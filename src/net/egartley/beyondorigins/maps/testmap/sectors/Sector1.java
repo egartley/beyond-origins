@@ -15,7 +15,7 @@ public class Sector1 extends MapSector {
 
 	@Override
 	public void tick() {
-		
+
 	}
 
 }

@@ -11,7 +11,7 @@ public class InGameState extends GameState {
 	public Map currentMap;
 	
 	public InGameState() {
-		identificationNumber = 1;
+		identificationNumber = GameState.IN_GAME;
 		currentMap = new TestMap();
 	}
 	
