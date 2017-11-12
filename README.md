@@ -1,4 +1,4 @@
-# beyond-origins
+# Beyond Origins
 
 Rewrite of an RPG game I tried to make a few years ago
 
