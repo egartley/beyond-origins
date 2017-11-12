@@ -26,5 +26,7 @@ public class TestMap extends Map {
 	public void setSector(MapSector sector) {
 		
 	}
+	
+	// this is a test comment
 
 }
