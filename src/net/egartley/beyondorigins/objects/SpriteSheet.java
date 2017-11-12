@@ -3,28 +3,56 @@ package net.egartley.beyondorigins.objects;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public abstract class SpriteSheet {
+public class SpriteSheet {
 
-	private BufferedImage bufferedImage;
+	private BufferedImage fullImage;
 	private ArrayList<Sprite> sprites;
 
-	public int spriteSize, rows, columns;
+	public int spriteWidth, spriteHeight, rows, stripWidth;
 
-	public SpriteSheet(int size, int r, int c) {
-		spriteSize = size;
+	public SpriteSheet(int w, int h, int r, int frames) {
+		spriteWidth = w;
+		spriteHeight = h;
 		rows = r;
-		columns = c;
+		stripWidth = spriteWidth * frames;
+		loadAllSprites(frames);
+	}
+	
+	public SpriteSheet(BufferedImage image, int w, int h, int r, int frames) {
+		fullImage = image;
+		spriteWidth = w;
+		spriteHeight = h;
+		rows = r;
+		stripWidth = spriteWidth * frames;
+		loadAllSprites(frames);
 	}
 
-	public void setBufferedImage(BufferedImage image) {
-		bufferedImage = image;
+	public void setFullImage(BufferedImage image) {
+		fullImage = image;
+	}
+	
+	private void loadAllSprites(int frames) {
+		sprites = new ArrayList<Sprite>(rows);
+		for (int i = 0; i < rows; i++) {
+			Sprite s = new Sprite(getBufferedImageStrip(i), spriteWidth, spriteHeight);
+			s.setFrames(frames);
+			sprites.add(s);
+		}
 	}
 
+	public BufferedImage getBufferedImageStrip(int rowIndex) {
+		return asBufferedImage().getSubimage(0, rowIndex * spriteHeight, stripWidth, spriteHeight);
+	}
+	
 	public BufferedImage asBufferedImage() {
-		return bufferedImage;
+		return fullImage;
 	}
-
-	public ArrayList<Sprite> getAllSprites() {
+	
+	public Sprite getSprite(int index) {
+		return sprites.get(index);
+	}
+	
+	public ArrayList<Sprite> getSprites() {
 		return sprites;
 	}
 

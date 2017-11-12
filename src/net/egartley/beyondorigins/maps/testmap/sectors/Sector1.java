@@ -9,13 +9,13 @@ public class Sector1 extends MapSector {
 
 	@Override
 	public void render(Graphics graphics) {
-		graphics.setColor(Color.MAGENTA);
+		graphics.setColor(Color.YELLOW);
 		graphics.fillOval(16, 16, 100, 100);
 	}
 
 	@Override
 	public void tick() {
-
+		
 	}
 
 }

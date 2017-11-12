@@ -4,14 +4,28 @@ import java.awt.image.BufferedImage;
 
 public class SpriteFrame {
 
-	private BufferedImage bufferedImage;
+	private Sprite parent;
+	private BufferedImage frameImage;
 
-	public SpriteFrame(BufferedImage image) {
-		bufferedImage = image;
+	public int index;
+
+	public SpriteFrame(Sprite parent, int index) {
+		this.parent = parent;
+		this.index = index;
+		try {
+			frameImage = parent.imageStrip.getSubimage(index * parent.frameWidth, 0, parent.frameWidth,
+					parent.frameHeight);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public Sprite getParent() {
+		return parent;
 	}
 
 	public BufferedImage asBufferedImage() {
-		return bufferedImage;
+		return frameImage;
 	}
 
 }

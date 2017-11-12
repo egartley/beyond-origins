@@ -4,37 +4,45 @@ import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
+import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.entities.Player;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.objects.GameState;
+import net.egartley.beyondorigins.objects.SpriteSheet;
 
 public class Game extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = 8213282993283826186L;
 	private static boolean running = false;
-	
+
 	public static short frames, currentFrames;
 	public static Graphics graphics;
 	public static JFrame frame;
-	public static Dimension d = new Dimension(65 * 16, 65 * 9);
-	
+	public static Dimension windowDimension = new Dimension(65 * 16, 65 * 9);
+
 	public Thread mainThread;
-	
+
 	public static GameState currentGameState;
-	
+
 	private void init() {
+		load();
 		currentGameState = new InGameState();
 	}
-	
+
 	public static void main(String[] args) {
 		Game game = new Game();
-		game.setPreferredSize(d);
-		game.setMaximumSize(d);
-		game.setMinimumSize(d);
+		game.setPreferredSize(windowDimension);
+		game.setMaximumSize(windowDimension);
+		game.setMinimumSize(windowDimension);
 		frame = new JFrame("Beyond Origins");
-		frame.setSize(d.width, d.height);
+		frame.setSize(windowDimension.width, windowDimension.height);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.add(game);
@@ -42,7 +50,17 @@ public class Game extends Canvas implements Runnable {
 		frame.setVisible(true);
 		game.start();
 	}
-	
+
+	public static void load() {
+		BufferedImage playerImage = null;
+		try {
+			playerImage = ImageIO.read(new File("resources/images/player-default.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Entities.PLAYER = new Player(new SpriteSheet(playerImage, 15, 23, 2, 4).getSprites());
+	}
+
 	public synchronized void start() {
 		if (running) {
 			return;
@@ -52,7 +70,7 @@ public class Game extends Canvas implements Runnable {
 		mainThread.setPriority(1);
 		mainThread.start();
 	}
-	
+
 	public synchronized void stop() {
 		if (!running) {
 			return;
@@ -64,7 +82,7 @@ public class Game extends Canvas implements Runnable {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void run() {
 		// init
@@ -100,26 +118,28 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	public synchronized void render() {
-		// main render method
 		BufferStrategy bs = getBufferStrategy();
 		if (bs == null) {
-			createBufferStrategy(3);
+			createBufferStrategy(2);
 			return;
 		}
 		graphics = bs.getDrawGraphics();
 
 		// ********** RENDER BEGIN ***********
-		currentGameState.render(graphics);
-		// *********** RENDER END ************
 		
+		currentGameState.render(graphics);
+		
+		// *********** RENDER END ************
+
 		graphics.dispose();
 		bs.show();
+		bs.dispose();
 	}
-	
+
 	public synchronized void tick() {
 		currentGameState.tick();
 	}
-	
+
 	public static short getCurrentFramesPerSecond() {
 		return currentFrames;
 	}

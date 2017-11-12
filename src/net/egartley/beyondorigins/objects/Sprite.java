@@ -3,55 +3,45 @@ package net.egartley.beyondorigins.objects;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public abstract class Sprite {
+public class Sprite {
 
-	private BufferedImage fullBufferedImage;
-	private ArrayList<SpriteFrame> frames;
-	private boolean isAnimated;
+	public BufferedImage imageStrip;
+	public ArrayList<SpriteFrame> frames = new ArrayList<SpriteFrame>();
+	public boolean isAnimated, squareFrames;
+	public int frameWidth, frameHeight, currentFrame = 0;
 
-	public int frameWidth, frameHeight;
-	public boolean squareFrames;
-
-	public Sprite(BufferedImage fullImage, int size, int numberOfFrames) {
-		fullBufferedImage = fullImage;
+	public Sprite(BufferedImage image, int size) {
+		this.imageStrip = image;
 		frameWidth = size;
 		frameHeight = size;
 		squareFrames = frameWidth == frameHeight;
-		setFrames(numberOfFrames);
+		// setFrames(numberOfFrames);
 	}
 
-	public Sprite(BufferedImage fullImage, int size, int numberOfFrames, boolean animated) {
-		fullBufferedImage = fullImage;
+	public Sprite(BufferedImage image, int size, boolean animated) {
+		this.imageStrip = image;
 		frameWidth = size;
 		frameHeight = size;
 		squareFrames = frameWidth == frameHeight;
 		isAnimated = animated;
-		setFrames(numberOfFrames);
+		// setFrames(numberOfFrames);
 	}
 
-	public Sprite(BufferedImage fullImage, int width, int height, int numberOfFrames) {
-		fullBufferedImage = fullImage;
+	public Sprite(BufferedImage image, int width, int height) {
+		this.imageStrip = image;
 		frameWidth = width;
 		frameHeight = height;
 		squareFrames = frameWidth == frameHeight;
-		setFrames(numberOfFrames);
+		// setFrames(numberOfFrames);
 	}
 
-	public Sprite(BufferedImage fullImage, int width, int height, int numberOfFrames, boolean animated) {
-		fullBufferedImage = fullImage;
+	public Sprite(BufferedImage image, int width, int height, boolean animated) {
+		this.imageStrip = image;
 		frameWidth = width;
 		frameHeight = height;
 		squareFrames = frameWidth == frameHeight;
 		isAnimated = animated;
-		setFrames(numberOfFrames);
-	}
-
-	public BufferedImage asBufferedImage() {
-		return fullBufferedImage;
-	}
-
-	public ArrayList<SpriteFrame> getFrames() {
-		return frames;
+		// setFrames(numberOfFrames);
 	}
 
 	public SpriteFrame getFrame(int index) {
@@ -59,18 +49,20 @@ public abstract class Sprite {
 			return null;
 		return frames.get(index);
 	}
-
-	public boolean isAnimated() {
-		return isAnimated;
+	
+	public BufferedImage getCurrentFrameAsBufferedImage() {
+		System.out.println(currentFrame);
+		return frames.get(currentFrame).asBufferedImage();
 	}
 
-	private void setFrames(int number) {
+	public void setFrames(int number) {
+		frames.clear();
 		if (number == 1) {
-			frames.add(new SpriteFrame(fullBufferedImage.getSubimage(0, 0, frameWidth, frameHeight)));
+			frames.add(new SpriteFrame(this, 0));
 			return;
 		}
 		for (int i = 0; i < number; i++) {
-			frames.add(new SpriteFrame(fullBufferedImage.getSubimage(i * frameWidth, 0, frameWidth, frameHeight)));
+			frames.add(new SpriteFrame(this, i));
 		}
 	}
 
