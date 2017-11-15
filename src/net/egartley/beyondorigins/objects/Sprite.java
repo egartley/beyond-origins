@@ -5,43 +5,39 @@ import java.util.ArrayList;
 
 public class Sprite {
 
-	public BufferedImage imageStrip;
+	public BufferedImage sheetImage;
 	public ArrayList<SpriteFrame> frames = new ArrayList<SpriteFrame>();
-	public boolean isAnimated, squareFrames;
+	public boolean isAnimated, isSquareFrames;
 	public int frameWidth, frameHeight, currentFrame = 0;
 
 	public Sprite(BufferedImage image, int size) {
-		this.imageStrip = image;
+		this.sheetImage = image;
 		frameWidth = size;
 		frameHeight = size;
-		squareFrames = frameWidth == frameHeight;
-		// setFrames(numberOfFrames);
+		isSquareFrames = frameWidth == frameHeight;
 	}
 
 	public Sprite(BufferedImage image, int size, boolean animated) {
-		this.imageStrip = image;
+		this.sheetImage = image;
 		frameWidth = size;
 		frameHeight = size;
-		squareFrames = frameWidth == frameHeight;
+		isSquareFrames = frameWidth == frameHeight;
 		isAnimated = animated;
-		// setFrames(numberOfFrames);
 	}
 
 	public Sprite(BufferedImage image, int width, int height) {
-		this.imageStrip = image;
+		this.sheetImage = image;
 		frameWidth = width;
 		frameHeight = height;
-		squareFrames = frameWidth == frameHeight;
-		// setFrames(numberOfFrames);
+		isSquareFrames = frameWidth == frameHeight;
 	}
 
 	public Sprite(BufferedImage image, int width, int height, boolean animated) {
-		this.imageStrip = image;
+		this.sheetImage = image;
 		frameWidth = width;
 		frameHeight = height;
-		squareFrames = frameWidth == frameHeight;
+		isSquareFrames = frameWidth == frameHeight;
 		isAnimated = animated;
-		// setFrames(numberOfFrames);
 	}
 
 	public SpriteFrame getFrame(int index) {
@@ -51,7 +47,6 @@ public class Sprite {
 	}
 	
 	public BufferedImage getCurrentFrameAsBufferedImage() {
-		System.out.println(currentFrame);
 		return frames.get(currentFrame).asBufferedImage();
 	}
 

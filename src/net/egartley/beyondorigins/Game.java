@@ -58,7 +58,11 @@ public class Game extends Canvas implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Entities.PLAYER = new Player(new SpriteSheet(playerImage, 15, 23, 2, 4).getSprites());
+		byte scale = 5;
+		if (playerImage != null) {
+			playerImage = Util.resized(playerImage, playerImage.getWidth() * scale, playerImage.getHeight() * scale);
+		}
+		Entities.PLAYER = new Player(new SpriteSheet(playerImage, 15 * scale, 23 * scale, 2, 4).getSprites());
 	}
 
 	public synchronized void start() {
@@ -126,9 +130,9 @@ public class Game extends Canvas implements Runnable {
 		graphics = bs.getDrawGraphics();
 
 		// ********** RENDER BEGIN ***********
-		
+
 		currentGameState.render(graphics);
-		
+
 		// *********** RENDER END ************
 
 		graphics.dispose();
