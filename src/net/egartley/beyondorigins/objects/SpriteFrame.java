@@ -13,7 +13,7 @@ public class SpriteFrame {
 		this.parent = parent;
 		this.index = index;
 		try {
-			frameImage = parent.imageStrip.getSubimage(index * parent.frameWidth, 0, parent.frameWidth,
+			frameImage = parent.sheetImage.getSubimage(index * parent.frameWidth, 0, parent.frameWidth,
 					parent.frameHeight);
 		} catch (Exception e) {
 			e.printStackTrace();

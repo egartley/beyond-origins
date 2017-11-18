@@ -5,17 +5,17 @@ import java.util.ArrayList;
 
 public abstract class Entity {
 
-	public ArrayList<Sprite> sprites;
+	public ArrayList<Sprite> spriteCollection;
 	public Sprite currentSprite;
 	public int absoluteX, absoluteY;
 	public boolean isAnimated;
-	public boolean isSingleFrame;
+	public boolean isStatic;
 	
 	public abstract void render(Graphics graphics);
 	public abstract void tick();
-
+	
 	public void setCurrentSprite(int index) {
-		currentSprite = sprites.get(index);
+		currentSprite = spriteCollection.get(index);
 	}
 
 }

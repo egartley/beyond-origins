@@ -3,36 +3,41 @@ package net.egartley.beyondorigins.entities;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import net.egartley.beyondorigins.objects.Entity;
+import net.egartley.beyondorigins.objects.AnimatedEntity;
+import net.egartley.beyondorigins.objects.Animation;
 import net.egartley.beyondorigins.objects.Sprite;
 
-public class Player extends Entity {
-	
+public class Player extends AnimatedEntity {
+
 	public Player(ArrayList<Sprite> sprites) {
-		this.sprites = sprites;
+		this.spriteCollection = sprites;
 		currentSprite = sprites.get(0);
-		setOtherValues();
+		setAnimationCollection();
 	}
-	
+
 	public Player(ArrayList<Sprite> sprites, Sprite current) {
-		this.sprites = sprites;
+		this.spriteCollection = sprites;
 		currentSprite = current;
-		setOtherValues();
+		setAnimationCollection();
 	}
-	
-	private void setOtherValues() {
-		isAnimated = true;
+
+	@Override
+	public void setAnimationCollection() {
+		animationCollection.clear();
+		for (Sprite s : spriteCollection) {
+			animationCollection.add(new Animation(s));
+		}
+		currentAnimation = animationCollection.get(0);
 	}
 
 	@Override
 	public void render(Graphics graphics) {
-		graphics.drawImage(currentSprite.getCurrentFrameAsBufferedImage(), absoluteX, absoluteY, null);
+		currentAnimation.render(graphics, absoluteX, absoluteY);
 	}
 
 	@Override
 	public void tick() {
-		// currentSprite =	sprites.get(1);
-		// currentSprite.currentFrame = 0;
+		currentAnimation.tick();
 	}
 
 }
