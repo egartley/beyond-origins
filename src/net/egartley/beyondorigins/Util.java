@@ -22,4 +22,16 @@ public class Util {
 		return toBufferedImage(image.getScaledInstance(w, h, Image.SCALE_DEFAULT));
 	}
 
+	public static int randomInt(int max, int min) {
+		return (int) (Math.random() * max + min);
+	}
+
+	public static int randomInt(int max, int min, boolean inclusive) {
+		if (inclusive) {
+			return randomInt(max + 1, min);
+		} else {
+			return randomInt(max, min);
+		}
+	}
+
 }

@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.Player;
 import net.egartley.beyondorigins.gamestates.InGameState;
+import net.egartley.beyondorigins.input.Keyboard;
 import net.egartley.beyondorigins.objects.GameState;
 import net.egartley.beyondorigins.objects.SpriteSheet;
 import net.egartley.beyondorigins.threads.Tick;
@@ -38,6 +39,7 @@ public class Game extends Canvas implements Runnable {
 	private void init() {
 		load();
 		currentGameState = new InGameState();
+		this.addKeyListener(new Keyboard());
 	}
 
 	public static void main(String[] args) {

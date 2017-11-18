@@ -3,41 +3,29 @@ package net.egartley.beyondorigins.objects;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import net.egartley.beyondorigins.Util;
+
 public class Sprite {
 
+	private int uuid;
+	
 	public BufferedImage sheetImage;
 	public ArrayList<SpriteFrame> frameCollection = new ArrayList<SpriteFrame>();
-	public boolean isAnimated, isSquareFrames;
-	public int frameWidth, frameHeight, currentFrameIndex = 0;
+	public int frameWidth, frameHeight;
+	public short currentFrameIndex = 0;
 
 	public Sprite(BufferedImage image, int size) {
-		this.sheetImage = image;
+		sheetImage = image;
 		frameWidth = size;
 		frameHeight = size;
-		isSquareFrames = frameWidth == frameHeight;
+		uuid = Util.randomInt(9999, 1000, true);
 	}
-
-	public Sprite(BufferedImage image, int size, boolean animated) {
-		this.sheetImage = image;
-		frameWidth = size;
-		frameHeight = size;
-		isSquareFrames = frameWidth == frameHeight;
-		isAnimated = animated;
-	}
-
+	
 	public Sprite(BufferedImage image, int width, int height) {
-		this.sheetImage = image;
+		sheetImage = image;
 		frameWidth = width;
 		frameHeight = height;
-		isSquareFrames = frameWidth == frameHeight;
-	}
-
-	public Sprite(BufferedImage image, int width, int height, boolean animated) {
-		this.sheetImage = image;
-		frameWidth = width;
-		frameHeight = height;
-		isSquareFrames = frameWidth == frameHeight;
-		isAnimated = animated;
+		uuid = Util.randomInt(9999, 1000, true);
 	}
 
 	public SpriteFrame getFrameAt(int index) {
@@ -59,6 +47,11 @@ public class Sprite {
 		for (int i = 0; i < numberOfFrames; i++) {
 			frameCollection.add(new SpriteFrame(this, i));
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return Integer.toHexString(uuid);
 	}
 
 }
