@@ -16,18 +16,22 @@ import net.egartley.beyondorigins.entities.Player;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.objects.GameState;
 import net.egartley.beyondorigins.objects.SpriteSheet;
+import net.egartley.beyondorigins.threads.Tick;
 
 public class Game extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = 8213282993283826186L;
-	private static boolean running = false;
+	public static boolean running = false;
 
 	public static short frames, currentFrames;
 	public static Graphics graphics;
 	public static JFrame frame;
-	public static Dimension windowDimension = new Dimension(65 * 16, 65 * 9);
+	public static Dimension windowDimension = new Dimension(1040, 585);
 
-	public Thread mainThread;
+	public Thread renderThread;
+	public Thread tickThread;
+
+	private Tick tick = new Tick();
 
 	public static GameState currentGameState;
 
@@ -52,17 +56,19 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	public static void load() {
+		// *********** PLAYER BEGIN ***********
 		BufferedImage playerImage = null;
 		try {
 			playerImage = ImageIO.read(new File("resources/images/player-default.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		byte scale = 5;
+		byte scale = 2;
 		if (playerImage != null) {
 			playerImage = Util.resized(playerImage, playerImage.getWidth() * scale, playerImage.getHeight() * scale);
 		}
-		Entities.PLAYER = new Player(new SpriteSheet(playerImage, 15 * scale, 23 * scale, 2, 4).getSprites());
+		Entities.PLAYER = new Player(new SpriteSheet(playerImage, 15 * scale, 23 * scale, 2, 4).getSpriteCollection());
+		// ************ PLAYER END ************
 	}
 
 	public synchronized void start() {
@@ -70,9 +76,18 @@ public class Game extends Canvas implements Runnable {
 			return;
 		}
 		running = true;
-		mainThread = new Thread(this);
-		mainThread.setPriority(1);
-		mainThread.start();
+
+		renderThread = new Thread(this);
+		tickThread = new Thread(tick);
+
+		renderThread.setPriority(1);
+		tickThread.setPriority(2);
+
+		renderThread.setName("Render");
+		tickThread.setName("Tick");
+
+		tickThread.start();
+		renderThread.start();
 	}
 
 	public synchronized void stop() {
@@ -81,7 +96,7 @@ public class Game extends Canvas implements Runnable {
 		}
 		running = false;
 		try {
-			mainThread.join();
+			renderThread.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -102,7 +117,6 @@ public class Game extends Canvas implements Runnable {
 			delta += (now - lastTime) / ns;
 			lastTime = now;
 			if (delta >= 1.0D) {
-				tick();
 				render();
 				delta -= 1.0D;
 				frames += 1;
@@ -138,10 +152,6 @@ public class Game extends Canvas implements Runnable {
 		graphics.dispose();
 		bs.show();
 		bs.dispose();
-	}
-
-	public synchronized void tick() {
-		currentGameState.tick();
 	}
 
 	public static short getCurrentFramesPerSecond() {

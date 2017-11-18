@@ -10,31 +10,34 @@ import net.egartley.beyondorigins.objects.Sprite;
 public class Player extends AnimatedEntity {
 
 	public Player(ArrayList<Sprite> sprites) {
-		this.sprites = sprites;
-		sprite = sprites.get(0);
-		setOtherValues();
+		this.spriteCollection = sprites;
+		currentSprite = sprites.get(0);
+		setAnimationCollection();
 	}
 
 	public Player(ArrayList<Sprite> sprites, Sprite current) {
-		this.sprites = sprites;
-		sprite = current;
-		setOtherValues();
+		this.spriteCollection = sprites;
+		currentSprite = current;
+		setAnimationCollection();
 	}
 
-	private void setOtherValues() {
-		isAnimated = true;
-		animation = new Animation(sprite);
+	@Override
+	public void setAnimationCollection() {
+		animationCollection.clear();
+		for (Sprite s : spriteCollection) {
+			animationCollection.add(new Animation(s));
+		}
+		currentAnimation = animationCollection.get(0);
 	}
 
 	@Override
 	public void render(Graphics graphics) {
-		// graphics.drawImage(sprite.getCurrentFrameAsBufferedImage(), absoluteX, absoluteY, null);
-		animation.render(graphics, absoluteX, absoluteY);
+		currentAnimation.render(graphics, absoluteX, absoluteY);
 	}
 
 	@Override
 	public void tick() {
-		animation.tick();
+		currentAnimation.tick();
 	}
 
 }

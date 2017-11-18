@@ -6,9 +6,9 @@ import java.util.ArrayList;
 public class Sprite {
 
 	public BufferedImage sheetImage;
-	public ArrayList<SpriteFrame> frames = new ArrayList<SpriteFrame>();
+	public ArrayList<SpriteFrame> frameCollection = new ArrayList<SpriteFrame>();
 	public boolean isAnimated, isSquareFrames;
-	public int frameWidth, frameHeight, currentFrame = 0;
+	public int frameWidth, frameHeight, currentFrameIndex = 0;
 
 	public Sprite(BufferedImage image, int size) {
 		this.sheetImage = image;
@@ -40,24 +40,24 @@ public class Sprite {
 		isAnimated = animated;
 	}
 
-	public SpriteFrame getFrame(int index) {
-		if (index >= frames.size())
+	public SpriteFrame getFrameAt(int index) {
+		if (index >= frameCollection.size())
 			return null;
-		return frames.get(index);
+		return frameCollection.get(index);
 	}
 	
 	public BufferedImage getCurrentFrameAsBufferedImage() {
-		return frames.get(currentFrame).asBufferedImage();
+		return frameCollection.get(currentFrameIndex).asBufferedImage();
 	}
 
-	public void setFrames(int number) {
-		frames.clear();
-		if (number == 1) {
-			frames.add(new SpriteFrame(this, 0));
+	public void setFrames(int numberOfFrames) {
+		frameCollection.clear();
+		if (numberOfFrames == 1) {
+			frameCollection.add(new SpriteFrame(this, 0));
 			return;
 		}
-		for (int i = 0; i < number; i++) {
-			frames.add(new SpriteFrame(this, i));
+		for (int i = 0; i < numberOfFrames; i++) {
+			frameCollection.add(new SpriteFrame(this, i));
 		}
 	}
 

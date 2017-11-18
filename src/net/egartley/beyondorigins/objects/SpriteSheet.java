@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class SpriteSheet {
 
 	private BufferedImage fullImage;
-	private ArrayList<Sprite> sprites;
+	private ArrayList<Sprite> spriteCollection;
 
 	public int spriteWidth, spriteHeight, strips, stripWidth;
 
@@ -32,11 +32,11 @@ public class SpriteSheet {
 	}
 
 	private void loadAllSprites(int frames) {
-		sprites = new ArrayList<Sprite>(strips);
+		spriteCollection = new ArrayList<Sprite>(strips);
 		for (int i = 0; i < strips; i++) {
 			Sprite s = new Sprite(getStripAsBufferedImage(i), spriteWidth, spriteHeight);
 			s.setFrames(frames);
-			sprites.add(s);
+			spriteCollection.add(s);
 		}
 	}
 
@@ -48,12 +48,12 @@ public class SpriteSheet {
 		return fullImage;
 	}
 
-	public Sprite getSprite(int index) {
-		return sprites.get(index);
+	public Sprite getSpriteAt(int index) {
+		return spriteCollection.get(index);
 	}
 
-	public ArrayList<Sprite> getSprites() {
-		return sprites;
+	public ArrayList<Sprite> getSpriteCollection() {
+		return spriteCollection;
 	}
 
 }

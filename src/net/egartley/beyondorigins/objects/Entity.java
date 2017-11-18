@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 public abstract class Entity {
 
-	public ArrayList<Sprite> sprites;
-	public Sprite sprite;
+	public ArrayList<Sprite> spriteCollection;
+	public Sprite currentSprite;
 	public int absoluteX, absoluteY;
 	public boolean isAnimated;
 	public boolean isStatic;
@@ -15,7 +15,7 @@ public abstract class Entity {
 	public abstract void tick();
 	
 	public void setCurrentSprite(int index) {
-		sprite = sprites.get(index);
+		currentSprite = spriteCollection.get(index);
 	}
 
 }
