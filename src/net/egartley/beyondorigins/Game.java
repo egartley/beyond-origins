@@ -45,7 +45,7 @@ public class Game extends Canvas implements Runnable {
 		game.setPreferredSize(windowDimension);
 		game.setMaximumSize(windowDimension);
 		game.setMinimumSize(windowDimension);
-		frame = new JFrame("Beyond Origins");
+		frame = new JFrame("Beyond Origins INDEV");
 		frame.setSize(windowDimension.width, windowDimension.height);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
