@@ -5,16 +5,14 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.Player;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.input.Keyboard;
+import net.egartley.beyondorigins.media.images.ImageStore;
 import net.egartley.beyondorigins.objects.GameState;
 import net.egartley.beyondorigins.objects.SpriteSheet;
 import net.egartley.beyondorigins.threads.MainTick;
@@ -24,12 +22,12 @@ public class Game extends Canvas implements Runnable {
 	private static final long serialVersionUID = 8213282993283826186L;
 	private static short frames, currentFrames;
 	private static JFrame frame;
-	private static Dimension windowDimension = new Dimension(1040, 585);
+	private static Dimension windowDimension = new Dimension(1024, 576);
 	private Graphics graphics;
-	
+
 	private static Thread renderThread;
 	private static Thread tickThread;
-	
+
 	public static boolean running = false;
 	public static boolean runTickThread = true;
 
@@ -39,6 +37,7 @@ public class Game extends Canvas implements Runnable {
 
 	private void init() {
 		loadGraphicsAndEntities();
+		loadMaps();
 		currentGameState = new InGameState();
 		this.addKeyListener(new Keyboard());
 	}
@@ -59,19 +58,19 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	private void loadGraphicsAndEntities() {
+		ImageStore.loadAll();
 		// *********** PLAYER BEGIN ***********
-		BufferedImage playerImage = null;
-		try {
-			playerImage = ImageIO.read(new File("resources/images/player-default.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		byte scale = 2;
+		BufferedImage playerImage = ImageStore.playerDefault;
 		if (playerImage != null) {
 			playerImage = Util.resized(playerImage, playerImage.getWidth() * scale, playerImage.getHeight() * scale);
 		}
 		Entities.PLAYER = new Player(new SpriteSheet(playerImage, 15 * scale, 23 * scale, 2, 4).getSpriteCollection());
 		// ************ PLAYER END ************
+	}
+
+	private void loadMaps() {
+		net.egartley.beyondorigins.definitions.maps.testmap.Sectors.defineAll();
 	}
 
 	private synchronized void start() {
@@ -153,11 +152,11 @@ public class Game extends Canvas implements Runnable {
 		bs.show();
 		bs.dispose();
 	}
-	
+
 	public static void stopMainTickThread() {
 		runTickThread = false;
 	}
-	
+
 	public static void restartMainTickThread() {
 		runTickThread = true;
 		tickThread = new Thread(tick);
