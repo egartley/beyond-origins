@@ -7,7 +7,7 @@ public abstract class Entity {
 
 	public ArrayList<Sprite> spriteCollection;
 	public Sprite currentSprite;
-	public int absoluteX, absoluteY;
+	public double absoluteX, absoluteY;
 	public boolean isAnimated;
 	public boolean isStatic;
 	

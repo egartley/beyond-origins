@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 public class AnimationFrame {
 
 	private Sprite parent;
-	private BufferedImage frameImage;
+	private BufferedImage bufferedImage;
 
 	public int index;
 
@@ -13,7 +13,7 @@ public class AnimationFrame {
 		this.parent = parent;
 		this.index = index;
 		try {
-			frameImage = parent.sheetImage.getSubimage(index * parent.frameWidth, 0, parent.frameWidth,
+			bufferedImage = parent.sheetImage.getSubimage(index * parent.frameWidth, 0, parent.frameWidth,
 					parent.frameHeight);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -25,7 +25,7 @@ public class AnimationFrame {
 	}
 
 	public BufferedImage asBufferedImage() {
-		return frameImage;
+		return bufferedImage;
 	}
 
 }

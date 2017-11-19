@@ -13,7 +13,8 @@ public class Player extends AnimatedEntity {
 
 	private final byte UP = 1, DOWN = 2, LEFT = 3, RIGHT = 4;
 	private final byte LEFT_ANIMATION = 0, RIGHT_ANIMATION = 1;
-	private byte speed = 1, animationThreshold = 13;
+	private byte animationThreshold = 10;
+	public double speed = 1.2;
 
 	public Player(ArrayList<Sprite> sprites) {
 		this.spriteCollection = sprites;
@@ -62,20 +63,26 @@ public class Player extends AnimatedEntity {
 
 	@Override
 	public void render(Graphics graphics) {
-		animation.render(graphics, absoluteX, absoluteY);
+		animation.render(graphics, (int) absoluteX, (int) absoluteY);
 	}
 
 	@Override
 	public void tick() {
-		if (Keyboard.isPressed(KeyEvent.VK_W)) {
+		boolean up = Keyboard.isPressed(KeyEvent.VK_W);
+		boolean down = Keyboard.isPressed(KeyEvent.VK_S);
+		boolean left = Keyboard.isPressed(KeyEvent.VK_A);
+		boolean right = Keyboard.isPressed(KeyEvent.VK_D);
+		if (up) {
 			move(UP);
-		} else if (Keyboard.isPressed(KeyEvent.VK_A)) {
-			move(LEFT);
-		} else if (Keyboard.isPressed(KeyEvent.VK_S)) {
+		} else if (down) {
 			move(DOWN);
-		} else if (Keyboard.isPressed(KeyEvent.VK_D)) {
+		}
+		if (left) {
+			move(LEFT);
+		} else if (right) {
 			move(RIGHT);
-		} else {
+		} 
+		if (!left && !right && !down && !up) {
 			if (!animation.isStopped) {
 				animation.stop();
 			}
