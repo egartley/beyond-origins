@@ -4,6 +4,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
+import net.egartley.beyondorigins.Game;
+
 public class Keyboard implements KeyListener {
 
 	public static ArrayList<Integer> pressed = new ArrayList<Integer>();
@@ -23,6 +25,12 @@ public class Keyboard implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		pressed.remove(pressed.indexOf(e.getKeyCode()));
+		if (e.getKeyCode() == KeyEvent.VK_B) {
+			if (Game.runTickThread)
+				Game.stopMainTickThread();
+			else
+				Game.restartMainTickThread();
+		}
 	}
 
 	@Override

@@ -12,7 +12,8 @@ import net.egartley.beyondorigins.objects.Sprite;
 public class Player extends AnimatedEntity {
 
 	private final byte UP = 1, DOWN = 2, LEFT = 3, RIGHT = 4;
-	private byte speed = 1, animationThreshold = 12;
+	private final byte LEFT_ANIMATION = 0, RIGHT_ANIMATION = 1;
+	private byte speed = 1, animationThreshold = 13;
 
 	public Player(ArrayList<Sprite> sprites) {
 		this.spriteCollection = sprites;
@@ -21,8 +22,8 @@ public class Player extends AnimatedEntity {
 	}
 
 	private void move(byte direction) {
-		if (currentAnimation.isStopped) {
-			currentAnimation.restart();
+		if (animation.isStopped) {
+			animation.restart();
 		}
 		switch (direction) {
 		case UP:
@@ -33,15 +34,19 @@ public class Player extends AnimatedEntity {
 			break;
 		case LEFT:
 			absoluteX -= speed;
-			currentAnimation = animationCollection.get(0);
+			setAnimation(LEFT_ANIMATION);
 			break;
 		case RIGHT:
 			absoluteX += speed;
-			currentAnimation = animationCollection.get(1);
+			setAnimation(RIGHT_ANIMATION);
 			break;
 		default:
 			break;
 		}
+	}
+	
+	private void setAnimation(byte i) {
+		animation = animationCollection.get(i);
 	}
 
 	@Override
@@ -52,12 +57,12 @@ public class Player extends AnimatedEntity {
 			a.setThreshold(animationThreshold);
 			animationCollection.add(a);
 		}
-		currentAnimation = animationCollection.get(0);
+		animation = animationCollection.get(0);
 	}
 
 	@Override
 	public void render(Graphics graphics) {
-		currentAnimation.render(graphics, absoluteX, absoluteY);
+		animation.render(graphics, absoluteX, absoluteY);
 	}
 
 	@Override
@@ -71,11 +76,11 @@ public class Player extends AnimatedEntity {
 		} else if (Keyboard.isPressed(KeyEvent.VK_D)) {
 			move(RIGHT);
 		} else {
-			if (!currentAnimation.isStopped) {
-				currentAnimation.stop();
+			if (!animation.isStopped) {
+				animation.stop();
 			}
 		}
-		currentAnimation.tick();
+		animation.tick();
 	}
 
 }

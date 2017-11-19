@@ -2,7 +2,7 @@ package net.egartley.beyondorigins.threads;
 
 import net.egartley.beyondorigins.Game;
 
-public class Tick implements Runnable {
+public class MainTick implements Runnable {
 
 	public static short frames, currentFrames;
 
@@ -12,7 +12,7 @@ public class Tick implements Runnable {
 		long timer = System.currentTimeMillis();
 		double ns = 16666666.666666666;
 		double delta = 0.0D;
-		while (Game.running) {
+		while (Game.running && Game.runTickThread) {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
 			lastTime = now;
@@ -39,7 +39,7 @@ public class Tick implements Runnable {
 		}
 	}
 
-	public void tick() {
+	private synchronized void tick() {
 		if (Game.currentGameState != null) {
 			Game.currentGameState.tick();
 		}

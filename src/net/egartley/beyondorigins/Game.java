@@ -17,27 +17,28 @@ import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.input.Keyboard;
 import net.egartley.beyondorigins.objects.GameState;
 import net.egartley.beyondorigins.objects.SpriteSheet;
-import net.egartley.beyondorigins.threads.Tick;
+import net.egartley.beyondorigins.threads.MainTick;
 
 public class Game extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = 8213282993283826186L;
+	private static short frames, currentFrames;
+	private static JFrame frame;
+	private static Dimension windowDimension = new Dimension(1040, 585);
+	private Graphics graphics;
+	
+	private static Thread renderThread;
+	private static Thread tickThread;
+	
 	public static boolean running = false;
+	public static boolean runTickThread = true;
 
-	public static short frames, currentFrames;
-	public static Graphics graphics;
-	public static JFrame frame;
-	public static Dimension windowDimension = new Dimension(1040, 585);
-
-	public Thread renderThread;
-	public Thread tickThread;
-
-	private Tick tick = new Tick();
+	private static MainTick tick = new MainTick();
 
 	public static GameState currentGameState;
 
 	private void init() {
-		load();
+		loadGraphicsAndEntities();
 		currentGameState = new InGameState();
 		this.addKeyListener(new Keyboard());
 	}
@@ -47,7 +48,7 @@ public class Game extends Canvas implements Runnable {
 		game.setPreferredSize(windowDimension);
 		game.setMaximumSize(windowDimension);
 		game.setMinimumSize(windowDimension);
-		frame = new JFrame("Beyond Origins INDEV");
+		frame = new JFrame("Beyond Origins");
 		frame.setSize(windowDimension.width, windowDimension.height);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
@@ -57,7 +58,7 @@ public class Game extends Canvas implements Runnable {
 		game.start();
 	}
 
-	public static void load() {
+	private void loadGraphicsAndEntities() {
 		// *********** PLAYER BEGIN ***********
 		BufferedImage playerImage = null;
 		try {
@@ -73,26 +74,23 @@ public class Game extends Canvas implements Runnable {
 		// ************ PLAYER END ************
 	}
 
-	public synchronized void start() {
+	private synchronized void start() {
 		if (running) {
 			return;
 		}
 		running = true;
 
 		renderThread = new Thread(this);
-		tickThread = new Thread(tick);
 
 		renderThread.setPriority(1);
-		tickThread.setPriority(2);
 
-		renderThread.setName("Render");
-		tickThread.setName("Tick");
+		renderThread.setName("Main-Render");
 
-		tickThread.start();
+		restartMainTickThread();
 		renderThread.start();
 	}
 
-	public synchronized void stop() {
+	private synchronized void stop() {
 		if (!running) {
 			return;
 		}
@@ -137,7 +135,7 @@ public class Game extends Canvas implements Runnable {
 		stop();
 	}
 
-	public synchronized void render() {
+	private synchronized void render() {
 		BufferStrategy bs = getBufferStrategy();
 		if (bs == null) {
 			createBufferStrategy(2);
@@ -155,8 +153,20 @@ public class Game extends Canvas implements Runnable {
 		bs.show();
 		bs.dispose();
 	}
+	
+	public static void stopMainTickThread() {
+		runTickThread = false;
+	}
+	
+	public static void restartMainTickThread() {
+		runTickThread = true;
+		tickThread = new Thread(tick);
+		tickThread.setPriority(2);
+		tickThread.setName("Main-Tick");
+		tickThread.start();
+	}
 
-	public static short getCurrentFramesPerSecond() {
+	public static short getFPS() {
 		return currentFrames;
 	}
 

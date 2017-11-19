@@ -10,23 +10,40 @@ public class Animation {
 	private boolean setStopFrame;
 
 	public Sprite sprite;
-	public SpriteFrame currentFrame;
+	public AnimationFrame currentFrame, startFrame;
 
+	/**
+	 * Creates a new animation
+	 * 
+	 * @param s
+	 *            Sprite to animate (must have at least one frame)
+	 */
 	public Animation(Sprite s) {
 		sprite = s;
 		frameIndex = 0;
 		startIndex = 0;
-		currentFrame = sprite.frameCollection.get(0);
+		startFrame = sprite.frameCollection.get(startIndex);
+		currentFrame = startFrame;
 	}
 
-	public Animation(Sprite s, int startIndex) {
+	/**
+	 * Creates a new animation, starting at the given index
+	 * 
+	 * @param s
+	 *            Sprite to animate (must have at least one frame)
+	 * @param startIndex
+	 *            The index of the frame to start at (from
+	 *            <code>Sprite.frameCollection</code>)
+	 */
+	public Animation(Sprite s, int start) {
 		sprite = s;
-		frameIndex = startIndex;
-		this.startIndex = startIndex;
-		currentFrame = sprite.frameCollection.get(startIndex);
+		frameIndex = start;
+		startIndex = frameIndex;
+		startFrame = sprite.frameCollection.get(startIndex);
+		currentFrame = startFrame;
 	}
 
-	private SpriteFrame nextFrame() {
+	private AnimationFrame nextFrame() {
 		if (frameIndex + 1 == sprite.frameCollection.size()) {
 			frameIndex = 0;
 		} else {
@@ -34,40 +51,75 @@ public class Animation {
 		}
 		return sprite.frameCollection.get(frameIndex);
 	}
-	
-	public void setThreshold(byte t) {
-		threshold = t;
+
+	/**
+	 * <p>
+	 * Sets the animation's threshold, or interval, for when to go to the next frame
+	 * </p>
+	 * <p>
+	 * The tick method should be called roughly 60 times per second, therefore each
+	 * frame will be displayed for about <b>threshold ÷ 60</b> seconds
+	 * </p>
+	 * 
+	 * @param t
+	 *            The new value for <code>threshold</code>
+	 */
+	public void setThreshold(int t) {
+		if (t > 127 || t < -128) {
+			return; // out of range for a byte
+		}
+		threshold = (byte) t;
 	}
 
+	/**
+	 * Resume the animation. Does nothing if already running
+	 */
 	public void resume() {
-		// Debug.out("Resumed (" + sprite + ")");
 		isStopped = false;
 	}
 
+	/**
+	 * Pauses the animation. Does nothing if already paused
+	 */
 	public void pause() {
-		// Debug.out("Paused (" + sprite + ")");
 		isStopped = true;
 	}
-	
+
+	/**
+	 * Stops the animation, and resets the displayed frame to the starting frame.
+	 * Does nothing if already stopped
+	 */
 	public void stop() {
-		// Debug.out("Stopped (" + sprite + ")");
 		isStopped = true;
 		setStopFrame = false;
 	}
 
+	/**
+	 * Restarts the animation. If already running, the animation will start over.
+	 */
 	public void restart() {
-		// Debug.out("Restarted (" + sprite + ")");
 		frameIndex = startIndex;
 		delay = 0;
 		isStopped = false;
 	}
 
+	/**
+	 * 
+	 * @param graphics
+	 *            The {@link java.awt.Graphics} object
+	 * @param x
+	 *            The x-bound coordinate (absolute)
+	 * @param y
+	 *            The y-bound coordinate (absolute)
+	 */
 	public void render(Graphics graphics, int x, int y) {
 		graphics.drawImage(currentFrame.asBufferedImage(), x, y, null);
 	}
 
+	/**
+	 * Should be called 60 times per second, in a tick thread
+	 */
 	public void tick() {
-		// called 60 times a second, new frame displayed every threshold/60 seconds
 		if (!isStopped) {
 			if (delay < threshold) {
 				delay++;
@@ -77,7 +129,7 @@ public class Animation {
 			}
 		} else {
 			if (!setStopFrame) {
-				currentFrame = sprite.frameCollection.get(startIndex);
+				currentFrame = startFrame;
 				setStopFrame = true;
 			}
 		}

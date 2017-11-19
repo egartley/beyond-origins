@@ -10,7 +10,7 @@ public class Sprite {
 	private int uuid;
 	
 	public BufferedImage sheetImage;
-	public ArrayList<SpriteFrame> frameCollection = new ArrayList<SpriteFrame>();
+	public ArrayList<AnimationFrame> frameCollection = new ArrayList<AnimationFrame>();
 	public int frameWidth, frameHeight;
 	public short currentFrameIndex = 0;
 
@@ -28,7 +28,7 @@ public class Sprite {
 		uuid = Util.randomInt(9999, 1000, true);
 	}
 
-	public SpriteFrame getFrameAt(int index) {
+	public AnimationFrame getFrameAt(int index) {
 		if (index >= frameCollection.size())
 			return null;
 		return frameCollection.get(index);
@@ -41,11 +41,11 @@ public class Sprite {
 	public void setFrames(int numberOfFrames) {
 		frameCollection.clear();
 		if (numberOfFrames == 1) {
-			frameCollection.add(new SpriteFrame(this, 0));
+			frameCollection.add(new AnimationFrame(this, 0));
 			return;
 		}
 		for (int i = 0; i < numberOfFrames; i++) {
-			frameCollection.add(new SpriteFrame(this, i));
+			frameCollection.add(new AnimationFrame(this, i));
 		}
 	}
 	
