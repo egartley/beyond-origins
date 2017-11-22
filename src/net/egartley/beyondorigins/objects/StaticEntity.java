@@ -2,21 +2,19 @@ package net.egartley.beyondorigins.objects;
 
 import java.awt.Graphics;
 
-public class StaticEntity extends Entity {
+public abstract class StaticEntity extends Entity {
 
+	protected double x;
+	protected double y;
+	
 	public StaticEntity() {
 		isAnimated = false;
 		isStatic = true;
 	}
 	
-	@Override
-	public void render(Graphics graphics) {
-		
-	}
-
-	@Override
-	public void tick() {
-		
-	}
+	public abstract void setEntityBoundary();
+	
+	public abstract void render(Graphics graphics);
+	public abstract void tick();
 
 }

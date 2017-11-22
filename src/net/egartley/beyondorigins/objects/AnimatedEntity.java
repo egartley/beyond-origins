@@ -8,6 +8,7 @@ public abstract class AnimatedEntity extends Entity {
 	public ArrayList<Animation> animationCollection = new ArrayList<Animation>();
 	
 	public abstract void setAnimationCollection();
+	public abstract void setEntityBoundary();
 	
 	public AnimatedEntity() {
 		isAnimated = true;

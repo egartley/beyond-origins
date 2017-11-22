@@ -8,10 +8,12 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
+import net.egartley.beyondorigins.entities.Dummy;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.Player;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.input.Keyboard;
+import net.egartley.beyondorigins.maps.TileBuilder;
 import net.egartley.beyondorigins.media.images.ImageStore;
 import net.egartley.beyondorigins.objects.GameState;
 import net.egartley.beyondorigins.objects.SpriteSheet;
@@ -30,6 +32,7 @@ public class Game extends Canvas implements Runnable {
 
 	public static boolean running = false;
 	public static boolean runTickThread = true;
+	public static boolean drawBoundaries = true;
 
 	private static MainTick tick = new MainTick();
 
@@ -59,17 +62,27 @@ public class Game extends Canvas implements Runnable {
 
 	private void loadGraphicsAndEntities() {
 		ImageStore.loadAll();
-		// *********** PLAYER BEGIN ***********
 		byte scale = 2;
+		
+		// *********** PLAYER BEGIN ***********
 		BufferedImage playerImage = ImageStore.playerDefault;
 		if (playerImage != null) {
 			playerImage = Util.resized(playerImage, playerImage.getWidth() * scale, playerImage.getHeight() * scale);
 		}
 		Entities.PLAYER = new Player(new SpriteSheet(playerImage, 15 * scale, 23 * scale, 2, 4).getSpriteCollection());
 		// ************ PLAYER END ************
+		
+		// ************ DUMMY BEGIN ***********
+		BufferedImage dummyImage = ImageStore.dummy;
+		if (dummyImage != null) {
+			dummyImage = Util.resized(dummyImage, dummyImage.getWidth() * scale, dummyImage.getHeight() * scale);
+		}
+		Entities.DUMMY = new Dummy(new SpriteSheet(dummyImage, 15 * scale, 23 * scale, 2, 4).getSpriteCollection().get(0));
+		// ************ DUMMY END *************
 	}
 
 	private void loadMaps() {
+		TileBuilder.load();
 		net.egartley.beyondorigins.definitions.maps.testmap.Sectors.defineAll();
 	}
 

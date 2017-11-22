@@ -23,12 +23,12 @@ public class Sector1 extends MapSector {
 	}
 
 	@Override
-	public void enter() {
+	public void onEnter() {
 		
 	}
 
 	@Override
-	public void exit() {
+	public void onExit() {
 		
 	}
 

@@ -2,9 +2,12 @@ package net.egartley.beyondorigins.entities;
 
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.input.Keyboard;
+import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.objects.AnimatedEntity;
 import net.egartley.beyondorigins.objects.Animation;
 import net.egartley.beyondorigins.objects.Sprite;
@@ -20,6 +23,7 @@ public class Player extends AnimatedEntity {
 		this.spriteCollection = sprites;
 		currentSprite = sprites.get(0);
 		setAnimationCollection();
+		setEntityBoundary();
 	}
 
 	private void move(byte direction) {
@@ -45,7 +49,7 @@ public class Player extends AnimatedEntity {
 			break;
 		}
 	}
-	
+
 	private void setAnimation(byte i) {
 		animation = animationCollection.get(i);
 	}
@@ -62,8 +66,17 @@ public class Player extends AnimatedEntity {
 	}
 
 	@Override
+	public void setEntityBoundary() {
+		BufferedImage image = animation.currentFrame.asBufferedImage();
+		boundary = new EntityBoundary(this, image.getWidth(), image.getHeight());
+	}
+
+	@Override
 	public void render(Graphics graphics) {
 		animation.render(graphics, (int) absoluteX, (int) absoluteY);
+		if (Game.drawBoundaries) {
+			boundary.draw(graphics);
+		}
 	}
 
 	@Override
@@ -81,13 +94,14 @@ public class Player extends AnimatedEntity {
 			move(LEFT);
 		} else if (right) {
 			move(RIGHT);
-		} 
+		}
 		if (!left && !right && !down && !up) {
 			if (!animation.isStopped) {
 				animation.stop();
 			}
 		}
 		animation.tick();
+		boundary.tick();
 	}
 
 }

@@ -3,13 +3,13 @@ package net.egartley.beyondorigins.objects;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import net.egartley.beyondorigins.logic.interaction.Boundary;
+import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 
 public abstract class Entity {
 
 	public ArrayList<Sprite> spriteCollection;
 	public Sprite currentSprite;
-	public Boundary boundary;
+	public EntityBoundary boundary;
 	public double absoluteX, absoluteY;
 	public boolean isAnimated;
 	public boolean isStatic;

@@ -28,6 +28,7 @@ public class TestMap extends Map {
 	@Override
 	public void changeSector(MapSector sector) {
 		currentSector = sector;
+		currentSector.onEnter();
 	}
 
 }
