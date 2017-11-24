@@ -9,5 +9,6 @@ public abstract class Map {
 	public MapSector currentSector;
 	public abstract void tick();
 	public abstract void render(Graphics graphics);
+	public abstract void changeSector(MapSector sector);
 	
 }

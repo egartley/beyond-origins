@@ -5,39 +5,44 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
+import net.egartley.beyondorigins.entities.Dummy;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.Player;
 import net.egartley.beyondorigins.gamestates.InGameState;
+import net.egartley.beyondorigins.input.Keyboard;
+import net.egartley.beyondorigins.maps.TileBuilder;
+import net.egartley.beyondorigins.media.images.ImageStore;
 import net.egartley.beyondorigins.objects.GameState;
 import net.egartley.beyondorigins.objects.SpriteSheet;
-import net.egartley.beyondorigins.threads.Tick;
+import net.egartley.beyondorigins.threads.MainTick;
 
 public class Game extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = 8213282993283826186L;
+	private static short frames, currentFrames;
+	private static JFrame frame;
+	private static Dimension windowDimension = new Dimension(1024, 576);
+	private Graphics graphics;
+
+	private static Thread renderThread;
+	private static Thread tickThread;
+
 	public static boolean running = false;
+	public static boolean runTickThread = true;
+	public static boolean drawBoundaries = true;
 
-	public static short frames, currentFrames;
-	public static Graphics graphics;
-	public static JFrame frame;
-	public static Dimension windowDimension = new Dimension(1040, 585);
-
-	public Thread renderThread;
-	public Thread tickThread;
-
-	private Tick tick = new Tick();
+	private static MainTick tick = new MainTick();
 
 	public static GameState currentGameState;
 
 	private void init() {
-		load();
+		loadGraphicsAndEntities();
+		loadMaps();
 		currentGameState = new InGameState();
+		this.addKeyListener(new Keyboard());
 	}
 
 	public static void main(String[] args) {
@@ -55,42 +60,49 @@ public class Game extends Canvas implements Runnable {
 		game.start();
 	}
 
-	public static void load() {
-		// *********** PLAYER BEGIN ***********
-		BufferedImage playerImage = null;
-		try {
-			playerImage = ImageIO.read(new File("resources/images/player-default.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	private void loadGraphicsAndEntities() {
+		ImageStore.loadAll();
 		byte scale = 2;
+		
+		// *********** PLAYER BEGIN ***********
+		BufferedImage playerImage = ImageStore.playerDefault;
 		if (playerImage != null) {
 			playerImage = Util.resized(playerImage, playerImage.getWidth() * scale, playerImage.getHeight() * scale);
 		}
 		Entities.PLAYER = new Player(new SpriteSheet(playerImage, 15 * scale, 23 * scale, 2, 4).getSpriteCollection());
 		// ************ PLAYER END ************
+		
+		// ************ DUMMY BEGIN ***********
+		BufferedImage dummyImage = ImageStore.dummy;
+		if (dummyImage != null) {
+			dummyImage = Util.resized(dummyImage, dummyImage.getWidth() * scale, dummyImage.getHeight() * scale);
+		}
+		Entities.DUMMY = new Dummy(new SpriteSheet(dummyImage, 15 * scale, 23 * scale, 2, 4).getSpriteCollection().get(0));
+		// ************ DUMMY END *************
 	}
 
-	public synchronized void start() {
+	private void loadMaps() {
+		TileBuilder.load();
+		net.egartley.beyondorigins.definitions.maps.testmap.Sectors.defineAll();
+	}
+
+	private synchronized void start() {
 		if (running) {
 			return;
 		}
 		running = true;
 
 		renderThread = new Thread(this);
-		tickThread = new Thread(tick);
 
 		renderThread.setPriority(1);
-		tickThread.setPriority(2);
 
-		renderThread.setName("Render");
-		tickThread.setName("Tick");
+		renderThread.setName("Main-Render");
 
-		tickThread.start();
+		restartMainTickThread();
 		renderThread.start();
 	}
 
-	public synchronized void stop() {
+	private synchronized void stop() {
 		if (!running) {
 			return;
 		}
@@ -135,7 +147,7 @@ public class Game extends Canvas implements Runnable {
 		stop();
 	}
 
-	public synchronized void render() {
+	private synchronized void render() {
 		BufferStrategy bs = getBufferStrategy();
 		if (bs == null) {
 			createBufferStrategy(2);
@@ -154,7 +166,19 @@ public class Game extends Canvas implements Runnable {
 		bs.dispose();
 	}
 
-	public static short getCurrentFramesPerSecond() {
+	public static void stopMainTickThread() {
+		runTickThread = false;
+	}
+
+	public static void restartMainTickThread() {
+		runTickThread = true;
+		tickThread = new Thread(tick);
+		tickThread.setPriority(2);
+		tickThread.setName("Main-Tick");
+		tickThread.start();
+	}
+
+	public static short getFPS() {
 		return currentFrames;
 	}
 

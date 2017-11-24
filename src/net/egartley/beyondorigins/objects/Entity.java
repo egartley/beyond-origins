@@ -3,11 +3,14 @@ package net.egartley.beyondorigins.objects;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
+
 public abstract class Entity {
 
 	public ArrayList<Sprite> spriteCollection;
 	public Sprite currentSprite;
-	public int absoluteX, absoluteY;
+	public EntityBoundary boundary;
+	public double absoluteX, absoluteY;
 	public boolean isAnimated;
 	public boolean isStatic;
 	

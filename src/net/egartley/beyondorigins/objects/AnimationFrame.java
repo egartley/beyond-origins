@@ -2,18 +2,18 @@ package net.egartley.beyondorigins.objects;
 
 import java.awt.image.BufferedImage;
 
-public class SpriteFrame {
+public class AnimationFrame {
 
 	private Sprite parent;
-	private BufferedImage frameImage;
+	private BufferedImage bufferedImage;
 
 	public int index;
 
-	public SpriteFrame(Sprite parent, int index) {
+	public AnimationFrame(Sprite parent, int index) {
 		this.parent = parent;
 		this.index = index;
 		try {
-			frameImage = parent.sheetImage.getSubimage(index * parent.frameWidth, 0, parent.frameWidth,
+			bufferedImage = parent.sheetImage.getSubimage(index * parent.frameWidth, 0, parent.frameWidth,
 					parent.frameHeight);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -25,7 +25,7 @@ public class SpriteFrame {
 	}
 
 	public BufferedImage asBufferedImage() {
-		return frameImage;
+		return bufferedImage;
 	}
 
 }

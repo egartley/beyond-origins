@@ -3,44 +3,32 @@ package net.egartley.beyondorigins.objects;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import net.egartley.beyondorigins.Util;
+
 public class Sprite {
 
+	private int uuid;
+	
 	public BufferedImage sheetImage;
-	public ArrayList<SpriteFrame> frameCollection = new ArrayList<SpriteFrame>();
-	public boolean isAnimated, isSquareFrames;
-	public int frameWidth, frameHeight, currentFrameIndex = 0;
+	public ArrayList<AnimationFrame> frameCollection = new ArrayList<AnimationFrame>();
+	public int frameWidth, frameHeight;
+	public short currentFrameIndex = 0;
 
 	public Sprite(BufferedImage image, int size) {
-		this.sheetImage = image;
+		sheetImage = image;
 		frameWidth = size;
 		frameHeight = size;
-		isSquareFrames = frameWidth == frameHeight;
+		uuid = Util.randomInt(9999, 1000, true);
 	}
-
-	public Sprite(BufferedImage image, int size, boolean animated) {
-		this.sheetImage = image;
-		frameWidth = size;
-		frameHeight = size;
-		isSquareFrames = frameWidth == frameHeight;
-		isAnimated = animated;
-	}
-
+	
 	public Sprite(BufferedImage image, int width, int height) {
-		this.sheetImage = image;
+		sheetImage = image;
 		frameWidth = width;
 		frameHeight = height;
-		isSquareFrames = frameWidth == frameHeight;
+		uuid = Util.randomInt(9999, 1000, true);
 	}
 
-	public Sprite(BufferedImage image, int width, int height, boolean animated) {
-		this.sheetImage = image;
-		frameWidth = width;
-		frameHeight = height;
-		isSquareFrames = frameWidth == frameHeight;
-		isAnimated = animated;
-	}
-
-	public SpriteFrame getFrameAt(int index) {
+	public AnimationFrame getFrameAt(int index) {
 		if (index >= frameCollection.size())
 			return null;
 		return frameCollection.get(index);
@@ -53,12 +41,17 @@ public class Sprite {
 	public void setFrames(int numberOfFrames) {
 		frameCollection.clear();
 		if (numberOfFrames == 1) {
-			frameCollection.add(new SpriteFrame(this, 0));
+			frameCollection.add(new AnimationFrame(this, 0));
 			return;
 		}
 		for (int i = 0; i < numberOfFrames; i++) {
-			frameCollection.add(new SpriteFrame(this, i));
+			frameCollection.add(new AnimationFrame(this, i));
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return Integer.toHexString(uuid);
 	}
 
 }

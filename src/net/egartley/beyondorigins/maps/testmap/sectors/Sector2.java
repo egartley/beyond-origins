@@ -1,13 +1,13 @@
-package net.egartley.beyondorigins.maps.testmap2.sectors;
+package net.egartley.beyondorigins.maps.testmap.sectors;
 
 import java.awt.Graphics;
 
 import net.egartley.beyondorigins.objects.MapSector;
 import net.egartley.beyondorigins.objects.MapSectorDefinition;
 
-public class Sector1 extends MapSector {
+public class Sector2 extends MapSector {
 
-	public Sector1(MapSectorDefinition def) {
+	public Sector2(MapSectorDefinition def) {
 		super(def);
 		definition = def;
 	}
