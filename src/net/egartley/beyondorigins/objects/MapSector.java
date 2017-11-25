@@ -16,16 +16,14 @@ public abstract class MapSector {
 	public abstract void onExit();
 	
 	public void drawTiles(Graphics graphics, int ix, int iy) {
-		int changeY = 0, changeX = 0, intervalX = 0, intervalY = 0;
+		int changeY = 0, changeX = 0;
 		for (ArrayList<MapTile> row : definition.tiles) {
 			for (MapTile tile : row) {
-				intervalX = tile.width;
-				intervalY = tile.height;
 				graphics.drawImage(tile.bufferedImage, ix + changeX, iy + changeY, null);
-				changeX += intervalX;
+				changeX += 32;
 			}
 			changeX = 0;
-			changeY += intervalY;
+			changeY += 32;
 		}
 	}
 	

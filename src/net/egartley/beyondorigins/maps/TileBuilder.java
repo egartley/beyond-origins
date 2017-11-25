@@ -7,6 +7,8 @@ import net.egartley.beyondorigins.objects.MapTile;
 
 public class TileBuilder {
 
+	public static final byte GRASS = 0, SAND = 1, STONE = 2;
+
 	public static MapTile grass, sand, stone;
 
 	public static void load() {
@@ -21,13 +23,13 @@ public class TileBuilder {
 			ArrayList<MapTile> row = new ArrayList<MapTile>();
 			for (byte j = 0; j < b[i].length; j++) {
 				switch (b[i][j]) {
-				case 0:
+				case GRASS:
 					row.add(grass);
 					break;
-				case 1:
+				case SAND:
 					row.add(sand);
 					break;
-				case 2:
+				case STONE:
 					row.add(stone);
 					break;
 				default:

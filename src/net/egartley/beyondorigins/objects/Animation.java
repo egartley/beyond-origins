@@ -10,7 +10,7 @@ public class Animation {
 	private boolean setStopFrame;
 
 	public Sprite sprite;
-	public AnimationFrame currentFrame, startFrame;
+	public AnimationFrame frame, startFrame;
 
 	/**
 	 * Creates a new animation
@@ -23,7 +23,7 @@ public class Animation {
 		frameIndex = 0;
 		startIndex = 0;
 		startFrame = sprite.frameCollection.get(startIndex);
-		currentFrame = startFrame;
+		frame = startFrame;
 	}
 
 	/**
@@ -40,7 +40,7 @@ public class Animation {
 		frameIndex = start;
 		startIndex = frameIndex;
 		startFrame = sprite.frameCollection.get(startIndex);
-		currentFrame = startFrame;
+		frame = startFrame;
 	}
 
 	private AnimationFrame nextFrame() {
@@ -113,7 +113,7 @@ public class Animation {
 	 *            The y-bound coordinate (absolute)
 	 */
 	public void render(Graphics graphics, int x, int y) {
-		graphics.drawImage(currentFrame.asBufferedImage(), x, y, null);
+		graphics.drawImage(frame.asBufferedImage(), x, y, null);
 	}
 
 	/**
@@ -125,11 +125,11 @@ public class Animation {
 				delay++;
 			} else {
 				delay = 0;
-				currentFrame = nextFrame();
+				frame = nextFrame();
 			}
 		} else {
 			if (!setStopFrame) {
-				currentFrame = startFrame;
+				frame = startFrame;
 				setStopFrame = true;
 			}
 		}

@@ -7,13 +7,19 @@ import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.objects.Sprite;
 import net.egartley.beyondorigins.objects.StaticEntity;
 
-public class Dummy extends StaticEntity {
-
-	public Dummy(Sprite sprite) {
-		currentSprite = sprite;
-		x = 470;
-		y = 190;
+public class Tree1 extends StaticEntity {
+	
+	public Tree1(Sprite s) {
+		currentSprite = s;
+		x = 200;
+		y = 200;
 		setBoundary();
+	}
+
+	@Override
+	public void setBoundary() {
+		BufferedImage image = currentSprite.getCurrentFrameAsBufferedImage();
+		boundary = new EntityBoundary(this, image.getWidth(), image.getHeight(), 2, x, y);
 	}
 
 	@Override
@@ -24,13 +30,7 @@ public class Dummy extends StaticEntity {
 
 	@Override
 	public void tick() {
-
-	}
-
-	@Override
-	public void setBoundary() {
-		BufferedImage image = currentSprite.getCurrentFrameAsBufferedImage();
-		boundary = new EntityBoundary(this, image.getWidth(), image.getHeight(), 12, x, y);
+		
 	}
 
 }

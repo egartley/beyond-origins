@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import net.egartley.beyondorigins.entities.Dummy;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.Player;
+import net.egartley.beyondorigins.entities.Tree1;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.input.Keyboard;
 import net.egartley.beyondorigins.maps.TileBuilder;
@@ -21,21 +22,29 @@ import net.egartley.beyondorigins.threads.MainTick;
 
 public class Game extends Canvas implements Runnable {
 
+	// SELF
 	private static final long serialVersionUID = 8213282993283826186L;
 	private static short frames, currentFrames;
 	private static JFrame frame;
-	private static Dimension windowDimension = new Dimension(1024, 576);
+	private static Dimension windowDimension = new Dimension(998, 573);
 	private Graphics graphics;
 
+	// CONSTANTS
+	public static final int WINDOW_WIDTH = windowDimension.width - 7, WINDOW_HEIGHT = windowDimension.height - 30;
+
+	// THREADS
 	private static Thread renderThread;
 	private static Thread tickThread;
 
+	// THREAD OBJECTS
+	private static MainTick tick = new MainTick();
+
+	// FLAGS
 	public static boolean running = false;
 	public static boolean runTickThread = true;
 	public static boolean drawBoundaries = true;
 
-	private static MainTick tick = new MainTick();
-
+	// GAMESTATES
 	public static GameState currentGameState;
 
 	private void init() {
@@ -63,7 +72,7 @@ public class Game extends Canvas implements Runnable {
 	private void loadGraphicsAndEntities() {
 		ImageStore.loadAll();
 		byte scale = 2;
-		
+
 		// *********** PLAYER BEGIN ***********
 		BufferedImage playerImage = ImageStore.playerDefault;
 		if (playerImage != null) {
@@ -71,19 +80,23 @@ public class Game extends Canvas implements Runnable {
 		}
 		Entities.PLAYER = new Player(new SpriteSheet(playerImage, 15 * scale, 23 * scale, 2, 4).getSpriteCollection());
 		// ************ PLAYER END ************
-		
+
 		// ************ DUMMY BEGIN ***********
 		BufferedImage dummyImage = ImageStore.dummy;
 		if (dummyImage != null) {
 			dummyImage = Util.resized(dummyImage, dummyImage.getWidth() * scale, dummyImage.getHeight() * scale);
 		}
-		Entities.DUMMY = new Dummy(new SpriteSheet(dummyImage, 15 * scale, 23 * scale, 2, 4).getSpriteCollection().get(0));
+		Entities.DUMMY = new Dummy(
+				new SpriteSheet(dummyImage, 15 * scale, 23 * scale, 2, 4).getSpriteCollection().get(0));
 		// ************ DUMMY END *************
+
+		// ************ TREE1 BEGIN ***********
+		Entities.TREE1 = new Tree1(new SpriteSheet(ImageStore.tree1, 64, 64, 1, 1).getSpriteCollection().get(0));
 	}
 
 	private void loadMaps() {
 		TileBuilder.load();
-		net.egartley.beyondorigins.definitions.maps.testmap.Sectors.defineAll();
+		net.egartley.beyondorigins.definitions.maps.Sectors.defineAll();
 	}
 
 	private synchronized void start() {
@@ -116,7 +129,6 @@ public class Game extends Canvas implements Runnable {
 
 	@Override
 	public void run() {
-		// init
 		init();
 		render();
 		long lastTime = System.nanoTime();

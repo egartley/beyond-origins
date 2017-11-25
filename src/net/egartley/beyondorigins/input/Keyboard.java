@@ -24,7 +24,9 @@ public class Keyboard implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		pressed.remove(pressed.indexOf(e.getKeyCode()));
+		if (pressed.indexOf(e.getKeyCode()) != -1) {
+			pressed.remove(pressed.indexOf(e.getKeyCode()));
+		}
 		if (e.getKeyCode() == KeyEvent.VK_F3) {
 			Game.drawBoundaries = !Game.drawBoundaries;
 		}

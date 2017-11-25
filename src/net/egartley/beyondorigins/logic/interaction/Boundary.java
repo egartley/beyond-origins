@@ -4,8 +4,7 @@ import java.awt.Graphics;
 
 public abstract class Boundary {
 	
-	public double x, y;
-	public int width, height;
+	public int x, y, width, height, padding, north, east, south, west;
 	public abstract void draw(Graphics graphics);
 	public abstract void tick();
 	
