@@ -16,26 +16,29 @@ public abstract class Collision {
 	public Collision(Boundary b1, Boundary b2) {
 		boundary1 = b1;
 		boundary2 = b2;
-		rect1 = new Rectangle(boundary1.x, boundary1.y, boundary1.width, boundary1.height);
-		rect2 = new Rectangle(boundary2.x, boundary2.y, boundary2.width, boundary2.height);
+		rect1 = boundary1.asRectangle();
+		rect2 = boundary2.asRectangle();
 	}
 
-	public void check() {
+	public void tick() {
 		rect1.x = boundary1.x;
 		rect2.x = boundary2.x;
 		rect1.y = boundary1.y;
 		rect2.y = boundary2.y;
 		isCollided = rect1.intersects(rect2);
+		
 		if (isCollided && !firedCollisionEvent) {
 			onCollision();
 			firedCollisionEvent = true;
 		}
-		if (!isCollided) {
+		if (!isCollided && firedCollisionEvent) {
+			postCollision();
 			firedCollisionEvent = false;
 		}
 		if (previouslyCollided != isCollided) {
 			setBoundaryColors();
 		}
+		
 		previouslyCollided = isCollided;
 	}
 
@@ -65,5 +68,6 @@ public abstract class Collision {
 	}
 
 	public abstract void onCollision();
+	public abstract void postCollision();
 
 }

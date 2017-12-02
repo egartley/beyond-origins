@@ -13,12 +13,14 @@ import net.egartley.beyondorigins.objects.Sprite;
 
 public class Player extends AnimatedEntity {
 
-	private final byte UP = 1, DOWN = 2, LEFT = 3, RIGHT = 4;
+	public final byte UP = 1, DOWN = 2, LEFT = 3, RIGHT = 4;
 	private final byte LEFT_ANIMATION = 0, RIGHT_ANIMATION = 1;
 	private byte animationThreshold = 10;
 	public byte speed = 1;
-	private byte boundaryPadding = 12;
+	private byte boundaryPadding = 5;
 	private int maxX, maxY;
+	public boolean canMoveUp = true, canMoveDown = true, canMoveLeft = true, canMoveRight = true;
+	public boolean movingUp = false, movingDown = false, movingLeft = false, movingRight = false;
 
 	public Player(ArrayList<Sprite> sprites) {
 		this.spriteCollection = sprites;
@@ -35,26 +37,26 @@ public class Player extends AnimatedEntity {
 		}
 		switch (direction) {
 		case UP:
-			if (boundary.north <= 0) {
+			if (boundary.north <= 0 || !canMoveUp) {
 				break; // top of window
 			}
 			y -= speed;
 			break;
 		case DOWN:
-			if (boundary.south >= maxY) {
+			if (boundary.south >= maxY || !canMoveDown) {
 				break; // bottom of window
 			}
 			y += speed;
 			break;
 		case LEFT:
-			if (boundary.west <= 0) {
+			if (boundary.west <= 0 || !canMoveLeft) {
 				break; // left of window
 			}
 			x -= speed;
 			setAnimation(LEFT_ANIMATION);
 			break;
 		case RIGHT:
-			if (boundary.east >= maxX) {
+			if (boundary.east >= maxX || !canMoveRight) {
 				break; // right of window
 			}
 			x += speed;
@@ -67,6 +69,13 @@ public class Player extends AnimatedEntity {
 
 	private void setAnimation(byte i) {
 		animation = animationCollection.get(i);
+	}
+
+	public void enableAllMovement() {
+		canMoveUp = true;
+		canMoveDown = true;
+		canMoveLeft = true;
+		canMoveRight = true;
 	}
 
 	@Override
@@ -97,14 +106,22 @@ public class Player extends AnimatedEntity {
 		boolean down = Keyboard.isPressed(KeyEvent.VK_S);
 		boolean left = Keyboard.isPressed(KeyEvent.VK_A);
 		boolean right = Keyboard.isPressed(KeyEvent.VK_D);
+		movingUp = false;
+		movingDown = false;
+		movingLeft = false;
+		movingRight = false;
 		if (up) {
+			movingUp = true;
 			move(UP);
 		} else if (down) {
+			movingDown = true;
 			move(DOWN);
 		}
 		if (left) {
+			movingLeft = true;
 			move(LEFT);
 		} else if (right) {
+			movingRight = true;
 			move(RIGHT);
 		}
 		if (!left && !right && !down && !up) {

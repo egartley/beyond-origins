@@ -3,6 +3,12 @@ package net.egartley.beyondorigins.objects;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+/**
+ * An image that can be "split" into multiple sprites
+ * 
+ * @author Evan Gartley
+ * @see Sprite
+ */
 public class SpriteSheet {
 
 	private BufferedImage fullImage;

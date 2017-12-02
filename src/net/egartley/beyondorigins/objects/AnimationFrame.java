@@ -2,6 +2,12 @@ package net.egartley.beyondorigins.objects;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * A single frame within an {@link Animation}
+ * 
+ * @author Evan Gartley
+ * @see Animation
+ */
 public class AnimationFrame {
 
 	private Sprite parent;
@@ -9,6 +15,13 @@ public class AnimationFrame {
 
 	public int index;
 
+	/**
+	 * Creates a new frame for use in an {@link Animation}
+	 * 
+	 * @param parent
+	 * @param index
+	 * @see Animation
+	 */
 	public AnimationFrame(Sprite parent, int index) {
 		this.parent = parent;
 		this.index = index;
@@ -20,10 +33,20 @@ public class AnimationFrame {
 		}
 	}
 
+	/**
+	 * Returns this frame's "parent" sprite ({@link AnimationFrame#parent})
+	 * 
+	 * @return {@link Sprite}
+	 */
 	public Sprite getParent() {
 		return parent;
 	}
 
+	/**
+	 * Returns this frame as a {@link BufferedImage}
+	 * 
+	 * @return {@link BufferedImage}
+	 */
 	public BufferedImage asBufferedImage() {
 		return bufferedImage;
 	}

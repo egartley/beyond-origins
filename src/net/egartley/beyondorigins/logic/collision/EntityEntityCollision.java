@@ -15,7 +15,12 @@ public class EntityEntityCollision extends Collision {
 
 	@Override
 	public void onCollision() {
-		System.out.println("Oof!");
+		// overriden in declaration
+	}
+
+	@Override
+	public void postCollision() {
+		// overriden in declaration
 	}
 
 }

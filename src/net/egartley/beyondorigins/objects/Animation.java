@@ -2,9 +2,18 @@ package net.egartley.beyondorigins.objects;
 
 import java.awt.Graphics;
 
+/**
+ * Represents a collection of <code>AnimationFrame</code>s used for animating,
+ * and the control thereof, a <code>Sprite</code>
+ * 
+ * @author Evan Gartley
+ *
+ * @see AnimationFrame
+ */
 public class Animation {
 
-	private byte delay = 0, threshold = 10;
+	private byte delay = 0;
+	private byte threshold = 10;
 	private int frameIndex, startIndex;
 	public boolean isStopped;
 	private boolean setStopFrame;
@@ -30,10 +39,10 @@ public class Animation {
 	 * Creates a new animation, starting at the given index
 	 * 
 	 * @param s
-	 *            Sprite to animate (must have at least one frame)
+	 *            Sprite to animate (at least one frame)
 	 * @param startIndex
 	 *            The index of the frame to start at (from
-	 *            <code>Sprite.frameCollection</code>)
+	 *            {@link Sprite#frameCollection frameCollection})
 	 */
 	public Animation(Sprite s, int start) {
 		sprite = s;
@@ -104,20 +113,25 @@ public class Animation {
 	}
 
 	/**
+	 * Renders the current <code>AnimationFrame</code> ({@link Animation#frame
+	 * frame})
 	 * 
 	 * @param graphics
-	 *            The {@link java.awt.Graphics} object
+	 *            The {@link java.awt.Graphics Graphics} object
 	 * @param x
-	 *            The x-bound coordinate (absolute)
+	 *            The x-axis coordinate
 	 * @param y
-	 *            The y-bound coordinate (absolute)
+	 *            The y-axis coordinate
+	 * 
+	 * @see #frame
+	 * @see AnimationFrame
 	 */
 	public void render(Graphics graphics, int x, int y) {
 		graphics.drawImage(frame.asBufferedImage(), x, y, null);
 	}
 
 	/**
-	 * Should be called 60 times per second, in a tick thread
+	 * Should be called 60 times per second in a tick thread
 	 */
 	public void tick() {
 		if (!isStopped) {
