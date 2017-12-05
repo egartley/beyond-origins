@@ -23,38 +23,41 @@ import net.egartley.beyondorigins.threads.MainTick;
 public class Game extends Canvas implements Runnable {
 
 	// SELF
-	private static final long serialVersionUID = 8213282993283826186L;
-	private static short frames, currentFrames;
-	private static JFrame frame;
-	private static Dimension windowDimension = new Dimension(998, 573);
-	private Graphics graphics;
+	private static final long	serialVersionUID	= 8213282993283826186L;
+	private static short		frames, currentFrames;
+	private static JFrame		frame;
+	private static Dimension	windowDimension		= new Dimension(998, 573);
+	private Graphics			graphics;
 
 	// CONSTANTS
-	public static final int WINDOW_WIDTH = windowDimension.width - 7, WINDOW_HEIGHT = windowDimension.height - 30;
+	public static final int		WINDOW_WIDTH		= windowDimension.width - 7,
+			WINDOW_HEIGHT = windowDimension.height - 30;
 
 	// THREADS
-	private static Thread renderThread;
-	private static Thread tickThread;
+	private static Thread		renderThread;
+	private static Thread		tickThread;
 
 	// THREAD OBJECTS
-	private static MainTick tick = new MainTick();
+	private static MainTick		tick				= new MainTick();
 
 	// FLAGS
-	public static boolean running = false;
-	public static boolean runTickThread = true;
-	public static boolean drawBoundaries = true;
+	public static boolean		running				= false;
+	public static boolean		runTickThread		= true;
+	public static boolean		drawBoundaries		= true;
 
 	// GAMESTATES
-	public static GameState currentGameState;
+	public static GameState		currentGameState;
 
-	private void init() {
+	private void init()
+	{
 		loadGraphicsAndEntities();
 		loadMaps();
 		currentGameState = new InGameState();
 		this.addKeyListener(new Keyboard());
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
 		Game game = new Game();
 		game.setPreferredSize(windowDimension);
 		game.setMaximumSize(windowDimension);
@@ -69,7 +72,8 @@ public class Game extends Canvas implements Runnable {
 		game.start();
 	}
 
-	private void loadGraphicsAndEntities() {
+	private void loadGraphicsAndEntities()
+	{
 		ImageStore.loadAll();
 		byte scale = 2;
 
@@ -94,12 +98,14 @@ public class Game extends Canvas implements Runnable {
 		Entities.TREE1 = new Tree1(new SpriteSheet(ImageStore.tree1, 64, 64, 1, 1).getSpriteCollection().get(0));
 	}
 
-	private void loadMaps() {
+	private void loadMaps()
+	{
 		TileBuilder.load();
 		net.egartley.beyondorigins.definitions.maps.Sectors.defineAll();
 	}
 
-	private synchronized void start() {
+	private synchronized void start()
+	{
 		if (running) {
 			return;
 		}
@@ -115,20 +121,23 @@ public class Game extends Canvas implements Runnable {
 		renderThread.start();
 	}
 
-	private synchronized void stop() {
+	private synchronized void stop()
+	{
 		if (!running) {
 			return;
 		}
 		running = false;
 		try {
 			renderThread.join();
-		} catch (InterruptedException e) {
+		}
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void run() {
+	public void run()
+	{
 		init();
 		render();
 		long lastTime = System.nanoTime();
@@ -152,14 +161,16 @@ public class Game extends Canvas implements Runnable {
 			}
 			try {
 				Thread.sleep(1L);
-			} catch (InterruptedException e) {
+			}
+			catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 		stop();
 	}
 
-	private synchronized void render() {
+	private synchronized void render()
+	{
 		BufferStrategy bs = getBufferStrategy();
 		if (bs == null) {
 			createBufferStrategy(2);
@@ -178,11 +189,13 @@ public class Game extends Canvas implements Runnable {
 		bs.dispose();
 	}
 
-	public static void stopMainTickThread() {
+	public static void stopMainTickThread()
+	{
 		runTickThread = false;
 	}
 
-	public static void restartMainTickThread() {
+	public static void restartMainTickThread()
+	{
 		runTickThread = true;
 		tickThread = new Thread(tick);
 		tickThread.setPriority(2);
@@ -190,7 +203,8 @@ public class Game extends Canvas implements Runnable {
 		tickThread.start();
 	}
 
-	public static short getFPS() {
+	public static short getFPS()
+	{
 		return currentFrames;
 	}
 

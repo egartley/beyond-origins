@@ -16,18 +16,18 @@ public abstract class GameState {
 	 * 
 	 * @see GameState
 	 */
-	public static final int IN_GAME = 0;
+	public static final int			IN_GAME	= 0;
 
 	/**
 	 * Collection of possible "sub", or lower level, game states
 	 * 
 	 * @see SubGameState
 	 */
-	public ArrayList<SubGameState> subStates;
+	public ArrayList<SubGameState>	subStates;
 	/**
 	 * Unique integer used to identify different game states
 	 */
-	public int identificationNumber;
+	public int						identificationNumber;
 
 	public abstract void render(Graphics graphics);
 

@@ -13,17 +13,17 @@ import net.egartley.beyondorigins.objects.Sprite;
 
 public class Player extends AnimatedEntity {
 
-	public final byte UP = 1, DOWN = 2, LEFT = 3, RIGHT = 4;
-	private final byte LEFT_ANIMATION = 0, RIGHT_ANIMATION = 1;
-	private byte animationThreshold = 10;
-	public byte speed = 1;
-	private byte boundaryPadding = 5;
-	private int maxX, maxY;
-	public boolean canMoveUp = true, canMoveDown = true, canMoveLeft = true, canMoveRight = true;
-	public boolean movingUp = false, movingDown = false, movingLeft = false, movingRight = false;
+	public final byte	UP					= 1, DOWN = 2, LEFT = 3, RIGHT = 4;
+	private final byte	LEFT_ANIMATION		= 0, RIGHT_ANIMATION = 1;
+	private byte		animationThreshold	= 10;
+	public byte			speed				= 1;
+	private byte		boundaryPadding		= 5;
+	private int			maxX, maxY;
+	public boolean		canMoveUp			= true, canMoveDown = true, canMoveLeft = true, canMoveRight = true;
+	public boolean		movingUp			= false, movingDown = false, movingLeft = false, movingRight = false;
 
 	public Player(ArrayList<Sprite> sprites) {
-		this.spriteCollection = sprites;
+		spriteCollection = sprites;
 		currentSprite = sprites.get(0);
 		maxX = Game.WINDOW_WIDTH;
 		maxY = Game.WINDOW_HEIGHT;
@@ -31,47 +31,51 @@ public class Player extends AnimatedEntity {
 		setBoundary();
 	}
 
-	private void move(byte direction) {
+	private void move(byte direction)
+	{
 		if (animation.isStopped) {
 			animation.restart();
 		}
-		switch (direction) {
-		case UP:
-			if (boundary.north <= 0 || !canMoveUp) {
-				break; // top of window
-			}
-			y -= speed;
+		switch (direction)
+		{
+			case UP:
+				if (boundary.top <= 0 || !canMoveUp) {
+					break; // top of window
+				}
+				y -= speed;
 			break;
-		case DOWN:
-			if (boundary.south >= maxY || !canMoveDown) {
-				break; // bottom of window
-			}
-			y += speed;
+			case DOWN:
+				if (boundary.bottom >= maxY || !canMoveDown) {
+					break; // bottom of window
+				}
+				y += speed;
 			break;
-		case LEFT:
-			if (boundary.west <= 0 || !canMoveLeft) {
-				break; // left of window
-			}
-			x -= speed;
-			setAnimation(LEFT_ANIMATION);
+			case LEFT:
+				if (boundary.left <= 0 || !canMoveLeft) {
+					break; // left of window
+				}
+				x -= speed;
+				setAnimation(LEFT_ANIMATION);
 			break;
-		case RIGHT:
-			if (boundary.east >= maxX || !canMoveRight) {
-				break; // right of window
-			}
-			x += speed;
-			setAnimation(RIGHT_ANIMATION);
+			case RIGHT:
+				if (boundary.right >= maxX || !canMoveRight) {
+					break; // right of window
+				}
+				x += speed;
+				setAnimation(RIGHT_ANIMATION);
 			break;
-		default:
+			default:
 			break;
 		}
 	}
 
-	private void setAnimation(byte i) {
+	private void setAnimation(byte i)
+	{
 		animation = animationCollection.get(i);
 	}
 
-	public void enableAllMovement() {
+	public void enableAllMovement()
+	{
 		canMoveUp = true;
 		canMoveDown = true;
 		canMoveLeft = true;
@@ -79,7 +83,8 @@ public class Player extends AnimatedEntity {
 	}
 
 	@Override
-	public void setAnimationCollection() {
+	public void setAnimationCollection()
+	{
 		animationCollection.clear();
 		for (Sprite s : spriteCollection) {
 			Animation a = new Animation(s);
@@ -90,18 +95,21 @@ public class Player extends AnimatedEntity {
 	}
 
 	@Override
-	public void setBoundary() {
+	public void setBoundary()
+	{
 		boundary = new EntityBoundary(this, currentSprite.frameWidth, currentSprite.frameHeight, boundaryPadding);
 	}
 
 	@Override
-	public void render(Graphics graphics) {
+	public void render(Graphics graphics)
+	{
 		animation.render(graphics, x, y);
 		boundary.draw(graphics);
 	}
 
 	@Override
-	public void tick() {
+	public void tick()
+	{
 		boolean up = Keyboard.isPressed(KeyEvent.VK_W);
 		boolean down = Keyboard.isPressed(KeyEvent.VK_S);
 		boolean left = Keyboard.isPressed(KeyEvent.VK_A);
@@ -113,14 +121,16 @@ public class Player extends AnimatedEntity {
 		if (up) {
 			movingUp = true;
 			move(UP);
-		} else if (down) {
+		}
+		else if (down) {
 			movingDown = true;
 			move(DOWN);
 		}
 		if (left) {
 			movingLeft = true;
 			move(LEFT);
-		} else if (right) {
+		}
+		else if (right) {
 			movingRight = true;
 			move(RIGHT);
 		}

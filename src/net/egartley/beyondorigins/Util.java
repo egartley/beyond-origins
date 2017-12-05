@@ -7,7 +7,8 @@ import java.awt.image.BufferedImage;
 public class Util {
 
 	// Credit: https://stackoverflow.com/a/13605411
-	private static BufferedImage toBufferedImage(Image img) {
+	private static BufferedImage toBufferedImage(Image img)
+	{
 		if (img instanceof BufferedImage) {
 			return (BufferedImage) img;
 		}
@@ -18,18 +19,22 @@ public class Util {
 		return bimage;
 	}
 
-	public static BufferedImage resized(BufferedImage image, int w, int h) {
+	public static BufferedImage resized(BufferedImage image, int w, int h)
+	{
 		return toBufferedImage(image.getScaledInstance(w, h, Image.SCALE_DEFAULT));
 	}
 
-	public static int randomInt(int max, int min) {
+	public static int randomInt(int max, int min)
+	{
 		return (int) (Math.random() * max + min);
 	}
 
-	public static int randomInt(int max, int min, boolean inclusive) {
+	public static int randomInt(int max, int min, boolean inclusive)
+	{
 		if (inclusive) {
 			return randomInt(max + 1, min);
-		} else {
+		}
+		else {
 			return randomInt(max, min);
 		}
 	}

@@ -3,32 +3,40 @@ package net.egartley.beyondorigins.entities;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.objects.Sprite;
 import net.egartley.beyondorigins.objects.StaticEntity;
 
+/**
+ * A tree that can be displayed on a map. It also serves as a barrier to the
+ * player
+ * 
+ * @author Evan Gartley
+ * @see StaticEntity
+ */
 public class Tree1 extends StaticEntity {
 
 	/**
-	 * Creates a new instance of {@code Tree1} with {@code Sprite} s
+	 * Creates a new instance of {@link Tree1} with the provided {@link Sprite}
 	 * 
-	 * @param s
-	 *            {@code Sprite} object to use while rendering
+	 * @param sprite
+	 *            {@link Sprite} object to use while rendering
 	 */
-	public Tree1(Sprite s) {
-		currentSprite = s;
+	public Tree1(Sprite sprite) {
+		currentSprite = sprite;
 		setBoundary();
 	}
 
 	/**
-	 * Creates a new instance of {@code Tree1} with {@code Sprite} s, at the given
-	 * coordinate
+	 * Creates a new instance of {@link Tree1} with the provided {@link Sprite} at
+	 * the supplied coordinates
 	 * 
-	 * @param s
-	 *            {@code Sprite} object to use while rendering
+	 * @param sprite
+	 *            {@link Sprite} object to use while rendering
 	 */
-	public Tree1(Sprite s, int x, int y) {
-		currentSprite = s;
+	public Tree1(Sprite sprite, int x, int y) {
+		currentSprite = sprite;
 		this.x = x;
 		this.y = y;
 		setBoundary();
@@ -44,58 +52,50 @@ public class Tree1 extends StaticEntity {
 	 * disabled
 	 * </p>
 	 * 
-	 * @param treeBoundary
-	 *            EntityBoundary of the instance of Tree1
+	 * @param tree
+	 *            {@link EntityBoundary} for the tree
+	 * @see Tree1
+	 * @see EntityBoundary
 	 */
-	public void playerCollision(EntityBoundary treeBoundary) {
-		EntityBoundary playerBoundary = Entities.PLAYER.boundary;
-		boolean down = Entities.PLAYER.movingDown;
-		boolean up = Entities.PLAYER.movingUp;
-		boolean right = Entities.PLAYER.movingRight;
-		boolean left = Entities.PLAYER.movingLeft;
-		if (playerBoundary.north <= treeBoundary.south && up) {
-			// bottom of tree
-			System.out.println("disable up");
-			Entities.PLAYER.canMoveUp = false;
-		} else if (playerBoundary.east >= treeBoundary.west && right) {
-			// right of tree
-			System.out.println("disable right");
-			Entities.PLAYER.canMoveRight = false;
+	public void onPlayerCollision(EntityEntityCollisionEvent event)
+	{
+		switch (event.collidedSide)
+		{
+			case EntityEntityCollisionEvent.RIGHT:
+				Entities.PLAYER.canMoveLeft = false;
+			break;
+			case EntityEntityCollisionEvent.LEFT:
+				Entities.PLAYER.canMoveRight = false;
+			break;
+			case EntityEntityCollisionEvent.TOP:
+				Entities.PLAYER.canMoveDown = false;
+			break;
+			case EntityEntityCollisionEvent.BOTTOM:
+				Entities.PLAYER.canMoveUp = false;
+			break;
+			default:
+			break;
 		}
-		if (playerBoundary.west <= treeBoundary.east && left) {
-			// left of tree
-			System.out.println("disable left");
-			Entities.PLAYER.canMoveLeft = false;
-		} else if (playerBoundary.south >= treeBoundary.north && down) {
-			// top of tree
-			System.out.println("disable down");
-			Entities.PLAYER.canMoveDown = false;
-		}
-		
-		if (!Entities.PLAYER.canMoveLeft) {
-			Entities.PLAYER.canMoveUp = true;
-		}
-		if (!Entities.PLAYER.canMoveRight) {
-			Entities.PLAYER.canMoveDown = true;
-		}
-		
-		System.out.println("\n");
 	}
 
 	@Override
-	public void setBoundary() {
+	protected void setBoundary()
+	{
 		BufferedImage image = currentSprite.getCurrentFrameAsBufferedImage();
-		boundary = new EntityBoundary(this, image.getWidth(), image.getHeight(), 2, x, y);
+		// negative padding works!
+		boundary = new EntityBoundary(this, image.getWidth(), image.getHeight(), -16, x, y);
 	}
 
 	@Override
-	public void render(Graphics graphics) {
+	public void render(Graphics graphics)
+	{
 		graphics.drawImage(currentSprite.getCurrentFrameAsBufferedImage(), x, y, null);
 		boundary.draw(graphics);
 	}
 
 	@Override
-	public void tick() {
+	public void tick()
+	{
 
 	}
 

@@ -51,7 +51,8 @@ public abstract class MapSector {
 	 *            Initial y-axis coordinate
 	 * @see MapSectorDefinition
 	 */
-	public void drawTiles(Graphics graphics, int ix, int iy) {
+	public void drawTiles(Graphics graphics, int ix, int iy)
+	{
 		int changeY = 0, changeX = 0;
 		for (ArrayList<MapTile> row : definition.tiles) {
 			for (MapTile tile : row) {

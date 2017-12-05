@@ -14,9 +14,9 @@ public class MapTile {
 	/**
 	 * This tile as a {@link BufferedImage} (used while rendering)
 	 */
-	public BufferedImage bufferedImage;
-	public int width, height;
-	public boolean isTraversable;
+	public BufferedImage	bufferedImage;
+	public int				width, height;
+	public boolean			isTraversable;
 
 	/**
 	 * Creates a new map tile with the provided {@link BufferedImage}

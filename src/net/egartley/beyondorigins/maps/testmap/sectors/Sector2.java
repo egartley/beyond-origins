@@ -9,27 +9,30 @@ public class Sector2 extends MapSector {
 
 	public Sector2(MapSectorDefinition def) {
 		super(def);
-		definition = def;
 	}
 
 	@Override
-	public void render(Graphics graphics) {
-		
+	public void render(Graphics graphics)
+	{
+
 	}
 
 	@Override
-	public void tick() {
-		
+	public void tick()
+	{
+
 	}
 
 	@Override
-	public void onEnter() {
-		
+	public void onEnter()
+	{
+
 	}
 
 	@Override
-	public void onExit() {
-		
+	public void onExit()
+	{
+
 	}
 
 }

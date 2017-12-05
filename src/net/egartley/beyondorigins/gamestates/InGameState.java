@@ -9,19 +9,21 @@ import net.egartley.beyondorigins.objects.Map;
 public class InGameState extends GameState {
 
 	public Map currentMap;
-	
+
 	public InGameState() {
 		identificationNumber = GameState.IN_GAME;
 		currentMap = new TestMap();
 	}
-	
+
 	@Override
-	public void render(Graphics graphics) {
+	public void render(Graphics graphics)
+	{
 		currentMap.render(graphics);
 	}
 
 	@Override
-	public void tick() {
+	public void tick()
+	{
 		currentMap.tick();
 	}
 

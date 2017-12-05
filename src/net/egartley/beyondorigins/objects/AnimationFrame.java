@@ -10,10 +10,10 @@ import java.awt.image.BufferedImage;
  */
 public class AnimationFrame {
 
-	private Sprite parent;
-	private BufferedImage bufferedImage;
+	private Sprite			parent;
+	private BufferedImage	bufferedImage;
 
-	public int index;
+	public int				index;
 
 	/**
 	 * Creates a new frame for use in an {@link Animation}
@@ -28,7 +28,8 @@ public class AnimationFrame {
 		try {
 			bufferedImage = parent.sheetImage.getSubimage(index * parent.frameWidth, 0, parent.frameWidth,
 					parent.frameHeight);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -38,7 +39,8 @@ public class AnimationFrame {
 	 * 
 	 * @return {@link Sprite}
 	 */
-	public Sprite getParent() {
+	public Sprite getParent()
+	{
 		return parent;
 	}
 
@@ -47,7 +49,8 @@ public class AnimationFrame {
 	 * 
 	 * @return {@link BufferedImage}
 	 */
-	public BufferedImage asBufferedImage() {
+	public BufferedImage asBufferedImage()
+	{
 		return bufferedImage;
 	}
 

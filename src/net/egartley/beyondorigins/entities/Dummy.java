@@ -17,18 +17,21 @@ public class Dummy extends StaticEntity {
 	}
 
 	@Override
-	public void render(Graphics graphics) {
+	public void render(Graphics graphics)
+	{
 		graphics.drawImage(currentSprite.getCurrentFrameAsBufferedImage(), x, y, null);
 		boundary.draw(graphics);
 	}
 
 	@Override
-	public void tick() {
+	public void tick()
+	{
 
 	}
 
 	@Override
-	public void setBoundary() {
+	public void setBoundary()
+	{
 		BufferedImage image = currentSprite.getCurrentFrameAsBufferedImage();
 		boundary = new EntityBoundary(this, image.getWidth(), image.getHeight(), 12, x, y);
 	}

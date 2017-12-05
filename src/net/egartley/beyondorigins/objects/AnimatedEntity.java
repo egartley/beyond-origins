@@ -16,13 +16,13 @@ public abstract class AnimatedEntity extends Entity {
 	 * {@link Entity#render(java.awt.Graphics) render} and {@link Entity#tick()
 	 * tick}
 	 */
-	public Animation animation;
+	public Animation			animation;
 	/**
 	 * All of the animations that could be used while rendering
 	 * 
 	 * @see Animation
 	 */
-	public ArrayList<Animation> animationCollection = new ArrayList<Animation>();
+	public ArrayList<Animation>	animationCollection	= new ArrayList<Animation>();
 
 	/**
 	 * Creates a new animated entity

@@ -11,10 +11,10 @@ import java.util.ArrayList;
  */
 public class SpriteSheet {
 
-	private BufferedImage fullImage;
-	private ArrayList<Sprite> spriteCollection;
+	private BufferedImage		fullImage;
+	private ArrayList<Sprite>	spriteCollection;
 
-	public int spriteWidth, spriteHeight, strips, stripWidth;
+	public int					spriteWidth, spriteHeight, strips, stripWidth;
 
 	public SpriteSheet(int w, int h, int r, int frames) {
 		spriteWidth = w;
@@ -33,11 +33,13 @@ public class SpriteSheet {
 		loadAllSprites(frames);
 	}
 
-	public void setFullImage(BufferedImage image) {
+	public void setFullImage(BufferedImage image)
+	{
 		fullImage = image;
 	}
 
-	private void loadAllSprites(int frames) {
+	private void loadAllSprites(int frames)
+	{
 		spriteCollection = new ArrayList<Sprite>(strips);
 		for (int i = 0; i < strips; i++) {
 			Sprite s = new Sprite(getStripAsBufferedImage(i), spriteWidth, spriteHeight);
@@ -46,19 +48,23 @@ public class SpriteSheet {
 		}
 	}
 
-	public BufferedImage getStripAsBufferedImage(int rowIndex) {
+	public BufferedImage getStripAsBufferedImage(int rowIndex)
+	{
 		return asBufferedImage().getSubimage(0, rowIndex * spriteHeight, stripWidth, spriteHeight);
 	}
 
-	public BufferedImage asBufferedImage() {
+	public BufferedImage asBufferedImage()
+	{
 		return fullImage;
 	}
 
-	public Sprite getSpriteAt(int index) {
+	public Sprite getSpriteAt(int index)
+	{
 		return spriteCollection.get(index);
 	}
 
-	public ArrayList<Sprite> getSpriteCollection() {
+	public ArrayList<Sprite> getSpriteCollection()
+	{
 		return spriteCollection;
 	}
 

@@ -12,14 +12,14 @@ import java.awt.Graphics;
  */
 public class Animation {
 
-	private byte delay = 0;
-	private byte threshold = 10;
-	private int frameIndex, startIndex;
-	public boolean isStopped;
-	private boolean setStopFrame;
+	private byte			delay		= 0;
+	private byte			threshold	= 10;
+	private int				frameIndex, startIndex;
+	public boolean			isStopped;
+	private boolean			setStopFrame;
 
-	public Sprite sprite;
-	public AnimationFrame frame, startFrame;
+	public Sprite			sprite;
+	public AnimationFrame	frame, startFrame;
 
 	/**
 	 * Creates a new animation
@@ -52,10 +52,12 @@ public class Animation {
 		frame = startFrame;
 	}
 
-	private AnimationFrame nextFrame() {
+	private AnimationFrame nextFrame()
+	{
 		if (frameIndex + 1 == sprite.frameCollection.size()) {
 			frameIndex = 0;
-		} else {
+		}
+		else {
 			frameIndex++;
 		}
 		return sprite.frameCollection.get(frameIndex);
@@ -73,7 +75,8 @@ public class Animation {
 	 * @param t
 	 *            The new value for <code>threshold</code>
 	 */
-	public void setThreshold(int t) {
+	public void setThreshold(int t)
+	{
 		if (t > 127 || t < -128) {
 			return; // out of range for a byte
 		}
@@ -83,14 +86,16 @@ public class Animation {
 	/**
 	 * Resume the animation. Does nothing if already running
 	 */
-	public void resume() {
+	public void resume()
+	{
 		isStopped = false;
 	}
 
 	/**
 	 * Pauses the animation. Does nothing if already paused
 	 */
-	public void pause() {
+	public void pause()
+	{
 		isStopped = true;
 	}
 
@@ -98,7 +103,8 @@ public class Animation {
 	 * Stops the animation, and resets the displayed frame to the starting frame.
 	 * Does nothing if already stopped
 	 */
-	public void stop() {
+	public void stop()
+	{
 		isStopped = true;
 		setStopFrame = false;
 	}
@@ -106,7 +112,8 @@ public class Animation {
 	/**
 	 * Restarts the animation. If already running, the animation will start over.
 	 */
-	public void restart() {
+	public void restart()
+	{
 		frameIndex = startIndex;
 		delay = 0;
 		isStopped = false;
@@ -126,22 +133,26 @@ public class Animation {
 	 * @see #frame
 	 * @see AnimationFrame
 	 */
-	public void render(Graphics graphics, int x, int y) {
+	public void render(Graphics graphics, int x, int y)
+	{
 		graphics.drawImage(frame.asBufferedImage(), x, y, null);
 	}
 
 	/**
 	 * Should be called 60 times per second in a tick thread
 	 */
-	public void tick() {
+	public void tick()
+	{
 		if (!isStopped) {
 			if (delay < threshold) {
 				delay++;
-			} else {
+			}
+			else {
 				delay = 0;
 				frame = nextFrame();
 			}
-		} else {
+		}
+		else {
 			if (!setStopFrame) {
 				frame = startFrame;
 				setStopFrame = true;

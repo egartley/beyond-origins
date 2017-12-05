@@ -8,8 +8,8 @@ import net.egartley.beyondorigins.objects.Entity;
 
 public class EntityBoundary extends Boundary {
 
-	public Entity entity;
-	public Color drawColor;
+	public Entity	entity;
+	public Color	drawColor;
 
 	public EntityBoundary(Entity e, int w, int h, int p) {
 		entity = e;
@@ -18,10 +18,10 @@ public class EntityBoundary extends Boundary {
 		padding = p;
 		x = entity.x - padding;
 		y = entity.y - padding;
-		north = y;
-		south = north + height;
-		west = x;
-		east = west + width;
+		top = y;
+		bottom = top + height;
+		left = x;
+		right = left + width;
 		setColor();
 	}
 
@@ -32,23 +32,26 @@ public class EntityBoundary extends Boundary {
 		padding = p;
 		this.x = x - p;
 		this.y = y - p;
-		north = this.y;
-		south = north + height;
-		west = this.x;
-		east = west + width;
+		top = this.y;
+		bottom = top + height;
+		left = this.x;
+		right = left + width;
 		setColor();
 	}
 
-	private void setColor() {
+	private void setColor()
+	{
 		if (entity.isStatic) {
 			drawColor = Color.BLACK;
-		} else {
+		}
+		else {
 			drawColor = Color.YELLOW;
 		}
 	}
 
 	@Override
-	public void draw(Graphics graphics) {
+	public void draw(Graphics graphics)
+	{
 		if (Game.drawBoundaries) {
 			Color previous = graphics.getColor();
 			graphics.setColor(drawColor);
@@ -58,13 +61,14 @@ public class EntityBoundary extends Boundary {
 	}
 
 	@Override
-	public void tick() {
+	public void tick()
+	{
 		x = entity.x - padding;
 		y = entity.y - padding;
-		north = y;
-		south = north + height;
-		west = x;
-		east = west + width;
+		top = y;
+		bottom = top + height;
+		left = x;
+		right = left + width;
 	}
 
 }

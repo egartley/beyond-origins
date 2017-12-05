@@ -7,7 +7,8 @@ public class MainTick implements Runnable {
 	public static short frames, currentFrames;
 
 	@Override
-	public void run() {
+	public void run()
+	{
 		long lastTime = System.nanoTime();
 		long timer = System.currentTimeMillis();
 		double ns = 16666666.666666666;
@@ -28,18 +29,21 @@ public class MainTick implements Runnable {
 			}
 			try {
 				Thread.sleep(1L);
-			} catch (InterruptedException e) {
+			}
+			catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 		try {
 			Thread.currentThread().join();
-		} catch (InterruptedException e) {
+		}
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private synchronized void tick() {
+	private synchronized void tick()
+	{
 		if (Game.currentGameState != null) {
 			Game.currentGameState.tick();
 		}
