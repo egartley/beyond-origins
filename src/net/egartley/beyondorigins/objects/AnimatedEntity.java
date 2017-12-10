@@ -13,8 +13,8 @@ public abstract class AnimatedEntity extends Entity {
 
 	/**
 	 * The current {@link Animation} to use with
-	 * {@link Entity#render(java.awt.Graphics) render} and {@link Entity#tick()
-	 * tick}
+	 * {@link Entity#render(java.awt.Graphics) render(Graphics)} and
+	 * {@link Entity#tick() tick()}
 	 */
 	public Animation			animation;
 	/**
@@ -25,7 +25,8 @@ public abstract class AnimatedEntity extends Entity {
 	public ArrayList<Animation>	animationCollection	= new ArrayList<Animation>();
 
 	/**
-	 * Creates a new animated entity
+	 * Creates a new animated entity, while setting {@link Entity#isAnimated} to
+	 * true and {@link Entity#isStatic} to false
 	 * 
 	 * @see Entity
 	 */
@@ -35,9 +36,8 @@ public abstract class AnimatedEntity extends Entity {
 	}
 
 	/**
-	 * Builds {@link #animationCollection}
+	 * This method must be used for building {@link #animationCollection}
 	 * 
-	 * @see #animationCollection
 	 * @see Animation
 	 */
 	public abstract void setAnimationCollection();

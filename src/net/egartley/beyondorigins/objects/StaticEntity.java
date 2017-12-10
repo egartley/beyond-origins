@@ -9,7 +9,8 @@ package net.egartley.beyondorigins.objects;
 public abstract class StaticEntity extends Entity {
 
 	/**
-	 * Creates a new static entity
+	 * Creates a new static entity, while setting {@link Entity#isAnimated} to false
+	 * and {@link Entity#isStatic} to true
 	 * 
 	 * @see Entity
 	 */

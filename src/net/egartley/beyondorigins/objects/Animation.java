@@ -2,30 +2,46 @@ package net.egartley.beyondorigins.objects;
 
 import java.awt.Graphics;
 
+import net.egartley.beyondorigins.Debug;
+
 /**
- * Represents a collection of <code>AnimationFrame</code>s used for animating,
- * and the control thereof, a <code>Sprite</code>
+ * Represents a collection of {@link AnimationFrame AnimationFrame} objects,
+ * which can be used for animating a {@link Sprite Sprite}
  * 
  * @author Evan Gartley
  *
  * @see AnimationFrame
+ * @see Sprite
+ * @see AnimatedEntity
  */
 public class Animation {
 
-	private byte			delay		= 0;
-	private byte			threshold	= 10;
+	private byte			delay	= 0, threshold = 10;
 	private int				frameIndex, startIndex;
+	/**
+	 * Set to true when the animation is no longer changing frames, false otherwise
+	 */
 	public boolean			isStopped;
 	private boolean			setStopFrame;
 
+	/**
+	 * The {@link Sprite} to animate
+	 */
 	public Sprite			sprite;
-	public AnimationFrame	frame, startFrame;
+	/**
+	 * The frame that is currently being used while rendering
+	 */
+	public AnimationFrame	frame;
+	/**
+	 * The frame that the animation will start at
+	 */
+	public AnimationFrame	startFrame;
 
 	/**
 	 * Creates a new animation
 	 * 
 	 * @param s
-	 *            Sprite to animate (must have at least one frame)
+	 *            {@link Sprite} to animate
 	 */
 	public Animation(Sprite s) {
 		sprite = s;
@@ -39,14 +55,14 @@ public class Animation {
 	 * Creates a new animation, starting at the given index
 	 * 
 	 * @param s
-	 *            Sprite to animate (at least one frame)
-	 * @param startIndex
-	 *            The index of the frame to start at (from
-	 *            {@link Sprite#frameCollection frameCollection})
+	 *            {@link Sprite} to animate
+	 * @param si
+	 *            Index to start at (from {@link Sprite#frameCollection
+	 *            Sprite.frameCollection})
 	 */
-	public Animation(Sprite s, int start) {
+	public Animation(Sprite s, int si) {
 		sprite = s;
-		frameIndex = start;
+		frameIndex = si;
 		startIndex = frameIndex;
 		startFrame = sprite.frameCollection.get(startIndex);
 		frame = startFrame;
@@ -73,12 +89,13 @@ public class Animation {
 	 * </p>
 	 * 
 	 * @param t
-	 *            The new value for <code>threshold</code>
+	 *            New value for {@link #threshold}
 	 */
 	public void setThreshold(int t)
 	{
 		if (t > 127 || t < -128) {
-			return; // out of range for a byte
+			Debug.warning("tried to set an animation threshold outside of the accepted range (-127 to 127)!");
+			return;
 		}
 		threshold = (byte) t;
 	}
@@ -110,7 +127,7 @@ public class Animation {
 	}
 
 	/**
-	 * Restarts the animation. If already running, the animation will start over.
+	 * Restarts the animation. If already running, the animation will start over
 	 */
 	public void restart()
 	{
@@ -120,17 +137,14 @@ public class Animation {
 	}
 
 	/**
-	 * Renders the current <code>AnimationFrame</code> ({@link Animation#frame
-	 * frame})
+	 * Renders {@link Animation#frame frame}
 	 * 
 	 * @param graphics
-	 *            The {@link java.awt.Graphics Graphics} object
+	 *            {@link java.awt.Graphics Graphics}
 	 * @param x
 	 *            The x-axis coordinate
 	 * @param y
 	 *            The y-axis coordinate
-	 * 
-	 * @see #frame
 	 * @see AnimationFrame
 	 */
 	public void render(Graphics graphics, int x, int y)
@@ -139,7 +153,7 @@ public class Animation {
 	}
 
 	/**
-	 * Should be called 60 times per second in a tick thread
+	 * Should be called 60 times per second, within a tick thread
 	 */
 	public void tick()
 	{

@@ -12,36 +12,62 @@ import net.egartley.beyondorigins.objects.Entity;
  * A collision between two different boundaries
  * 
  * @author Evan Gartley
- * @see EntityEntityCollision
+ * @see {@link net.egartley.beyondorigins.logic.interaction.Boundary Boundary}
+ * @see {@link net.egartley.beyondorigins.logic.interaction.EntityBoundary
+ *      EntityBoundary}
+ * @see {@link EntityEntityCollison}
  */
 public abstract class Collision {
 
-	public boolean		isCollided, previouslyCollided;
-	private boolean		firedEvent;
-	public Boundary		boundary1, boundary2;
-	public Rectangle	rect1, rect2;
+	/**
+	 * Whether or not the two boundaries are collided with one another
+	 */
+	public boolean		isCollided;
+	/**
+	 * I kind of forgot what this signifies... carry on
+	 */
+	public boolean		previouslyCollided;
 
+	private boolean		firedEvent;
+
+	public Boundary		boundary1;
+	public Boundary		boundary2;
+	public Rectangle	rectangle1;
+	public Rectangle	rectangle2;
+
+	/**
+	 * Creates a new collision between the two specified boundaries
+	 * 
+	 * @param b1
+	 *            One of the two boundaries
+	 * @param b2
+	 *            The other of the two boundaries
+	 * @see {@link net.egartley.beyondorigins.logic.interaction.Boundary Boundary}
+	 */
 	public Collision(Boundary b1, Boundary b2) {
 		boundary1 = b1;
 		boundary2 = b2;
-		rect1 = boundary1.asRectangle();
-		rect2 = boundary2.asRectangle();
+		rectangle1 = boundary1.asRectangle();
+		rectangle2 = boundary2.asRectangle();
 	}
 
+	/**
+	 * Checks to see if the two boundaries are collided with one another
+	 */
 	public void tick()
 	{
-		rect1.x = boundary1.x;
-		rect2.x = boundary2.x;
-		rect1.y = boundary1.y;
-		rect2.y = boundary2.y;
-		isCollided = rect1.intersects(rect2);
+		rectangle1.x = boundary1.x;
+		rectangle2.x = boundary2.x;
+		rectangle1.y = boundary1.y;
+		rectangle2.y = boundary2.y;
+		isCollided = rectangle1.intersects(rectangle2);
 
 		if (isCollided && !firedEvent) {
 			onCollision(new EntityEntityCollisionEvent(this));
 			firedEvent = true;
 		}
 		if (!isCollided && firedEvent) {
-			afterCollision(new EntityEntityCollisionEvent(this));
+			collisionEnd(new EntityEntityCollisionEvent(this));
 			firedEvent = false;
 		}
 		if (previouslyCollided != isCollided) {
@@ -51,7 +77,7 @@ public abstract class Collision {
 		previouslyCollided = isCollided;
 	}
 
-	public void setBoundaryColors()
+	private void setBoundaryColors()
 	{
 		Entity e1 = ((EntityBoundary) boundary1).entity;
 		Entity e2 = ((EntityBoundary) boundary2).entity;
@@ -87,6 +113,6 @@ public abstract class Collision {
 	/**
 	 * This method is called <i>once</i> after the collision ends
 	 */
-	public abstract void afterCollision(EntityEntityCollisionEvent event);
+	public abstract void collisionEnd(EntityEntityCollisionEvent event);
 
 }

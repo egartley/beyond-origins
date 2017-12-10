@@ -13,6 +13,9 @@ public class AnimationFrame {
 	private Sprite			parent;
 	private BufferedImage	bufferedImage;
 
+	/**
+	 * The index of this frame within its parent's {@link Sprite#sheetImage}
+	 */
 	public int				index;
 
 	/**
@@ -26,8 +29,7 @@ public class AnimationFrame {
 		this.parent = parent;
 		this.index = index;
 		try {
-			bufferedImage = parent.sheetImage.getSubimage(index * parent.frameWidth, 0, parent.frameWidth,
-					parent.frameHeight);
+			bufferedImage = parent.sheetImage.getSubimage(index * parent.frameWidth, 0, parent.frameWidth, parent.frameHeight);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -35,7 +37,7 @@ public class AnimationFrame {
 	}
 
 	/**
-	 * Returns this frame's "parent" sprite ({@link AnimationFrame#parent})
+	 * Returns this frame's "parent" sprite
 	 * 
 	 * @return {@link Sprite}
 	 */
@@ -45,7 +47,7 @@ public class AnimationFrame {
 	}
 
 	/**
-	 * Returns this frame as a {@link BufferedImage}
+	 * Returns this frame as a buffered image
 	 * 
 	 * @return {@link BufferedImage}
 	 */

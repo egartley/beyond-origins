@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.input.Keyboard;
+import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.objects.AnimatedEntity;
 import net.egartley.beyondorigins.objects.Animation;
@@ -23,6 +24,8 @@ public class Player extends AnimatedEntity {
 	public boolean		movingUp			= false, movingDown = false, movingLeft = false, movingRight = false;
 
 	public Player(ArrayList<Sprite> sprites) {
+		generateUUID();
+		id = "Player (" + uuid + ")";
 		spriteCollection = sprites;
 		currentSprite = sprites.get(0);
 		maxX = Game.WINDOW_WIDTH;
@@ -97,7 +100,7 @@ public class Player extends AnimatedEntity {
 	@Override
 	public void setBoundary()
 	{
-		boundary = new EntityBoundary(this, currentSprite.frameWidth, currentSprite.frameHeight, boundaryPadding);
+		boundary = new EntityBoundary(this, currentSprite.frameWidth, currentSprite.frameHeight, new BoundaryPadding(boundaryPadding));
 	}
 
 	@Override

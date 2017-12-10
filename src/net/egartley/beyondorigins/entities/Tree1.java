@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
+import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.objects.Sprite;
 import net.egartley.beyondorigins.objects.StaticEntity;
@@ -24,6 +25,8 @@ public class Tree1 extends StaticEntity {
 	 *            {@link Sprite} object to use while rendering
 	 */
 	public Tree1(Sprite sprite) {
+		generateUUID();
+		id = "Tree1 (" + uuid + ")";
 		currentSprite = sprite;
 		setBoundary();
 	}
@@ -36,6 +39,8 @@ public class Tree1 extends StaticEntity {
 	 *            {@link Sprite} object to use while rendering
 	 */
 	public Tree1(Sprite sprite, int x, int y) {
+		generateUUID();
+		id = "Tree1 (" + uuid + ")";
 		currentSprite = sprite;
 		this.x = x;
 		this.y = y;
@@ -59,6 +64,7 @@ public class Tree1 extends StaticEntity {
 	 */
 	public void onPlayerCollision(EntityEntityCollisionEvent event)
 	{
+		// System.out.println(this.id);
 		switch (event.collidedSide)
 		{
 			case EntityEntityCollisionEvent.RIGHT:
@@ -82,8 +88,7 @@ public class Tree1 extends StaticEntity {
 	protected void setBoundary()
 	{
 		BufferedImage image = currentSprite.getCurrentFrameAsBufferedImage();
-		// negative padding works!
-		boundary = new EntityBoundary(this, image.getWidth(), image.getHeight(), -16, x, y);
+		boundary = new EntityBoundary(this, image.getWidth(), image.getHeight(), new BoundaryPadding(-24, -20, -6, -20), x, y);
 	}
 
 	@Override

@@ -80,9 +80,9 @@ public abstract class Entity {
 	protected abstract void setBoundary();
 
 	/**
-	 * Creates a new entity
+	 * Method to generate {@link #uuid}
 	 */
-	public Entity() {
+	protected void generateUUID() {
 		uuid = Util.randomInt(9999, 1000, true);
 	}
 

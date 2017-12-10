@@ -39,10 +39,10 @@ public class Sector1 extends MapSector {
 			{
 				public void onCollision(EntityEntityCollisionEvent event)
 				{
-					Entities.TREE1.onPlayerCollision(event);
+					trees.get(0).onPlayerCollision(event);
 				};
 
-				public void afterCollision(EntityEntityCollisionEvent event)
+				public void collisionEnd(EntityEntityCollisionEvent event)
 				{
 					Entities.PLAYER.enableAllMovement();
 				};
@@ -51,10 +51,10 @@ public class Sector1 extends MapSector {
 			{
 				public void onCollision(EntityEntityCollisionEvent event)
 				{
-					Entities.TREE1.onPlayerCollision(event);
+					trees.get(1).onPlayerCollision(event);
 				};
 
-				public void afterCollision(EntityEntityCollisionEvent event)
+				public void collisionEnd(EntityEntityCollisionEvent event)
 				{
 					Entities.PLAYER.enableAllMovement();
 				};

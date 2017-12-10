@@ -13,18 +13,27 @@ import net.egartley.beyondorigins.objects.Entity;
  */
 public class EntityEntityCollision extends Collision {
 
-	public Entity firstEntity, secondEntity;
+	/**
+	 * One of the two entities that are to collide
+	 */
+	public Entity	firstEntity;
+	/**
+	 * The other of the two entities that are to collide
+	 */
+	public Entity	secondEntity;
 
 	/**
 	 * Creates a new collision between two entities
 	 * 
 	 * @param first
-	 *            EntityBoundary of the first entity
+	 *            {@link net.egartley.beyondorigins.logic.interaction.EntityBoundary
+	 *            EntityBoundary} of the first entity
 	 * @param second
-	 *            EntityBoundary of the second entity
+	 *            {@link net.egartley.beyondorigins.logic.interaction.EntityBoundary
+	 *            EntityBoundary} of the second entity
 	 * 
-	 * @see Collision
-	 * @see Entity
+	 * @see {@link net.egartley.beyondorigins.logic.collision.Collision Collision}
+	 * @see {@link net.egartley.beyondorigins.objects.Entity Entity}
 	 */
 	public EntityEntityCollision(EntityBoundary first, EntityBoundary second) {
 		super(first, second);
@@ -38,7 +47,7 @@ public class EntityEntityCollision extends Collision {
 	}
 
 	@Override
-	public void afterCollision(EntityEntityCollisionEvent event)
+	public void collisionEnd(EntityEntityCollisionEvent event)
 	{
 	}
 
