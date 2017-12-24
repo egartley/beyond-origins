@@ -11,7 +11,7 @@ import javax.swing.JFrame;
 import net.egartley.beyondorigins.entities.Dummy;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.Player;
-import net.egartley.beyondorigins.entities.Tree1;
+import net.egartley.beyondorigins.entities.DefaultTree;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.input.Keyboard;
 import net.egartley.beyondorigins.maps.TileBuilder;
@@ -95,7 +95,7 @@ public class Game extends Canvas implements Runnable {
 		// ************ DUMMY END *************
 
 		// ************ TREE1 BEGIN ***********
-		Entities.TREE1 = new Tree1(new SpriteSheet(ImageStore.tree1, 64, 64, 1, 1).getSpriteCollection().get(0));
+		Entities.TREE = new DefaultTree(new SpriteSheet(ImageStore.tree1, 64, 64, 1, 1).getSpriteCollection().get(0));
 	}
 
 	private void loadMaps()

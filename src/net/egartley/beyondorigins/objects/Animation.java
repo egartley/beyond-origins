@@ -47,7 +47,7 @@ public class Animation {
 		sprite = s;
 		frameIndex = 0;
 		startIndex = 0;
-		startFrame = sprite.frameCollection.get(startIndex);
+		startFrame = sprite.frames.get(startIndex);
 		frame = startFrame;
 	}
 
@@ -57,26 +57,26 @@ public class Animation {
 	 * @param s
 	 *            {@link Sprite} to animate
 	 * @param si
-	 *            Index to start at (from {@link Sprite#frameCollection
-	 *            Sprite.frameCollection})
+	 *            Index to start at (from {@link Sprite#frames
+	 *            Sprite.frames})
 	 */
 	public Animation(Sprite s, int si) {
 		sprite = s;
 		frameIndex = si;
 		startIndex = frameIndex;
-		startFrame = sprite.frameCollection.get(startIndex);
+		startFrame = sprite.frames.get(startIndex);
 		frame = startFrame;
 	}
 
 	private AnimationFrame nextFrame()
 	{
-		if (frameIndex + 1 == sprite.frameCollection.size()) {
+		if (frameIndex + 1 == sprite.frames.size()) {
 			frameIndex = 0;
 		}
 		else {
 			frameIndex++;
 		}
-		return sprite.frameCollection.get(frameIndex);
+		return sprite.frames.get(frameIndex);
 	}
 
 	/**

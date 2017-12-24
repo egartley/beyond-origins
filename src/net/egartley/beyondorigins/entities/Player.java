@@ -25,13 +25,14 @@ public class Player extends AnimatedEntity {
 
 	public Player(ArrayList<Sprite> sprites) {
 		generateUUID();
-		id = "Player (" + uuid + ")";
-		spriteCollection = sprites;
-		currentSprite = sprites.get(0);
+		id = "Player";
+		this.sprites = sprites;
+		sprite = sprites.get(0);
 		maxX = Game.WINDOW_WIDTH;
 		maxY = Game.WINDOW_HEIGHT;
 		setAnimationCollection();
 		setBoundary();
+		setCollisions();
 	}
 
 	private void move(byte direction)
@@ -89,7 +90,7 @@ public class Player extends AnimatedEntity {
 	public void setAnimationCollection()
 	{
 		animationCollection.clear();
-		for (Sprite s : spriteCollection) {
+		for (Sprite s : sprites) {
 			Animation a = new Animation(s);
 			a.setThreshold(animationThreshold);
 			animationCollection.add(a);
@@ -100,7 +101,7 @@ public class Player extends AnimatedEntity {
 	@Override
 	public void setBoundary()
 	{
-		boundary = new EntityBoundary(this, currentSprite.frameWidth, currentSprite.frameHeight, new BoundaryPadding(boundaryPadding));
+		boundary = new EntityBoundary(this, sprite.frameWidth, sprite.frameHeight, new BoundaryPadding(boundaryPadding));
 	}
 
 	@Override
@@ -144,6 +145,12 @@ public class Player extends AnimatedEntity {
 		}
 		animation.tick();
 		boundary.tick();
+	}
+
+	@Override
+	protected void setCollisions()
+	{
+		
 	}
 
 }

@@ -3,59 +3,93 @@ package net.egartley.beyondorigins.objects;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import net.egartley.beyondorigins.Util;
-
+/**
+ * A collection of images that can used while rendering entities
+ * 
+ * @author Evan Gartley
+ * @see SpriteSheet
+ * @see Entity
+ */
 public class Sprite {
 
-	private int							uuid;
-
-	public BufferedImage				sheetImage;
-	public ArrayList<AnimationFrame>	frameCollection		= new ArrayList<AnimationFrame>();
-	public int							frameWidth, frameHeight;
+	/**
+	 * The image that contains all of the sprite's possible frames
+	 * 
+	 * @see AnimationFrame
+	 * @see #frames
+	 */
+	public BufferedImage				sheet;
+	/**
+	 * All of the possible frames that the sprite could use, which are derived from {@link #sheet}
+	 * 
+	 * @see AnimatedEntity
+	 * @see StaticEntity
+	 */
+	public ArrayList<AnimationFrame>	frames		= new ArrayList<AnimationFrame>();
+	/**
+	 * The width in pixels for each frame
+	 */
+	public int							frameWidth;
+	/**
+	 * The height in pixels for each frame
+	 */
+	public int							frameHeight;
 	public short						currentFrameIndex	= 0;
 
 	public Sprite(BufferedImage image, int size) {
-		sheetImage = image;
-		frameWidth = size;
-		frameHeight = size;
-		uuid = Util.randomInt(9999, 1000, true);
+		this(image, size, size);
 	}
 
 	public Sprite(BufferedImage image, int width, int height) {
-		sheetImage = image;
+		sheet = image;
 		frameWidth = width;
 		frameHeight = height;
-		uuid = Util.randomInt(9999, 1000, true);
 	}
 
+	/**
+	 * Returns the frame at the given index (from {@link #frames})
+	 * 
+	 * @param index
+	 *            Index of the frame to return
+	 * @return {@link AnimationFrame}
+	 */
 	public AnimationFrame getFrameAt(int index)
 	{
-		if (index >= frameCollection.size())
+		if (index >= frames.size())
 			return null;
-		return frameCollection.get(index);
+		return frames.get(index);
 	}
 
+	/**
+	 * Returns the current frame
+	 * ({@link #frames}[{@link #currentFrameIndex}]) as a buffered image
+	 * 
+	 * @return {@link java.awt.image.BufferedImage BufferedImage}
+	 */
 	public BufferedImage getCurrentFrameAsBufferedImage()
 	{
-		return frameCollection.get(currentFrameIndex).asBufferedImage();
+		return frames.get(currentFrameIndex).asBufferedImage();
 	}
 
+	/**
+	 * Resets {@link #frames} and re-loads it with the given number of
+	 * frames
+	 * 
+	 * @param numberOfFrames
+	 *            How many frames to use (must be at least 1)
+	 * 
+	 * @see AnimationFrame
+	 */
 	public void setFrames(int numberOfFrames)
 	{
-		frameCollection.clear();
+		frames.clear();
 		if (numberOfFrames == 1) {
-			frameCollection.add(new AnimationFrame(this, 0));
+			frames.add(new AnimationFrame(this, 0));
 			return;
 		}
 		for (int i = 0; i < numberOfFrames; i++) {
-			frameCollection.add(new AnimationFrame(this, i));
+			frames.add(new AnimationFrame(this, i));
 		}
-	}
-
-	@Override
-	public String toString()
-	{
-		return Integer.toHexString(uuid);
 	}
 
 }

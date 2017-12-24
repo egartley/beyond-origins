@@ -4,12 +4,14 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import net.egartley.beyondorigins.Util;
+import net.egartley.beyondorigins.logic.collision.Collision;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 
 /**
- * A "thing" that can rendered with a sprite and change position
+ * An entity that can rendered with a sprite and have a specific position
  * 
  * @author Evan Gartley
+ * @see Sprite
  * @see AnimatedEntity
  * @see StaticEntity
  */
@@ -20,16 +22,29 @@ public abstract class Entity {
 	 * 
 	 * @see Sprite
 	 */
-	public ArrayList<Sprite>	spriteCollection;
+	public ArrayList<Sprite>	sprites;
+	
+	public ArrayList<Collision> collisions;
 	/**
 	 * The sprite to use while rendering
 	 */
-	public Sprite				currentSprite;
+	public Sprite				sprite;
 	/**
 	 * This entity's boundary
 	 */
 	public EntityBoundary		boundary;
-	public int					x, y, uuid;
+	/**
+	 * The entity's x-axis coordinate
+	 */
+	public int					x;
+	/**
+	 * The entity's y-axis coordinate
+	 */
+	public int					y;
+	/**
+	 * The entity's unique ID number. Use {@link #id} for user-friendly identification
+	 */
+	public int					uuid;
 	/**
 	 * Whether or not this entity is animated
 	 * 
@@ -53,13 +68,20 @@ public abstract class Entity {
 	 * Human-readable identifier for this entity
 	 */
 	public String				id;
+	
+	/**
+	 * Returns this entity as a human-readable string
+	 */
+	public String toString() {
+		return id + " (" + uuid + ")";
+	}
 
 	/**
 	 * <p>
 	 * Method for actually rendering this entity
 	 * </p>
 	 * <p>
-	 * The current sprite ({@link #currentSprite}) should be used
+	 * The current sprite ({@link #sprite}) should be used
 	 * </p>
 	 * 
 	 * @param graphics
@@ -78,24 +100,27 @@ public abstract class Entity {
 	 * @see EntityBoundary
 	 */
 	protected abstract void setBoundary();
+	
+	protected abstract void setCollisions();
 
 	/**
 	 * Method to generate {@link #uuid}
 	 */
-	protected void generateUUID() {
+	protected void generateUUID()
+	{
 		uuid = Util.randomInt(9999, 1000, true);
 	}
 
 	/**
-	 * Sets {@link #currentSprite}
+	 * Sets {@link #sprite}
 	 * 
 	 * @param index
-	 *            Index of a {@link Sprite} within {@link #spriteCollection} to set
-	 *            as {@link #currentSprite}
+	 *            Index of a {@link Sprite} within {@link #sprites} to set
+	 *            as {@link #sprite}
 	 */
 	public void setCurrentSprite(int index)
 	{
-		currentSprite = spriteCollection.get(index);
+		sprite = sprites.get(index);
 	}
 
 }

@@ -24,11 +24,14 @@ public abstract class Collision {
 	 */
 	public boolean		isCollided;
 	/**
-	 * I kind of forgot what this signifies... carry on
+	 * Forgot what this does...
 	 */
 	public boolean		previouslyCollided;
 
 	private boolean		firedEvent;
+
+	private Color		collidedStaticColor	= Color.YELLOW, collidedAnimatedColor = Color.RED, defaultStaticColor = Color.BLACK,
+			defaultAnimatedColor = Color.YELLOW;
 
 	public Boundary		boundary1;
 	public Boundary		boundary2;
@@ -38,15 +41,15 @@ public abstract class Collision {
 	/**
 	 * Creates a new collision between the two specified boundaries
 	 * 
-	 * @param b1
+	 * @param boundary1
 	 *            One of the two boundaries
-	 * @param b2
+	 * @param boundary2
 	 *            The other of the two boundaries
 	 * @see {@link net.egartley.beyondorigins.logic.interaction.Boundary Boundary}
 	 */
-	public Collision(Boundary b1, Boundary b2) {
-		boundary1 = b1;
-		boundary2 = b2;
+	public Collision(Boundary boundary1, Boundary boundary2) {
+		this.boundary1 = boundary1;
+		this.boundary2 = boundary2;
 		rectangle1 = boundary1.asRectangle();
 		rectangle2 = boundary2.asRectangle();
 	}
@@ -62,11 +65,11 @@ public abstract class Collision {
 		rectangle2.y = boundary2.y;
 		isCollided = rectangle1.intersects(rectangle2);
 
-		if (isCollided && !firedEvent) {
+		if (isCollided == true && firedEvent == false) {
 			onCollision(new EntityEntityCollisionEvent(this));
 			firedEvent = true;
 		}
-		if (!isCollided && firedEvent) {
+		if (isCollided == false && firedEvent == true) {
 			collisionEnd(new EntityEntityCollisionEvent(this));
 			firedEvent = false;
 		}
@@ -79,39 +82,39 @@ public abstract class Collision {
 
 	private void setBoundaryColors()
 	{
-		Entity e1 = ((EntityBoundary) boundary1).entity;
-		Entity e2 = ((EntityBoundary) boundary2).entity;
-		Color c1 = Color.BLACK, c2 = Color.YELLOW;
+		Entity entity1 = ((EntityBoundary) boundary1).entity;
+		Entity entity2 = ((EntityBoundary) boundary2).entity;
+		Color staticColor = defaultStaticColor, animatedColor = defaultAnimatedColor;
 		if (isCollided) {
-			c1 = Color.YELLOW;
-			c2 = Color.RED;
+			staticColor = collidedStaticColor;
+			animatedColor = collidedAnimatedColor;
 		}
 
-		if (!e1.isCollided) {
-			if (e1.isStatic) {
-				e1.boundary.drawColor = c1;
+		if (entity1.isCollided == false) {
+			if (entity1.isStatic == true) {
+				entity1.boundary.drawColor = staticColor;
 			}
 			else {
-				e1.boundary.drawColor = c2;
+				entity1.boundary.drawColor = animatedColor;
 			}
 		}
-		if (!e2.isCollided) {
-			if (e2.isStatic) {
-				e2.boundary.drawColor = c1;
+		if (entity2.isCollided == false) {
+			if (entity2.isStatic == true) {
+				entity2.boundary.drawColor = staticColor;
 			}
 			else {
-				e2.boundary.drawColor = c2;
+				entity2.boundary.drawColor = animatedColor;
 			}
 		}
 	}
 
 	/**
-	 * This method is called <i>once</i> after the collision occurs
+	 * This method is called <b>once</b> after the collision occurs
 	 */
 	public abstract void onCollision(EntityEntityCollisionEvent event);
 
 	/**
-	 * This method is called <i>once</i> after the collision ends
+	 * This method is called <b>once</b> after the collision ends
 	 */
 	public abstract void collisionEnd(EntityEntityCollisionEvent event);
 

@@ -14,7 +14,7 @@ public class AnimationFrame {
 	private BufferedImage	bufferedImage;
 
 	/**
-	 * The index of this frame within its parent's {@link Sprite#sheetImage}
+	 * The index of this frame within its parent's {@link Sprite#sheet}
 	 */
 	public int				index;
 
@@ -29,7 +29,7 @@ public class AnimationFrame {
 		this.parent = parent;
 		this.index = index;
 		try {
-			bufferedImage = parent.sheetImage.getSubimage(index * parent.frameWidth, 0, parent.frameWidth, parent.frameHeight);
+			bufferedImage = parent.sheet.getSubimage(index * parent.frameWidth, 0, parent.frameWidth, parent.frameHeight);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

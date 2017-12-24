@@ -4,6 +4,6 @@ public class Entities {
 
 	public static Player	PLAYER;
 	public static Dummy		DUMMY;
-	public static Tree1		TREE1;
+	public static DefaultTree TREE;
 
 }

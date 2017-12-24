@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 
 /**
- * An auxiliary boundary with a width, height and x/y coordinates
+ * An imaginary boundary, or border, with a width, height and coordinates
  * 
  * @author Evan Gartley
  * @see EntityBoundary
@@ -47,7 +47,8 @@ public abstract class Boundary {
 	public int				left;
 
 	/**
-	 * This boundary's padding (extra space added/subtracted from each side)
+	 * This boundary's padding (extra space added/subtracted from any or all of the
+	 * four sides)
 	 * 
 	 * @see {@link net.egartley.beyondorigins.logic.interaction.BoundaryPadding
 	 *      BoundaryPadding}

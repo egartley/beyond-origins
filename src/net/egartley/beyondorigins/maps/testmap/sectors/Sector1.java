@@ -4,65 +4,23 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.entities.Tree1;
-import net.egartley.beyondorigins.logic.collision.Collision;
-import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
-import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
+import net.egartley.beyondorigins.entities.DefaultTree;
 import net.egartley.beyondorigins.objects.MapSector;
 import net.egartley.beyondorigins.objects.MapSectorDefinition;
 import net.egartley.beyondorigins.objects.Sprite;
 
 public class Sector1 extends MapSector {
 
-	private EntityEntityCollision	playerDummyCollision, playerTree1Collision, playerTree2Collision;
-	private ArrayList<Tree1>		trees;
-	private ArrayList<Collision>	collisions;
+	private ArrayList<DefaultTree>		trees;
 
 	public Sector1(MapSectorDefinition def) {
 		super(def);
 
 		// sector-specific entities
-		trees = new ArrayList<Tree1>();
-		Sprite s = Entities.TREE1.currentSprite;
-		trees.add(new Tree1(s, 100, 200));
-		trees.add(new Tree1(s, 300, 400));
-
-		// sector-specific collisions
-		playerDummyCollision = new EntityEntityCollision(Entities.PLAYER.boundary, Entities.DUMMY.boundary)
-			{
-				public void onCollision(EntityEntityCollisionEvent event)
-				{
-
-				};
-			};
-		playerTree1Collision = new EntityEntityCollision(Entities.PLAYER.boundary, trees.get(0).boundary)
-			{
-				public void onCollision(EntityEntityCollisionEvent event)
-				{
-					trees.get(0).onPlayerCollision(event);
-				};
-
-				public void collisionEnd(EntityEntityCollisionEvent event)
-				{
-					Entities.PLAYER.enableAllMovement();
-				};
-			};
-		playerTree2Collision = new EntityEntityCollision(Entities.PLAYER.boundary, trees.get(1).boundary)
-			{
-				public void onCollision(EntityEntityCollisionEvent event)
-				{
-					trees.get(1).onPlayerCollision(event);
-				};
-
-				public void collisionEnd(EntityEntityCollisionEvent event)
-				{
-					Entities.PLAYER.enableAllMovement();
-				};
-			};
-		collisions = new ArrayList<Collision>();
-		collisions.add(playerDummyCollision);
-		collisions.add(playerTree1Collision);
-		collisions.add(playerTree2Collision);
+		trees = new ArrayList<DefaultTree>();
+		Sprite s = Entities.TREE.sprite;
+		trees.add(new DefaultTree(s, 100, 200));
+		trees.add(new DefaultTree(s, 36, 200));
 	}
 
 	@Override
@@ -71,7 +29,7 @@ public class Sector1 extends MapSector {
 		drawTiles(graphics, 0, 0);
 		Entities.DUMMY.render(graphics);
 		Entities.PLAYER.render(graphics);
-		for (Tree1 tree : trees) {
+		for (DefaultTree tree : trees) {
 			tree.render(graphics);
 		}
 	}
@@ -80,8 +38,8 @@ public class Sector1 extends MapSector {
 	public void tick()
 	{
 		Entities.PLAYER.tick();
-		for (Collision c : collisions) {
-			c.tick();
+		for (DefaultTree tree : trees) {
+			tree.tick();
 		}
 	}
 

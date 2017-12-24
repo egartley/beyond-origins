@@ -12,8 +12,8 @@ public class Dummy extends StaticEntity {
 
 	public Dummy(Sprite sprite) {
 		generateUUID();
-		id = "Dummy (" + uuid + ")";
-		currentSprite = sprite;
+		id = "Dummy";
+		this.sprite = sprite;
 		x = 470;
 		y = 190;
 		setBoundary();
@@ -22,7 +22,7 @@ public class Dummy extends StaticEntity {
 	@Override
 	public void render(Graphics graphics)
 	{
-		graphics.drawImage(currentSprite.getCurrentFrameAsBufferedImage(), x, y, null);
+		graphics.drawImage(sprite.getCurrentFrameAsBufferedImage(), x, y, null);
 		boundary.draw(graphics);
 	}
 
@@ -35,8 +35,14 @@ public class Dummy extends StaticEntity {
 	@Override
 	public void setBoundary()
 	{
-		BufferedImage image = currentSprite.getCurrentFrameAsBufferedImage();
+		BufferedImage image = sprite.getCurrentFrameAsBufferedImage();
 		boundary = new EntityBoundary(this, image.getWidth(), image.getHeight(), new BoundaryPadding(12), x, y);
+	}
+
+	@Override
+	protected void setCollisions()
+	{
+		
 	}
 
 }
