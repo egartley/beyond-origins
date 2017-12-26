@@ -2,6 +2,9 @@ package net.egartley.beyondorigins.objects;
 
 import java.util.ArrayList;
 
+import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
+import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
+
 /**
  * An {@link Entity} with associated animations
  * 
@@ -12,17 +15,25 @@ import java.util.ArrayList;
 public abstract class AnimatedEntity extends Entity {
 
 	/**
-	 * The current {@link Animation} to use with
-	 * {@link Entity#render(java.awt.Graphics) render(Graphics)} and
-	 * {@link Entity#tick() tick()}
+	 * The current animation that is used while rendering and in tick()
 	 */
-	public Animation			animation;
+	public Animation					animation;
 	/**
-	 * All of the animations that could be used while rendering
+	 * All of the animations that <i>could</i> be used while rendering
 	 * 
 	 * @see Animation
 	 */
-	public ArrayList<Animation>	animationCollection	= new ArrayList<Animation>();
+	public ArrayList<Animation>			animationCollection	= new ArrayList<Animation>();
+	/**
+	 * The most recent collision that has occured for this entity. If no collisions
+	 * have occured within this entity's lifetime, this will be null
+	 */
+	public EntityEntityCollision		lastCollision;
+	/**
+	 * The most recent collision event to have occured. This will be null if no
+	 * collision event has yet to take place
+	 */
+	public EntityEntityCollisionEvent	lastCollisionEvent;
 
 	/**
 	 * Creates a new animated entity, while setting {@link Entity#isAnimated} to
@@ -30,13 +41,14 @@ public abstract class AnimatedEntity extends Entity {
 	 * 
 	 * @see Entity
 	 */
-	public AnimatedEntity() {
+	public AnimatedEntity(String id) {
+		super(id);
 		isAnimated = true;
 		isStatic = false;
 	}
 
 	/**
-	 * This method must be used for building {@link #animationCollection}
+	 * This method should be used for building {@link #animationCollection}
 	 * 
 	 * @see Animation
 	 */

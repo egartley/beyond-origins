@@ -1,5 +1,8 @@
 package net.egartley.beyondorigins.objects;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -23,8 +26,8 @@ public abstract class Entity {
 	 * @see Sprite
 	 */
 	public ArrayList<Sprite>	sprites;
-	
-	public ArrayList<Collision> collisions;
+
+	public ArrayList<Collision>	collisions;
 	/**
 	 * The sprite to use while rendering
 	 */
@@ -34,15 +37,24 @@ public abstract class Entity {
 	 */
 	public EntityBoundary		boundary;
 	/**
-	 * The entity's x-axis coordinate
+	 * The entity's x-axis coordinate (absolute)
 	 */
 	public int					x;
 	/**
-	 * The entity's y-axis coordinate
+	 * The entity's y-axis coordinate (absolute)
 	 */
 	public int					y;
 	/**
-	 * The entity's unique ID number. Use {@link #id} for user-friendly identification
+	 * The entity's "effective" x-axis coordinate (includes its boundary)
+	 */
+	public int					effectiveX;
+	/**
+	 * The entity's "effective" y-axis coordinate (includes its boundary)
+	 */
+	public int					effectiveY;
+	/**
+	 * The entity's unique ID number. Use {@link #id} for user-friendly
+	 * identification
 	 */
 	public int					uuid;
 	/**
@@ -60,6 +72,7 @@ public abstract class Entity {
 	/**
 	 * Whether ot not this entity is currently collided with another entity
 	 * 
+	 * @see {@link net.egartley.beyondorigins.logic.collision.Collision Collision}
 	 * @see {@link net.egartley.beyondorigins.logic.collision.EntityEntityCollision
 	 *      EntityEntityCollision}
 	 */
@@ -68,12 +81,33 @@ public abstract class Entity {
 	 * Human-readable identifier for this entity
 	 */
 	public String				id;
-	
+	/**
+	 * This entity's most recent collision, or the current one if
+	 * {@link #isCollided} is
+	 * true
+	 */
+	public Collision			lastCollision;
+
+	private String				name;
+	private Font				nameTagFont		= new Font("Consalas", Font.PLAIN, 11);
+	private FontMetrics			nameTagFontMetrics;
+	private boolean				setFontMetrics	= false;
+	private int					nameWidth, overallWidth, entityWidth, nameX, nameY;
+
+	/**
+	 * Creates a new entity with a randomly generated UUID
+	 */
+	public Entity(String id) {
+		generateUUID();
+		this.id = id;
+	}
+
 	/**
 	 * Returns this entity as a human-readable string
 	 */
-	public String toString() {
-		return id + " (" + uuid + ")";
+	public String toString()
+	{
+		return id + "#" + uuid;
 	}
 
 	/**
@@ -89,6 +123,35 @@ public abstract class Entity {
 	 */
 	public abstract void render(Graphics graphics);
 
+	public void drawNameTag(Graphics graphics)
+	{
+		Color prevColor = graphics.getColor();
+		Font prevFont = graphics.getFont();
+		
+		// init
+		if (setFontMetrics == false) {
+			nameTagFontMetrics = graphics.getFontMetrics(nameTagFont);
+			name = this.toString();
+			nameWidth = nameTagFontMetrics.stringWidth(name);
+			overallWidth = nameWidth + 8; // 4-pixel padding on both sides
+			entityWidth = this.sprite.frameWidth;
+			System.out.println(entityWidth);
+			setFontMetrics = true;
+		}
+		nameX = (this.x + (entityWidth / 2)) - (overallWidth / 2);
+		nameY = this.y - 18;
+
+		graphics.setColor(new Color(0, 0, 0, 128));
+		graphics.setFont(nameTagFont);
+
+		graphics.fillRect(nameX, nameY, overallWidth, 16);
+		graphics.setColor(Color.WHITE);
+		graphics.drawString(name, nameX + 4, nameY + 11);
+
+		graphics.setColor(prevColor);
+		graphics.setFont(prevFont);
+	}
+
 	/**
 	 * Should be called 60 times per second in a tick thread
 	 */
@@ -100,13 +163,13 @@ public abstract class Entity {
 	 * @see EntityBoundary
 	 */
 	protected abstract void setBoundary();
-	
+
 	protected abstract void setCollisions();
 
 	/**
 	 * Method to generate {@link #uuid}
 	 */
-	protected void generateUUID()
+	private void generateUUID()
 	{
 		uuid = Util.randomInt(9999, 1000, true);
 	}

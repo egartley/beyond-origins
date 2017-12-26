@@ -1,6 +1,8 @@
 package net.egartley.beyondorigins.logic.collision;
 
-import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
+import java.awt.Color;
+
+import net.egartley.beyondorigins.logic.events.CollisionEvent;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.objects.Entity;
 
@@ -42,13 +44,40 @@ public class EntityEntityCollision extends Collision {
 	}
 
 	@Override
-	public void onCollision(EntityEntityCollisionEvent event)
+	public void onCollide(CollisionEvent event)
 	{
 	}
 
 	@Override
-	public void collisionEnd(EntityEntityCollisionEvent event)
+	public void onCollisionEnd(CollisionEvent event)
 	{
+	}
+
+	@Override
+	public void setBoundaryColors()
+	{
+		calculateBoundaryColor(firstEntity);
+		calculateBoundaryColor(secondEntity);
+	}
+
+	private void calculateBoundaryColor(Entity e)
+	{
+		if (e.isCollided == false) {
+			if (e.isStatic == true) {
+				e.boundary.drawColor = Color.BLACK;
+			}
+			else {
+				e.boundary.drawColor = Color.YELLOW;
+			}
+		}
+		else {
+			if (e.isStatic == true) {
+				e.boundary.drawColor = Color.YELLOW;
+			}
+			else {
+				e.boundary.drawColor = Color.RED;
+			}
+		}
 	}
 
 }

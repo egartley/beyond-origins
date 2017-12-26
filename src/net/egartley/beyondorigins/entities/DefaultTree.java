@@ -4,8 +4,10 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.logic.collision.Collision;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
+import net.egartley.beyondorigins.logic.events.CollisionEvent;
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
@@ -13,7 +15,8 @@ import net.egartley.beyondorigins.objects.Sprite;
 import net.egartley.beyondorigins.objects.StaticEntity;
 
 /**
- * A tree that can be displayed on a map. The player cannot walk over or under it
+ * A tree that can be displayed on a map. The player cannot walk over or under
+ * it
  * it
  * 
  * @author Evan Gartley
@@ -40,8 +43,7 @@ public class DefaultTree extends StaticEntity {
 	 *            {@link Sprite} object to use while rendering
 	 */
 	public DefaultTree(Sprite sprite, int x, int y) {
-		generateUUID();
-		id = "DefaultTree (" + uuid + ")";
+		super("DT");
 		this.sprite = sprite;
 		this.x = x;
 		this.y = y;
@@ -66,6 +68,7 @@ public class DefaultTree extends StaticEntity {
 	 */
 	public void onPlayerCollision(EntityEntityCollisionEvent event)
 	{
+		Entities.PLAYER.lastCollisionEvent = event;
 		switch (event.collidedSide)
 		{
 			case EntityEntityCollisionEvent.RIGHT:
@@ -98,13 +101,18 @@ public class DefaultTree extends StaticEntity {
 		collisions = new ArrayList<Collision>();
 		EntityEntityCollision withPlayer = new EntityEntityCollision(Entities.PLAYER.boundary, boundary)
 			{
-				public void onCollision(EntityEntityCollisionEvent event)
+				public void onCollide(CollisionEvent event)
 				{
-					onPlayerCollision(event);
+					Entities.PLAYER.lastCollision = (EntityEntityCollision) event.invoker;
+					firstEntity.isCollided = true;
+					secondEntity.isCollided = true;
+					onPlayerCollision((EntityEntityCollisionEvent) event);
 				};
 
-				public void collisionEnd(EntityEntityCollisionEvent event)
+				public void onCollisionEnd(CollisionEvent event)
 				{
+					firstEntity.isCollided = false;
+					secondEntity.isCollided = false;
 					Entities.PLAYER.enableAllMovement();
 				};
 			};
@@ -116,6 +124,8 @@ public class DefaultTree extends StaticEntity {
 	{
 		graphics.drawImage(sprite.getCurrentFrameAsBufferedImage(), x, y, null);
 		boundary.draw(graphics);
+		if (Game.debug)
+			drawNameTag(graphics);
 	}
 
 	@Override

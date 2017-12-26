@@ -28,7 +28,7 @@ public class Keyboard implements KeyListener {
 			pressed.remove(pressed.indexOf(e.getKeyCode()));
 		}
 		if (e.getKeyCode() == KeyEvent.VK_F3) {
-			Game.drawBoundaries = !Game.drawBoundaries;
+			Game.debug = !Game.debug;
 		}
 	}
 

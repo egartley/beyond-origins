@@ -58,7 +58,7 @@ public abstract class Boundary {
 	/**
 	 * Use {@link java.awt.Graphics#drawRect(int, int, int, int) drawRect}
 	 * method to render this boundary (only if
-	 * {@link net.egartley.beyondorigins.Game#drawBoundaries Game.drawBoundaries} is
+	 * {@link net.egartley.beyondorigins.Game#debug Game.debug} is
 	 * enabled)
 	 * 
 	 * @param graphics

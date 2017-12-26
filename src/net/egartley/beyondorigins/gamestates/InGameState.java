@@ -2,6 +2,7 @@ package net.egartley.beyondorigins.gamestates;
 
 import java.awt.Graphics;
 
+import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.maps.testmap.TestMap;
 import net.egartley.beyondorigins.objects.GameState;
 import net.egartley.beyondorigins.objects.Map;
@@ -19,6 +20,7 @@ public class InGameState extends GameState {
 	public void render(Graphics graphics)
 	{
 		currentMap.render(graphics);
+		Debug.render(graphics);
 	}
 
 	@Override

@@ -43,7 +43,7 @@ public class Game extends Canvas implements Runnable {
 	// FLAGS
 	public static boolean		running				= false;
 	public static boolean		runTickThread		= true;
-	public static boolean		drawBoundaries		= true;
+	public static boolean		debug		= true;
 
 	// GAMESTATES
 	public static GameState		currentGameState;

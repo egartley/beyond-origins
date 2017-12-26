@@ -14,7 +14,8 @@ public abstract class StaticEntity extends Entity {
 	 * 
 	 * @see Entity
 	 */
-	public StaticEntity() {
+	public StaticEntity(String id) {
+		super(id);
 		isAnimated = false;
 		isStatic = true;
 	}

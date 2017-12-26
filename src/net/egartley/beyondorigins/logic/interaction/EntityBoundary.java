@@ -101,7 +101,7 @@ public class EntityBoundary extends Boundary {
 	@Override
 	public void draw(Graphics graphics)
 	{
-		if (Game.drawBoundaries) {
+		if (Game.debug) {
 			Color previous = graphics.getColor();
 			graphics.setColor(drawColor);
 			graphics.drawRect(x, y, width, height);

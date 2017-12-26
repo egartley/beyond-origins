@@ -19,17 +19,16 @@ public class Player extends AnimatedEntity {
 	private byte		animationThreshold	= 10;
 	public byte			speed				= 1;
 	private byte		boundaryPadding		= 5;
-	private int			maxX, maxY;
+	private int			maximumX, maximumY;
 	public boolean		canMoveUp			= true, canMoveDown = true, canMoveLeft = true, canMoveRight = true;
 	public boolean		movingUp			= false, movingDown = false, movingLeft = false, movingRight = false;
 
 	public Player(ArrayList<Sprite> sprites) {
-		generateUUID();
-		id = "Player";
+		super("Player");
 		this.sprites = sprites;
 		sprite = sprites.get(0);
-		maxX = Game.WINDOW_WIDTH;
-		maxY = Game.WINDOW_HEIGHT;
+		maximumX = Game.WINDOW_WIDTH;
+		maximumY = Game.WINDOW_HEIGHT;
 		setAnimationCollection();
 		setBoundary();
 		setCollisions();
@@ -49,7 +48,7 @@ public class Player extends AnimatedEntity {
 				y -= speed;
 			break;
 			case DOWN:
-				if (boundary.bottom >= maxY || !canMoveDown) {
+				if (boundary.bottom >= maximumY || !canMoveDown) {
 					break; // bottom of window
 				}
 				y += speed;
@@ -62,7 +61,7 @@ public class Player extends AnimatedEntity {
 				setAnimation(LEFT_ANIMATION);
 			break;
 			case RIGHT:
-				if (boundary.right >= maxX || !canMoveRight) {
+				if (boundary.right >= maximumX || !canMoveRight) {
 					break; // right of window
 				}
 				x += speed;
@@ -109,6 +108,8 @@ public class Player extends AnimatedEntity {
 	{
 		animation.render(graphics, x, y);
 		boundary.draw(graphics);
+		if (Game.debug)
+			drawNameTag(graphics);
 	}
 
 	@Override
@@ -145,6 +146,8 @@ public class Player extends AnimatedEntity {
 		}
 		animation.tick();
 		boundary.tick();
+		effectiveX = boundary.left;
+		effectiveY = boundary.top;
 	}
 
 	@Override

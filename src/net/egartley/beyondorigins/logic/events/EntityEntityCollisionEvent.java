@@ -18,22 +18,23 @@ import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
  */
 public class EntityEntityCollisionEvent extends CollisionEvent {
 
-	public static final byte	TOP			= 0, LEFT = 1, BOTTOM = 2, RIGHT = 3;
-	public byte					collidedSide;
-	private final byte			TOLERANCE	= 2;
+	public static final byte		TOP			= 0, LEFT = 1, BOTTOM = 2, RIGHT = 3;
+	public byte						collidedSide;
+	private final byte				TOLERANCE	= 2;
+	private EntityEntityCollision	parent;
 
 	public EntityEntityCollisionEvent(Collision invoker) {
 		this.invoker = invoker;
-		EntityEntityCollision c = null;
+		parent = null;
 		try {
-			c = (EntityEntityCollision) this.invoker;
+			parent = (EntityEntityCollision) invoker;
 		}
 		catch (Exception e) {
 			Debug.error("There was an error while attempting to cast the collision event's invoker to an EntityEntityCollision");
 			e.printStackTrace();
 		}
-		if (c != null) {
-			EntityBoundary collider = c.firstEntity.boundary, into = c.secondEntity.boundary;
+		if (parent != null) {
+			EntityBoundary collider = parent.firstEntity.boundary, into = parent.secondEntity.boundary;
 			if (into.right - TOLERANCE <= collider.left && collider.left <= into.right) {
 				collidedSide = RIGHT;
 			}

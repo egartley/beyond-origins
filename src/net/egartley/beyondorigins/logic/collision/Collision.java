@@ -1,12 +1,10 @@
 package net.egartley.beyondorigins.logic.collision;
 
-import java.awt.Color;
 import java.awt.Rectangle;
 
+import net.egartley.beyondorigins.logic.events.CollisionEvent;
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.logic.interaction.Boundary;
-import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
-import net.egartley.beyondorigins.objects.Entity;
 
 /**
  * A collision between two different boundaries
@@ -29,9 +27,6 @@ public abstract class Collision {
 	public boolean		previouslyCollided;
 
 	private boolean		firedEvent;
-
-	private Color		collidedStaticColor	= Color.YELLOW, collidedAnimatedColor = Color.RED, defaultStaticColor = Color.BLACK,
-			defaultAnimatedColor = Color.YELLOW;
 
 	public Boundary		boundary1;
 	public Boundary		boundary2;
@@ -66,11 +61,11 @@ public abstract class Collision {
 		isCollided = rectangle1.intersects(rectangle2);
 
 		if (isCollided == true && firedEvent == false) {
-			onCollision(new EntityEntityCollisionEvent(this));
+			onCollide(new EntityEntityCollisionEvent(this));
 			firedEvent = true;
 		}
 		if (isCollided == false && firedEvent == true) {
-			collisionEnd(new EntityEntityCollisionEvent(this));
+			onCollisionEnd(new EntityEntityCollisionEvent(this));
 			firedEvent = false;
 		}
 		if (previouslyCollided != isCollided) {
@@ -80,42 +75,19 @@ public abstract class Collision {
 		previouslyCollided = isCollided;
 	}
 
-	private void setBoundaryColors()
-	{
-		Entity entity1 = ((EntityBoundary) boundary1).entity;
-		Entity entity2 = ((EntityBoundary) boundary2).entity;
-		Color staticColor = defaultStaticColor, animatedColor = defaultAnimatedColor;
-		if (isCollided) {
-			staticColor = collidedStaticColor;
-			animatedColor = collidedAnimatedColor;
-		}
-
-		if (entity1.isCollided == false) {
-			if (entity1.isStatic == true) {
-				entity1.boundary.drawColor = staticColor;
-			}
-			else {
-				entity1.boundary.drawColor = animatedColor;
-			}
-		}
-		if (entity2.isCollided == false) {
-			if (entity2.isStatic == true) {
-				entity2.boundary.drawColor = staticColor;
-			}
-			else {
-				entity2.boundary.drawColor = animatedColor;
-			}
-		}
-	}
+	/**
+	 * This method should set/update the colors for both boundaries
+	 */
+	public abstract void setBoundaryColors();
 
 	/**
 	 * This method is called <b>once</b> after the collision occurs
 	 */
-	public abstract void onCollision(EntityEntityCollisionEvent event);
+	public abstract void onCollide(CollisionEvent event);
 
 	/**
 	 * This method is called <b>once</b> after the collision ends
 	 */
-	public abstract void collisionEnd(EntityEntityCollisionEvent event);
+	public abstract void onCollisionEnd(CollisionEvent event);
 
 }
