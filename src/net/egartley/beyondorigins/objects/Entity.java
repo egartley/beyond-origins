@@ -2,13 +2,13 @@ package net.egartley.beyondorigins.objects;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.logic.collision.Collision;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
+import net.egartley.beyondorigins.logic.math.Calculate;
 
 /**
  * An entity that can rendered with a sprite and have a specific position
@@ -90,9 +90,8 @@ public abstract class Entity {
 
 	private String				name;
 	private Font				nameTagFont		= new Font("Consalas", Font.PLAIN, 11);
-	private FontMetrics			nameTagFontMetrics;
 	private boolean				setFontMetrics	= false;
-	private int					nameWidth, overallWidth, entityWidth, nameX, nameY;
+	private int					nameTagWidth, entityWidth, nameX, nameY;
 
 	/**
 	 * Creates a new entity with a randomly generated UUID
@@ -115,7 +114,7 @@ public abstract class Entity {
 	 * Method for actually rendering this entity
 	 * </p>
 	 * <p>
-	 * The current sprite ({@link #sprite}) should be used
+	 * {@link #sprite} should be used
 	 * </p>
 	 * 
 	 * @param graphics
@@ -123,33 +122,30 @@ public abstract class Entity {
 	 */
 	public abstract void render(Graphics graphics);
 
+	/**
+	 * Draws the entity's "name tag" which displays {@link #id} and {@link #uuid}
+	 * 
+	 * @param graphics
+	 *            The {@link java.awt.Graphics Graphics} object
+	 */
 	public void drawNameTag(Graphics graphics)
 	{
-		Color prevColor = graphics.getColor();
-		Font prevFont = graphics.getFont();
-		
 		// init
 		if (setFontMetrics == false) {
-			nameTagFontMetrics = graphics.getFontMetrics(nameTagFont);
 			name = this.toString();
-			nameWidth = nameTagFontMetrics.stringWidth(name);
-			overallWidth = nameWidth + 8; // 4-pixel padding on both sides
+			nameTagWidth = graphics.getFontMetrics(nameTagFont).stringWidth(name) + 8; // 4-pixel padding on both sides
 			entityWidth = this.sprite.frameWidth;
-			System.out.println(entityWidth);
 			setFontMetrics = true;
 		}
-		nameX = (this.x + (entityWidth / 2)) - (overallWidth / 2);
+		nameX = Calculate.horizontalCenter(x, entityWidth) - Calculate.horizontalCenter(0, nameTagWidth);
 		nameY = this.y - 18;
 
 		graphics.setColor(new Color(0, 0, 0, 128));
 		graphics.setFont(nameTagFont);
 
-		graphics.fillRect(nameX, nameY, overallWidth, 16);
+		graphics.fillRect(nameX, nameY, nameTagWidth, 16);
 		graphics.setColor(Color.WHITE);
 		graphics.drawString(name, nameX + 4, nameY + 11);
-
-		graphics.setColor(prevColor);
-		graphics.setFont(prevFont);
 	}
 
 	/**
@@ -163,7 +159,9 @@ public abstract class Entity {
 	 * @see EntityBoundary
 	 */
 	protected abstract void setBoundary();
-
+	/**
+	 * Sets this entity's collisions
+	 */
 	protected abstract void setCollisions();
 
 	/**
