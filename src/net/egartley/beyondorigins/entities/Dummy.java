@@ -3,7 +3,6 @@ package net.egartley.beyondorigins.entities;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.objects.Sprite;
@@ -24,9 +23,7 @@ public class Dummy extends StaticEntity {
 	public void render(Graphics graphics)
 	{
 		graphics.drawImage(sprite.getCurrentFrameAsBufferedImage(), x, y, null);
-		boundary.draw(graphics);
-		if (Game.debug)
-			drawNameTag(graphics);
+		drawDebug(graphics);
 	}
 
 	@Override

@@ -67,13 +67,14 @@ public class Debug {
 		if (Game.debug) {
 			graphics.setColor(Color.WHITE);
 			graphics.setFont(font);
-			graphics.drawString("Player X: " + Entities.PLAYER.x + ", Y: " + Entities.PLAYER.y + " (eX: " + Entities.PLAYER.effectiveX + ", eY: "
+			graphics.drawString("Player X: " + Entities.PLAYER.x + ", Y: " + Entities.PLAYER.y + " (effective " + Entities.PLAYER.effectiveX + ", "
 					+ Entities.PLAYER.effectiveY + ")", lx, ly);
 			String s = "isCollided: " + Entities.PLAYER.isCollided;
 			if (Entities.PLAYER.isCollided && Entities.PLAYER.lastCollision != null)
 				s += " (" + Entities.PLAYER.lastCollision.firstEntity + " and " + Entities.PLAYER.lastCollision.secondEntity + ", collidedSide: "
 						+ Entities.PLAYER.lastCollisionEvent.collidedSide + ")";
 			graphics.drawString(s, lx, ly + d);
+			// graphics.drawString("FPS: " + Game.getFPS(), lx, ly + (d * 2));
 		}
 	}
 

@@ -7,8 +7,7 @@ import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 
 /**
  * An extension of {@link CollisionEvent} meant for use with an
- * {@link net.egartley.beyondorigins.logic.collision.EntityEntityCollision
- * EntityEntityCollision}
+ * EntityEntityCollision
  * 
  * @author Evan Gartley
  * @see CollisionEvent
@@ -23,6 +22,13 @@ public class EntityEntityCollisionEvent extends CollisionEvent {
 	private final byte				TOLERANCE	= 2;
 	private EntityEntityCollision	parent;
 
+	/**
+	 * Creates a new collision event between two entities
+	 * 
+	 * @param invoker
+	 *            The collision that invoked the event
+	 * @see CollisionEvent
+	 */
 	public EntityEntityCollisionEvent(Collision invoker) {
 		this.invoker = invoker;
 		parent = null;
@@ -34,7 +40,10 @@ public class EntityEntityCollisionEvent extends CollisionEvent {
 			e.printStackTrace();
 		}
 		if (parent != null) {
+			// the collider and into should not really matter
 			EntityBoundary collider = parent.firstEntity.boundary, into = parent.secondEntity.boundary;
+			// this is probably the single most difficult thing I have done in awhile...
+			// it took nearly three hours to work out
 			if (into.right - TOLERANCE <= collider.left && collider.left <= into.right) {
 				collidedSide = RIGHT;
 			}

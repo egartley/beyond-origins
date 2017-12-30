@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.logic.collision.Collision;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.events.CollisionEvent;
@@ -61,10 +60,8 @@ public class DefaultTree extends StaticEntity {
 	 * disabled
 	 * </p>
 	 * 
-	 * @param tree
-	 *            {@link EntityBoundary} for the tree
-	 * @see DefaultTree
-	 * @see EntityBoundary
+	 * @param event
+	 *            The collision event between the player and tree
 	 */
 	public void onPlayerCollision(EntityEntityCollisionEvent event)
 	{
@@ -72,16 +69,20 @@ public class DefaultTree extends StaticEntity {
 		switch (event.collidedSide)
 		{
 			case EntityEntityCollisionEvent.RIGHT:
-				Entities.PLAYER.canMoveLeft = false;
+				// collided on the right, so disable leftwards movement
+				Entities.PLAYER.isAllowedToMoveLeftwards = false;
 			break;
 			case EntityEntityCollisionEvent.LEFT:
-				Entities.PLAYER.canMoveRight = false;
+				// collided on the left, so disable rightwards movement
+				Entities.PLAYER.isAllowedToMoveRightwards = false;
 			break;
 			case EntityEntityCollisionEvent.TOP:
-				Entities.PLAYER.canMoveDown = false;
+				// collided at the top, so disable downwards movement
+				Entities.PLAYER.isAllowedToMoveDownwards = false;
 			break;
 			case EntityEntityCollisionEvent.BOTTOM:
-				Entities.PLAYER.canMoveUp = false;
+				// collided at the bottom, so disable upwards movement
+				Entities.PLAYER.isAllowedToMoveUpwards = false;
 			break;
 			default:
 			break;
@@ -91,6 +92,8 @@ public class DefaultTree extends StaticEntity {
 	@Override
 	protected void setBoundary()
 	{
+		// the image is set to a variable because it is used twice in the constructor
+		// for the entity boundary, makes it more resource efficient (in theory)
 		BufferedImage image = sprite.getCurrentFrameAsBufferedImage();
 		boundary = new EntityBoundary(this, image.getWidth(), image.getHeight(), new BoundaryPadding(-24, -20, -6, -20), x, y);
 	}
@@ -99,6 +102,7 @@ public class DefaultTree extends StaticEntity {
 	protected void setCollisions()
 	{
 		collisions = new ArrayList<Collision>();
+		// this is independent of whatever map/sector the player is in
 		EntityEntityCollision withPlayer = new EntityEntityCollision(Entities.PLAYER.boundary, boundary)
 			{
 				public void onCollide(CollisionEvent event)
@@ -113,7 +117,7 @@ public class DefaultTree extends StaticEntity {
 				{
 					firstEntity.isCollided = false;
 					secondEntity.isCollided = false;
-					Entities.PLAYER.enableAllMovement();
+					Entities.PLAYER.allowAllMovement();
 				};
 			};
 		collisions.add(withPlayer);
@@ -123,9 +127,7 @@ public class DefaultTree extends StaticEntity {
 	public void render(Graphics graphics)
 	{
 		graphics.drawImage(sprite.getCurrentFrameAsBufferedImage(), x, y, null);
-		boundary.draw(graphics);
-		if (Game.debug)
-			drawNameTag(graphics);
+		drawDebug(graphics);
 	}
 
 	@Override

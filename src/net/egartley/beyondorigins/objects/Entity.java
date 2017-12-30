@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.logic.collision.Collision;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
@@ -122,13 +123,20 @@ public abstract class Entity {
 	 */
 	public abstract void render(Graphics graphics);
 
+	public void drawDebug(Graphics graphics) {
+		if (Game.debug) {
+			boundary.draw(graphics);
+			drawNameTag(graphics);
+		}
+	}
+	
 	/**
 	 * Draws the entity's "name tag" which displays {@link #id} and {@link #uuid}
 	 * 
 	 * @param graphics
 	 *            The {@link java.awt.Graphics Graphics} object
 	 */
-	public void drawNameTag(Graphics graphics)
+	private void drawNameTag(Graphics graphics)
 	{
 		// init
 		if (setFontMetrics == false) {
@@ -143,9 +151,9 @@ public abstract class Entity {
 		graphics.setColor(new Color(0, 0, 0, 128));
 		graphics.setFont(nameTagFont);
 
-		graphics.fillRect(nameX, nameY, nameTagWidth, 16);
+		graphics.fillRect(nameX, nameY, nameTagWidth, 18);
 		graphics.setColor(Color.WHITE);
-		graphics.drawString(name, nameX + 4, nameY + 11);
+		graphics.drawString(name, nameX + 5, nameY + 13);
 	}
 
 	/**

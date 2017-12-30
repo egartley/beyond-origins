@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public abstract class GameState {
 
 	/**
-	 * The {@link #identificationNumber} used while actually playing the game
+	 * The ID number used while actually playing the game
 	 * 
 	 * @see GameState
 	 */
