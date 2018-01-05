@@ -19,14 +19,14 @@ public abstract class Map {
 	 * @see MapSector
 	 * @see MapSectorDefinition
 	 */
-	public ArrayList<MapSector>	sectors;
+	public ArrayList<MapSector> sectors;
 	/**
 	 * The current sector to use while rendering
 	 * 
 	 * @see MapSector
 	 * @see MapSectorDefinition
 	 */
-	public MapSector			currentSector;
+	public MapSector currentSector;
 
 	public abstract void tick();
 

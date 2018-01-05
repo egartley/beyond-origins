@@ -17,15 +17,14 @@ public class InGameState extends GameState {
 	}
 
 	@Override
-	public void render(Graphics graphics)
-	{
+	public void render(Graphics graphics) {
 		currentMap.render(graphics);
+		// draw debug text
 		Debug.render(graphics);
 	}
 
 	@Override
-	public void tick()
-	{
+	public void tick() {
 		currentMap.tick();
 	}
 

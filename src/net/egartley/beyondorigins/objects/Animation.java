@@ -16,26 +16,26 @@ import net.egartley.beyondorigins.Debug;
  */
 public class Animation {
 
-	private byte			delay	= 0, threshold = 10;
-	private int				frameIndex, startIndex;
+	private byte delay = 0, threshold = 10;
+	private int frameIndex, startIndex;
 	/**
 	 * Set to true when the animation is no longer changing frames, false otherwise
 	 */
-	public boolean			isStopped;
-	private boolean			setStopFrame;
+	public boolean isStopped;
+	private boolean setStopFrame;
 
 	/**
 	 * The {@link Sprite} to animate
 	 */
-	public Sprite			sprite;
+	public Sprite sprite;
 	/**
 	 * The frame that is currently being used while rendering
 	 */
-	public AnimationFrame	frame;
+	public AnimationFrame frame;
 	/**
 	 * The frame that the animation will start at
 	 */
-	public AnimationFrame	startFrame;
+	public AnimationFrame startFrame;
 
 	/**
 	 * Creates a new animation
@@ -47,7 +47,7 @@ public class Animation {
 		sprite = s;
 		frameIndex = 0;
 		startIndex = 0;
-		startFrame = sprite.frames.get(startIndex);
+		startFrame = sprite.frameCollection.get(startIndex);
 		frame = startFrame;
 	}
 
@@ -57,26 +57,24 @@ public class Animation {
 	 * @param s
 	 *            {@link Sprite} to animate
 	 * @param si
-	 *            Index to start at (from {@link Sprite#frames
-	 *            Sprite.frames})
+	 *            Index to start at (from {@link Sprite#frameCollection
+	 *            Sprite.frameCollection})
 	 */
 	public Animation(Sprite s, int si) {
 		sprite = s;
 		frameIndex = si;
 		startIndex = frameIndex;
-		startFrame = sprite.frames.get(startIndex);
+		startFrame = sprite.frameCollection.get(startIndex);
 		frame = startFrame;
 	}
 
-	private AnimationFrame nextFrame()
-	{
-		if (frameIndex + 1 == sprite.frames.size()) {
+	private AnimationFrame nextFrame() {
+		if (frameIndex + 1 == sprite.frameCollection.size()) {
 			frameIndex = 0;
-		}
-		else {
+		} else {
 			frameIndex++;
 		}
-		return sprite.frames.get(frameIndex);
+		return sprite.frameCollection.get(frameIndex);
 	}
 
 	/**
@@ -91,8 +89,7 @@ public class Animation {
 	 * @param t
 	 *            New value for {@link #threshold}
 	 */
-	public void setThreshold(int t)
-	{
+	public void setThreshold(int t) {
 		if (t > 127 || t < -128) {
 			Debug.warning("tried to set an animation threshold outside of the accepted range (-127 to 127)!");
 			return;
@@ -103,16 +100,14 @@ public class Animation {
 	/**
 	 * Resume the animation. Does nothing if already running
 	 */
-	public void resume()
-	{
+	public void resume() {
 		isStopped = false;
 	}
 
 	/**
 	 * Pauses the animation. Does nothing if already paused
 	 */
-	public void pause()
-	{
+	public void pause() {
 		isStopped = true;
 	}
 
@@ -120,8 +115,7 @@ public class Animation {
 	 * Stops the animation, and resets the displayed frame to the starting frame.
 	 * Does nothing if already stopped
 	 */
-	public void stop()
-	{
+	public void stop() {
 		isStopped = true;
 		setStopFrame = false;
 	}
@@ -129,8 +123,7 @@ public class Animation {
 	/**
 	 * Restarts the animation. If already running, the animation will start over
 	 */
-	public void restart()
-	{
+	public void restart() {
 		frameIndex = startIndex;
 		delay = 0;
 		isStopped = false;
@@ -147,26 +140,22 @@ public class Animation {
 	 *            The y-axis coordinate
 	 * @see AnimationFrame
 	 */
-	public void render(Graphics graphics, int x, int y)
-	{
+	public void render(Graphics graphics, int x, int y) {
 		graphics.drawImage(frame.asBufferedImage(), x, y, null);
 	}
 
 	/**
 	 * Should be called 60 times per second, within a tick thread
 	 */
-	public void tick()
-	{
+	public void tick() {
 		if (!isStopped) {
 			if (delay < threshold) {
 				delay++;
-			}
-			else {
+			} else {
 				delay = 0;
 				frame = nextFrame();
 			}
-		}
-		else {
+		} else {
 			if (!setStopFrame) {
 				frame = startFrame;
 				setStopFrame = true;

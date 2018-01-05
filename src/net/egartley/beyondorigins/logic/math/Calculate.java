@@ -11,8 +11,7 @@ public class Calculate {
 	 *            Width or height
 	 * @return a + (b / 2)
 	 */
-	private static int getCenter(int a, int b)
-	{
+	private static int getCenter(int a, int b) {
 		return a + (b / 2);
 	}
 
@@ -25,8 +24,7 @@ public class Calculate {
 	 *            The height to use
 	 * @return y + (height / 2)
 	 */
-	public static int verticalCenter(int y, int height)
-	{
+	public static int verticalCenter(int y, int height) {
 		return getCenter(y, height);
 	}
 
@@ -39,8 +37,7 @@ public class Calculate {
 	 *            The width to use
 	 * @return x + (width / 2)
 	 */
-	public static int horizontalCenter(int x, int width)
-	{
+	public static int horizontalCenter(int x, int width) {
 		return getCenter(x, width);
 	}
 

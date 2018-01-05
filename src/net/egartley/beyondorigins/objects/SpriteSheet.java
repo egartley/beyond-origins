@@ -4,67 +4,108 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
- * An image that can be "split" into multiple sprites
+ * An image that contains multiple sprites, each represented by a row, or
+ * "strip" that is specified in the constructor
  * 
  * @author Evan Gartley
  * @see Sprite
  */
 public class SpriteSheet {
 
-	private BufferedImage		fullImage;
-	private ArrayList<Sprite>	spriteCollection;
+	private BufferedImage sheet;
+	private ArrayList<Sprite> spriteCollection;
 
-	public int					spriteWidth, spriteHeight, strips, stripWidth;
+	public int spriteWidth;
+	public int spriteHeight;
+	public int strips;
+	public int stripWidth;
+	public short frames;
 
-	public SpriteSheet(int w, int h, int r, int frames) {
-		spriteWidth = w;
-		spriteHeight = h;
-		strips = r;
+	/**
+	 * Creates a new sprite strip, then loads its sprites
+	 * 
+	 * @param image
+	 *            BufferedImage that represents the entire strip
+	 * @param width
+	 *            Width of each sprite/frame (same for all of them)
+	 * @param height
+	 *            Height of each sprite/frame (same for all of them)
+	 * @param rows
+	 *            Number of rows, or "strips", of sprites that are in the strip
+	 * @param frames
+	 *            Number of frames in each row, or "strip" (same for entire strip)
+	 */
+	public SpriteSheet(BufferedImage image, int width, int height, int rows, short frames) {
+		sheet = image;
+		spriteWidth = width;
+		spriteHeight = height;
+		strips = rows;
+		this.frames = frames;
 		stripWidth = spriteWidth * frames;
-		loadAllSprites(frames);
+		loadAllSprites();
 	}
 
-	public SpriteSheet(BufferedImage image, int w, int h, int r, int frames) {
-		fullImage = image;
-		spriteWidth = w;
-		spriteHeight = h;
-		strips = r;
-		stripWidth = spriteWidth * frames;
-		loadAllSprites(frames);
+	/**
+	 * Sets the strip's image
+	 * 
+	 * @param image
+	 *            The BufferedImage to replace the strip with
+	 */
+	public void setSheetImage(BufferedImage image) {
+		sheet = image;
 	}
 
-	public void setFullImage(BufferedImage image)
-	{
-		fullImage = image;
-	}
-
-	private void loadAllSprites(int frames)
-	{
+	/**
+	 * Builds the sprite collection from the strip image (should have already been
+	 * set)
+	 */
+	private void loadAllSprites() {
+		// clear sprite collection if previously built
 		spriteCollection = new ArrayList<Sprite>(strips);
 		for (int i = 0; i < strips; i++) {
+			// get each row/strip as a sprite
 			Sprite s = new Sprite(getStripAsBufferedImage(i), spriteWidth, spriteHeight);
 			s.setFrames(frames);
+			// add to collection
 			spriteCollection.add(s);
 		}
 	}
 
-	public BufferedImage getStripAsBufferedImage(int rowIndex)
-	{
-		return asBufferedImage().getSubimage(0, rowIndex * spriteHeight, stripWidth, spriteHeight);
+	/**
+	 * Returns the "strip" at the given row index
+	 * 
+	 * @param rowIndex
+	 *            The row number, or index, of the "strip" to return in the strip
+	 * @return The specified "strip" as a BufferedImage
+	 */
+	public BufferedImage getStripAsBufferedImage(int rowIndex) {
+		return sheet.getSubimage(0, rowIndex * spriteHeight, stripWidth, spriteHeight);
 	}
 
-	public BufferedImage asBufferedImage()
-	{
-		return fullImage;
+	/**
+	 * Returns the entire sprite strip
+	 * 
+	 * @return The sprite strip as a BufferedImage object
+	 */
+	public BufferedImage asBufferedImage() {
+		return sheet;
 	}
 
-	public Sprite getSpriteAt(int index)
-	{
+	/**
+	 * @param index
+	 *            Index of the sprite to get within the strip's sprite collection
+	 * @return The sprite at the given index in the strip's sprite collection
+	 */
+	public Sprite getSpriteAt(int index) {
 		return spriteCollection.get(index);
 	}
 
-	public ArrayList<Sprite> getSpriteCollection()
-	{
+	/**
+	 * Returns the strip's sprite collection
+	 * 
+	 * @return An array list of sprites within the strip
+	 */
+	public ArrayList<Sprite> getSpriteCollection() {
 		return spriteCollection;
 	}
 

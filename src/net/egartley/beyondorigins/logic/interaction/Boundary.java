@@ -16,35 +16,35 @@ public abstract class Boundary {
 	/**
 	 * The absolute x-coordinate
 	 */
-	public int				x;
+	public int x;
 	/**
 	 * The absolute y-coordinate
 	 */
-	public int				y;
+	public int y;
 	/**
 	 * This boundary's width (calcuated with padding)
 	 */
-	public int				width;
+	public int width;
 	/**
 	 * This boundary's height (calcuated with padding)
 	 */
-	public int				height;
+	public int height;
 	/**
 	 * The "top" side of this boundary, which is its y-coordinate
 	 */
-	public int				top;
+	public int top;
 	/**
 	 * The "right" side of this boundary, which is its x-coordinate
 	 */
-	public int				right;
+	public int right;
 	/**
 	 * The "bottom" side of this boundary, which is its y-coordinate
 	 */
-	public int				bottom;
+	public int bottom;
 	/**
 	 * The "left" side of this boundary, which is its x-coordinate
 	 */
-	public int				left;
+	public int left;
 
 	/**
 	 * This boundary's padding (extra space added/subtracted from any or all of the
@@ -53,13 +53,12 @@ public abstract class Boundary {
 	 * @see {@link net.egartley.beyondorigins.logic.interaction.BoundaryPadding
 	 *      BoundaryPadding}
 	 */
-	public BoundaryPadding	padding;
+	public BoundaryPadding padding;
 
 	/**
-	 * Use {@link java.awt.Graphics#drawRect(int, int, int, int) drawRect}
-	 * method to render this boundary (only if
-	 * {@link net.egartley.beyondorigins.Game#debug Game.debug} is
-	 * enabled)
+	 * Use {@link java.awt.Graphics#drawRect(int, int, int, int) drawRect} method to
+	 * render this boundary (only if {@link net.egartley.beyondorigins.Game#debug
+	 * Game.debug} is enabled)
 	 * 
 	 * @param graphics
 	 *            {@link java.awt.Graphics Graphics}
@@ -68,18 +67,16 @@ public abstract class Boundary {
 
 	/**
 	 * Update {@linkplain #x}, {@linkplain #y}, {@linkplain #top},
-	 * {@linkplain #left}, {@linkplain #bottom}
-	 * and {@link #right}
+	 * {@linkplain #left}, {@linkplain #bottom} and {@link #right}
 	 */
 	public abstract void tick();
-
+	
 	/**
 	 * Returns the boundary as a {@link java.awt.Rectangle Rectangle} object
 	 * 
 	 * @return {@link java.awt.Rectangle Rectangle}
 	 */
-	public Rectangle asRectangle()
-	{
+	public Rectangle asRectangle() {
 		return new Rectangle(x, y, width, height);
 	}
 

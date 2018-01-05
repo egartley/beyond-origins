@@ -10,57 +10,52 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
-import net.egartley.beyondorigins.definitions.maps.Sectors;
-import net.egartley.beyondorigins.entities.DefaultTree;
-import net.egartley.beyondorigins.entities.Dummy;
-import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.entities.Player;
+import net.egartley.beyondorigins.definitions.maps.AllSectors;
+import net.egartley.beyondorigins.entities.*;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.input.Keyboard;
 import net.egartley.beyondorigins.maps.TileBuilder;
 import net.egartley.beyondorigins.media.images.ImageStore;
 import net.egartley.beyondorigins.objects.GameState;
 import net.egartley.beyondorigins.objects.SpriteSheet;
-import net.egartley.beyondorigins.threads.MainTick;
+import net.egartley.beyondorigins.threads.MasterTick;
 
 public class Game extends Canvas implements Runnable {
 
 	// SELF
-	private static final long	serialVersionUID	= 8213282993283826186L;
-	private static short		frames, currentFrames;
-	private static JFrame		frame;
-	private static Dimension	windowDimension		= new Dimension(998, 573);
-	private Graphics			graphics;
-	private BufferStrategy		bufferStrategy;
+	private static final long serialVersionUID = 8213282993283826186L;
+	private static short frames, currentFrames;
+	private static JFrame frame;
+	private static Dimension windowDimension = new Dimension(998, 573);
+	private Graphics graphics;
+	private BufferStrategy bufferStrategy;
 
 	// CONSTANTS
-	public static final int		WINDOW_WIDTH		= windowDimension.width - 7, WINDOW_HEIGHT = windowDimension.height - 30;
+	public static final int WINDOW_WIDTH = windowDimension.width - 7, WINDOW_HEIGHT = windowDimension.height - 30;
 
 	// THREADS
-	private static Thread		renderThread;
-	private static Thread		tickThread;
+	private static Thread masterRenderThread;
+	private static Thread masterTickThread;
 
 	// THREAD OBJECTS
-	private static MainTick		tick				= new MainTick();
+	private static MasterTick tick = new MasterTick();
 
 	// FLAGS
-	public static boolean		running				= false;
-	public static boolean		runTickThread		= true;
-	public static boolean		debug				= true;
+	public static boolean running = false;
+	public static boolean runTickThread = true;
+	public static boolean debug = true;
 
 	// GAMESTATES
-	public static GameState		currentGameState;
+	public static GameState currentGameState;
 
-	private void init()
-	{
+	private void init() {
 		loadGraphicsAndEntities();
 		loadMaps();
 		currentGameState = new InGameState();
 		this.addKeyListener(new Keyboard());
 	}
 
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		Game game = new Game();
 		game.setPreferredSize(windowDimension);
 		game.setMaximumSize(windowDimension);
@@ -83,8 +78,7 @@ public class Game extends Canvas implements Runnable {
 		game.start();
 	}
 
-	private void loadGraphicsAndEntities()
-	{
+	private void loadGraphicsAndEntities() {
 		// this loads all of the images in "resources/images"
 		ImageStore.loadAll();
 		// this upscales all images to a factor of 2 (i.e. each pixel in an image will
@@ -92,84 +86,88 @@ public class Game extends Canvas implements Runnable {
 		byte scale = 2;
 
 		// *********** PLAYER BEGIN ***********
-		BufferedImage playerImage = ImageStore.playerDefault;
-		if (playerImage != null) {
+		BufferedImage image = ImageStore.playerDefault;
+		if (image != null) {
 			// upscale the image by a factor of 2 (double it)
-			playerImage = Util.resized(playerImage, playerImage.getWidth() * scale, playerImage.getHeight() * scale);
-		}
-		else {
-			// TODO handle error with image being null
+			image = Util.resized(image, image.getWidth() * scale, image.getHeight() * scale);
+		} else {
+			Debug.error(
+					"The default player image (\"player-default.png\") doesn't exist, or there was a problem while loading it!");
+			return;
 		}
 		// initialize the player
-		// TODO: simplify this shitshow, make it easier to understand
-		Entities.PLAYER = new Player(new SpriteSheet(playerImage, 15 * scale, 23 * scale, 2, 4).getSpriteCollection());
+		Entities.PLAYER = new Player(
+				new SpriteSheet(image, 15 * scale, 23 * scale, 2, (short) 4).getSpriteCollection());
 		// ************ PLAYER END ************
 
 		// ************ DUMMY BEGIN ***********
-		BufferedImage dummyImage = ImageStore.dummy;
-		if (dummyImage != null) {
+		image = ImageStore.dummy;
+		if (image != null) {
 			// upscale the image by a factor of 2 (double it)
-			dummyImage = Util.resized(dummyImage, dummyImage.getWidth() * scale, dummyImage.getHeight() * scale);
-		}
-		else {
-			// TODO handle error with image being null
+			image = Util.resized(image, image.getWidth() * scale, image.getHeight() * scale);
+		} else {
+			Debug.error("The dummy image (\"dummy.png\") doesn't exist, or there was a problem while loading it!");
+			return;
 		}
 		// initialize the dummy
-		// TODO: simplify this shitshow, make it easier to understand
-		Entities.DUMMY = new Dummy(new SpriteSheet(dummyImage, 15 * scale, 23 * scale, 2, 4).getSpriteCollection().get(0));
+		Entities.DUMMY = new Dummy(
+				new SpriteSheet(image, 15 * scale, 23 * scale, 2, (short) 4).getSpriteCollection().get(0));
 		// ************ DUMMY END *************
 
-		// ************ TREE1 BEGIN ***********
-		// TODO: simplify this shitshow, make it easier to understand
-		Entities.TREE = new DefaultTree(new SpriteSheet(ImageStore.tree1, 64, 64, 1, 1).getSpriteCollection().get(0));
+		// ******** DEFAULT TREE BEGIN ********
+		// initialize the default tree
+		Entities.TREE = new DefaultTree(new SpriteSheet(ImageStore.treeDefault, ImageStore.treeDefault.getWidth(),
+				ImageStore.treeDefault.getHeight(), 1, (short) 1).getSpriteCollection().get(0));
+		// ******** DEFAULT TREE END **********
+
+		// ******** DEFAULT ROCK BEGIN ********
+		// initialize the default rock
+		Entities.ROCK = new DefaultRock(new SpriteSheet(ImageStore.rockDefault, ImageStore.rockDefault.getWidth(),
+				ImageStore.rockDefault.getHeight(), 1, (short) 1).getSpriteCollection().get(0));
+		// ******** DEFAULT TREE END **********
 	}
 
 	/**
 	 * Loads all maps and their sectors' tile definitions
 	 */
-	private void loadMaps()
-	{
+	private void loadMaps() {
 		// load map tiles used while rendering individual sectors
 		TileBuilder.load();
-		// define all of the map sectors, which entails tile layout
-		Sectors.defineAll();
+		// define all of the map sectors, which is basically just their tile layout
+		AllSectors.define();
 	}
 
-	private synchronized void start()
-	{
+	private synchronized void start() {
 		if (running == true) {
 			// already "running" so the render and tick threads should have already been sta
 			return;
 		}
 		running = true;
-		renderThread = new Thread(this);
-		renderThread.setPriority(1);
-		renderThread.setName("Main-Render");
+		masterRenderThread = new Thread(this);
+		masterRenderThread.setPriority(1);
+		masterRenderThread.setName("Main-Render");
 
 		// this actually starts the tick thread for the first time
 		restartMainTickThread();
 		// starts the rendering thread
-		renderThread.start();
+		masterRenderThread.start();
 	}
 
-	private synchronized void stop()
-	{
+	private synchronized void stop() {
 		if (running == false) {
 			return;
 		}
 		// stops the fps system, thus ending calls to render and tick methods
 		running = false;
 		try {
-			renderThread.join();
-		}
-		catch (InterruptedException e) {
+			masterRenderThread.join();
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void run()
-	{
+	public void run() {
 		// load images, save data, etc.
 		init();
 		// enable double buffering
@@ -207,8 +205,7 @@ public class Game extends Canvas implements Runnable {
 			// this helps to stabilize the fps system
 			try {
 				Thread.sleep(1L);
-			}
-			catch (InterruptedException e) {
+			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
@@ -216,8 +213,7 @@ public class Game extends Canvas implements Runnable {
 		stop();
 	}
 
-	private synchronized void render()
-	{
+	private synchronized void render() {
 		// ********** RENDER BEGIN ***********
 
 		currentGameState.render(graphics);
@@ -230,21 +226,19 @@ public class Game extends Canvas implements Runnable {
 	/**
 	 * Stops all calls to tick methods, but render methods are still called
 	 */
-	public static void stopMainTickThread()
-	{
+	public static void stopMainTickThread() {
 		runTickThread = false;
 	}
 
 	/**
 	 * Restarts the main tick thread, which enables calls to tick methods
 	 */
-	public static void restartMainTickThread()
-	{
+	public static void restartMainTickThread() {
 		runTickThread = true;
-		tickThread = new Thread(tick);
-		tickThread.setPriority(2);
-		tickThread.setName("Main-Tick");
-		tickThread.start();
+		masterTickThread = new Thread(tick);
+		masterTickThread.setPriority(2);
+		masterTickThread.setName("Main-Tick");
+		masterTickThread.start();
 	}
 
 	/**
@@ -252,8 +246,7 @@ public class Game extends Canvas implements Runnable {
 	 * 
 	 * @return The game's current frames per second
 	 */
-	public static short getFPS()
-	{
+	public static short getFramesPerSecond() {
 		return currentFrames;
 	}
 

@@ -13,36 +13,46 @@ public class Dummy extends StaticEntity {
 	public Dummy(Sprite sprite) {
 		super("Dummy");
 		this.sprite = sprite;
-		x = 470;
-		y = 190;
+		x = 470.0;
+		y = 190.0;
 		setBoundary();
 		setCollisions();
+		EntityStore.register(this);
+
+		sectorSpecific = false;
+		isDualRendered = false;
 	}
 
 	@Override
-	public void render(Graphics graphics)
-	{
-		graphics.drawImage(sprite.getCurrentFrameAsBufferedImage(), x, y, null);
+	public void render(Graphics graphics) {
+		graphics.drawImage(sprite.getCurrentFrameAsBufferedImage(), (int) x, (int) y, null);
 		drawDebug(graphics);
 	}
 
 	@Override
-	public void tick()
-	{
+	public void tick() {
 
 	}
 
 	@Override
-	public void setBoundary()
-	{
+	public void setBoundary() {
 		BufferedImage image = sprite.getCurrentFrameAsBufferedImage();
-		boundary = new EntityBoundary(this, image.getWidth(), image.getHeight(), new BoundaryPadding(12), x, y);
+		boundary = new EntityBoundary(this, image.getWidth(), image.getHeight(), new BoundaryPadding(12));
 	}
 
 	@Override
-	protected void setCollisions()
-	{
-		
+	protected void setCollisions() {
+
+	}
+
+	@Override
+	public void drawSecondLayer(Graphics graphics) {
+
+	}
+
+	@Override
+	public void drawFirstLayer(Graphics graphics) {
+
 	}
 
 }

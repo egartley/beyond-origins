@@ -16,22 +16,19 @@ public class TestMap extends Map {
 	}
 
 	@Override
-	public void tick()
-	{
+	public void tick() {
 		currentSector.tick();
 	}
 
 	@Override
-	public void render(Graphics graphics)
-	{
+	public void render(Graphics graphics) {
 		currentSector.render(graphics);
 	}
 
 	@Override
-	public void changeSector(MapSector sector)
-	{
+	public void changeSector(MapSector sector) {
 		currentSector = sector;
-		currentSector.onEnter();
+		currentSector.onPlayerEnter();
 	}
 
 }

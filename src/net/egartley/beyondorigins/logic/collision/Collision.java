@@ -20,18 +20,18 @@ public abstract class Collision {
 	/**
 	 * Whether or not the two boundaries are collided with one another
 	 */
-	public boolean		isCollided;
+	public boolean isCollided;
 	/**
 	 * Forgot what this does...
 	 */
-	public boolean		previouslyCollided;
+	public boolean previouslyCollided;
 
-	private boolean		firedEvent;
+	private boolean firedEvent;
 
-	public Boundary		boundary1;
-	public Boundary		boundary2;
-	public Rectangle	rectangle1;
-	public Rectangle	rectangle2;
+	public Boundary boundary1;
+	public Boundary boundary2;
+	public Rectangle rectangle1;
+	public Rectangle rectangle2;
 
 	/**
 	 * Creates a new collision between the two specified boundaries
@@ -45,19 +45,22 @@ public abstract class Collision {
 	public Collision(Boundary boundary1, Boundary boundary2) {
 		this.boundary1 = boundary1;
 		this.boundary2 = boundary2;
-		rectangle1 = boundary1.asRectangle();
-		rectangle2 = boundary2.asRectangle();
+		rectangle1 = this.boundary1.asRectangle();
+		rectangle2 = this.boundary2.asRectangle();
 	}
 
 	/**
 	 * Checks to see if the two boundaries are collided with one another
 	 */
-	public void tick()
-	{
-		rectangle1.x = boundary1.x;
-		rectangle2.x = boundary2.x;
-		rectangle1.y = boundary1.y;
-		rectangle2.y = boundary2.y;
+	public void tick() {
+		rectangle1.x = boundary1.x - 1;
+		rectangle2.x = boundary2.x - 1;
+		rectangle1.y = boundary1.y - 1;
+		rectangle2.y = boundary2.y - 1;
+		rectangle1.width = boundary1.width + 1;
+		rectangle2.width = boundary2.width + 1;
+		rectangle1.height = boundary1.height + 1;
+		rectangle2.height = boundary2.height + 1;
 		isCollided = rectangle1.intersects(rectangle2);
 
 		if (isCollided == true && firedEvent == false) {

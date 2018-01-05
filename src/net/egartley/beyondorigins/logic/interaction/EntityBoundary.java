@@ -23,12 +23,26 @@ public class EntityBoundary extends Boundary {
 	 * 
 	 * @see {@link net.egartley.beyondorigins.objects.Entity Entity }
 	 */
-	public Entity	entity;
+	public Entity parent;
 	/**
 	 * The current {@linkplain java.awt.Color Color} that is being used for
 	 * {@link #draw(Graphics)}
 	 */
-	public Color	drawColor;
+	public Color drawColor;
+
+	/**
+	 * Creates a new boundary for the given entity (with no padding)
+	 * 
+	 * @param e
+	 *            The entity to use
+	 * @param w
+	 *            Width of the boundary
+	 * @param h
+	 *            Height of the boundary
+	 */
+	public EntityBoundary(Entity e, int w, int h) {
+		this(e, w, h, new BoundaryPadding(0));
+	}
 
 	/**
 	 * Creates a new boundary for the given entity
@@ -44,12 +58,12 @@ public class EntityBoundary extends Boundary {
 	 * @see Boundary
 	 */
 	public EntityBoundary(Entity e, int w, int h, BoundaryPadding p) {
-		entity = e;
+		parent = e;
 		width = w + p.left + p.right;
 		height = h + p.top + p.bottom;
 		padding = p;
-		x = entity.x - p.left;
-		y = entity.y - p.top;
+		x = (int) parent.x - p.left;
+		y = (int) parent.y - p.top;
 		top = y;
 		bottom = top + height;
 		left = x;
@@ -57,50 +71,16 @@ public class EntityBoundary extends Boundary {
 		setColor();
 	}
 
-	/**
-	 * Creates a new boundary for the given entity
-	 * 
-	 * @param e
-	 *            The entity to use
-	 * @param w
-	 *            Width of the boundary (not counting the left or right padding)
-	 * @param h
-	 *            Height of the boundary (not counting the top or bottom padding)
-	 * @param p
-	 *            The padding to apply
-	 * @param x
-	 *            An initial x-coordinate
-	 * @param y
-	 *            An initial y-coordinate
-	 * @see Boundary
-	 */
-	public EntityBoundary(Entity e, int w, int h, BoundaryPadding p, int x, int y) {
-		entity = e;
-		width = w + p.left + p.right;
-		height = h + p.top + p.bottom;
-		padding = p;
-		this.x = entity.x - p.left;
-		this.y = entity.y - p.top;
-		top = this.y;
-		bottom = top + height;
-		left = this.x;
-		right = left + width;
-		setColor();
-	}
-
-	private void setColor()
-	{
-		if (entity.isStatic) {
+	private void setColor() {
+		if (parent.isStatic) {
 			drawColor = Color.BLACK;
-		}
-		else {
+		} else {
 			drawColor = Color.YELLOW;
 		}
 	}
 
 	@Override
-	public void draw(Graphics graphics)
-	{
+	public void draw(Graphics graphics) {
 		if (Game.debug) {
 			Color previous = graphics.getColor();
 			graphics.setColor(drawColor);
@@ -110,10 +90,9 @@ public class EntityBoundary extends Boundary {
 	}
 
 	@Override
-	public void tick()
-	{
-		x = entity.x - padding.left;
-		y = entity.y - padding.top;
+	public void tick() {
+		x = (int) parent.x - padding.left;
+		y = (int) parent.y - padding.top;
 		top = y;
 		bottom = top + height;
 		left = x;

@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
- * A collection of images that can used while rendering entities
+ * A row, or "strip", of individual frames of a specific entity or object
  * 
  * @author Evan Gartley
  * @see SpriteSheet
@@ -16,79 +16,78 @@ public class Sprite {
 	 * The image that contains all of the sprite's possible frames
 	 * 
 	 * @see AnimationFrame
-	 * @see #frames
+	 * @see #frameCollection
 	 */
-	public BufferedImage				sheet;
+	public BufferedImage strip;
 	/**
-	 * All of the possible frames that the sprite could use, which are derived from {@link #sheet}
+	 * All of the possible frameCollection that the sprite could use, which are
+	 * derived from {@link #strip}
 	 * 
 	 * @see AnimatedEntity
 	 * @see StaticEntity
 	 */
-	public ArrayList<AnimationFrame>	frames		= new ArrayList<AnimationFrame>();
+	public ArrayList<AnimationFrame> frameCollection = new ArrayList<AnimationFrame>();
 	/**
 	 * The width in pixels for each frame
 	 */
-	public int							frameWidth;
+	public int frameWidth;
 	/**
 	 * The height in pixels for each frame
 	 */
-	public int							frameHeight;
-	public short						currentFrameIndex	= 0;
+	public int frameHeight;
+	public short currentFrameIndex = 0;
 
 	public Sprite(BufferedImage image, int size) {
 		this(image, size, size);
 	}
 
 	public Sprite(BufferedImage image, int width, int height) {
-		sheet = image;
+		strip = image;
 		frameWidth = width;
 		frameHeight = height;
 	}
 
 	/**
-	 * Returns the frame at the given index (from {@link #frames})
+	 * Returns the frame at the given index (from {@link #frameCollection})
 	 * 
 	 * @param index
 	 *            Index of the frame to return
 	 * @return {@link AnimationFrame}
 	 */
-	public AnimationFrame getFrameAt(int index)
-	{
-		if (index >= frames.size())
+	public AnimationFrame getFrameAt(int index) {
+		if (index >= frameCollection.size())
 			return null;
-		return frames.get(index);
+		return frameCollection.get(index);
 	}
 
 	/**
 	 * Returns the current frame
-	 * ({@link #frames}[{@link #currentFrameIndex}]) as a buffered image
+	 * ({@link #frameCollection}[{@link #currentFrameIndex}]) as a buffered image
 	 * 
 	 * @return {@link java.awt.image.BufferedImage BufferedImage}
 	 */
-	public BufferedImage getCurrentFrameAsBufferedImage()
-	{
-		return frames.get(currentFrameIndex).asBufferedImage();
+	public BufferedImage getCurrentFrameAsBufferedImage() {
+		return frameCollection.get(currentFrameIndex).asBufferedImage();
 	}
 
 	/**
-	 * Resets {@link #frames} and re-loads it with the given number of
-	 * frames
+	 * Resets the frame collection and re-loads it with the given number of
+	 * frameCollection
 	 * 
 	 * @param numberOfFrames
-	 *            How many frames to use (must be at least 1)
+	 *            How many frameCollection to use (must be at least 1)
 	 * 
 	 * @see AnimationFrame
 	 */
-	public void setFrames(int numberOfFrames)
-	{
-		frames.clear();
+	public void setFrames(int numberOfFrames) {
+		// clear frame collection if previously set
+		frameCollection.clear();
 		if (numberOfFrames == 1) {
-			frames.add(new AnimationFrame(this, 0));
+			frameCollection.add(new AnimationFrame(this, 0));
 			return;
 		}
 		for (int i = 0; i < numberOfFrames; i++) {
-			frames.add(new AnimationFrame(this, i));
+			frameCollection.add(new AnimationFrame(this, i));
 		}
 	}
 

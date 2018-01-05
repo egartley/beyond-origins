@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.entities.DefaultRock;
 import net.egartley.beyondorigins.entities.DefaultTree;
 import net.egartley.beyondorigins.objects.MapSector;
 import net.egartley.beyondorigins.objects.MapSectorDefinition;
@@ -11,49 +12,79 @@ import net.egartley.beyondorigins.objects.Sprite;
 
 public class Sector1 extends MapSector {
 
-	private ArrayList<DefaultTree>		trees;
+	private ArrayList<DefaultTree> trees;
+	private ArrayList<DefaultRock> rocks;
 
 	public Sector1(MapSectorDefinition def) {
 		super(def);
+	}
+
+	@Override
+	public void render(Graphics graphics) {
+		drawTiles(graphics);
+		for (DefaultTree tree : trees) {
+			// render all of the trees' first layer
+			tree.drawFirstLayer(graphics);
+		}
+		for (DefaultRock rock : rocks) {
+			// render all of the rocks' first layer
+			rock.drawFirstLayer(graphics);
+		}
+		Entities.DUMMY.render(graphics);
+		Entities.PLAYER.render(graphics);
+		for (DefaultTree tree : trees) {
+			// render all of the trees' second layer
+			tree.drawSecondLayer(graphics);
+		}
+		for (DefaultRock rock : rocks) {
+			// render all of the rocks' second layer
+			rock.drawSecondLayer(graphics);
+		}
+	}
+
+	@Override
+	public void tick() {
+		Entities.PLAYER.tick();
+		for (DefaultTree tree : trees) {
+			tree.tick();
+		}
+		for (DefaultRock rock : rocks) {
+			rock.tick();
+		}
+	}
+
+	@Override
+	public void onPlayerEnter() {
+		// set default/initial position
+		Entities.PLAYER.x = 200;
+		Entities.PLAYER.y = 200;
 
 		// sector-specific entities
 		trees = new ArrayList<DefaultTree>();
 		Sprite s = Entities.TREE.sprite;
 		trees.add(new DefaultTree(s, 100, 200));
 		trees.add(new DefaultTree(s, 36, 200));
+
+		rocks = new ArrayList<DefaultRock>();
+		// re-use same sprite variable, no use in creating a new one if there is already
+		// one in memory
+		s = Entities.ROCK.sprite;
+		rocks.add(new DefaultRock(s, 300, 160));
+		rocks.add(new DefaultRock(s, 270, 310));
+		rocks.add(new DefaultRock(s, 150, 370));
+		rocks.add(new DefaultRock(s, 460, 350));
+		rocks.add(new DefaultRock(s, 200, 115));
 	}
 
 	@Override
-	public void render(Graphics graphics)
-	{
-		drawTiles(graphics, 0, 0);
-		Entities.DUMMY.render(graphics);
-		Entities.PLAYER.render(graphics);
+	public void onPlayerDeparture() {
+		// de-register all sector-specific entities
 		for (DefaultTree tree : trees) {
-			tree.render(graphics);
+			tree.kill();
 		}
-	}
-
-	@Override
-	public void tick()
-	{
-		Entities.PLAYER.tick();
-		for (DefaultTree tree : trees) {
-			tree.tick();
+		for (DefaultRock rock : rocks) {
+			rock.kill();
 		}
-	}
-
-	@Override
-	public void onEnter()
-	{
-		Entities.PLAYER.x = 200;
-		Entities.PLAYER.y = 200;
-	}
-
-	@Override
-	public void onExit()
-	{
-
 	}
 
 }

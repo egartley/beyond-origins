@@ -10,13 +10,13 @@ import java.awt.image.BufferedImage;
  */
 public class AnimationFrame {
 
-	private Sprite			parent;
-	private BufferedImage	bufferedImage;
+	private Sprite parent;
+	private BufferedImage bufferedImage;
 
 	/**
-	 * The index of this frame within its parent's {@link Sprite#sheet}
+	 * The index of this frame within its parent's {@link Sprite#strip}
 	 */
-	public int				index;
+	public int index;
 
 	/**
 	 * Creates a new frame for use in an {@link Animation}
@@ -29,9 +29,9 @@ public class AnimationFrame {
 		this.parent = parent;
 		this.index = index;
 		try {
-			bufferedImage = parent.sheet.getSubimage(index * parent.frameWidth, 0, parent.frameWidth, parent.frameHeight);
-		}
-		catch (Exception e) {
+			bufferedImage = parent.strip.getSubimage(index * parent.frameWidth, 0, parent.frameWidth,
+					parent.frameHeight);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -41,8 +41,7 @@ public class AnimationFrame {
 	 * 
 	 * @return {@link Sprite}
 	 */
-	public Sprite getParent()
-	{
+	public Sprite getParent() {
 		return parent;
 	}
 
@@ -51,8 +50,7 @@ public class AnimationFrame {
 	 * 
 	 * @return {@link BufferedImage}
 	 */
-	public BufferedImage asBufferedImage()
-	{
+	public BufferedImage asBufferedImage() {
 		return bufferedImage;
 	}
 

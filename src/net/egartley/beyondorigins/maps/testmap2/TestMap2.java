@@ -8,20 +8,17 @@ import net.egartley.beyondorigins.objects.MapSector;
 public class TestMap2 extends Map {
 
 	@Override
-	public void tick()
-	{
+	public void tick() {
 
 	}
 
 	@Override
-	public void render(Graphics graphics)
-	{
+	public void render(Graphics graphics) {
 
 	}
 
 	@Override
-	public void changeSector(MapSector sector)
-	{
+	public void changeSector(MapSector sector) {
 
 	}
 

@@ -2,13 +2,15 @@ package net.egartley.beyondorigins.threads;
 
 import net.egartley.beyondorigins.Game;
 
-public class MainTick implements Runnable {
+public class MasterTick implements Runnable {
 
-	public static short frames, currentFrames;
+	public static short frames;
+	public static short currentFrames;
 
 	@Override
-	public void run()
-	{
+	public void run() {
+		// system to run 60 times per second (roughly, could be slightly slower on
+		// older/cheaper machines)
 		long lastTime = System.nanoTime();
 		long timer = System.currentTimeMillis();
 		double ns = 16666666.666666666;
@@ -27,24 +29,24 @@ public class MainTick implements Runnable {
 					frames = 0;
 				}
 			}
+			// this helps to stabilize the tick system
 			try {
 				Thread.sleep(1L);
-			}
-			catch (InterruptedException e) {
+			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 		try {
 			Thread.currentThread().join();
-		}
-		catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private synchronized void tick()
-	{
+	private synchronized void tick() {
+		// main tick
 		if (Game.currentGameState != null) {
+			// null check because the first call would have Game.currentGameState as null
 			Game.currentGameState.tick();
 		}
 	}

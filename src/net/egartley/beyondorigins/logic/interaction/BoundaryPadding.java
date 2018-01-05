@@ -11,19 +11,19 @@ public class BoundaryPadding {
 	/**
 	 * Extra space added to the top side of the boundary
 	 */
-	public int	top;
+	public int top;
 	/**
 	 * Extra space added to the left side of the boundary
 	 */
-	public int	left;
+	public int left;
 	/**
 	 * Extra space added to the bottom side of the boundary
 	 */
-	public int	bottom;
+	public int bottom;
 	/**
 	 * Extra space added to the right side of the boundary
 	 */
-	public int	right;
+	public int right;
 
 	/**
 	 * Creates new padding with all sides having the same value ("square")

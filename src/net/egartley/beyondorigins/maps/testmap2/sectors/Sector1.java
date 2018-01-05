@@ -13,26 +13,22 @@ public class Sector1 extends MapSector {
 	}
 
 	@Override
-	public void render(Graphics graphics)
-	{
+	public void render(Graphics graphics) {
 
 	}
 
 	@Override
-	public void tick()
-	{
+	public void tick() {
 
 	}
 
 	@Override
-	public void onEnter()
-	{
+	public void onPlayerEnter() {
 
 	}
 
 	@Override
-	public void onExit()
-	{
+	public void onPlayerDeparture() {
 
 	}
 

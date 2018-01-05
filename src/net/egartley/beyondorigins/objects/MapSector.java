@@ -11,6 +11,8 @@ import java.util.ArrayList;
  */
 public abstract class MapSector {
 
+	private final short DEFAULT_TILE_SIZE = 32;
+
 	/**
 	 * Creates a new map sector with the provided definition
 	 * 
@@ -33,12 +35,23 @@ public abstract class MapSector {
 	/**
 	 * Called upon entering this sector
 	 */
-	public abstract void onEnter();
+	public abstract void onPlayerEnter();
 
 	/**
 	 * Called upon leaving this sector
 	 */
-	public abstract void onExit();
+	public abstract void onPlayerDeparture();
+
+	/**
+	 * Renders all of the tiles within {@link #definition} starting at 0, 0
+	 * 
+	 * @param graphics
+	 *            The {@link java.awt.Graphics Graphics} object to use
+	 * @see MapSectorDefinition
+	 */
+	public void drawTiles(Graphics graphics) {
+		drawTiles(graphics, 0, 0);
+	}
 
 	/**
 	 * Renders all of the tiles within {@link #definition}
@@ -51,16 +64,15 @@ public abstract class MapSector {
 	 *            Initial y-axis coordinate
 	 * @see MapSectorDefinition
 	 */
-	public void drawTiles(Graphics graphics, int ix, int iy)
-	{
+	public void drawTiles(Graphics graphics, int ix, int iy) {
 		int changeY = 0, changeX = 0;
 		for (ArrayList<MapTile> row : definition.tiles) {
 			for (MapTile tile : row) {
 				graphics.drawImage(tile.bufferedImage, ix + changeX, iy + changeY, null);
-				changeX += 32;
+				changeX += DEFAULT_TILE_SIZE;
 			}
 			changeX = 0;
-			changeY += 32;
+			changeY += DEFAULT_TILE_SIZE;
 		}
 	}
 
