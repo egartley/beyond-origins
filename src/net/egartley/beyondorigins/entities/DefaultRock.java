@@ -117,7 +117,7 @@ public class DefaultRock extends StaticEntity {
 	@Override
 	protected void setCollisions() {
 		collisions = new ArrayList<Collision>();
-		// this is independent of whatever map/sector the player is in
+		// doesn't matter whatever map or sector the player is in
 		EntityEntityCollision withPlayer = new EntityEntityCollision(Entities.PLAYER, this) {
 			public void onCollide(CollisionEvent event) {
 				EntityEntityCollisionEvent e = (EntityEntityCollisionEvent) event;
