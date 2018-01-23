@@ -1,73 +1,77 @@
 package net.egartley.beyondorigins.logic.interaction;
 
 import java.awt.Color;
-import java.awt.Graphics;
 
-import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.objects.Entity;
 
 /**
  * Represents a {@link Boundary} that is specifically tailored for use with an
- * {@link net.egartley.beyondorigins.objects.Entity Entity}
+ * entity
  * 
  * @author Evan Gartley
- * @see Boundary
- * @see {@link net.egartley.beyondorigins.objects.Entity Entity}
- * @see {@link net.egartley.beyondorigins.logic.interaction.BoundaryPadding
- *      BoundaryPadding}
  */
 public class EntityBoundary extends Boundary {
 
 	/**
-	 * The entity in which to base this boundary around
-	 * 
-	 * @see {@link net.egartley.beyondorigins.objects.Entity Entity }
+	 * The entity in which to base the boundary
 	 */
 	public Entity parent;
-	/**
-	 * The current {@linkplain java.awt.Color Color} that is being used for
-	 * {@link #draw(Graphics)}
-	 */
-	public Color drawColor;
 
 	/**
 	 * Creates a new boundary for the given entity (with no padding)
 	 * 
-	 * @param e
+	 * @param entity
 	 *            The entity to use
-	 * @param w
+	 * @param width
 	 *            Width of the boundary
-	 * @param h
+	 * @param height
 	 *            Height of the boundary
 	 */
-	public EntityBoundary(Entity e, int w, int h) {
-		this(e, w, h, new BoundaryPadding(0));
+	public EntityBoundary(Entity entity, int width, int height) {
+		this(entity, width, height, new BoundaryPadding(0), new BoundaryOffset(0, 0, 0, 0));
 	}
 
 	/**
 	 * Creates a new boundary for the given entity
 	 * 
-	 * @param e
+	 * @param entity
 	 *            The entity to use
-	 * @param w
-	 *            Width of the boundary (not counting the left or right padding)
-	 * @param h
-	 *            Height of the boundary (not counting the top or bottom padding)
-	 * @param p
+	 * @param width
+	 *            Width of the boundary (not including the left or right padding)
+	 * @param height
+	 *            Height of the boundary (not including the top or bottom padding)
+	 * @param padding
 	 *            The padding to apply
 	 * @see Boundary
 	 */
-	public EntityBoundary(Entity e, int w, int h, BoundaryPadding p) {
-		parent = e;
-		width = w + p.left + p.right;
-		height = h + p.top + p.bottom;
-		padding = p;
-		x = (int) parent.x - p.left;
-		y = (int) parent.y - p.top;
-		top = y;
-		bottom = top + height;
-		left = x;
-		right = left + width;
+	public EntityBoundary(Entity entity, int width, int height, BoundaryPadding padding) {
+		this(entity, width, height, padding, new BoundaryOffset(0, 0, 0, 0));
+	}
+
+	/**
+	 * Creates a new boundary for the given entity
+	 * 
+	 * @param entity
+	 *            The entity to use
+	 * @param width
+	 *            Width of the boundary (not including the left or right padding)
+	 * @param height
+	 *            Height of the boundary (not including the top or bottom padding)
+	 * @param padding
+	 *            The padding to apply
+	 * @param offset
+	 *            The offset to apply
+	 * @see Boundary
+	 */
+	public EntityBoundary(Entity entity, int width, int height, BoundaryPadding padding, BoundaryOffset offset) {
+		parent = entity;
+		this.padding = padding;
+		this.width = width + padding.left + padding.right;
+		this.height = height + padding.top + padding.bottom;
+		this.offset = offset;
+		horizontalOffset = padding.left + this.offset.left - this.offset.right;
+		verticalOffset = padding.top + this.offset.top - this.offset.bottom;
+		tick();
 		setColor();
 	}
 
@@ -80,19 +84,9 @@ public class EntityBoundary extends Boundary {
 	}
 
 	@Override
-	public void draw(Graphics graphics) {
-		if (Game.debug) {
-			Color previous = graphics.getColor();
-			graphics.setColor(drawColor);
-			graphics.drawRect(x, y, width, height);
-			graphics.setColor(previous);
-		}
-	}
-
-	@Override
 	public void tick() {
-		x = (int) parent.x - padding.left;
-		y = (int) parent.y - padding.top;
+		x = (int) parent.x - horizontalOffset;
+		y = (int) parent.y - verticalOffset;
 		top = y;
 		bottom = top + height;
 		left = x;

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.entities.EntityStore;
-import net.egartley.beyondorigins.logic.collision.Collision;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
@@ -26,29 +25,29 @@ import net.egartley.beyondorigins.logic.math.Calculate;
 public abstract class Entity {
 
 	/**
-	 * Collection of sprites that could be used while rendering
-	 * 
-	 * @see Sprite
+	 * Collection of this entity's sprites
 	 */
 	public ArrayList<Sprite> sprites;
-
-	public ArrayList<Collision> collisions;
+	/**
+	 * Collection of this entity's collisions
+	 */
+	public ArrayList<EntityEntityCollision> collisions;
+	/**
+	 * Collection of this entity's boundaries
+	 */
+	public ArrayList<EntityBoundary> boundaries;
 	/**
 	 * The sprite to use while rendering
 	 */
 	public Sprite sprite;
 	/**
-	 * If this entity is dual rendered, render this before the player
+	 * If {@link #isDualRendered} is true, render this before the player ("below")
 	 */
 	public BufferedImage firstLayer;
 	/**
-	 * If this entity is dual rendered, render this after the player
+	 * If {@link #isDualRendered} is true, render this after the player ("above")
 	 */
 	public BufferedImage secondLayer;
-	/**
-	 * This entity's boundary
-	 */
-	public EntityBoundary boundary;
 	/**
 	 * The most recent collision that has occured for this entity. If no collisions
 	 * have occured within this entity's lifetime, this will be null
@@ -105,7 +104,7 @@ public abstract class Entity {
 	 * Whether or not this entity is "bound" to, or only exists in, a specific map
 	 * sector
 	 */
-	public boolean sectorSpecific;
+	public boolean isSectorSpecific;
 	/**
 	 * Human-readable identifier for this entity
 	 */
@@ -115,88 +114,87 @@ public abstract class Entity {
 	private Font nameTagFont = new Font("Arial", Font.PLAIN, 11);
 	private Color nameTagBackgroundColor = new Color(0, 0, 0, 128);
 	private boolean setFontMetrics = false;
-	private int nameTagWidth, entityWidth, nameX, nameY;
+
+	private int nameTagWidth;
+	private int entityWidth;
+	private int nameX;
+	private int nameY;
 
 	/**
-	 * Creates a new entity with a randomly generated UUID
+	 * Creates a new entity with a randomly generated UUID, then adds it to the
+	 * entity store
+	 * 
+	 * @param id
+	 *            Human-readable ID for the entity
 	 */
 	public Entity(String id) {
 		generateUUID();
 		this.id = id;
+		boundaries = new ArrayList<EntityBoundary>();
+		collisions = new ArrayList<EntityEntityCollision>();
 		EntityStore.register(this);
 	}
 
 	/**
-	 * Returns this entity as a human-readable string (useful while debugging)
+	 * Renders the entity
+	 * 
+	 * @param graphics
+	 *            Graphics object to use
 	 */
-	public String toString() {
-		return id + "#" + uuid;
+	public void render(Graphics graphics) {
+		graphics.drawImage(sprite.getCurrentFrameAsBufferedImage(), (int) x, (int) y, null);
+		drawDebug(graphics);
 	}
 
 	/**
-	 * <p>
-	 * Method for actually rendering this entity
-	 * </p>
-	 * <p>
-	 * {@link #sprite} should be used
-	 * </p>
+	 * Draws the first "layer" if {@link #isDualRendered} is true (below the player)
 	 * 
 	 * @param graphics
-	 *            The {@link java.awt.Graphics Graphics} object
+	 *            Graphics object to use
 	 */
-	public abstract void render(Graphics graphics);
+	public void drawFirstLayer(Graphics graphics) {
+		graphics.drawImage(firstLayer, (int) x, (int) y + secondLayer.getHeight(), null);
+	}
 
 	/**
-	 * Draws the second "layer" if dual rendered is set to true
+	 * Draws the second "layer" if {@link #isDualRendered} is true (above the
+	 * player)
 	 * 
 	 * @param graphics
-	 *            The {@link java.awt.Graphics Graphics} object
+	 *            Graphics object to use
 	 */
-	public abstract void drawFirstLayer(Graphics graphics);
+	public void drawSecondLayer(Graphics graphics) {
+		graphics.drawImage(secondLayer, (int) x, (int) y, null);
+		drawDebug(graphics);
+	}
 
 	/**
-	 * Draws the first "layer" if dual rendered is set to true (with offset y
-	 * coordinate)
+	 * Renders debug information, such as the entity's boundaries and "name tag"
 	 * 
 	 * @param graphics
-	 *            The {@link java.awt.Graphics Graphics} object
-	 */
-	public abstract void drawSecondLayer(Graphics graphics);
-
-	/**
-	 * Draws debug information, such as the entity's boundary and "name tag"
-	 * 
-	 * @param graphics
-	 *            The {@link java.awt.Graphics Graphics} object
+	 *            Graphics object to use
 	 */
 	public void drawDebug(Graphics graphics) {
 		if (Game.debug) {
-			boundary.draw(graphics);
+			drawBoundaries(graphics);
 			drawNameTag(graphics);
 		}
 	}
 
 	/**
-	 * "Kills" this entity by removing it from the entity store. This should only be
-	 * used for sector-specific entities
-	 */
-	public void kill() {
-		EntityStore.remove(this);
-	}
-
-	/**
-	 * Draws the entity's "name tag", which displays {@link #id} and {@link #uuid}
+	 * Draws the entity's "name tag", which displays its {@link #id} and
+	 * {@link #uuid}
 	 * 
 	 * @param graphics
-	 *            The {@link java.awt.Graphics Graphics} object
+	 *            Graphics object to use
 	 */
 	private void drawNameTag(Graphics graphics) {
-		// init
 		if (setFontMetrics == false) {
+			// init, only run once
 			name = toString();
-			nameTagWidth = graphics.getFontMetrics(nameTagFont).stringWidth(name) + 8; // 4 pixel padding on both sides
+			nameTagWidth = graphics.getFontMetrics(nameTagFont).stringWidth(name) + 8; // 4px padding on both sides
 			entityWidth = sprite.frameWidth;
-			// don't initialize again, don't need to
+			// don't initialize again, not needed
 			setFontMetrics = true;
 		}
 		nameX = Calculate.horizontalCenter((int) x, entityWidth) - Calculate.horizontalCenter(0, nameTagWidth);
@@ -211,16 +209,36 @@ public abstract class Entity {
 	}
 
 	/**
-	 * Should be called 60 times per second in a tick thread
+	 * Draws all of the entity's boundaries
+	 * 
+	 * @param graphics
+	 *            Graphics object to use
+	 */
+	private void drawBoundaries(Graphics graphics) {
+		for (EntityBoundary boundary : boundaries) {
+			boundary.draw(graphics);
+		}
+	}
+
+	/**
+	 * "Kills" this entity by removing it from the entity store. Only for
+	 * sector-specific entities
+	 */
+	public void kill() {
+		if (isSectorSpecific == true) {
+			EntityStore.remove(this);
+		}
+	}
+
+	/**
+	 * Should be called 60 times per second within a tick thread
 	 */
 	public abstract void tick();
 
 	/**
-	 * Sets this entity's boundary
-	 * 
-	 * @see EntityBoundary
+	 * Sets this entity's boundaries
 	 */
-	protected abstract void setBoundary();
+	protected abstract void setBoundaries();
 
 	/**
 	 * Sets this entity's collisions
@@ -228,23 +246,29 @@ public abstract class Entity {
 	protected abstract void setCollisions();
 
 	/**
-	 * Generates, and then sets, a new UUID
+	 * Sets the current sprite
 	 * 
-	 * @see #uuid
+	 * @param index
+	 *            Position of a sprite within the sprite collection
+	 *            ({@link #sprites}) to set as the current one
+	 */
+	public void setCurrentSprite(int index) {
+		sprite = sprites.get(index);
+	}
+
+	/**
+	 * Generates a new UUID
 	 */
 	public void generateUUID() {
 		uuid = Util.randomInt(9999, 1000, true);
 	}
 
 	/**
-	 * Sets the current sprite
-	 * 
-	 * @param index
-	 *            Position of a sprite within the sprite collection to set as the
-	 *            current one
+	 * Returns this entity as a human-readable string, in the format
+	 * "{@link #id}#{@link #uuid}"
 	 */
-	public void setCurrentSprite(int index) {
-		sprite = sprites.get(index);
+	public String toString() {
+		return id + "#" + uuid;
 	}
 
 }

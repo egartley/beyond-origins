@@ -16,44 +16,44 @@ public class Debug {
 	private static int lx = 24, ly = 24, d = 18;
 
 	/**
-	 * Prints the given object using {@linkplain java.io.PrintStream#println(Object)
+	 * Prints the given object using {@link java.io.PrintStream#println(Object)
 	 * System.out.println(object)}
 	 * 
 	 * @param object
-	 *            {@link java.lang.Object Object}
+	 *            The object to print out
 	 */
 	public static void out(Object object) {
 		System.out.println(object);
 	}
 
 	/**
-	 * Prints the given object using {@linkplain java.io.PrintStream#println(Object)
+	 * Prints the given object using {@link java.io.PrintStream#println(Object)
 	 * System.out.println(object)} with the tag "INFO"
 	 * 
 	 * @param object
-	 *            {@link java.lang.Object Object}
+	 *            The object to print out
 	 */
 	public static void info(Object object) {
 		out("INFO: " + object);
 	}
 
 	/**
-	 * Prints the given object using {@linkplain java.io.PrintStream#println(Object)
+	 * Prints the given object using {@link java.io.PrintStream#println(Object)
 	 * System.out.println(object)} with the tag "WARNING"
 	 * 
 	 * @param object
-	 *            {@link java.lang.Object Object}
+	 *            The object to print out
 	 */
 	public static void warning(Object object) {
 		out("WARNING: " + object);
 	}
 
 	/**
-	 * Prints the given object using {@linkplain java.io.PrintStream#println(Object)
+	 * Prints the given object using {@link java.io.PrintStream#println(Object)
 	 * System.out.println(object)} with the tag "ERROR"
 	 * 
 	 * @param object
-	 *            {@link java.lang.Object Object}
+	 *            The object to print out
 	 */
 	public static void error(Object object) {
 		out("ERROR: " + object);
@@ -79,10 +79,10 @@ public class Debug {
 					+ Entities.PLAYER.effectiveX + ", " + Entities.PLAYER.effectiveY + ")", graphics, 0);
 			drawLine("Collided: " + Entities.PLAYER.isCollided, graphics, 1);
 			if (Entities.PLAYER.lastCollision != null)
-				drawLine("Last collision: " + Entities.PLAYER.lastCollision.firstEntity + " and "
-						+ Entities.PLAYER.lastCollision.secondEntity + ", collidedSide: "
+				drawLine("Last collision: " + Entities.PLAYER.lastCollision.boundary1.parent + " ("
+						+ Entities.PLAYER.boundaries.indexOf(Entities.PLAYER.lastCollision.boundary1) + ") and "
+						+ Entities.PLAYER.lastCollision.boundary2.parent + ", collidedSide: "
 						+ Entities.PLAYER.lastCollisionEvent.collidedSide, graphics, 2);
-			// graphics.drawString("FPS: " + Game.getFPS(), lx, ly + (d * 2));
 		}
 	}
 

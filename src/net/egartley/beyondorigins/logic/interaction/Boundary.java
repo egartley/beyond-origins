@@ -1,80 +1,94 @@
 package net.egartley.beyondorigins.logic.interaction;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+
+import net.egartley.beyondorigins.Game;
 
 /**
  * An imaginary boundary, or border, with a width, height and coordinates
  * 
  * @author Evan Gartley
- * @see EntityBoundary
- * @see {@link net.egartley.beyondorigins.logic.interaction.BoundaryPadding
- *      BoundaryPadding}
  */
 public abstract class Boundary {
 
 	/**
-	 * The absolute x-coordinate
+	 * Absolute x-coordinate
 	 */
 	public int x;
 	/**
-	 * The absolute y-coordinate
+	 * Absolute y-coordinate
 	 */
 	public int y;
+	public int horizontalOffset;
+	public int verticalOffset;
 	/**
-	 * This boundary's width (calcuated with padding)
+	 * The boundary's width (calcuated with padding)
 	 */
 	public int width;
 	/**
-	 * This boundary's height (calcuated with padding)
+	 * The boundary's height (calcuated with padding)
 	 */
 	public int height;
 	/**
-	 * The "top" side of this boundary, which is its y-coordinate
+	 * Top side of the boundary, which is its y-coordinate
 	 */
 	public int top;
 	/**
-	 * The "right" side of this boundary, which is its x-coordinate
+	 * Right side of the boundary, which is its x-coordinate
 	 */
 	public int right;
 	/**
-	 * The "bottom" side of this boundary, which is its y-coordinate
+	 * Bottom side of the boundary, which is its y-coordinate
 	 */
 	public int bottom;
 	/**
-	 * The "left" side of this boundary, which is its x-coordinate
+	 * Left side of the boundary, which is its x-coordinate
 	 */
 	public int left;
+	/**
+	 * Whether or not the boundary is collided with another
+	 */
+	public boolean isCollided;
 
 	/**
 	 * This boundary's padding (extra space added/subtracted from any or all of the
 	 * four sides)
-	 * 
-	 * @see {@link net.egartley.beyondorigins.logic.interaction.BoundaryPadding
-	 *      BoundaryPadding}
 	 */
 	public BoundaryPadding padding;
+	/**
+	 * This boundary's offset (change in its coordinate)
+	 */
+	public BoundaryOffset offset;
+	/**
+	 * The current color that is being used while rendering
+	 */
+	public Color drawColor;
 
 	/**
-	 * Use {@link java.awt.Graphics#drawRect(int, int, int, int) drawRect} method to
+	 * Uses {@link java.awt.Graphics#drawRect(int, int, int, int) drawRect} to
 	 * render this boundary (only if {@link net.egartley.beyondorigins.Game#debug
 	 * Game.debug} is enabled)
 	 * 
 	 * @param graphics
-	 *            {@link java.awt.Graphics Graphics}
+	 *            Graphics object to use
 	 */
-	public abstract void draw(Graphics graphics);
+	public void draw(Graphics graphics) {
+		if (Game.debug) {
+			graphics.setColor(drawColor);
+			graphics.drawRect(x, y, width, height);
+		}
+	}
 
 	/**
-	 * Update {@linkplain #x}, {@linkplain #y}, {@linkplain #top},
-	 * {@linkplain #left}, {@linkplain #bottom} and {@link #right}
+	 * Update {@link #x}, {@link #y}, {@link #top}, {@link #left}, {@link #bottom}
+	 * and {@link #right}
 	 */
 	public abstract void tick();
-	
+
 	/**
-	 * Returns the boundary as a {@link java.awt.Rectangle Rectangle} object
-	 * 
-	 * @return {@link java.awt.Rectangle Rectangle}
+	 * @return The boundary as a {@link java.awt.Rectangle Rectangle} object
 	 */
 	public Rectangle asRectangle() {
 		return new Rectangle(x, y, width, height);

@@ -1,7 +1,6 @@
 package net.egartley.beyondorigins.entities;
 
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
 import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
@@ -15,11 +14,10 @@ public class Dummy extends StaticEntity {
 		this.sprite = sprite;
 		x = 470.0;
 		y = 190.0;
-		setBoundary();
+		setBoundaries();
 		setCollisions();
-		EntityStore.register(this);
 
-		sectorSpecific = false;
+		isSectorSpecific = false;
 		isDualRendered = false;
 	}
 
@@ -35,23 +33,12 @@ public class Dummy extends StaticEntity {
 	}
 
 	@Override
-	public void setBoundary() {
-		BufferedImage image = sprite.getCurrentFrameAsBufferedImage();
-		boundary = new EntityBoundary(this, image.getWidth(), image.getHeight(), new BoundaryPadding(12));
+	public void setBoundaries() {
+		boundaries.add(new EntityBoundary(this, sprite.frameWidth, sprite.frameHeight, new BoundaryPadding(12)));
 	}
 
 	@Override
 	protected void setCollisions() {
-
-	}
-
-	@Override
-	public void drawSecondLayer(Graphics graphics) {
-
-	}
-
-	@Override
-	public void drawFirstLayer(Graphics graphics) {
 
 	}
 

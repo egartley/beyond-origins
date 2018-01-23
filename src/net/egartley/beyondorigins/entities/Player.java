@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.input.Keyboard;
+import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
+import net.egartley.beyondorigins.logic.interaction.BoundaryOffset;
 import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.objects.AnimatedEntity;
@@ -22,6 +24,11 @@ public class Player extends AnimatedEntity {
 
 	private final byte LEFT_ANIMATION = 0;
 	private final byte RIGHT_ANIMATION = 1;
+
+	public EntityBoundary boundary;
+	public EntityBoundary headBoundary;
+	public EntityBoundary bodyBoundary;
+	public EntityBoundary feetBoundary;
 
 	public double speed = 1;
 	private byte animationThreshold = 11;
@@ -44,10 +51,10 @@ public class Player extends AnimatedEntity {
 		maximumX = Game.WINDOW_WIDTH;
 		maximumY = Game.WINDOW_HEIGHT;
 		setAnimationCollection();
-		setBoundary();
+		setBoundaries();
 		setCollisions();
 
-		sectorSpecific = false;
+		isSectorSpecific = false;
 		isDualRendered = false;
 	}
 
@@ -109,6 +116,35 @@ public class Player extends AnimatedEntity {
 	}
 
 	/**
+	 * Disregards any movement restrictions imposed by the provided
+	 * {@link net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent
+	 * EntityEntityCollisionEvent}
+	 * 
+	 * @param event
+	 *            The
+	 *            {@link net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent
+	 *            EntityEntityCollisionEvent} in which to annul
+	 */
+	public void annulCollisionEvent(EntityEntityCollisionEvent event) {
+		switch (event.collidedSide) {
+		case EntityEntityCollisionEvent.TOP_SIDE:
+			isAllowedToMoveDownwards = true;
+			break;
+		case EntityEntityCollisionEvent.BOTTOM_SIDE:
+			isAllowedToMoveUpwards = true;
+			break;
+		case EntityEntityCollisionEvent.LEFT_SIDE:
+			isAllowedToMoveRightwards = true;
+			break;
+		case EntityEntityCollisionEvent.RIGHT_SIDE:
+			isAllowedToMoveLeftwards = true;
+			break;
+		default:
+			break;
+		}
+	}
+
+	/**
 	 * Returns whether or not the player is currently moving in a certain direction
 	 * 
 	 * @param direction
@@ -146,8 +182,18 @@ public class Player extends AnimatedEntity {
 	}
 
 	@Override
-	public void setBoundary() {
-		boundary = new EntityBoundary(this, sprite.frameWidth, sprite.frameHeight, new BoundaryPadding(2, 4, 2, 4));
+	public void setBoundaries() {
+		boundary = new EntityBoundary(this, sprite.frameWidth, sprite.frameHeight, new BoundaryPadding(4, 3, 2, 3));
+		headBoundary = new EntityBoundary(this, 19, 18, new BoundaryPadding(0, 0, 0, 0),
+				new BoundaryOffset(0, 0, 0, 5));
+		bodyBoundary = new EntityBoundary(this, 30, 22, new BoundaryPadding(0, 0, 0, 0),
+				new BoundaryOffset(0, 13, 0, 0));
+		feetBoundary = new EntityBoundary(this, 17, 16, new BoundaryPadding(0, 0, 0, 0),
+				new BoundaryOffset(0, 29, 0, 6));
+		boundaries.add(boundary);
+		boundaries.add(headBoundary);
+		boundaries.add(bodyBoundary);
+		boundaries.add(feetBoundary);
 	}
 
 	@Override
@@ -197,8 +243,12 @@ public class Player extends AnimatedEntity {
 		}
 		// reset speed
 		speed = 1.0;
+
 		animation.tick();
-		boundary.tick();
+		for (EntityBoundary boundary : boundaries) {
+			boundary.tick();
+		}
+
 		effectiveX = boundary.left;
 		effectiveY = boundary.top;
 	}
@@ -209,12 +259,12 @@ public class Player extends AnimatedEntity {
 	}
 
 	@Override
-	public void drawSecondLayer(Graphics graphics) {
+	public void drawFirstLayer(Graphics graphics) {
 
 	}
 
 	@Override
-	public void drawFirstLayer(Graphics graphics) {
+	public void drawSecondLayer(Graphics graphics) {
 
 	}
 

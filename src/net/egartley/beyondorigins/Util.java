@@ -3,10 +3,16 @@ package net.egartley.beyondorigins;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
+import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
+import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
+import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
+import net.egartley.beyondorigins.objects.Entity;
+
 /**
- * Miscellaneous methods that don't fit into a particular class or object
+ * Miscellaneous methods that don't fit into a specific class or object
  * 
  * @author Evan Gartley
  */
@@ -40,35 +46,79 @@ public class Util {
 	}
 
 	/**
-	 * Returns a random integer between the supplied maximum and minimum
+	 * Returns a random integer, using {@link java.util.concurrent.ThreadLocalRandom
+	 * ThreadLocalRandom}, between the supplied maximum and minimum values
 	 * 
-	 * @param max
+	 * @param maximum
 	 *            The maximum value the random integer could be
-	 * @param min
+	 * @param minimum
 	 *            The minimum value the random integer could be
-	 * @return A randon integer that is between the given maximum and minimum
+	 * @return A randon integer between the given maximum and minimum
 	 */
-	public static int randomInt(int max, int min) {
-		return ThreadLocalRandom.current().nextInt(min, max);
+	public static int randomInt(int maximum, int minimum) {
+		// this is using ThreadLocalRandom because that is apparently more efficient
+		return ThreadLocalRandom.current().nextInt(minimum, maximum);
 	}
 
 	/**
-	 * Returns a random integer between the supplied maximum and minimum
+	 * <p>
+	 * Returns a random integer between the supplied maximum and minimum values
+	 * (uses {@link #randomInt(int, int) randomInt(minimum, maximum)})
+	 * </p>
 	 * 
-	 * @param max
+	 * <p>
+	 * If inclusive, then {@link #randomInt(int, int) randomInt(minimum, maximum +
+	 * 1)} will be used
+	 * </p>
+	 * 
+	 * @param maximum
 	 *            The maximum value the random integer could be
-	 * @param min
+	 * @param minimum
 	 *            The minimum value the random integer could be
 	 * @param inclusive
 	 *            Whether or not the include the maximum as a possible value
-	 * @return A randon integer that is between the given maximum and minimum
+	 * @return A randon integer between the given maximum and minimum
 	 */
-	public static int randomInt(int max, int min, boolean inclusive) {
+	public static int randomInt(int maximum, int minimum, boolean inclusive) {
 		if (inclusive) {
-			return randomInt(max + 1, min);
+			return randomInt(maximum + 1, minimum);
 		} else {
-			return randomInt(max, min);
+			return randomInt(maximum, minimum);
 		}
+	}
+
+	/**
+	 * Returns generated entity-to-entity collisions around the given parameters
+	 * 
+	 * @param baseEvent
+	 *            The
+	 *            {@link net.egartley.beyondorigins.logic.collision.EntityEntityCollision
+	 *            EntityEntityCollision} in which to base all of the returned ones
+	 *            on
+	 * @param entity
+	 *            The {@link net.egartley.beyondorigins.objects.Entity Entity} in
+	 *            which to generate collisions around each of its boundaries
+	 * @param baseBoundary
+	 *            The other
+	 *            {@link net.egartley.beyondorigins.logic.interaction.EntityBoundary
+	 *            EntityBounadry} in which to base the generated collisions around
+	 * @return Generated entity-to-entity collisions based on the given parameters
+	 */
+	public static ArrayList<EntityEntityCollision> getAllBoundaryCollisions(EntityEntityCollision baseEvent,
+			Entity entity, EntityBoundary baseBoundary) {
+		ArrayList<EntityEntityCollision> collisions = new ArrayList<EntityEntityCollision>();
+		for (EntityBoundary boundary : entity.boundaries) {
+			collisions.add(new EntityEntityCollision(boundary, baseBoundary) {
+				public void onCollide(EntityEntityCollisionEvent event) {
+					baseEvent.onCollide(event);
+				};
+
+				public void onCollisionEnd(EntityEntityCollisionEvent event) {
+					baseEvent.onCollisionEnd(event);
+				};
+			});
+		}
+		return collisions;
 	}
 
 }

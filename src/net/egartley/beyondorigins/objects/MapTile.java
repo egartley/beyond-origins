@@ -6,8 +6,6 @@ import java.awt.image.BufferedImage;
  * A "tile" that is rendered within a map sector
  * 
  * @author Evan Gartley
- * @see Map
- * @see MapSector
  */
 public class MapTile {
 
@@ -20,6 +18,9 @@ public class MapTile {
 
 	/**
 	 * Creates a new map tile with the provided {@link BufferedImage}
+	 * 
+	 * @param image
+	 *            The tile's image
 	 */
 	public MapTile(BufferedImage image) {
 		bufferedImage = image;

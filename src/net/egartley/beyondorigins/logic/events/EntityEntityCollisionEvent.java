@@ -1,58 +1,62 @@
 package net.egartley.beyondorigins.logic.events;
 
 import net.egartley.beyondorigins.Debug;
-import net.egartley.beyondorigins.logic.collision.Collision;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 
 /**
- * An extension of {@link CollisionEvent} meant for use with an
- * EntityEntityCollision
+ * A custom "event" that can be used for gathering information from a collision
+ * that has occured
+ * {@link net.egartley.beyondorigins.logic.collision.EntityEntityCollision
+ * EntityEntityCollision}
  * 
  * @author Evan Gartley
- * @see CollisionEvent
- * @see {@link net.egartley.beyondorigins.logic.collision.EntityEntityCollision
- *      EntityEntityCollision}
- *
  */
-public class EntityEntityCollisionEvent extends CollisionEvent {
+public class EntityEntityCollisionEvent {
 
-	public static final byte TOP = 0, LEFT = 1, BOTTOM = 2, RIGHT = 3;
-	public byte collidedSide;
-	private final byte TOLERANCE = 2;
-	private EntityEntityCollision parent;
+	public static final byte TOP_SIDE = 0;
+	public static final byte LEFT_SIDE = 1;
+	public static final byte BOTTOM_SIDE = 2;
+	public static final byte RIGHT_SIDE = 3;
+
+	private final byte TOLERANCE = 1;
 
 	/**
-	 * Creates a new collision event between two entities
+	 * The numerical representation for the side that the collision occured at
+	 * 
+	 * @see #TOP_SIDE
+	 * @see #BOTTOM_SIDE
+	 * @see #LEFT_SIDE
+	 * @see #RIGHT_SIDE
+	 */
+	public byte collidedSide = -1;
+
+	public EntityEntityCollision invoker;
+
+	/**
+	 * Creates a new entity-entity collision event, then calculates
+	 * {@link #collidedSide}
 	 * 
 	 * @param invoker
-	 *            The collision that invoked the event
-	 * @see CollisionEvent
+	 *            The
+	 *            {@link net.egartley.beyondorigins.logic.collision.EntityEntityCollision
+	 *            EntityEntityCollision} that occured
 	 */
-	public EntityEntityCollisionEvent(Collision invoker) {
+	public EntityEntityCollisionEvent(EntityEntityCollision invoker) {
 		this.invoker = invoker;
-		parent = null;
-		try {
-			parent = (EntityEntityCollision) invoker;
-		} catch (Exception e) {
-			Debug.error(
-					"There was an error while attempting to cast the collision event's invoker to an EntityEntityCollision");
-			e.printStackTrace();
-		}
-		if (parent != null) {
-			// the collider and into should not really matter
-			EntityBoundary collider = parent.firstEntity.boundary, into = parent.secondEntity.boundary;
-			// this is probably the single most difficult thing I have done in awhile...
-			// it took nearly three hours to work out
-			if (into.right - TOLERANCE <= collider.left && collider.left <= into.right) {
-				collidedSide = RIGHT;
-			} else if (into.left <= collider.right && collider.right <= into.left + TOLERANCE) {
-				collidedSide = LEFT;
-			} else if (into.top <= collider.bottom && collider.bottom <= into.top + TOLERANCE) {
-				collidedSide = TOP;
-			} else if (into.bottom - TOLERANCE <= collider.top && collider.top <= into.bottom) {
-				collidedSide = BOTTOM;
-			}
+		EntityBoundary collider = (EntityBoundary) invoker.boundary1;
+		EntityBoundary into = (EntityBoundary) invoker.boundary2;
+		if (into.right - TOLERANCE <= collider.left && collider.left <= into.right) {
+			collidedSide = RIGHT_SIDE;
+		} else if (into.left <= collider.right && collider.right <= into.left + TOLERANCE) {
+			collidedSide = LEFT_SIDE;
+		} else if (into.top <= collider.bottom && collider.bottom <= into.top + TOLERANCE) {
+			collidedSide = TOP_SIDE;
+		} else if (into.bottom - TOLERANCE <= collider.top && collider.top <= into.bottom) {
+			collidedSide = BOTTOM_SIDE;
+		} else {
+			Debug.error("Could not calcuate a collided side! (between " + invoker.entities.get(0) + " and "
+					+ invoker.entities.get(1) + ")");
 		}
 	}
 

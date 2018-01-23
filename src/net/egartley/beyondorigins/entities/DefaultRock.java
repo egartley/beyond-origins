@@ -1,11 +1,9 @@
 package net.egartley.beyondorigins.entities;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
 
-import net.egartley.beyondorigins.logic.collision.Collision;
+import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
-import net.egartley.beyondorigins.logic.events.CollisionEvent;
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
@@ -13,12 +11,13 @@ import net.egartley.beyondorigins.objects.Sprite;
 import net.egartley.beyondorigins.objects.StaticEntity;
 
 /**
- * A rock that the player cannot walk over
+ * Rock that the player cannot walk over
  * 
  * @author Evan Gartley
- * @see StaticEntity
  */
 public class DefaultRock extends StaticEntity {
+
+	private EntityBoundary boundary;
 
 	/**
 	 * Creates a new rock, however this should only be used when first initializing
@@ -35,7 +34,7 @@ public class DefaultRock extends StaticEntity {
 	 * constructors or anywhere else that the rock has already been initialized
 	 * 
 	 * @param sprite
-	 *            The rock's sprite (use Entities.ROCK.sprite)
+	 *            The rock's sprite
 	 * @param x
 	 *            The x-axis coordinate to set the rock at initailly
 	 * @param y
@@ -47,16 +46,16 @@ public class DefaultRock extends StaticEntity {
 		frame = this.sprite.getCurrentFrameAsBufferedImage();
 		this.x = x;
 		this.y = y;
-		setBoundary();
+		setBoundaries();
 		setCollisions();
 
 		// entity-specific stuff
-		sectorSpecific = true;
+		isSectorSpecific = true;
 		isDualRendered = true;
 		// set the first layer as the top half
-		firstLayer = frame.getSubimage(0, 0, frame.getWidth(), frame.getHeight() / 2);
+		firstLayer = frame.getSubimage(0, frame.getHeight() / 2, frame.getWidth(), frame.getHeight() / 2);
 		// set the second layer as the bottom half
-		secondLayer = frame.getSubimage(0, frame.getHeight() / 2, frame.getWidth(), frame.getHeight() / 2);
+		secondLayer = frame.getSubimage(0, 0, frame.getWidth(), frame.getHeight() / 2);
 	}
 
 	/**
@@ -75,19 +74,19 @@ public class DefaultRock extends StaticEntity {
 	private void onPlayerCollision(EntityEntityCollisionEvent event) {
 		Entities.PLAYER.lastCollisionEvent = event;
 		switch (event.collidedSide) {
-		case EntityEntityCollisionEvent.RIGHT:
+		case EntityEntityCollisionEvent.RIGHT_SIDE:
 			// collided on the right, so disable leftwards movement
 			Entities.PLAYER.isAllowedToMoveLeftwards = false;
 			break;
-		case EntityEntityCollisionEvent.LEFT:
+		case EntityEntityCollisionEvent.LEFT_SIDE:
 			// collided on the left, so disable rightwards movement
 			Entities.PLAYER.isAllowedToMoveRightwards = false;
 			break;
-		case EntityEntityCollisionEvent.TOP:
+		case EntityEntityCollisionEvent.TOP_SIDE:
 			// collided at the top, so disable downwards movement
 			Entities.PLAYER.isAllowedToMoveDownwards = false;
 			break;
-		case EntityEntityCollisionEvent.BOTTOM:
+		case EntityEntityCollisionEvent.BOTTOM_SIDE:
 			// collided at the bottom, so disable upwards movement
 			Entities.PLAYER.isAllowedToMoveUpwards = false;
 			break;
@@ -104,47 +103,36 @@ public class DefaultRock extends StaticEntity {
 
 	@Override
 	public void tick() {
-		for (Collision collision : collisions) {
+		for (EntityEntityCollision collision : collisions) {
 			collision.tick();
 		}
 	}
 
 	@Override
-	protected void setBoundary() {
-		boundary = new EntityBoundary(this, frame.getWidth(), frame.getHeight(), new BoundaryPadding(-4, -2, -14, -2));
+	protected void setBoundaries() {
+		boundary = new EntityBoundary(this, frame.getWidth(), frame.getHeight(), new BoundaryPadding(-4, -2, -8, -2));
+		boundaries.add(boundary);
 	}
 
 	@Override
 	protected void setCollisions() {
-		collisions = new ArrayList<Collision>();
-		// doesn't matter whatever map or sector the player is in
-		EntityEntityCollision withPlayer = new EntityEntityCollision(Entities.PLAYER, this) {
-			public void onCollide(CollisionEvent event) {
-				EntityEntityCollisionEvent e = (EntityEntityCollisionEvent) event;
-				Entities.PLAYER.lastCollision = (EntityEntityCollision) e.invoker;
-				firstEntity.isCollided = true;
-				secondEntity.isCollided = true;
-				onPlayerCollision(e);
+		EntityEntityCollision withPlayer = new EntityEntityCollision(Entities.PLAYER.headBoundary, boundary) {
+			public void onCollide(EntityEntityCollisionEvent event) {
+				onPlayerCollision(event);
 			};
 
-			public void onCollisionEnd(CollisionEvent event) {
-				firstEntity.isCollided = false;
-				secondEntity.isCollided = false;
-				Entities.PLAYER.allowAllMovement();
+			public void onCollisionEnd(EntityEntityCollisionEvent event) {
+				if (Entities.PLAYER.isCollided == false)
+					Entities.PLAYER.allowAllMovement();
+				else
+					Entities.PLAYER.annulCollisionEvent(event);
 			};
 		};
 		collisions.add(withPlayer);
-	}
-
-	@Override
-	public void drawSecondLayer(Graphics graphics) {
-		graphics.drawImage(firstLayer, (int) x, (int) y, null);
-		drawDebug(graphics);
-	}
-
-	@Override
-	public void drawFirstLayer(Graphics graphics) {
-		graphics.drawImage(secondLayer, (int) x, (int) y + firstLayer.getHeight(), null);
+		for (EntityEntityCollision collision : Util.getAllBoundaryCollisions(withPlayer, Entities.PLAYER, boundary)) {
+			if (collision.boundary1 != Entities.PLAYER.boundary)
+				collisions.add(collision);
+		}
 	}
 
 }

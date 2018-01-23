@@ -1,5 +1,6 @@
 package net.egartley.beyondorigins.objects;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 /**
@@ -19,12 +20,20 @@ public abstract class StaticEntity extends Entity {
 	 * Creates a new static entity, while setting {@link Entity#isAnimated} to false
 	 * and {@link Entity#isStatic} to true
 	 * 
+	 * @param id
+	 *            Human-readable ID for the entity
 	 * @see Entity
 	 */
 	public StaticEntity(String id) {
 		super(id);
 		isAnimated = false;
 		isStatic = true;
+	}
+
+	@Override
+	public void render(Graphics graphics) {
+		graphics.drawImage(frame, (int) x, (int) y, null);
+		drawDebug(graphics);
 	}
 
 }

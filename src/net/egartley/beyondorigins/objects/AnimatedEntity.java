@@ -3,7 +3,8 @@ package net.egartley.beyondorigins.objects;
 import java.util.ArrayList;
 
 /**
- * An {@link Entity} with associated animations
+ * An {@link net.egartley.beyondorigins.objects.Entity Entity} with associated
+ * animations
  * 
  * @author Evan Gartley
  * @see Entity
@@ -23,9 +24,14 @@ public abstract class AnimatedEntity extends Entity {
 	public ArrayList<Animation> animationCollection = new ArrayList<Animation>();
 
 	/**
-	 * Creates a new animated entity, while setting {@link Entity#isAnimated} to
-	 * true and {@link Entity#isStatic} to false
+	 * Creates a new animated entity, while setting
+	 * {@link net.egartley.beyondorigins.objects.Entity#isAnimated
+	 * Entity.isAnimated} to true and
+	 * {@link net.egartley.beyondorigins.objects.Entity#isStatic Entity.isStatic} to
+	 * false
 	 * 
+	 * @param id
+	 *            Human-readable ID for the entity
 	 * @see Entity
 	 */
 	public AnimatedEntity(String id) {
@@ -35,7 +41,7 @@ public abstract class AnimatedEntity extends Entity {
 	}
 
 	/**
-	 * This method should be used for building {@link #animationCollection}
+	 * Sets {@link #animationCollection}
 	 * 
 	 * @see Animation
 	 */

@@ -1,11 +1,9 @@
 package net.egartley.beyondorigins.entities;
 
-import java.awt.Graphics;
 import java.util.ArrayList;
 
-import net.egartley.beyondorigins.logic.collision.Collision;
+import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
-import net.egartley.beyondorigins.logic.events.CollisionEvent;
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
@@ -20,12 +18,13 @@ import net.egartley.beyondorigins.objects.StaticEntity;
  */
 public class DefaultTree extends StaticEntity {
 
+	private EntityBoundary boundary;
+
 	/**
-	 * Creates a new instance of {@link DefaultTree} with the provided
-	 * {@link Sprite}
+	 * Creates a new default tree
 	 * 
 	 * @param sprite
-	 *            {@link Sprite} object to use while rendering
+	 *            {@link Sprite} to use while rendering
 	 */
 	public DefaultTree(Sprite sprite) {
 		this(sprite, 0.0, 0.0);
@@ -36,7 +35,12 @@ public class DefaultTree extends StaticEntity {
 	 * {@link Sprite} at the supplied coordinates
 	 * 
 	 * @param sprite
-	 *            {@link Sprite} object to use while rendering
+	 *            {@link net.egartley.beyondorigins.objects.Sprite Sprite} to use
+	 *            while rendering
+	 * @param x
+	 *            The x-coordinate to render at
+	 * @param y
+	 *            The y-coordinate to render at
 	 */
 	public DefaultTree(Sprite sprite, double x, double y) {
 		super("Tree");
@@ -44,14 +48,14 @@ public class DefaultTree extends StaticEntity {
 		frame = this.sprite.getCurrentFrameAsBufferedImage();
 		this.x = x;
 		this.y = y;
-		setBoundary();
+		setBoundaries();
 		setCollisions();
 
-		sectorSpecific = true;
+		isSectorSpecific = true;
 		// set the first layer as the leaves
-		firstLayer = frame.getSubimage(0, 0, frame.getWidth(), 44);
+		firstLayer = frame.getSubimage(0, 44, frame.getWidth(), 20);
 		// set the second layer as the trunk
-		secondLayer = frame.getSubimage(0, 44, frame.getWidth(), 20);
+		secondLayer = frame.getSubimage(0, 0, frame.getWidth(), 44);
 	}
 
 	/**
@@ -65,24 +69,26 @@ public class DefaultTree extends StaticEntity {
 	 * </p>
 	 * 
 	 * @param event
-	 *            The collision event between the player and tree
+	 *            The
+	 *            {@link net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent
+	 *            EntityEntityCollisionEvent} between the player and tree
 	 */
 	private void onPlayerCollision(EntityEntityCollisionEvent event) {
 		Entities.PLAYER.lastCollisionEvent = event;
 		switch (event.collidedSide) {
-		case EntityEntityCollisionEvent.RIGHT:
+		case EntityEntityCollisionEvent.RIGHT_SIDE:
 			// collided on the right, so disable leftwards movement
 			Entities.PLAYER.isAllowedToMoveLeftwards = false;
 			break;
-		case EntityEntityCollisionEvent.LEFT:
+		case EntityEntityCollisionEvent.LEFT_SIDE:
 			// collided on the left, so disable rightwards movement
 			Entities.PLAYER.isAllowedToMoveRightwards = false;
 			break;
-		case EntityEntityCollisionEvent.TOP:
+		case EntityEntityCollisionEvent.TOP_SIDE:
 			// collided at the top, so disable downwards movement
 			Entities.PLAYER.isAllowedToMoveDownwards = false;
 			break;
-		case EntityEntityCollisionEvent.BOTTOM:
+		case EntityEntityCollisionEvent.BOTTOM_SIDE:
 			// collided at the bottom, so disable upwards movement
 			Entities.PLAYER.isAllowedToMoveUpwards = false;
 			break;
@@ -92,55 +98,39 @@ public class DefaultTree extends StaticEntity {
 	}
 
 	@Override
-	protected void setBoundary() {
+	protected void setBoundaries() {
 		boundary = new EntityBoundary(this, frame.getWidth(), frame.getHeight(),
 				new BoundaryPadding(-24, -24, -36, -24));
+		boundaries.add(boundary);
 	}
 
 	@Override
 	protected void setCollisions() {
-		collisions = new ArrayList<Collision>();
-		// this is independent of whatever map/sector the player is in
-		EntityEntityCollision withPlayer = new EntityEntityCollision(Entities.PLAYER, this) {
-			public void onCollide(CollisionEvent event) {
-				EntityEntityCollisionEvent e = (EntityEntityCollisionEvent) event;
-				Entities.PLAYER.lastCollision = (EntityEntityCollision) e.invoker;
-				firstEntity.isCollided = true;
-				secondEntity.isCollided = true;
-				onPlayerCollision(e);
+		collisions = new ArrayList<EntityEntityCollision>();
+		EntityEntityCollision withPlayer = new EntityEntityCollision(Entities.PLAYER.headBoundary, boundary) {
+			public void onCollide(EntityEntityCollisionEvent event) {
+				onPlayerCollision(event);
 			};
 
-			public void onCollisionEnd(CollisionEvent event) {
-				firstEntity.isCollided = false;
-				secondEntity.isCollided = false;
-				Entities.PLAYER.allowAllMovement();
+			public void onCollisionEnd(EntityEntityCollisionEvent event) {
+				if (Entities.PLAYER.isCollided == false)
+					Entities.PLAYER.allowAllMovement();
+				else
+					Entities.PLAYER.annulCollisionEvent(event);
 			};
 		};
 		collisions.add(withPlayer);
-	}
-
-	@Override
-	public void render(Graphics graphics) {
-		graphics.drawImage(frame, (int) x, (int) y, null);
-		drawDebug(graphics);
-	}
-
-	@Override
-	public void tick() {
-		for (Collision collision : collisions) {
-			collision.tick();
+		for (EntityEntityCollision collision : Util.getAllBoundaryCollisions(withPlayer, Entities.PLAYER, boundary)) {
+			if (collision.boundary1 != Entities.PLAYER.boundary)
+				collisions.add(collision);
 		}
 	}
 
 	@Override
-	public void drawSecondLayer(Graphics graphics) {
-		graphics.drawImage(firstLayer, (int) x, (int) y, null);
-		drawDebug(graphics);
-	}
-
-	@Override
-	public void drawFirstLayer(Graphics graphics) {
-		graphics.drawImage(secondLayer, (int) x, (int) y + firstLayer.getHeight(), null);
+	public void tick() {
+		for (EntityEntityCollision collision : collisions) {
+			collision.tick();
+		}
 	}
 
 }

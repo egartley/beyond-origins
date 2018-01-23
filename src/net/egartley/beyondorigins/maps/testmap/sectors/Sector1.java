@@ -17,27 +17,24 @@ public class Sector1 extends MapSector {
 
 	public Sector1(MapSectorDefinition def) {
 		super(def);
+		// see onPlayerEnter for init
 	}
 
 	@Override
 	public void render(Graphics graphics) {
 		drawTiles(graphics);
 		for (DefaultTree tree : trees) {
-			// render all of the trees' first layer
 			tree.drawFirstLayer(graphics);
 		}
 		for (DefaultRock rock : rocks) {
-			// render all of the rocks' first layer
 			rock.drawFirstLayer(graphics);
 		}
 		Entities.DUMMY.render(graphics);
 		Entities.PLAYER.render(graphics);
 		for (DefaultTree tree : trees) {
-			// render all of the trees' second layer
 			tree.drawSecondLayer(graphics);
 		}
 		for (DefaultRock rock : rocks) {
-			// render all of the rocks' second layer
 			rock.drawSecondLayer(graphics);
 		}
 	}
@@ -77,7 +74,7 @@ public class Sector1 extends MapSector {
 	}
 
 	@Override
-	public void onPlayerDeparture() {
+	public void onPlayerLeave() {
 		// de-register all sector-specific entities
 		for (DefaultTree tree : trees) {
 			tree.kill();

@@ -14,7 +14,7 @@ public class AnimationFrame {
 	private BufferedImage bufferedImage;
 
 	/**
-	 * The index of this frame within its parent's {@link Sprite#strip}
+	 * The index of the frame within its parent's {@link Sprite#strip}
 	 */
 	public int index;
 
@@ -22,8 +22,10 @@ public class AnimationFrame {
 	 * Creates a new frame for use in an {@link Animation}
 	 * 
 	 * @param parent
+	 *            The {@link net.egartley.beyondorigins.objects.Sprite Sprite} in
+	 *            which to base the frame around
 	 * @param index
-	 * @see Animation
+	 *            The index of the frame within its parent's {@link Sprite#strip}
 	 */
 	public AnimationFrame(Sprite parent, int index) {
 		this.parent = parent;
@@ -37,18 +39,16 @@ public class AnimationFrame {
 	}
 
 	/**
-	 * Returns this frame's "parent" sprite
+	 * Returns the frame's "parent" sprite ({@link #parent})
 	 * 
-	 * @return {@link Sprite}
+	 * @return The sprite in which the frame is based on
 	 */
 	public Sprite getParent() {
 		return parent;
 	}
 
 	/**
-	 * Returns this frame as a buffered image
-	 * 
-	 * @return {@link BufferedImage}
+	 * @return The frame as {@link BufferedImage}
 	 */
 	public BufferedImage asBufferedImage() {
 		return bufferedImage;
