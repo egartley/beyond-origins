@@ -3,13 +3,12 @@ package net.egartley.beyondorigins.objects;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import net.egartley.beyondorigins.logic.events.MapSectorChangeEvent;
+
 /**
  * Represents a collection of "sectors" for a specific map, or "level"
  * 
  * @author Evan Gartley
- * @see MapSector
- * @see MapSectorDefinition
- * @see MapTile
  */
 public abstract class Map {
 
@@ -28,6 +27,10 @@ public abstract class Map {
 	 */
 	public MapSector currentSector;
 
+	public Map() {
+		sectors = new ArrayList<MapSector>();
+	}
+
 	public abstract void tick();
 
 	public abstract void render(Graphics graphics);
@@ -40,5 +43,12 @@ public abstract class Map {
 	 * @see MapSector
 	 */
 	public abstract void changeSector(MapSector sector);
+
+	/**
+	 * Called when the current sector changes ({@link #changeSector(MapSector)})
+	 */
+	public void onSectorChange(MapSectorChangeEvent event) {
+
+	}
 
 }

@@ -24,14 +24,16 @@ public class Game extends Canvas implements Runnable {
 
 	// SELF
 	private static final long serialVersionUID = 8213282993283826186L;
-	private static short frames, currentFrames;
+	private static short frames;
+	private static short currentFrames;
 	private static JFrame frame;
 	private static Dimension windowDimension = new Dimension(998, 573);
 	private Graphics graphics;
 	private BufferStrategy bufferStrategy;
 
 	// CONSTANTS
-	public static final int WINDOW_WIDTH = windowDimension.width - 7, WINDOW_HEIGHT = windowDimension.height - 30;
+	public static final int WINDOW_WIDTH = windowDimension.width - 7;
+	public static final int WINDOW_HEIGHT = windowDimension.height - 30;
 
 	// THREADS
 	private static Thread masterRenderThread;
@@ -42,6 +44,9 @@ public class Game extends Canvas implements Runnable {
 
 	// FLAGS
 	public static boolean running = false;
+	/**
+	 * Whether or not the main tick thread ({@link #tick}) is runnning
+	 */
 	public static boolean runTickThread = true;
 	/**
 	 * Whether or not to perform debug related operations
@@ -81,8 +86,10 @@ public class Game extends Canvas implements Runnable {
 		game.start();
 	}
 
+	/**
+	 * Loads all of the images in "/resources/images"
+	 */
 	private void loadGraphicsAndEntities() {
-		// this loads all of the images in "resources/images"
 		ImageStore.loadAll();
 		// this upscales all images to a factor of 2 (i.e. each pixel in an image will
 		// be rendered as 2x2 pixels)
@@ -91,14 +98,12 @@ public class Game extends Canvas implements Runnable {
 		// *********** PLAYER BEGIN ***********
 		BufferedImage image = ImageStore.playerDefault;
 		if (image != null) {
-			// upscale the image by a factor of 2 (double it)
 			image = Util.resized(image, image.getWidth() * scale, image.getHeight() * scale);
 		} else {
 			Debug.error(
 					"The default player image (\"player-default.png\") doesn't exist, or there was a problem while loading it!");
 			return;
 		}
-		// initialize the player
 		Entities.PLAYER = new Player(
 				new SpriteSheet(image, 15 * scale, 23 * scale, 2, (short) 4).getSpriteCollection());
 		// ************ PLAYER END ************
@@ -106,25 +111,21 @@ public class Game extends Canvas implements Runnable {
 		// ************ DUMMY BEGIN ***********
 		image = ImageStore.dummy;
 		if (image != null) {
-			// upscale the image by a factor of 2 (double it)
 			image = Util.resized(image, image.getWidth() * scale, image.getHeight() * scale);
 		} else {
 			Debug.error("The dummy image (\"dummy.png\") doesn't exist, or there was a problem while loading it!");
 			return;
 		}
-		// initialize the dummy
 		Entities.DUMMY = new Dummy(
 				new SpriteSheet(image, 15 * scale, 23 * scale, 2, (short) 4).getSpriteCollection().get(0));
 		// ************ DUMMY END *************
 
 		// ******** DEFAULT TREE BEGIN ********
-		// initialize the default tree
 		Entities.TREE = new DefaultTree(new SpriteSheet(ImageStore.treeDefault, ImageStore.treeDefault.getWidth(),
 				ImageStore.treeDefault.getHeight(), 1, (short) 1).getSpriteCollection().get(0));
 		// ******** DEFAULT TREE END **********
 
 		// ******** DEFAULT ROCK BEGIN ********
-		// initialize the default rock
 		Entities.ROCK = new DefaultRock(new SpriteSheet(ImageStore.rockDefault, ImageStore.rockDefault.getWidth(),
 				ImageStore.rockDefault.getHeight(), 1, (short) 1).getSpriteCollection().get(0));
 		// ******** DEFAULT TREE END **********
@@ -181,7 +182,7 @@ public class Game extends Canvas implements Runnable {
 		// enable anti-aliasing for strings
 		Graphics2D g2d = (Graphics2D) graphics;
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		// actually render
+		// actually render (for the first time)
 		render();
 		// setup system for ensuring that the game runs at most 60 fps
 		long lastTime = System.nanoTime();
@@ -212,17 +213,12 @@ public class Game extends Canvas implements Runnable {
 				e.printStackTrace();
 			}
 		}
-		// end the game, terminate application process
+		// end the game, thus terminating the process
 		stop();
 	}
 
 	private synchronized void render() {
-		// ********** RENDER BEGIN ***********
-
 		currentGameState.render(graphics);
-
-		// *********** RENDER END ************
-
 		bufferStrategy.show();
 	}
 

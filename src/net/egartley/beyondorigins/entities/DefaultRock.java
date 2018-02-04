@@ -129,6 +129,8 @@ public class DefaultRock extends StaticEntity {
 			};
 		};
 		collisions.add(withPlayer);
+		// add collisions with all of the player's boundaries, except the main one. The
+		// events will be the same as the given "base" event
 		for (EntityEntityCollision collision : Util.getAllBoundaryCollisions(withPlayer, Entities.PLAYER, boundary)) {
 			if (collision.boundary1 != Entities.PLAYER.boundary)
 				collisions.add(collision);

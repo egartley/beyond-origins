@@ -49,7 +49,7 @@ public class EntityStore {
 	 */
 	public static void remove(Entity entity) {
 		Debug.out("Removing entity from store... (" + entity + ")");
-		if (entities.remove(entity) == true && entity.isRegistered == true) {
+		if (entities.remove(entity) == true && entity.isRegistered == false) {
 			Debug.warning("Tried to remove an entity (" + entity
 					+ ") from the store, but it was never registered in the first place");
 		} else {

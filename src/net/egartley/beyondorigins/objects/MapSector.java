@@ -3,8 +3,12 @@ package net.egartley.beyondorigins.objects;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.logic.collision.MapSectorChangeAreaCollision;
+import net.egartley.beyondorigins.logic.interaction.MapSectorChangeArea;
+
 /**
- * A "sector" of map that fills the entire window
+ * A "sector" of a map, which fills the entire window
  * 
  * @author Evan Gartley
  * @see Map
@@ -14,20 +18,38 @@ public abstract class MapSector {
 	private final short TILE_SIZE = 32;
 	private int deltaX, deltaY;
 
-	/**
-	 * Creates a new map sector with the provided definition
-	 * 
-	 * @param def
-	 *            The {@link MapSectorDefinition} to use
-	 */
-	public MapSector(MapSectorDefinition def) {
-		definition = def;
-	}
-
+	public Map parent;
+	public ArrayList<MapSectorChangeArea> changeAreas;
+	public ArrayList<MapSectorChangeAreaCollision> changeAreaCollisions;
 	/**
 	 * This sector's definition, which includes its tiles
 	 */
 	public MapSectorDefinition definition;
+
+	/**
+	 * Creates a new map sector with the provided definition
+	 * 
+	 * @param parent
+	 *            The map that this sector is in
+	 * @param def
+	 *            The {@link MapSectorDefinition} to use
+	 * @param areas
+	 *            The areas where a sector change will occur
+	 */
+	public MapSector(Map parent, MapSectorDefinition def, MapSectorChangeArea... areas) {
+		this.parent = parent;
+		definition = def;
+		changeAreas = new ArrayList<MapSectorChangeArea>();
+		changeAreaCollisions = new ArrayList<MapSectorChangeAreaCollision>();
+		for (MapSectorChangeArea area : areas) {
+			changeAreas.add(area);
+			changeAreaCollisions.add(new MapSectorChangeAreaCollision(area, Entities.PLAYER.boundary) {
+				public void onCollide() {
+					parent.changeSector(area.to);
+				}
+			});
+		}
+	}
 
 	public abstract void render(Graphics graphics);
 
