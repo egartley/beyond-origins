@@ -15,8 +15,12 @@ public class TestMap extends Map {
 		super();
 		sectors.add(new Sector1(this, net.egartley.beyondorigins.definitions.maps.testmap.Sectors.sector1));
 		sectors.add(new Sector2(this, net.egartley.beyondorigins.definitions.maps.testmap.Sectors.sector2));
+		// go to the first sector by default
 		changeSector(sectors.get(0));
-		sectors.get(0).changeAreas.get(0).to = sectors.get(1);
+		// stupid fix for sector changing, should be implemented in the map sector
+		// change boundary constructor somehow
+		sectors.get(0).changeBoundaries.get(0).goingTo = sectors.get(1);
+		sectors.get(1).changeBoundaries.get(0).goingTo = sectors.get(0);
 	}
 
 	@Override
@@ -41,7 +45,7 @@ public class TestMap extends Map {
 
 	@Override
 	public void onSectorChange(MapSectorChangeEvent event) {
-		Debug.info("Moved from sector \"" + event.from + " to \"" + event.to + "\"");
+		Debug.info("Moved from sector \"" + event.from + "\" to \"" + event.to + "\"");
 	}
 
 }

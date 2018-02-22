@@ -7,8 +7,8 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.entities.DefaultRock;
 import net.egartley.beyondorigins.entities.DefaultTree;
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.logic.collision.MapSectorChangeAreaCollision;
-import net.egartley.beyondorigins.logic.interaction.MapSectorChangeArea;
+import net.egartley.beyondorigins.logic.collision.MapSectorChangeCollision;
+import net.egartley.beyondorigins.logic.interaction.MapSectorChangeBoundary;
 import net.egartley.beyondorigins.objects.Map;
 import net.egartley.beyondorigins.objects.MapSector;
 import net.egartley.beyondorigins.objects.MapSectorDefinition;
@@ -20,7 +20,7 @@ public class Sector1 extends MapSector {
 	private ArrayList<DefaultRock> rocks;
 
 	public Sector1(Map parent, MapSectorDefinition def) {
-		super(parent, def, new MapSectorChangeArea(Game.WINDOW_WIDTH / 2 - 37, 50, 74, 74));
+		super(parent, def, new MapSectorChangeBoundary(Game.WINDOW_WIDTH / 2 - 37, 50, 74, 74));
 	}
 
 	@Override
@@ -44,8 +44,8 @@ public class Sector1 extends MapSector {
 			rock.drawSecondLayer(graphics);
 		}
 
-		for (MapSectorChangeArea area : changeAreas) {
-			area.draw(graphics);
+		for (MapSectorChangeBoundary boundary : changeBoundaries) {
+			boundary.draw(graphics);
 		}
 	}
 
@@ -58,8 +58,8 @@ public class Sector1 extends MapSector {
 		for (DefaultRock rock : rocks) {
 			rock.tick();
 		}
-		for (MapSectorChangeAreaCollision changeAreaCollision : changeAreaCollisions) {
-			changeAreaCollision.tick();
+		for (MapSectorChangeCollision collision : changeCollisions) {
+			collision.tick();
 		}
 	}
 

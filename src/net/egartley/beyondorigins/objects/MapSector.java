@@ -4,8 +4,8 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.logic.collision.MapSectorChangeAreaCollision;
-import net.egartley.beyondorigins.logic.interaction.MapSectorChangeArea;
+import net.egartley.beyondorigins.logic.collision.MapSectorChangeCollision;
+import net.egartley.beyondorigins.logic.interaction.MapSectorChangeBoundary;
 
 /**
  * A "sector" of a map, which fills the entire window
@@ -19,8 +19,8 @@ public abstract class MapSector {
 	private int deltaX, deltaY;
 
 	public Map parent;
-	public ArrayList<MapSectorChangeArea> changeAreas;
-	public ArrayList<MapSectorChangeAreaCollision> changeAreaCollisions;
+	public ArrayList<MapSectorChangeBoundary> changeBoundaries;
+	public ArrayList<MapSectorChangeCollision> changeCollisions;
 	/**
 	 * This sector's definition, which includes its tiles
 	 */
@@ -33,19 +33,22 @@ public abstract class MapSector {
 	 *            The map that this sector is in
 	 * @param def
 	 *            The {@link MapSectorDefinition} to use
-	 * @param areas
-	 *            The areas where a sector change will occur
+	 * @param boundaries
+	 *            The areas, or boundaries, where a sector change can occur
 	 */
-	public MapSector(Map parent, MapSectorDefinition def, MapSectorChangeArea... areas) {
+	public MapSector(Map parent, MapSectorDefinition def, MapSectorChangeBoundary... boundaries) {
 		this.parent = parent;
 		definition = def;
-		changeAreas = new ArrayList<MapSectorChangeArea>();
-		changeAreaCollisions = new ArrayList<MapSectorChangeAreaCollision>();
-		for (MapSectorChangeArea area : areas) {
-			changeAreas.add(area);
-			changeAreaCollisions.add(new MapSectorChangeAreaCollision(area, Entities.PLAYER.boundary) {
+		changeBoundaries = new ArrayList<MapSectorChangeBoundary>();
+		changeCollisions = new ArrayList<MapSectorChangeCollision>();
+		
+		for (MapSectorChangeBoundary changeBoundary : boundaries) {
+			// initialize each collision
+			changeBoundaries.add(changeBoundary);
+			changeCollisions.add(new MapSectorChangeCollision(changeBoundary, Entities.PLAYER.boundary) {
+				@Override
 				public void onCollide() {
-					parent.changeSector(area.to);
+					parent.changeSector(changeBoundary.goingTo);
 				}
 			});
 		}

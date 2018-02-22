@@ -9,11 +9,15 @@ import net.egartley.beyondorigins.objects.MapSector;
  * 
  * @author Evan Gartley
  */
-public class MapSectorChangeArea extends Boundary {
+public class MapSectorChangeBoundary extends Boundary {
 
-	public MapSector to;
+	/**
+	 * The map sector where the player will be going to after colliding with this
+	 * boundary
+	 */
+	public MapSector goingTo;
 
-	public MapSectorChangeArea(int x, int y, int width, int height) {
+	public MapSectorChangeBoundary(int x, int y, int width, int height) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -22,7 +26,7 @@ public class MapSectorChangeArea extends Boundary {
 		bottom = top + height;
 		left = x;
 		right = left + width;
-		drawColor = Color.MAGENTA;
+		drawColor = Color.ORANGE;
 	}
 
 	@Override

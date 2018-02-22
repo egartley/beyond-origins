@@ -4,19 +4,19 @@ import java.awt.Rectangle;
 
 import net.egartley.beyondorigins.logic.interaction.Boundary;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
-import net.egartley.beyondorigins.logic.interaction.MapSectorChangeArea;
+import net.egartley.beyondorigins.logic.interaction.MapSectorChangeBoundary;
 
-public class MapSectorChangeAreaCollision {
+public class MapSectorChangeCollision {
 
 	private boolean isCollided;
 	private boolean firedEvent;
 
 	public Boundary boundary1;
 	public Boundary boundary2;
-	public Rectangle rectangle1;
-	public Rectangle rectangle2;
+	private Rectangle rectangle1;
+	private Rectangle rectangle2;
 
-	public MapSectorChangeAreaCollision(MapSectorChangeArea changeBoundary, EntityBoundary playerBoundary) {
+	public MapSectorChangeCollision(MapSectorChangeBoundary changeBoundary, EntityBoundary playerBoundary) {
 		boundary1 = changeBoundary;
 		boundary2 = playerBoundary;
 		rectangle1 = boundary1.asRectangle();
@@ -37,6 +37,9 @@ public class MapSectorChangeAreaCollision {
 		if (isCollided == true && firedEvent == false) {
 			onCollide();
 			firedEvent = true;
+		}
+		if (isCollided == false && firedEvent == true) {
+			firedEvent = false;
 		}
 	}
 	

@@ -4,6 +4,8 @@ import java.awt.Graphics;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.logic.collision.MapSectorChangeCollision;
+import net.egartley.beyondorigins.logic.interaction.MapSectorChangeBoundary;
 import net.egartley.beyondorigins.objects.Map;
 import net.egartley.beyondorigins.objects.MapSector;
 import net.egartley.beyondorigins.objects.MapSectorDefinition;
@@ -11,18 +13,26 @@ import net.egartley.beyondorigins.objects.MapSectorDefinition;
 public class Sector2 extends MapSector {
 
 	public Sector2(Map parent, MapSectorDefinition def) {
-		super(parent, def);
+		super(parent, def, new MapSectorChangeBoundary(Game.WINDOW_WIDTH / 2 - 37, 150, 74, 74));
 	}
 
 	@Override
 	public void render(Graphics graphics) {
 		drawTiles(graphics);
 		Entities.PLAYER.render(graphics);
+		
+		for (MapSectorChangeBoundary boundary : changeBoundaries) {
+			boundary.draw(graphics);
+		}
 	}
 
 	@Override
 	public void tick() {
 		Entities.PLAYER.tick();
+		
+		for (MapSectorChangeCollision collision : changeCollisions) {
+			collision.tick();
+		}
 	}
 
 	@Override
