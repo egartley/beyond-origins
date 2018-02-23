@@ -25,8 +25,8 @@ public class Sector1 extends MapSector {
 
 	@Override
 	public void render(Graphics graphics) {
-		drawTiles(graphics);
-
+		super.render(graphics);
+		
 		for (DefaultTree tree : trees) {
 			tree.drawFirstLayer(graphics);
 		}

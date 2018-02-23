@@ -6,7 +6,6 @@ import java.util.ArrayList;
 /**
  * A row, or "strip", of individual frames of a specific entity or object
  * 
- * @author Evan Gartley
  * @see SpriteSheet
  * @see Entity
  */

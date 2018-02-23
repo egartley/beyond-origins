@@ -11,9 +11,8 @@ import net.egartley.beyondorigins.objects.Sprite;
 import net.egartley.beyondorigins.objects.StaticEntity;
 
 /**
- * A tree that the player cannot walk over
+ * Basic tree that the player can walk under, but not over
  * 
- * @author Evan Gartley
  * @see StaticEntity
  */
 public class DefaultTree extends StaticEntity {

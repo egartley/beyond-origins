@@ -19,7 +19,6 @@ public class InGameState extends GameState {
 	@Override
 	public void render(Graphics graphics) {
 		currentMap.render(graphics);
-		// draw debug text
 		Debug.render(graphics);
 	}
 

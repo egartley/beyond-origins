@@ -5,7 +5,6 @@ import java.util.ArrayList;
 /**
  * A collection of map tiles used for defining a map sector
  * 
- * @author Evan Gartley
  * @see MapSector
  * @see MapTile
  */

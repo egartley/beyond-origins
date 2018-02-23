@@ -8,8 +8,6 @@ import net.egartley.beyondorigins.Game;
 
 /**
  * An imaginary boundary, or border, with a width, height and coordinates
- * 
- * @author Evan Gartley
  */
 public abstract class Boundary {
 
@@ -85,7 +83,12 @@ public abstract class Boundary {
 	 * Update {@link #x}, {@link #y}, {@link #top}, {@link #left}, {@link #bottom}
 	 * and {@link #right}
 	 */
-	public abstract void tick();
+	public void tick() {
+		top = y;
+		bottom = top + height;
+		left = x;
+		right = left + width;
+	}
 
 	/**
 	 * @return The boundary as a {@link java.awt.Rectangle Rectangle} object

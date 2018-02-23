@@ -10,8 +10,6 @@ import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
  * that has occured
  * {@link net.egartley.beyondorigins.logic.collision.EntityEntityCollision
  * EntityEntityCollision}
- * 
- * @author Evan Gartley
  */
 public class EntityEntityCollisionEvent {
 

@@ -2,8 +2,6 @@ package net.egartley.beyondorigins.logic.interaction;
 
 /**
  * A numeric offset from the top left (relative origin) of a entity
- * 
- * @author Evan Gartley
  */
 public class BoundaryOffset {
 

@@ -8,7 +8,6 @@ import net.egartley.beyondorigins.objects.Entity;
 /**
  * Storage for all the entities that are currently in use
  * 
- * @author Evan Gartley
  * @see Entity
  */
 public class EntityStore {

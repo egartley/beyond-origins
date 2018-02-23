@@ -6,7 +6,6 @@ import java.util.ArrayList;
 /**
  * One of the game's "states" that has unique render and tick methods
  * 
- * @author Evan Gartley
  * @see SubGameState
  */
 public abstract class GameState {

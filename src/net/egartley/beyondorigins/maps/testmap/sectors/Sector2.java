@@ -18,7 +18,7 @@ public class Sector2 extends MapSector {
 
 	@Override
 	public void render(Graphics graphics) {
-		drawTiles(graphics);
+		super.render(graphics);
 		Entities.PLAYER.render(graphics);
 		
 		for (MapSectorChangeBoundary boundary : changeBoundaries) {
@@ -37,7 +37,6 @@ public class Sector2 extends MapSector {
 
 	@Override
 	public void onPlayerEnter(MapSector from) {
-		// Entities.PLAYER.x = Game.WINDOW_WIDTH / 2 - (Entities.PLAYER.sprite.frameWidth / 2);
 		Entities.PLAYER.y = Game.WINDOW_HEIGHT - 84;
 	}
 

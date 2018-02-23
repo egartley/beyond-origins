@@ -13,8 +13,6 @@ import net.egartley.beyondorigins.objects.Entity;
 
 /**
  * Miscellaneous methods that don't fit into a specific class or object
- * 
- * @author Evan Gartley
  */
 public class Util {
 

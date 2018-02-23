@@ -6,8 +6,6 @@ import net.egartley.beyondorigins.objects.MapSector;
 
 /**
  * An area (boundary) where a map sector change can occur
- * 
- * @author Evan Gartley
  */
 public class MapSectorChangeBoundary extends Boundary {
 
@@ -15,7 +13,7 @@ public class MapSectorChangeBoundary extends Boundary {
 	 * The map sector where the player will be going to after colliding with this
 	 * boundary
 	 */
-	public MapSector goingTo;
+	public MapSector to;
 
 	public MapSectorChangeBoundary(int x, int y, int width, int height) {
 		this.x = x;

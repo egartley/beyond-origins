@@ -6,7 +6,6 @@ import java.util.ArrayList;
  * An {@link net.egartley.beyondorigins.objects.Entity Entity} with associated
  * animations
  * 
- * @author Evan Gartley
  * @see Entity
  * @see Animation
  */

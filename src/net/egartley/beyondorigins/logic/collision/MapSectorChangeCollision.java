@@ -45,9 +45,6 @@ public class MapSectorChangeCollision {
 	
 	/**
 	 * This is called <b>once</b> after the collision occurs
-	 * 
-	 * @param event
-	 *            The collision's event
 	 */
 	public void onCollide() {
 

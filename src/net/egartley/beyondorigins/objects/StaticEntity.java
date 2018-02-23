@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 /**
  * An entity that cannot be animated
  * 
- * @author Evan Gartley
  * @see Entity
  */
 public abstract class StaticEntity extends Entity {

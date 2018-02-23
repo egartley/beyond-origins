@@ -5,7 +5,6 @@ import java.awt.Graphics;
 /**
  * Represents a "sub", or lower level, state within another game state
  * 
- * @author Evan Gartley
  * @see GameState
  */
 public abstract class SubGameState extends GameState {

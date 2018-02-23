@@ -8,19 +8,41 @@ import net.egartley.beyondorigins.logic.collision.MapSectorChangeCollision;
 import net.egartley.beyondorigins.logic.interaction.MapSectorChangeBoundary;
 
 /**
- * A "sector" of a map, which fills the entire window
+ * Sector, or portion, of a map, which fills the entire window
  * 
- * @author Evan Gartley
  * @see Map
  */
 public abstract class MapSector {
 
+	/**
+	 * Default/allowed tile size in pixels
+	 */
 	private final short TILE_SIZE = 32;
-	private int deltaX, deltaY;
+	/**
+	 * Change in x-axis when rendering
+	 */
+	private int deltaX;
+	/**
+	 * Change in y-axis when rendering
+	 */
+	private int deltaY;
 
+	/**
+	 * The map in which this sector is located
+	 */
 	public Map parent;
+	/**
+	 * Boundaries, or areas, of all of the sector changes
+	 */
 	public ArrayList<MapSectorChangeBoundary> changeBoundaries;
+	/**
+	 * All of the collision for the sector changes
+	 */
 	public ArrayList<MapSectorChangeCollision> changeCollisions;
+	/**
+	 * Entities (static or animated) that are specific to this sector
+	 */
+	public ArrayList<Entity> entities;
 	/**
 	 * This sector's definition, which includes its tiles
 	 */
@@ -41,21 +63,32 @@ public abstract class MapSector {
 		definition = def;
 		changeBoundaries = new ArrayList<MapSectorChangeBoundary>();
 		changeCollisions = new ArrayList<MapSectorChangeCollision>();
-		
+
 		for (MapSectorChangeBoundary changeBoundary : boundaries) {
 			// initialize each collision
 			changeBoundaries.add(changeBoundary);
 			changeCollisions.add(new MapSectorChangeCollision(changeBoundary, Entities.PLAYER.boundary) {
 				@Override
 				public void onCollide() {
-					parent.changeSector(changeBoundary.goingTo);
+					parent.changeSector(changeBoundary.to);
 				}
 			});
 		}
 	}
 
-	public abstract void render(Graphics graphics);
+	/**
+	 * Minimum requirement for sector rendering
+	 * 
+	 * @param graphics
+	 *            The {@link java.awt.Graphics Graphics} object to use
+	 */
+	public void render(Graphics graphics) {
+		drawTiles(graphics);
+	}
 
+	/**
+	 * Obvious what this does
+	 */
 	public abstract void tick();
 
 	/**
@@ -76,26 +109,11 @@ public abstract class MapSector {
 	 * @see MapSectorDefinition
 	 */
 	public void drawTiles(Graphics graphics) {
-		drawTiles(graphics, 0, 0);
-	}
-
-	/**
-	 * Renders all of the tiles within {@link #definition}
-	 * 
-	 * @param graphics
-	 *            The {@link java.awt.Graphics Graphics} object to use
-	 * @param ix
-	 *            Initial x-axis coordinate
-	 * @param iy
-	 *            Initial y-axis coordinate
-	 * @see MapSectorDefinition
-	 */
-	public void drawTiles(Graphics graphics, int ix, int iy) {
 		deltaX = 0;
 		deltaY = 0;
 		for (ArrayList<MapTile> row : definition.tiles) {
 			for (MapTile tile : row) {
-				graphics.drawImage(tile.bufferedImage, ix + deltaX, iy + deltaY, null);
+				graphics.drawImage(tile.bufferedImage, deltaX, deltaY, null);
 				deltaX += TILE_SIZE;
 			}
 			deltaX = 0;

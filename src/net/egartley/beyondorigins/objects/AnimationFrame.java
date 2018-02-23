@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 /**
  * A single frame within an {@link Animation}
  * 
- * @author Evan Gartley
  * @see Animation
  */
 public class AnimationFrame {

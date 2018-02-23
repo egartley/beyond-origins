@@ -8,8 +8,6 @@ import net.egartley.beyondorigins.Debug;
  * Represents a collection of {@link AnimationFrame AnimationFrame} objects,
  * which can be used for animating a {@link Sprite Sprite}
  * 
- * @author Evan Gartley
- *
  * @see AnimationFrame
  * @see Sprite
  * @see AnimatedEntity

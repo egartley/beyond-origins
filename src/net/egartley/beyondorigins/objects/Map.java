@@ -7,8 +7,6 @@ import net.egartley.beyondorigins.logic.events.MapSectorChangeEvent;
 
 /**
  * Represents a collection of "sectors" for a specific map, or "level"
- * 
- * @author Evan Gartley
  */
 public abstract class Map {
 

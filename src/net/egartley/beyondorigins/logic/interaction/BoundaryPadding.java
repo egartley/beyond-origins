@@ -2,8 +2,6 @@ package net.egartley.beyondorigins.logic.interaction;
 
 /**
  * Extra spacing for boundaries, values can be negative or positive
- * 
- * @author Evan Gartley
  */
 public class BoundaryPadding {
 

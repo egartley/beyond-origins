@@ -9,8 +9,6 @@ import net.egartley.beyondorigins.entities.Entities;
 
 /**
  * Stuff for debugging
- * 
- * @author Evan Gartley
  */
 public class Debug {
 
@@ -82,7 +80,7 @@ public class Debug {
 	 * Render debug information
 	 * 
 	 * @param graphics
-	 *            Graphics object to use
+	 *            The {@link java.awt.Graphics Graphics} object to use
 	 */
 	public static void render(Graphics graphics) {
 		if (Game.debug) {

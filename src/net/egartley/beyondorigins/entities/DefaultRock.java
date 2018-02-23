@@ -1,7 +1,5 @@
 package net.egartley.beyondorigins.entities;
 
-import java.awt.Graphics;
-
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
@@ -11,9 +9,7 @@ import net.egartley.beyondorigins.objects.Sprite;
 import net.egartley.beyondorigins.objects.StaticEntity;
 
 /**
- * Rock that the player cannot walk over
- * 
- * @author Evan Gartley
+ * Rock that the player cannot walk over, but can walk behind
  */
 public class DefaultRock extends StaticEntity {
 
@@ -93,12 +89,6 @@ public class DefaultRock extends StaticEntity {
 		default:
 			break;
 		}
-	}
-
-	@Override
-	public void render(Graphics graphics) {
-		graphics.drawImage(frame, (int) x, (int) y, null);
-		drawDebug(graphics);
 	}
 
 	@Override

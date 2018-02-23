@@ -4,8 +4,6 @@ import java.awt.image.BufferedImage;
 
 /**
  * A "tile" that is rendered within a map sector
- * 
- * @author Evan Gartley
  */
 public class MapTile {
 

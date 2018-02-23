@@ -20,10 +20,14 @@ import net.egartley.beyondorigins.objects.GameState;
 import net.egartley.beyondorigins.objects.SpriteSheet;
 import net.egartley.beyondorigins.threads.MasterTick;
 
+/**
+ * @author Evan Gartley
+ */
 public class Game extends Canvas implements Runnable {
 
 	// SELF
 	private static final long serialVersionUID = 8213282993283826186L;
+	private static long startTime;
 	private static short frames;
 	private static short currentFrames;
 	private static JFrame frame;
@@ -57,13 +61,18 @@ public class Game extends Canvas implements Runnable {
 	public static GameState currentGameState;
 
 	private void init() {
+		Debug.out("Initializing graphics and entities...");
 		loadGraphicsAndEntities();
+		Debug.out("Graphics and entities were initialized");
+		Debug.out("Loading maps...");
 		loadMaps();
+		Debug.out("Maps were loaded");
 		currentGameState = new InGameState();
 		this.addKeyListener(new Keyboard());
 	}
 
 	public static void main(String[] args) {
+		startTime = System.currentTimeMillis();
 		Game game = new Game();
 		game.setPreferredSize(windowDimension);
 		game.setMaximumSize(windowDimension);
@@ -80,8 +89,11 @@ public class Game extends Canvas implements Runnable {
 		frame.add(game);
 		// center the frame's window in the user's screen
 		frame.setLocationRelativeTo(null);
-		// actually show the frame
+		// actually show it
 		frame.setVisible(true);
+
+		Debug.out("Initialized the JFrame");
+
 		// actually start the game
 		game.start();
 	}
@@ -90,6 +102,7 @@ public class Game extends Canvas implements Runnable {
 	 * Loads all of the images in "/resources/images"
 	 */
 	private void loadGraphicsAndEntities() {
+		Debug.out("Loading images...");
 		ImageStore.loadAll();
 		// this upscales all images to a factor of 2 (i.e. each pixel in an image will
 		// be rendered as 2x2 pixels)
@@ -107,7 +120,7 @@ public class Game extends Canvas implements Runnable {
 		Entities.PLAYER = new Player(
 				new SpriteSheet(image, 15 * scale, 23 * scale, 2, (short) 4).getSpriteCollection());
 		// ************ PLAYER END ************
-
+		Debug.out("Initialized the player");
 		// ************ DUMMY BEGIN ***********
 		image = ImageStore.dummy;
 		if (image != null) {
@@ -119,24 +132,27 @@ public class Game extends Canvas implements Runnable {
 		Entities.DUMMY = new Dummy(
 				new SpriteSheet(image, 15 * scale, 23 * scale, 2, (short) 4).getSpriteCollection().get(0));
 		// ************ DUMMY END *************
-
+		Debug.out("Initialized the dummy");
 		// ******** DEFAULT TREE BEGIN ********
 		Entities.TREE = new DefaultTree(new SpriteSheet(ImageStore.treeDefault, ImageStore.treeDefault.getWidth(),
 				ImageStore.treeDefault.getHeight(), 1, (short) 1).getSpriteCollection().get(0));
 		// ******** DEFAULT TREE END **********
-
+		Debug.out("Initialized the default tree");
 		// ******** DEFAULT ROCK BEGIN ********
 		Entities.ROCK = new DefaultRock(new SpriteSheet(ImageStore.rockDefault, ImageStore.rockDefault.getWidth(),
 				ImageStore.rockDefault.getHeight(), 1, (short) 1).getSpriteCollection().get(0));
 		// ******** DEFAULT TREE END **********
+		Debug.out("Initialized the default rock");
 	}
 
 	/**
 	 * Loads all maps and their sectors' tile definitions
 	 */
 	private void loadMaps() {
+		Debug.out("Loading tiles...");
 		// load map tiles used while rendering individual sectors
 		TileBuilder.load();
+		Debug.out("Defining sectors...");
 		// define all of the map sectors, which is basically just their tile layout
 		AllSectors.define();
 	}
@@ -172,6 +188,7 @@ public class Game extends Canvas implements Runnable {
 
 	@Override
 	public void run() {
+		Debug.out("Starting master render thread...");
 		// load images, save data, etc.
 		init();
 		// enable double buffering
@@ -183,6 +200,7 @@ public class Game extends Canvas implements Runnable {
 		Graphics2D g2d = (Graphics2D) graphics;
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		// actually render (for the first time)
+		Debug.out("Rendering for the first time...");
 		render();
 		// setup system for ensuring that the game runs at most 60 fps
 		long lastTime = System.nanoTime();
@@ -191,6 +209,7 @@ public class Game extends Canvas implements Runnable {
 		double delta = 0.0D;
 		// request user's operating system "focus", i.e. mouse and keyboard input
 		requestFocus();
+		Debug.out("Startup: " + ((System.currentTimeMillis() - startTime) / 1000.0) + " seconds");
 		while (running) {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
@@ -213,6 +232,7 @@ public class Game extends Canvas implements Runnable {
 				e.printStackTrace();
 			}
 		}
+		Debug.out("Stopping master render thread...");
 		// end the game, thus terminating the process
 		stop();
 	}
@@ -226,6 +246,7 @@ public class Game extends Canvas implements Runnable {
 	 * Stops all calls to tick methods, but render methods are still called
 	 */
 	public static void stopMainTickThread() {
+		Debug.out("Stopping main tick thread...");
 		runTickThread = false;
 	}
 
@@ -233,6 +254,7 @@ public class Game extends Canvas implements Runnable {
 	 * Restarts the main tick thread, which enables calls to tick methods
 	 */
 	public static void restartMainTickThread() {
+		Debug.out("Starting main tick thread...");
 		runTickThread = true;
 		masterTickThread = new Thread(tick);
 		masterTickThread.setPriority(2);

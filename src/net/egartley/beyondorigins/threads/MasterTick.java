@@ -44,9 +44,9 @@ public class MasterTick implements Runnable {
 	}
 
 	private synchronized void tick() {
-		// main tick
 		if (Game.currentGameState != null) {
 			// null check because the first call would have Game.currentGameState as null
+			// TODO: Fix?
 			Game.currentGameState.tick();
 		}
 	}

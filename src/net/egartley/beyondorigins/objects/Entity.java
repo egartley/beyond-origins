@@ -18,7 +18,6 @@ import net.egartley.beyondorigins.logic.math.Calculate;
  * An object or character that can rendered with a sprite and have a specific
  * position
  * 
- * @author Evan Gartley
  * @see AnimatedEntity
  * @see StaticEntity
  */

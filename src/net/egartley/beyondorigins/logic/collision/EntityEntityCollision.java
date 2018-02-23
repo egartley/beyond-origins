@@ -10,8 +10,6 @@ import net.egartley.beyondorigins.objects.Entity;
 
 /**
  * A collision between two different entities
- * 
- * @author Evan Gartley
  */
 public class EntityEntityCollision {
 

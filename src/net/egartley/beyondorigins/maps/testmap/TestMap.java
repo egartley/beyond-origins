@@ -2,6 +2,7 @@ package net.egartley.beyondorigins.maps.testmap;
 
 import java.awt.Graphics;
 
+import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.logic.events.MapSectorChangeEvent;
 import net.egartley.beyondorigins.maps.testmap.sectors.Sector1;
 import net.egartley.beyondorigins.maps.testmap.sectors.Sector2;
@@ -17,8 +18,8 @@ public class TestMap extends Map {
 		changeSector(sectors.get(0));
 		// stupid fix for sector changing, should be implemented in the map sector
 		// change boundary constructor somehow
-		sectors.get(0).changeBoundaries.get(0).goingTo = sectors.get(1);
-		sectors.get(1).changeBoundaries.get(0).goingTo = sectors.get(0);
+		sectors.get(0).changeBoundaries.get(0).to = sectors.get(1);
+		sectors.get(1).changeBoundaries.get(0).to = sectors.get(0);
 	}
 
 	@Override
@@ -33,7 +34,7 @@ public class TestMap extends Map {
 
 	@Override
 	public void onSectorChange(MapSectorChangeEvent event) {
-		// Debug.info("Moved from sector \"" + event.from + "\" to \"" + event.to + "\"");
+		Debug.info("Moved from sector \"" + event.from + "\" to \"" + event.to + "\"");
 	}
 
 }

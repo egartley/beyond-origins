@@ -6,9 +6,7 @@ import net.egartley.beyondorigins.objects.Entity;
 
 /**
  * Represents a {@link Boundary} that is specifically tailored for use with an
- * entity
- * 
- * @author Evan Gartley
+ * {@link Entity}
  */
 public class EntityBoundary extends Boundary {
 
@@ -16,9 +14,11 @@ public class EntityBoundary extends Boundary {
 	 * The entity in which to base the boundary
 	 */
 	public Entity parent;
-
+	/**
+	 * Human-readable identifcation for this entity boundary
+	 */
 	public String name;
-	
+
 	/**
 	 * Creates a new boundary for the given entity (with no padding)
 	 * 
@@ -90,12 +90,9 @@ public class EntityBoundary extends Boundary {
 	public void tick() {
 		x = (int) parent.x - horizontalOffset;
 		y = (int) parent.y - verticalOffset;
-		top = y;
-		bottom = top + height;
-		left = x;
-		right = left + width;
+		super.tick();
 	}
-	
+
 	public String toString() {
 		return name;
 	}
