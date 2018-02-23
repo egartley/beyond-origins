@@ -10,14 +10,20 @@ public class Keyboard implements KeyListener {
 
 	private static ArrayList<Integer> pressedKeyCodes = new ArrayList<Integer>();
 
-	public static boolean isPressed(int keycode) {
+	/**
+	 * 
+	 * @param keycode
+	 *            The key code from {@link java.awt.event.KeyEvent KeyEvent }
+	 * @return Whether or not the provided key is currently being pressed down
+	 */
+	public static boolean isKeyPressed(int keycode) {
 		return pressedKeyCodes.contains(keycode);
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int keycode = e.getKeyCode();
-		if (!isPressed(keycode)) {
+		if (!isKeyPressed(keycode)) {
 			pressedKeyCodes.add(keycode);
 		}
 	}

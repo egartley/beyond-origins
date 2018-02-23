@@ -13,7 +13,7 @@ import net.egartley.beyondorigins.objects.MapSectorDefinition;
 public class Sector2 extends MapSector {
 
 	public Sector2(Map parent, MapSectorDefinition def) {
-		super(parent, def, new MapSectorChangeBoundary(Game.WINDOW_WIDTH / 2 - 37, 150, 74, 74));
+		super(parent, def, new MapSectorChangeBoundary(0, Game.WINDOW_HEIGHT - 18, Game.WINDOW_WIDTH, 18));
 	}
 
 	@Override
@@ -36,15 +36,14 @@ public class Sector2 extends MapSector {
 	}
 
 	@Override
-	public void onPlayerEnter() {
-		// set default/initial position
-		Entities.PLAYER.x = Game.WINDOW_WIDTH / 2 - (Entities.PLAYER.sprite.frameWidth / 2);
-		Entities.PLAYER.y = Game.WINDOW_HEIGHT - 100;
+	public void onPlayerEnter(MapSector from) {
+		// Entities.PLAYER.x = Game.WINDOW_WIDTH / 2 - (Entities.PLAYER.sprite.frameWidth / 2);
+		Entities.PLAYER.y = Game.WINDOW_HEIGHT - 84;
 	}
 
 	@Override
-	public void onPlayerLeave() {
-
+	public void onPlayerLeave(MapSector to) {
+		
 	}
 
 }

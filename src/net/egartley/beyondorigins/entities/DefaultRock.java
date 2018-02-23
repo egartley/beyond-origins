@@ -110,7 +110,7 @@ public class DefaultRock extends StaticEntity {
 
 	@Override
 	protected void setBoundaries() {
-		boundary = new EntityBoundary(this, frame.getWidth(), frame.getHeight(), new BoundaryPadding(-4, -2, -8, -2));
+		boundary = new EntityBoundary(this, frame.getWidth(), frame.getHeight(), new BoundaryPadding(-4, 1, -8, 1));
 		boundaries.add(boundary);
 	}
 

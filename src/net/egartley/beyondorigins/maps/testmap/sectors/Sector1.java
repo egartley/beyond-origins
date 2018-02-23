@@ -20,7 +20,7 @@ public class Sector1 extends MapSector {
 	private ArrayList<DefaultRock> rocks;
 
 	public Sector1(Map parent, MapSectorDefinition def) {
-		super(parent, def, new MapSectorChangeBoundary(Game.WINDOW_WIDTH / 2 - 37, 50, 74, 74));
+		super(parent, def, new MapSectorChangeBoundary(0, 0, Game.WINDOW_WIDTH, 18));
 	}
 
 	@Override
@@ -64,10 +64,13 @@ public class Sector1 extends MapSector {
 	}
 
 	@Override
-	public void onPlayerEnter() {
-		// set default/initial position
-		Entities.PLAYER.x = 200;
-		Entities.PLAYER.y = 200;
+	public void onPlayerEnter(MapSector from) {
+		if (from == null) {
+			Entities.PLAYER.x = 200;
+			Entities.PLAYER.y = 200;
+		} else {
+			Entities.PLAYER.y = 50;
+		}
 
 		// sector-specific entities
 		trees = new ArrayList<DefaultTree>();
@@ -87,7 +90,7 @@ public class Sector1 extends MapSector {
 	}
 
 	@Override
-	public void onPlayerLeave() {
+	public void onPlayerLeave(MapSector to) {
 		// de-register all sector-specific entities
 		for (DefaultTree tree : trees) {
 			tree.kill();

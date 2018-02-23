@@ -2,12 +2,10 @@ package net.egartley.beyondorigins.maps.testmap;
 
 import java.awt.Graphics;
 
-import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.logic.events.MapSectorChangeEvent;
 import net.egartley.beyondorigins.maps.testmap.sectors.Sector1;
 import net.egartley.beyondorigins.maps.testmap.sectors.Sector2;
 import net.egartley.beyondorigins.objects.Map;
-import net.egartley.beyondorigins.objects.MapSector;
 
 public class TestMap extends Map {
 
@@ -34,18 +32,8 @@ public class TestMap extends Map {
 	}
 
 	@Override
-	public void changeSector(MapSector sector) {
-		onSectorChange(new MapSectorChangeEvent(currentSector, sector));
-		if (currentSector != null)
-			currentSector.onPlayerLeave();
-
-		currentSector = sector;
-		currentSector.onPlayerEnter();
-	}
-
-	@Override
 	public void onSectorChange(MapSectorChangeEvent event) {
-		Debug.info("Moved from sector \"" + event.from + "\" to \"" + event.to + "\"");
+		// Debug.info("Moved from sector \"" + event.from + "\" to \"" + event.to + "\"");
 	}
 
 }

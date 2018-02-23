@@ -94,4 +94,8 @@ public abstract class Boundary {
 		return new Rectangle(x, y, width, height);
 	}
 
+	public String toString() {
+		return "Boundary#" + hashCode();
+	}
+	
 }

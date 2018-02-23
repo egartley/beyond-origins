@@ -7,13 +7,20 @@ import java.awt.Graphics;
 
 import net.egartley.beyondorigins.entities.Entities;
 
+/**
+ * Stuff for debugging
+ * 
+ * @author Evan Gartley
+ */
 public class Debug {
 
 	private static Font font = new Font("Consolas", Font.PLAIN, 12);
 	private static FontMetrics fontMetrics;
 	private static Color backgroundColor = new Color(0, 0, 0, 72);
 	private static boolean setFontMetrics;
-	private static int lx = 24, ly = 24, d = 18;
+	private static int lx = 24;
+	private static int ly = 24;
+	private static int d = 18;
 
 	/**
 	 * Prints the given object using {@link java.io.PrintStream#println(Object)
@@ -62,27 +69,30 @@ public class Debug {
 	private static void drawLine(String s, Graphics graphics, int r) {
 		if (setFontMetrics == false) {
 			fontMetrics = graphics.getFontMetrics();
-			// don't do this every tick, only needs to be done once
+			// don't do this every tick, only once
 			setFontMetrics = true;
 		}
-		int stringWidth = fontMetrics.stringWidth(s);
 		graphics.setColor(backgroundColor);
-		graphics.fillRect(lx - 4, ly + (r * d) - font.getSize(), stringWidth + 8, font.getSize() + 4);
+		graphics.fillRect(lx - 4, ly + (r * d) - font.getSize(), fontMetrics.stringWidth(s) + 8, font.getSize() + 4);
 		graphics.setColor(Color.WHITE);
 		graphics.drawString(s, lx, ly + (r * d));
 	}
 
+	/**
+	 * Render debug information
+	 * 
+	 * @param graphics
+	 *            Graphics object to use
+	 */
 	public static void render(Graphics graphics) {
 		if (Game.debug) {
 			graphics.setFont(font);
-			drawLine("Player (" + (int) Entities.PLAYER.x + ", " + (int) Entities.PLAYER.y + "), (effective "
-					+ Entities.PLAYER.effectiveX + ", " + Entities.PLAYER.effectiveY + ")", graphics, 0);
+			drawLine("Player (x = " + (int) Entities.PLAYER.x + ", y = " + (int) Entities.PLAYER.y + ")", graphics, 0);
 			drawLine("Collided: " + Entities.PLAYER.isCollided, graphics, 1);
 			if (Entities.PLAYER.lastCollision != null)
-				drawLine("Last collision: " + Entities.PLAYER.lastCollision.boundary1.parent + " ("
-						+ Entities.PLAYER.boundaries.indexOf(Entities.PLAYER.lastCollision.boundary1) + ") and "
-						+ Entities.PLAYER.lastCollision.boundary2.parent + ", collidedSide: "
-						+ Entities.PLAYER.lastCollisionEvent.collidedSide, graphics, 2);
+				drawLine("Last collision: " + Entities.PLAYER.lastCollision.boundary1 + " and "
+						+ Entities.PLAYER.lastCollision.boundary2.parent + " (collidedSide = "
+						+ Entities.PLAYER.lastCollisionEvent.collidedSide + ")", graphics, 2);
 		}
 	}
 

@@ -61,12 +61,12 @@ public abstract class MapSector {
 	/**
 	 * Called upon entering this sector
 	 */
-	public abstract void onPlayerEnter();
+	public abstract void onPlayerEnter(MapSector from);
 
 	/**
 	 * Called upon leaving this sector
 	 */
-	public abstract void onPlayerLeave();
+	public abstract void onPlayerLeave(MapSector to);
 
 	/**
 	 * Renders all of the tiles within {@link #definition} starting at 0, 0

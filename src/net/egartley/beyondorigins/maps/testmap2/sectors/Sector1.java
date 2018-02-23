@@ -24,13 +24,13 @@ public class Sector1 extends MapSector {
 	}
 
 	@Override
-	public void onPlayerEnter() {
-
+	public void onPlayerEnter(MapSector from) {
+		
 	}
 
 	@Override
-	public void onPlayerLeave() {
-
+	public void onPlayerLeave(MapSector to) {
+		
 	}
 
 }

@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins.logic.events;
 
 import net.egartley.beyondorigins.Debug;
+import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 
@@ -19,7 +20,7 @@ public class EntityEntityCollisionEvent {
 	public static final byte BOTTOM_SIDE = 2;
 	public static final byte RIGHT_SIDE = 3;
 
-	private final byte TOLERANCE = 1;
+	private int tolerance;
 
 	/**
 	 * The numerical representation for the side that the collision occured at
@@ -44,15 +45,17 @@ public class EntityEntityCollisionEvent {
 	 */
 	public EntityEntityCollisionEvent(EntityEntityCollision invoker) {
 		this.invoker = invoker;
+		// round player speed to int, ex. 1.6 would be 2
+		tolerance = (int) (Entities.PLAYER.speed + 0.5);
 		EntityBoundary collider = (EntityBoundary) invoker.boundary1;
 		EntityBoundary into = (EntityBoundary) invoker.boundary2;
-		if (into.right - TOLERANCE <= collider.left && collider.left <= into.right) {
+		if (into.right - tolerance <= collider.left && collider.left <= into.right) {
 			collidedSide = RIGHT_SIDE;
-		} else if (into.left <= collider.right && collider.right <= into.left + TOLERANCE) {
+		} else if (into.left <= collider.right && collider.right <= into.left + tolerance) {
 			collidedSide = LEFT_SIDE;
-		} else if (into.top <= collider.bottom && collider.bottom <= into.top + TOLERANCE) {
+		} else if (into.top <= collider.bottom && collider.bottom <= into.top + tolerance) {
 			collidedSide = TOP_SIDE;
-		} else if (into.bottom - TOLERANCE <= collider.top && collider.top <= into.bottom) {
+		} else if (into.bottom - tolerance <= collider.top && collider.top <= into.bottom) {
 			collidedSide = BOTTOM_SIDE;
 		} else {
 			Debug.error("Could not calcuate a collided side! (between " + invoker.entities.get(0) + " and "

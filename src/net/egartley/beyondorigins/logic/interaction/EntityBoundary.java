@@ -17,6 +17,8 @@ public class EntityBoundary extends Boundary {
 	 */
 	public Entity parent;
 
+	public String name;
+	
 	/**
 	 * Creates a new boundary for the given entity (with no padding)
 	 * 
@@ -71,6 +73,7 @@ public class EntityBoundary extends Boundary {
 		this.offset = offset;
 		horizontalOffset = padding.left + this.offset.left - this.offset.right;
 		verticalOffset = padding.top + this.offset.top - this.offset.bottom;
+		name = "EntityBoundary#" + hashCode();
 		tick();
 		setColor();
 	}
@@ -91,6 +94,10 @@ public class EntityBoundary extends Boundary {
 		bottom = top + height;
 		left = x;
 		right = left + width;
+	}
+	
+	public String toString() {
+		return name;
 	}
 
 }

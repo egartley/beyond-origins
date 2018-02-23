@@ -53,9 +53,9 @@ public class DefaultTree extends StaticEntity {
 
 		isSectorSpecific = true;
 		// set the first layer as the leaves
-		firstLayer = frame.getSubimage(0, 44, frame.getWidth(), 20);
+		firstLayer = frame.getSubimage(0, 45, frame.getWidth(), 19);
 		// set the second layer as the trunk
-		secondLayer = frame.getSubimage(0, 0, frame.getWidth(), 44);
+		secondLayer = frame.getSubimage(0, 0, frame.getWidth(), 45);
 	}
 
 	/**

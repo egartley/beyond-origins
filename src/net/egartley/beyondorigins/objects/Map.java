@@ -42,7 +42,14 @@ public abstract class Map {
 	 *            The new {@link MapSector} to go to
 	 * @see MapSector
 	 */
-	public abstract void changeSector(MapSector sector);
+	public void changeSector(MapSector sector) {
+		onSectorChange(new MapSectorChangeEvent(currentSector, sector));
+		if (currentSector != null)
+			currentSector.onPlayerLeave(sector);
+		MapSector prev = currentSector;
+		currentSector = sector;
+		currentSector.onPlayerEnter(prev);
+	}
 
 	/**
 	 * Called when the current sector changes ({@link #changeSector(MapSector)})

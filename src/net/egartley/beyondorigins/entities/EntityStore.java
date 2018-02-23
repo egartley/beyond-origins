@@ -30,7 +30,7 @@ public class EntityStore {
 	 *            The entity to add to the store
 	 */
 	public static void register(Entity entity) {
-		Debug.out("Adding entity to store... (" + entity + ")");
+		// Debug.out("Adding entity to store... (" + entity + ")");
 		if (entity.isRegistered == false) {
 			entities.add(entity);
 			entity.isRegistered = true;
@@ -48,7 +48,7 @@ public class EntityStore {
 	 *            Entity to remove
 	 */
 	public static void remove(Entity entity) {
-		Debug.out("Removing entity from store... (" + entity + ")");
+		// Debug.out("Removing entity from store... (" + entity + ")");
 		if (entities.remove(entity) == true && entity.isRegistered == false) {
 			Debug.warning("Tried to remove an entity (" + entity
 					+ ") from the store, but it was never registered in the first place");

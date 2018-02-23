@@ -22,16 +22,19 @@ public class Player extends AnimatedEntity {
 	public final byte LEFT = 3;
 	public final byte RIGHT = 4;
 
+	public final double SPEED = 1.6;
+
 	private final byte LEFT_ANIMATION = 0;
 	private final byte RIGHT_ANIMATION = 1;
+	private final byte ANIMATION_THRESHOLD = 11;
 
 	public EntityBoundary boundary;
 	public EntityBoundary headBoundary;
 	public EntityBoundary bodyBoundary;
 	public EntityBoundary feetBoundary;
 
-	public double speed = 1;
-	private byte animationThreshold = 11;
+	public double speed;
+
 	private int maximumX;
 	private int maximumY;
 
@@ -39,6 +42,7 @@ public class Player extends AnimatedEntity {
 	public boolean isAllowedToMoveDownwards = true;
 	public boolean isAllowedToMoveLeftwards = true;
 	public boolean isAllowedToMoveRightwards = true;
+
 	private boolean isMovingUpwards = false;
 	private boolean isMovingDownwards = false;
 	private boolean isMovingLeftwards = false;
@@ -175,7 +179,7 @@ public class Player extends AnimatedEntity {
 		// this allows variations of the player sprite to be added in the future
 		for (Sprite s : sprites) {
 			Animation a = new Animation(s);
-			a.setThreshold(animationThreshold);
+			a.setThreshold(ANIMATION_THRESHOLD);
 			animationCollection.add(a);
 		}
 		animation = animationCollection.get(0);
@@ -184,12 +188,16 @@ public class Player extends AnimatedEntity {
 	@Override
 	public void setBoundaries() {
 		boundary = new EntityBoundary(this, sprite.frameWidth, sprite.frameHeight, new BoundaryPadding(4, 3, 2, 3));
+		boundary.name = "Base";
 		headBoundary = new EntityBoundary(this, 19, 18, new BoundaryPadding(0, 0, 0, 0),
 				new BoundaryOffset(0, 0, 0, 5));
+		headBoundary.name = "Head";
 		bodyBoundary = new EntityBoundary(this, 30, 22, new BoundaryPadding(0, 0, 0, 0),
 				new BoundaryOffset(0, 13, 0, 0));
+		bodyBoundary.name = "Body";
 		feetBoundary = new EntityBoundary(this, 17, 16, new BoundaryPadding(0, 0, 0, 0),
 				new BoundaryOffset(0, 29, 0, 6));
+		feetBoundary.name = "Feet";
 		boundaries.add(boundary);
 		boundaries.add(headBoundary);
 		boundaries.add(bodyBoundary);
@@ -205,22 +213,26 @@ public class Player extends AnimatedEntity {
 	@Override
 	public void tick() {
 		// get keyboard input (typical W-A-S-D)
-		boolean up = Keyboard.isPressed(KeyEvent.VK_W);
-		boolean down = Keyboard.isPressed(KeyEvent.VK_S);
-		boolean left = Keyboard.isPressed(KeyEvent.VK_A);
-		boolean right = Keyboard.isPressed(KeyEvent.VK_D);
+		boolean up = Keyboard.isKeyPressed(KeyEvent.VK_W);
+		boolean down = Keyboard.isKeyPressed(KeyEvent.VK_S);
+		boolean left = Keyboard.isKeyPressed(KeyEvent.VK_A);
+		boolean right = Keyboard.isKeyPressed(KeyEvent.VK_D);
 		// reset all booleans for player's current movement
 		isMovingUpwards = false;
 		isMovingDownwards = false;
 		isMovingLeftwards = false;
 		isMovingRightwards = false;
+
 		// check if moving diagonal
 		if ((up == true && left == true) || (up == true && right == true) || (down == true && left == true)
 				|| (down == true && right == true)) {
 			// slightly reduce speed to keep diagonal speed the same as when moving only one
 			// direction
-			speed = 0.95;
+			speed = SPEED - 0.05;
+		} else {
+			speed = SPEED;
 		}
+
 		if (up) {
 			isMovingUpwards = true;
 			move(UP);
@@ -241,8 +253,6 @@ public class Player extends AnimatedEntity {
 			// not moving at all, so stop the animation
 			animation.stop();
 		}
-		// reset speed
-		speed = 1.0;
 
 		animation.tick();
 		for (EntityBoundary boundary : boundaries) {
@@ -255,7 +265,10 @@ public class Player extends AnimatedEntity {
 
 	@Override
 	protected void setCollisions() {
+		// nothing here right now because the player is not sector-specific, therefore
+		// sector-specific entities are to define collisions with the player
 
+		// this could change in the future, though
 	}
 
 	@Override
@@ -265,7 +278,7 @@ public class Player extends AnimatedEntity {
 
 	@Override
 	public void drawSecondLayer(Graphics graphics) {
-
+		// armor? different clothes? accessories?
 	}
 
 }
