@@ -21,8 +21,7 @@ public class Player extends AnimatedEntity {
 	public final byte DOWN = 2;
 	public final byte LEFT = 3;
 	public final byte RIGHT = 4;
-
-	public final double SPEED = 1.6;
+	public final double SPEED = 2;
 
 	private final byte LEFT_ANIMATION = 0;
 	private final byte RIGHT_ANIMATION = 1;
@@ -64,7 +63,7 @@ public class Player extends AnimatedEntity {
 
 	private void move(byte direction) {
 		if (animation.isStopped == true) {
-			// animation was stopped, so restart it because we're moving!
+			// animation was stopped, so restart it because we're moving
 			animation.restart();
 		}
 		switch (direction) {
@@ -212,7 +211,7 @@ public class Player extends AnimatedEntity {
 
 	@Override
 	public void tick() {
-		// get keyboard input (typical W-A-S-D)
+		// get keyboard input (typical WASD)
 		boolean up = Keyboard.isKeyPressed(KeyEvent.VK_W);
 		boolean down = Keyboard.isKeyPressed(KeyEvent.VK_S);
 		boolean left = Keyboard.isKeyPressed(KeyEvent.VK_A);
@@ -258,9 +257,6 @@ public class Player extends AnimatedEntity {
 		for (EntityBoundary boundary : boundaries) {
 			boundary.tick();
 		}
-
-		effectiveX = boundary.left;
-		effectiveY = boundary.top;
 	}
 
 	@Override
@@ -269,16 +265,6 @@ public class Player extends AnimatedEntity {
 		// sector-specific entities are to define collisions with the player
 
 		// this could change in the future, though
-	}
-
-	@Override
-	public void drawFirstLayer(Graphics graphics) {
-
-	}
-
-	@Override
-	public void drawSecondLayer(Graphics graphics) {
-		// armor? different clothes? accessories?
 	}
 
 }

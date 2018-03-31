@@ -43,10 +43,13 @@ public class EntityEntityCollisionEvent {
 	 */
 	public EntityEntityCollisionEvent(EntityEntityCollision invoker) {
 		this.invoker = invoker;
+		
 		// round player speed to int, ex. 1.6 would be 2
 		tolerance = (int) (Entities.PLAYER.speed + 0.5);
-		EntityBoundary collider = (EntityBoundary) invoker.boundary1;
-		EntityBoundary into = (EntityBoundary) invoker.boundary2;
+		
+		EntityBoundary collider = invoker.boundary1;
+		EntityBoundary into = invoker.boundary2;
+		
 		if (into.right - tolerance <= collider.left && collider.left <= into.right) {
 			collidedSide = RIGHT_SIDE;
 		} else if (into.left <= collider.right && collider.right <= into.left + tolerance) {

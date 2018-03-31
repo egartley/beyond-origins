@@ -13,7 +13,7 @@ public class InGameState extends GameState {
 
 	public InGameState() {
 		identificationNumber = GameState.IN_GAME;
-		currentMap = new TestMap();
+		currentMap = new TestMap("TestMap");
 	}
 
 	@Override

@@ -69,7 +69,13 @@ public class Sector1 extends MapSector {
 			Entities.PLAYER.x = 200;
 			Entities.PLAYER.y = 200;
 		} else {
-			Entities.PLAYER.y = 50;
+			if (from.equals(parent.sectors.get(1))) {
+				// from sector 2
+				Entities.PLAYER.y = 50;
+			} else if (from.equals(parent.sectors.get(3))) {
+				// from sector 4
+				Entities.PLAYER.x = Game.WINDOW_WIDTH - 84;
+			}
 		}
 
 		// sector-specific entities

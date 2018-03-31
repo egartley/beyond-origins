@@ -66,14 +66,6 @@ public abstract class Entity {
 	 */
 	public double y;
 	/**
-	 * The entity's "effective" x-axis coordinate (includes its boundary)
-	 */
-	public int effectiveX;
-	/**
-	 * The entity's "effective" y-axis coordinate (includes its boundary)
-	 */
-	public int effectiveY;
-	/**
 	 * The entity's unique identifacation number. Use {@link #id} for user-friendly
 	 * identification
 	 */

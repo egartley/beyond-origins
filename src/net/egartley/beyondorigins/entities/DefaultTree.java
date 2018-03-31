@@ -99,7 +99,7 @@ public class DefaultTree extends StaticEntity {
 	@Override
 	protected void setBoundaries() {
 		boundary = new EntityBoundary(this, frame.getWidth(), frame.getHeight(),
-				new BoundaryPadding(-24, -24, -36, -24));
+				new BoundaryPadding(-24, -24, -24, -24));
 		boundaries.add(boundary);
 	}
 

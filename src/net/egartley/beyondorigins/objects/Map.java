@@ -18,15 +18,20 @@ public abstract class Map {
 	 */
 	public ArrayList<MapSector> sectors;
 	/**
+	 * Human-readable identifier
+	 */
+	public String id;
+	/**
 	 * The current sector to use while rendering
 	 * 
 	 * @see MapSector
 	 * @see MapSectorDefinition
 	 */
-	public MapSector currentSector;
+	public static MapSector currentSector;
 
-	public Map() {
+	public Map(String id) {
 		sectors = new ArrayList<MapSector>();
+		this.id = id;
 	}
 
 	public abstract void tick();
@@ -40,8 +45,8 @@ public abstract class Map {
 	 *            The new {@link MapSector} to go to
 	 * @see MapSector
 	 */
-	public void changeSector(MapSector sector) {
-		onSectorChange(new MapSectorChangeEvent(currentSector, sector));
+	public void changeSector(MapSector sector, MapSector comingFrom) {
+		onSectorChange(new MapSectorChangeEvent(comingFrom, sector));
 		if (currentSector != null)
 			currentSector.onPlayerLeave(sector);
 		MapSector prev = currentSector;
@@ -54,6 +59,10 @@ public abstract class Map {
 	 */
 	public void onSectorChange(MapSectorChangeEvent event) {
 
+	}
+
+	public String toString() {
+		return id;
 	}
 
 }

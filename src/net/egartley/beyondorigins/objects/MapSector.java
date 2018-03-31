@@ -15,15 +15,15 @@ import net.egartley.beyondorigins.logic.interaction.MapSectorChangeBoundary;
 public abstract class MapSector {
 
 	/**
-	 * Default/allowed tile size in pixels
+	 * Default tile size in pixels
 	 */
 	private final short TILE_SIZE = 32;
 	/**
-	 * Change in x-axis when rendering
+	 * Change in x-axis while rendering
 	 */
 	private int deltaX;
 	/**
-	 * Change in y-axis when rendering
+	 * Change in y-axis while rendering
 	 */
 	private int deltaY;
 
@@ -53,24 +53,24 @@ public abstract class MapSector {
 	 * 
 	 * @param parent
 	 *            The map that this sector is in
-	 * @param def
+	 * @param definition
 	 *            The {@link MapSectorDefinition} to use
 	 * @param boundaries
 	 *            The areas, or boundaries, where a sector change can occur
 	 */
-	public MapSector(Map parent, MapSectorDefinition def, MapSectorChangeBoundary... boundaries) {
+	public MapSector(Map parent, MapSectorDefinition definition, MapSectorChangeBoundary... boundaries) {
 		this.parent = parent;
-		definition = def;
+		this.definition = definition;
 		changeBoundaries = new ArrayList<MapSectorChangeBoundary>();
 		changeCollisions = new ArrayList<MapSectorChangeCollision>();
+		MapSector me = this;
 
 		for (MapSectorChangeBoundary changeBoundary : boundaries) {
-			// initialize each collision
 			changeBoundaries.add(changeBoundary);
 			changeCollisions.add(new MapSectorChangeCollision(changeBoundary, Entities.PLAYER.boundary) {
 				@Override
 				public void onCollide() {
-					parent.changeSector(changeBoundary.to);
+					parent.changeSector(changeBoundary.to, me);
 				}
 			});
 		}
@@ -94,12 +94,12 @@ public abstract class MapSector {
 	/**
 	 * Called upon entering this sector
 	 */
-	public abstract void onPlayerEnter(MapSector from);
+	public abstract void onPlayerEnter(MapSector comingFrom);
 
 	/**
 	 * Called upon leaving this sector
 	 */
-	public abstract void onPlayerLeave(MapSector to);
+	public abstract void onPlayerLeave(MapSector goingTo);
 
 	/**
 	 * Renders all of the tiles within {@link #definition} starting at 0, 0
@@ -119,6 +119,10 @@ public abstract class MapSector {
 			deltaX = 0;
 			deltaY += TILE_SIZE;
 		}
+	}
+
+	public String toString() {
+		return parent + ", sector " + parent.sectors.indexOf(this);
 	}
 
 }

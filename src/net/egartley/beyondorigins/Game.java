@@ -16,8 +16,7 @@ import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.input.Keyboard;
 import net.egartley.beyondorigins.maps.TileBuilder;
 import net.egartley.beyondorigins.media.images.ImageStore;
-import net.egartley.beyondorigins.objects.GameState;
-import net.egartley.beyondorigins.objects.SpriteSheet;
+import net.egartley.beyondorigins.objects.*;
 import net.egartley.beyondorigins.threads.MasterTick;
 
 /**
@@ -121,6 +120,7 @@ public class Game extends Canvas implements Runnable {
 				new SpriteSheet(image, 15 * scale, 23 * scale, 2, (short) 4).getSpriteCollection());
 		// ************ PLAYER END ************
 		Debug.out("Initialized the player");
+
 		// ************ DUMMY BEGIN ***********
 		image = ImageStore.dummy;
 		if (image != null) {
@@ -133,11 +133,13 @@ public class Game extends Canvas implements Runnable {
 				new SpriteSheet(image, 15 * scale, 23 * scale, 2, (short) 4).getSpriteCollection().get(0));
 		// ************ DUMMY END *************
 		Debug.out("Initialized the dummy");
+
 		// ******** DEFAULT TREE BEGIN ********
 		Entities.TREE = new DefaultTree(new SpriteSheet(ImageStore.treeDefault, ImageStore.treeDefault.getWidth(),
 				ImageStore.treeDefault.getHeight(), 1, (short) 1).getSpriteCollection().get(0));
 		// ******** DEFAULT TREE END **********
 		Debug.out("Initialized the default tree");
+
 		// ******** DEFAULT ROCK BEGIN ********
 		Entities.ROCK = new DefaultRock(new SpriteSheet(ImageStore.rockDefault, ImageStore.rockDefault.getWidth(),
 				ImageStore.rockDefault.getHeight(), 1, (short) 1).getSpriteCollection().get(0));
@@ -159,7 +161,8 @@ public class Game extends Canvas implements Runnable {
 
 	private synchronized void start() {
 		if (running == true) {
-			// already "running" so the render and tick threads should have already been sta
+			// already "running" so the render and tick threads should have already been
+			// started
 			return;
 		}
 		running = true;

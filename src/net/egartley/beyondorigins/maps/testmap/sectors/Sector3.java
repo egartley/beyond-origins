@@ -10,11 +10,10 @@ import net.egartley.beyondorigins.objects.Map;
 import net.egartley.beyondorigins.objects.MapSector;
 import net.egartley.beyondorigins.objects.MapSectorDefinition;
 
-public class Sector2 extends MapSector {
+public class Sector3 extends MapSector {
 
-	public Sector2(Map parent, MapSectorDefinition def) {
-		super(parent, def, new MapSectorChangeBoundary(0, Game.WINDOW_HEIGHT - 18, Game.WINDOW_WIDTH, 18),
-				new MapSectorChangeBoundary(Game.WINDOW_WIDTH - 18, 0, 18, Game.WINDOW_HEIGHT));
+	public Sector3(Map parent, MapSectorDefinition def) {
+		super(parent, def, new MapSectorChangeBoundary(0, 0, 18, Game.WINDOW_HEIGHT));
 	}
 
 	@Override
@@ -38,13 +37,7 @@ public class Sector2 extends MapSector {
 
 	@Override
 	public void onPlayerEnter(MapSector from) {
-		if (from.equals(parent.sectors.get(0))) {
-			// from sector 1
-			Entities.PLAYER.y = Game.WINDOW_HEIGHT - 84;
-		} else if (from.equals(parent.sectors.get(2))) {
-			// from sector 3
-			Entities.PLAYER.x = Game.WINDOW_WIDTH - 84;
-		}
+		Entities.PLAYER.x = 52;
 	}
 
 	@Override
