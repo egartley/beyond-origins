@@ -6,12 +6,12 @@ The primary objective right now is to have a viable framework, or scaffolding, t
 
 <img src="https://github.com/egartley/beyond-origins/blob/indev/resources/images/screenshot.png">
 
-JavaDoc can be found <a href="https://docs.egartley.net/beyond-origins/?via=githubreadme">here</a> (updated periodically)
+JavaDoc can be found <a href="https://egartley.net/docs/beyond-origins/?via=githubreadme">here</a> (updated periodically)
 
 <h2 style="margin-top:36px">To-do List</h2>
 
-• Add sector-to-sector connections (i.e. be able to move from one map sector to another)<br>
-• Make better sprites for everything (tree, grass, rock, etc.)
+â€¢ Add sector-to-sector connections (i.e. be able to move from one map sector to another)<br>
+â€¢ Make better sprites for everything (tree, grass, rock, etc.)
 
 <h2 style="margin-top:36px">Additional Information</h2>
 
