@@ -1,8 +1,5 @@
 package net.egartley.beyondorigins.maps.testmap.sectors;
 
-import java.awt.Graphics;
-import java.util.ArrayList;
-
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.entities.DefaultRock;
 import net.egartley.beyondorigins.entities.DefaultTree;
@@ -14,96 +11,99 @@ import net.egartley.beyondorigins.objects.MapSector;
 import net.egartley.beyondorigins.objects.MapSectorDefinition;
 import net.egartley.beyondorigins.objects.Sprite;
 
+import java.awt.*;
+import java.util.ArrayList;
+
 public class Sector1 extends MapSector {
 
-	private ArrayList<DefaultTree> trees;
-	private ArrayList<DefaultRock> rocks;
+    private ArrayList<DefaultTree> trees;
+    private ArrayList<DefaultRock> rocks;
 
-	public Sector1(Map parent, MapSectorDefinition def) {
-		super(parent, def, new MapSectorChangeBoundary(0, 0, Game.WINDOW_WIDTH, 18));
-	}
+    public Sector1(Map parent, MapSectorDefinition def) {
+        super(parent, def, new MapSectorChangeBoundary(0, 0, Game.WINDOW_WIDTH, 18));
+    }
 
-	@Override
-	public void render(Graphics graphics) {
-		super.render(graphics);
-		
-		for (DefaultTree tree : trees) {
-			tree.drawFirstLayer(graphics);
-		}
-		for (DefaultRock rock : rocks) {
-			rock.drawFirstLayer(graphics);
-		}
+    @Override
+    public void render(Graphics graphics) {
+        super.render(graphics);
 
-		Entities.DUMMY.render(graphics);
-		Entities.PLAYER.render(graphics);
+        for (DefaultTree tree : trees) {
+            tree.drawFirstLayer(graphics);
+        }
+        for (DefaultRock rock : rocks) {
+            rock.drawFirstLayer(graphics);
+        }
 
-		for (DefaultTree tree : trees) {
-			tree.drawSecondLayer(graphics);
-		}
-		for (DefaultRock rock : rocks) {
-			rock.drawSecondLayer(graphics);
-		}
+        Entities.DUMMY.render(graphics);
+        Entities.PLAYER.render(graphics);
 
-		for (MapSectorChangeBoundary boundary : changeBoundaries) {
-			boundary.draw(graphics);
-		}
-	}
+        for (DefaultTree tree : trees) {
+            tree.drawSecondLayer(graphics);
+        }
+        for (DefaultRock rock : rocks) {
+            rock.drawSecondLayer(graphics);
+        }
 
-	@Override
-	public void tick() {
-		Entities.PLAYER.tick();
-		for (DefaultTree tree : trees) {
-			tree.tick();
-		}
-		for (DefaultRock rock : rocks) {
-			rock.tick();
-		}
-		for (MapSectorChangeCollision collision : changeCollisions) {
-			collision.tick();
-		}
-	}
+        for (MapSectorChangeBoundary boundary : changeBoundaries) {
+            boundary.draw(graphics);
+        }
+    }
 
-	@Override
-	public void onPlayerEnter(MapSector from) {
-		if (from == null) {
-			Entities.PLAYER.x = 200;
-			Entities.PLAYER.y = 200;
-		} else {
-			if (from.equals(parent.sectors.get(1))) {
-				// from sector 2
-				Entities.PLAYER.y = 50;
-			} else if (from.equals(parent.sectors.get(3))) {
-				// from sector 4
-				Entities.PLAYER.x = Game.WINDOW_WIDTH - 84;
-			}
-		}
+    @Override
+    public void tick() {
+        Entities.PLAYER.tick();
+        for (DefaultTree tree : trees) {
+            tree.tick();
+        }
+        for (DefaultRock rock : rocks) {
+            rock.tick();
+        }
+        for (MapSectorChangeCollision collision : changeCollisions) {
+            collision.tick();
+        }
+    }
 
-		// sector-specific entities
-		trees = new ArrayList<DefaultTree>();
-		Sprite s = Entities.TREE.sprite;
-		trees.add(new DefaultTree(s, 100, 200));
-		trees.add(new DefaultTree(s, 36, 200));
+    @Override
+    public void onPlayerEnter(MapSector from) {
+        if (from == null) {
+            Entities.PLAYER.x = 200;
+            Entities.PLAYER.y = 200;
+        } else {
+            if (from.equals(parent.sectors.get(1))) {
+                // from sector 2
+                Entities.PLAYER.y = 50;
+            } else if (from.equals(parent.sectors.get(3))) {
+                // from sector 4
+                Entities.PLAYER.x = Game.WINDOW_WIDTH - 84;
+            }
+        }
 
-		rocks = new ArrayList<DefaultRock>();
-		// re-use same sprite variable, no use in creating a new one if there is already
-		// one in memory
-		s = Entities.ROCK.sprite;
-		rocks.add(new DefaultRock(s, 300, 160));
-		rocks.add(new DefaultRock(s, 270, 310));
-		rocks.add(new DefaultRock(s, 150, 370));
-		rocks.add(new DefaultRock(s, 460, 350));
-		rocks.add(new DefaultRock(s, 200, 115));
-	}
+        // sector-specific entities
+        trees = new ArrayList<>();
+        Sprite s = Entities.TREE.sprite;
+        trees.add(new DefaultTree(s, 100, 200));
+        trees.add(new DefaultTree(s, 36, 200));
 
-	@Override
-	public void onPlayerLeave(MapSector to) {
-		// de-register all sector-specific entities
-		for (DefaultTree tree : trees) {
-			tree.kill();
-		}
-		for (DefaultRock rock : rocks) {
-			rock.kill();
-		}
-	}
+        rocks = new ArrayList<>();
+        // re-use same sprite variable, no use in creating a new one if there is already
+        // one in memory
+        s = Entities.ROCK.sprite;
+        rocks.add(new DefaultRock(s, 300, 160));
+        rocks.add(new DefaultRock(s, 270, 310));
+        rocks.add(new DefaultRock(s, 150, 370));
+        rocks.add(new DefaultRock(s, 460, 350));
+        rocks.add(new DefaultRock(s, 200, 115));
+    }
+
+    @Override
+    public void onPlayerLeave(MapSector to) {
+        // de-register all sector-specific entities
+        for (DefaultTree tree : trees) {
+            tree.kill();
+        }
+        for (DefaultRock rock : rocks) {
+            rock.kill();
+        }
+    }
 
 }

@@ -7,23 +7,22 @@ import java.awt.image.BufferedImage;
  */
 public class MapTile {
 
-	/**
-	 * This tile as a {@link BufferedImage} (used while rendering)
-	 */
-	public BufferedImage bufferedImage;
-	public int width, height;
-	public boolean isTraversable;
+    /**
+     * This tile as a {@link BufferedImage} (used while rendering)
+     */
+    BufferedImage bufferedImage;
+    public int width, height;
+    public boolean isTraversable;
 
-	/**
-	 * Creates a new map tile with the provided {@link BufferedImage}
-	 * 
-	 * @param image
-	 *            The tile's image
-	 */
-	public MapTile(BufferedImage image) {
-		bufferedImage = image;
-		width = image.getWidth();
-		height = image.getHeight();
-	}
+    /**
+     * Creates a new map tile with the provided {@link BufferedImage}
+     *
+     * @param image The tile's image
+     */
+    public MapTile(BufferedImage image) {
+        bufferedImage = image;
+        width = image.getWidth();
+        height = image.getHeight();
+    }
 
 }

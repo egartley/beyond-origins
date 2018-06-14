@@ -1,35 +1,35 @@
 package net.egartley.beyondorigins.objects;
 
-import java.awt.Graphics;
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
  * One of the game's "states" that has unique render and tick methods
- * 
+ *
  * @see SubGameState
  */
 public abstract class GameState {
 
-	/**
-	 * The ID number used while actually playing the game
-	 * 
-	 * @see GameState
-	 */
-	public static final int IN_GAME = 0;
+    /**
+     * The ID number used while actually playing the game
+     *
+     * @see GameState
+     */
+    public static final int IN_GAME = 0;
 
-	/**
-	 * Collection of possible "sub", or lower level, game states
-	 * 
-	 * @see SubGameState
-	 */
-	public ArrayList<SubGameState> subStates;
-	/**
-	 * Unique integer used to identify different game states
-	 */
-	public int identificationNumber;
+    /**
+     * Collection of possible "sub", or lower level, game states
+     *
+     * @see SubGameState
+     */
+    public ArrayList<SubGameState> subStates;
+    /**
+     * Unique integer used to identify different game states
+     */
+    protected int identificationNumber;
 
-	public abstract void render(Graphics graphics);
+    public abstract void render(Graphics graphics);
 
-	public abstract void tick();
+    public abstract void tick();
 
 }
