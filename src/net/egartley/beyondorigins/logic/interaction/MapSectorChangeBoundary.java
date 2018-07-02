@@ -15,7 +15,7 @@ public class MapSectorChangeBoundary extends Boundary {
      */
     public MapSector to;
 
-    public MapSectorChangeBoundary(int x, int y, int width, int height) {
+    public MapSectorChangeBoundary(int x, int y, int width, int height, MapSector to) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -25,6 +25,7 @@ public class MapSectorChangeBoundary extends Boundary {
         left = x;
         right = left + width;
         drawColor = Color.ORANGE;
+        this.to = to;
     }
 
     @Override

@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * Represents a collection of "sectors" for a specific map, or "level"
+ * Represents a collection of "sectors" for a map, "level", or "world"
  */
 public abstract class Map {
 
@@ -22,13 +22,17 @@ public abstract class Map {
      */
     private String id;
     /**
-     * The current sector to use while rendering
+     * The sector the player is currently in
      *
      * @see MapSector
-     * @see MapSectorDefinition
      */
     public static MapSector currentSector;
 
+    /**
+     * Creates a new map, with no sectors
+     *
+     * @param id Name or identifier for the map
+     */
     public Map(String id) {
         sectors = new ArrayList<>();
         this.id = id;
@@ -39,18 +43,19 @@ public abstract class Map {
     public abstract void render(Graphics graphics);
 
     /**
-     * Method for changing the current sector
+     * Changes the current sector
      *
-     * @param sector The new {@link MapSector} to go to
+     * @param to The new {@link MapSector} to go to
      * @see MapSector
      */
-    protected void changeSector(MapSector sector, MapSector comingFrom) {
-        onSectorChange(new MapSectorChangeEvent(comingFrom, sector));
-        if (currentSector != null)
-            currentSector.onPlayerLeave(sector);
-        MapSector prev = currentSector;
-        currentSector = sector;
-        currentSector.onPlayerEnter(prev);
+    public void changeSector(MapSector to, MapSector from) {
+        onSectorChange(new MapSectorChangeEvent(from, to));
+        if (currentSector != null) {
+            currentSector.onPlayerLeave(to);
+        }
+        MapSector previousSector = currentSector;
+        currentSector = to;
+        currentSector.onPlayerEnter(previousSector);
     }
 
     /**

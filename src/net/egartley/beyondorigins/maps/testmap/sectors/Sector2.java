@@ -13,8 +13,7 @@ import java.awt.*;
 public class Sector2 extends MapSector {
 
     public Sector2(Map parent, MapSectorDefinition def) {
-        super(parent, def, new MapSectorChangeBoundary(0, Game.WINDOW_HEIGHT - 18, Game.WINDOW_WIDTH, 18),
-                new MapSectorChangeBoundary(Game.WINDOW_WIDTH - 18, 0, 18, Game.WINDOW_HEIGHT));
+        super(parent, def);
     }
 
     @Override

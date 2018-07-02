@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins;
 
 import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.entities.EntityStore;
 import net.egartley.beyondorigins.maps.testmap.TestMap;
 
 import java.awt.*;
@@ -109,10 +110,11 @@ public class Debug {
             drawLine("Player (" + (int) Entities.PLAYER.x + ", " + (int) Entities.PLAYER.y + ")", graphics, 0);
             drawLine("isCollided = " + Entities.PLAYER.isCollided, graphics, 1);
             drawLine("Location: " + TestMap.currentSector, graphics, 2);
+            drawLine("EntityStore: " + EntityStore.amount, graphics, 3);
             if (Entities.PLAYER.lastCollision != null) {
                 drawLine("Last collision: " + Entities.PLAYER.lastCollision.boundary1 + " and "
                         + Entities.PLAYER.lastCollision.boundary2.parent + " (collidedSide = "
-                        + Entities.PLAYER.lastCollisionEvent.collidedSide + ")", graphics, 3);
+                        + Entities.PLAYER.lastCollisionEvent.collidedSide + ")", graphics, 4);
             }
         }
     }

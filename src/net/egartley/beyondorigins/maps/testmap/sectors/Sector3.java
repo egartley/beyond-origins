@@ -13,7 +13,7 @@ import java.awt.*;
 public class Sector3 extends MapSector {
 
     public Sector3(Map parent, MapSectorDefinition def) {
-        super(parent, def, new MapSectorChangeBoundary(0, 0, 18, Game.WINDOW_HEIGHT));
+        super(parent, def);
     }
 
     @Override
@@ -37,7 +37,13 @@ public class Sector3 extends MapSector {
 
     @Override
     public void onPlayerEnter(MapSector from) {
-        Entities.PLAYER.x = 52;
+        if (from.equals(parent.sectors.get(1))) {
+            // from sector 2
+            Entities.PLAYER.x = 50;
+        } else if (from.equals(parent.sectors.get(3))) {
+            // from sector 4
+            Entities.PLAYER.y = Game.WINDOW_HEIGHT - 84;
+        }
     }
 
     @Override

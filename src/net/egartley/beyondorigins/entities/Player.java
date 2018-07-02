@@ -11,7 +11,7 @@ import net.egartley.beyondorigins.objects.AnimatedEntity;
 import net.egartley.beyondorigins.objects.Animation;
 import net.egartley.beyondorigins.objects.Sprite;
 
-import java.awt.*;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
@@ -62,32 +62,32 @@ public class Player extends AnimatedEntity {
     }
 
     private void move(byte direction) {
-        if (animation.isStopped == true) {
+        if (animation.isStopped) {
             // animation was stopped, so restart it because we're moving
             animation.restart();
         }
         switch (direction) {
             case UP:
-                if (boundary.top <= 0 || isAllowedToMoveUpwards == false) {
+                if (boundary.top <= 0 || !isAllowedToMoveUpwards) {
                     break; // top of window or can't move upwards
                 }
                 y -= speed;
                 break;
             case DOWN:
-                if (boundary.bottom >= maximumY || isAllowedToMoveDownwards == false) {
+                if (boundary.bottom >= maximumY || !isAllowedToMoveDownwards) {
                     break; // bottom of window or can't move downwards
                 }
                 y += speed;
                 break;
             case LEFT:
-                if (boundary.left <= 0 || isAllowedToMoveLeftwards == false) {
+                if (boundary.left <= 0 || !isAllowedToMoveLeftwards) {
                     break; // left of window or can't move leftwards
                 }
                 x -= speed;
                 switchAnimation(LEFT_ANIMATION);
                 break;
             case RIGHT:
-                if (boundary.right >= maximumX || isAllowedToMoveRightwards == false) {
+                if (boundary.right >= maximumX || !isAllowedToMoveRightwards) {
                     break; // right of window or can't move rightwards
                 }
                 x += speed;
@@ -220,8 +220,7 @@ public class Player extends AnimatedEntity {
         isMovingRightwards = false;
 
         // check if moving diagonal
-        if ((up == true && left == true) || (up == true && right == true) || (down == true && left == true)
-                || (down == true && right == true)) {
+        if ((up && left) || (up && right) || (down && left) || (down && right)) {
             // slightly reduce speed to keep diagonal speed the same as when moving only one
             // direction
             speed = SPEED - 0.05;

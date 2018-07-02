@@ -8,7 +8,9 @@ import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.logic.math.Calculate;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -46,12 +48,12 @@ public abstract class Entity {
      */
     protected BufferedImage secondLayer;
     /**
-     * The most recent collision that has occured for this entity. If no collisions
-     * have occured within this entity's lifetime, this will be null
+     * The most recent collision that has occurred for this entity. If no collisions
+     * have occurred within this entity's lifetime, this will be null
      */
     public EntityEntityCollision lastCollision = null;
     /**
-     * The most recent collision event to have occured. This will be null if no
+     * The most recent collision event to have occurred. This will be null if no
      * collision event has yet to take place
      */
     public EntityEntityCollisionEvent lastCollisionEvent = null;
@@ -64,7 +66,7 @@ public abstract class Entity {
      */
     public double y;
     /**
-     * The entity's unique identifacation number. Use {@link #id} for user-friendly
+     * The entity's unique identification number. Use {@link #id} for user-friendly
      * identification
      */
     public int uuid;
@@ -118,8 +120,8 @@ public abstract class Entity {
     Entity(String id) {
         generateUUID();
         this.id = id;
-        boundaries = new ArrayList<EntityBoundary>();
-        collisions = new ArrayList<EntityEntityCollision>();
+        boundaries = new ArrayList<>();
+        collisions = new ArrayList<>();
         EntityStore.register(this);
     }
 
@@ -172,7 +174,7 @@ public abstract class Entity {
      * @param graphics Graphics object to use
      */
     private void drawNameTag(Graphics graphics) {
-        if (setFontMetrics == false) {
+        if (!setFontMetrics) {
             // init, only run once
             name = toString();
             nameTagWidth = graphics.getFontMetrics(nameTagFont).stringWidth(name) + 8; // 4px padding on both sides
@@ -207,7 +209,7 @@ public abstract class Entity {
      * sector-specific entities
      */
     public void kill() {
-        if (isSectorSpecific == true) {
+        if (isSectorSpecific) {
             EntityStore.remove(this);
         }
     }

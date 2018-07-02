@@ -20,7 +20,7 @@ public class Sector1 extends MapSector {
     private ArrayList<DefaultRock> rocks;
 
     public Sector1(Map parent, MapSectorDefinition def) {
-        super(parent, def, new MapSectorChangeBoundary(0, 0, Game.WINDOW_WIDTH, 18));
+        super(parent, def);
     }
 
     @Override

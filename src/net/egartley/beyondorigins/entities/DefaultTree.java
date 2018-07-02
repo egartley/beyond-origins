@@ -109,7 +109,7 @@ public class DefaultTree extends StaticEntity {
             ;
 
             public void onCollisionEnd(EntityEntityCollisionEvent event) {
-                if (Entities.PLAYER.isCollided == false)
+                if (!Entities.PLAYER.isCollided)
                     Entities.PLAYER.allowAllMovement();
                 else
                     Entities.PLAYER.annulCollisionEvent(event);

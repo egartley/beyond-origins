@@ -156,7 +156,7 @@ public class Game extends Canvas implements Runnable {
     }
 
     private synchronized void start() {
-        if (running == true) {
+        if (running) {
             // already "running" so the render and tick threads should have already been
             // started
             return;
@@ -173,7 +173,7 @@ public class Game extends Canvas implements Runnable {
     }
 
     private synchronized void stop() {
-        if (running == false) {
+        if (!running) {
             return;
         }
         // stops the fps system, thus ending calls to render and tick methods
@@ -214,7 +214,7 @@ public class Game extends Canvas implements Runnable {
             delta += (now - lastTime) / ns;
             lastTime = now;
             if (delta >= 1.0D) {
-                // render with the graphics object (tick is in a seperate thread)
+                // render with the graphics object (tick is in a separate thread)
                 render();
                 delta -= 1.0D;
                 frames += 1;
@@ -254,9 +254,9 @@ public class Game extends Canvas implements Runnable {
     }
 
     /**
-     * Returns the current FPS, which should always be between 60 and 57
+     * Returns the current FPS, which should always be somewhere between 60 and 57
      *
-     * @return The game's current frames per second
+     * @return Current frames per second
      */
     public static short getFramesPerSecond() {
         return currentFrames;

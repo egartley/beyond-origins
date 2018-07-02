@@ -15,11 +15,11 @@ public class EntityStore {
     /**
      * Internal store of entities
      */
-    private static ArrayList<Entity> entities = new ArrayList<Entity>();
+    private static ArrayList<Entity> entities = new ArrayList<>();
     /**
-     * The number of currently registred entities
+     * The number of currently registered entities
      */
-    private static int amount = 0;
+    public static int amount = 0;
 
     /**
      * Addes the given entity to the store. Prints out a warning if it has already
@@ -28,8 +28,7 @@ public class EntityStore {
      * @param entity The entity to add to the store
      */
     public static void register(Entity entity) {
-        // Debug.out("Adding entity to store... (" + entity + ")");
-        if (entity.isRegistered == false) {
+        if (!entity.isRegistered) {
             entities.add(entity);
             entity.isRegistered = true;
             amount++;
@@ -46,9 +45,8 @@ public class EntityStore {
      */
     public static void remove(Entity entity) {
         // Debug.out("Removing entity from store... (" + entity + ")");
-        if (entities.remove(entity) == true && entity.isRegistered == false) {
-            Debug.warning("Tried to remove an entity (" + entity
-                    + ") from the store, but it was never registered in the first place");
+        if (entities.remove(entity) && !entity.isRegistered) {
+            Debug.warning("Tried to remove an entity (" + entity + ") from the store, but it was never registered in the first place");
         } else {
             entity.isRegistered = false;
             amount--;
