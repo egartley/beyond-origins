@@ -1,31 +1,30 @@
 package net.egartley.beyondorigins.gamestates;
 
-import java.awt.Graphics;
-
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.maps.testmap.TestMap;
 import net.egartley.beyondorigins.objects.GameState;
 import net.egartley.beyondorigins.objects.Map;
 
+import java.awt.*;
+
 public class InGameState extends GameState {
 
-	public Map currentMap;
+    private Map currentMap;
 
-	public InGameState() {
-		identificationNumber = GameState.IN_GAME;
-		currentMap = new TestMap();
-	}
+    public InGameState() {
+        identificationNumber = GameState.IN_GAME;
+        currentMap = new TestMap("TestMap");
+    }
 
-	@Override
-	public void render(Graphics graphics) {
-		currentMap.render(graphics);
-		// draw debug text
-		Debug.render(graphics);
-	}
+    @Override
+    public void render(Graphics graphics) {
+        currentMap.render(graphics);
+        Debug.render(graphics);
+    }
 
-	@Override
-	public void tick() {
-		currentMap.tick();
-	}
+    @Override
+    public void tick() {
+        currentMap.tick();
+    }
 
 }

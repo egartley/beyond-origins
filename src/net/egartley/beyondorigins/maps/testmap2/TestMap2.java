@@ -1,25 +1,23 @@
 package net.egartley.beyondorigins.maps.testmap2;
 
-import java.awt.Graphics;
-
 import net.egartley.beyondorigins.objects.Map;
-import net.egartley.beyondorigins.objects.MapSector;
+
+import java.awt.*;
 
 public class TestMap2 extends Map {
 
-	@Override
-	public void tick() {
+    public TestMap2(String id) {
+        super(id);
+    }
 
-	}
+    @Override
+    public void tick() {
 
-	@Override
-	public void render(Graphics graphics) {
+    }
 
-	}
+    @Override
+    public void render(Graphics graphics) {
 
-	@Override
-	public void changeSector(MapSector sector) {
-
-	}
+    }
 
 }

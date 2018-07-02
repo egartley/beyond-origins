@@ -1,42 +1,54 @@
 package net.egartley.beyondorigins.maps;
 
-import java.util.ArrayList;
-
 import net.egartley.beyondorigins.media.images.ImageStore;
 import net.egartley.beyondorigins.objects.MapTile;
 
+import java.util.ArrayList;
+
 public class TileBuilder {
 
-	public static final byte GRASS = 0;
-	public static final byte SAND = 1;
+    public static final byte GRASS = 0;
+    private static final byte SAND = 1;
 
-	public static MapTile grass;
-	public static MapTile sand;
+    private static MapTile grass;
+    private static MapTile sand;
 
-	public static void load() {
-		grass = new MapTile(ImageStore.grassDefault);
-		sand = new MapTile(ImageStore.sandDefault);
-	}
-	
-	public static ArrayList<ArrayList<MapTile>> buildArrayList(byte[][] b) {
-		ArrayList<ArrayList<MapTile>> array = new ArrayList<ArrayList<MapTile>>();
-		for (byte i = 0; i < b.length; i++) {
-			ArrayList<MapTile> row = new ArrayList<MapTile>();
-			for (byte j = 0; j < b[i].length; j++) {
-				switch (b[i][j]) {
-				case GRASS:
-					row.add(grass);
-					break;
-				case SAND:
-					row.add(sand);
-					break;
-				default:
-					break;
-				}
-			}
-			array.add(row);
-		}
-		return array;
-	}
+    public static void load() {
+        grass = new MapTile(ImageStore.grassDefault);
+        sand = new MapTile(ImageStore.sandDefault);
+    }
+
+    public static ArrayList<ArrayList<MapTile>> buildArrayList(byte b, int r, int c) {
+        byte[][] array = new byte[r][c];
+        for (int rr = 0; rr < r; rr++) {
+            byte[] col = new byte[c];
+            for (int cc = 0; cc < c; cc++)
+                col[cc] = b;
+
+            array[rr] = col;
+        }
+        return buildArrayList(array);
+    }
+
+    private static ArrayList<ArrayList<MapTile>> buildArrayList(byte[][] b) {
+        ArrayList<ArrayList<MapTile>> array = new ArrayList<>();
+        for (byte[] aB : b) {
+            ArrayList<MapTile> row = new ArrayList<>();
+            for (byte anAB : aB) {
+                switch (anAB) {
+                    case GRASS:
+                        row.add(grass);
+                        break;
+                    case SAND:
+                        row.add(sand);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            array.add(row);
+        }
+        return array;
+    }
 
 }

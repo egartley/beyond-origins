@@ -1,44 +1,72 @@
 package net.egartley.beyondorigins.objects;
 
-import java.awt.Graphics;
+import net.egartley.beyondorigins.logic.events.MapSectorChangeEvent;
+
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * Represents a collection of "sectors" for a specific map, or "level"
- * 
- * @author Evan Gartley
- * @see MapSector
- * @see MapSectorDefinition
- * @see MapTile
+ * Represents a collection of "sectors" for a map, "level", or "world"
  */
 public abstract class Map {
 
-	/**
-	 * Collection of all the possible sectors
-	 * 
-	 * @see MapSector
-	 * @see MapSectorDefinition
-	 */
-	public ArrayList<MapSector> sectors;
-	/**
-	 * The current sector to use while rendering
-	 * 
-	 * @see MapSector
-	 * @see MapSectorDefinition
-	 */
-	public MapSector currentSector;
+    /**
+     * Collection of all the possible sectors
+     *
+     * @see MapSector
+     * @see MapSectorDefinition
+     */
+    public ArrayList<MapSector> sectors;
+    /**
+     * Human-readable identifier
+     */
+    private String id;
+    /**
+     * The sector the player is currently in
+     *
+     * @see MapSector
+     */
+    public static MapSector currentSector;
 
-	public abstract void tick();
+    /**
+     * Creates a new map, with no sectors
+     *
+     * @param id Name or identifier for the map
+     */
+    public Map(String id) {
+        sectors = new ArrayList<>();
+        this.id = id;
+    }
 
-	public abstract void render(Graphics graphics);
+    public abstract void tick();
 
-	/**
-	 * Method for changing the current sector
-	 * 
-	 * @param sector
-	 *            The new {@link MapSector} to go to
-	 * @see MapSector
-	 */
-	public abstract void changeSector(MapSector sector);
+    public abstract void render(Graphics graphics);
+
+    /**
+     * Changes the current sector
+     *
+     * @param to The new {@link MapSector} to go to
+     * @see MapSector
+     */
+    public void changeSector(MapSector to, MapSector from) {
+        onSectorChange(new MapSectorChangeEvent(from, to));
+        if (currentSector != null) {
+            currentSector.onPlayerLeave(to);
+        }
+        MapSector previousSector = currentSector;
+        currentSector = to;
+        currentSector.onPlayerEnter(previousSector);
+    }
+
+    /**
+     * Called when the current sector changes ({@link #changeSector(MapSector)})
+     */
+    public void onSectorChange(MapSectorChangeEvent event) {
+
+    }
+
+    public String toString() {
+        return id;
+    }
 
 }

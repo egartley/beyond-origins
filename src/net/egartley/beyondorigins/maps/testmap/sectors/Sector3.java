@@ -10,9 +10,9 @@ import net.egartley.beyondorigins.objects.MapSectorDefinition;
 
 import java.awt.*;
 
-public class Sector2 extends MapSector {
+public class Sector3 extends MapSector {
 
-    public Sector2(Map parent, MapSectorDefinition def) {
+    public Sector3(Map parent, MapSectorDefinition def) {
         super(parent, def);
     }
 
@@ -37,12 +37,12 @@ public class Sector2 extends MapSector {
 
     @Override
     public void onPlayerEnter(MapSector from) {
-        if (from.equals(parent.sectors.get(0))) {
-            // from sector 1
+        if (from.equals(parent.sectors.get(1))) {
+            // from sector 2
+            Entities.PLAYER.x = 50;
+        } else if (from.equals(parent.sectors.get(3))) {
+            // from sector 4
             Entities.PLAYER.y = Game.WINDOW_HEIGHT - 84;
-        } else if (from.equals(parent.sectors.get(2))) {
-            // from sector 3
-            Entities.PLAYER.x = Game.WINDOW_WIDTH - 84;
         }
     }
 
