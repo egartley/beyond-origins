@@ -76,20 +76,6 @@ public abstract class MapSector {
     }
 
     /**
-     * Minimum requirement for sector rendering
-     *
-     * @param graphics The {@link java.awt.Graphics Graphics} object to use
-     */
-    public void render(Graphics graphics) {
-        drawTiles(graphics);
-    }
-
-    /**
-     * Obvious what this does
-     */
-    public abstract void tick();
-
-    /**
      * Called upon entering this sector
      */
     public abstract void onPlayerEnter(MapSector comingFrom);
@@ -99,6 +85,32 @@ public abstract class MapSector {
      */
     public abstract void onPlayerLeave(MapSector goingTo);
 
+    /**
+     * Minimum requirement for rendering, must be called first in any implementation
+     */
+    public void render(Graphics graphics) {
+        drawTiles(graphics);
+        for (MapSectorChangeBoundary boundary : changeBoundaries) {
+            boundary.draw(graphics);
+        }
+    }
+
+    /**
+     * Minimum requirement for each tick, must be called first in any implementation
+     */
+    public void tick() {
+        Entities.PLAYER.tick();
+        for (MapSectorChangeCollision collision : changeCollisions) {
+            collision.tick();
+        }
+    }
+
+    /**
+     * Sets a neighboring sector in the direction, as well as reciprocating it
+     *
+     * @param neighbor  The sector to set as a neighbor
+     * @param direction {@link #TOP}, {@link #LEFT}, {@link #BOTTOM}, or {@link #RIGHT}
+     */
     public void setNeighborAt(MapSector neighbor, byte direction) {
         setNeighborAt(neighbor, direction, false);
     }
@@ -139,7 +151,7 @@ public abstract class MapSector {
             changeBoundaries.add(changeBoundary);
             changeCollisions.add(new MapSectorChangeCollision(changeBoundary, Entities.PLAYER.boundary, changeBoundary.to, this, parent));
         } else {
-            Debug.warning("Could not set a sector neighbor (\"" + neighbor + "\") for \"" + this + "\"!");
+            Debug.warning("Could not set a neighbor (\"" + neighbor + "\") for \"" + this + "\"!");
         }
     }
 

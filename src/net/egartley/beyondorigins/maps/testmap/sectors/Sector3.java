@@ -20,19 +20,11 @@ public class Sector3 extends MapSector {
     public void render(Graphics graphics) {
         super.render(graphics);
         Entities.PLAYER.render(graphics);
-
-        for (MapSectorChangeBoundary boundary : changeBoundaries) {
-            boundary.draw(graphics);
-        }
     }
 
     @Override
     public void tick() {
-        Entities.PLAYER.tick();
-
-        for (MapSectorChangeCollision collision : changeCollisions) {
-            collision.tick();
-        }
+        super.tick();
     }
 
     @Override

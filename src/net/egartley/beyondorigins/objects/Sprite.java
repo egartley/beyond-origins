@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
- * A row, or "strip", of individual frames of a specific entity or object
+ * A row, or "strip", of individual frames of an entity or object
  *
  * @see SpriteSheet
  * @see Entity

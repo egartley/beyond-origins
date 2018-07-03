@@ -4,8 +4,6 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.entities.DefaultRock;
 import net.egartley.beyondorigins.entities.DefaultTree;
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.logic.collision.MapSectorChangeCollision;
-import net.egartley.beyondorigins.logic.interaction.MapSectorChangeBoundary;
 import net.egartley.beyondorigins.objects.Map;
 import net.egartley.beyondorigins.objects.MapSector;
 import net.egartley.beyondorigins.objects.MapSectorDefinition;
@@ -43,23 +41,17 @@ public class Sector1 extends MapSector {
         for (DefaultRock rock : rocks) {
             rock.drawSecondLayer(graphics);
         }
-
-        for (MapSectorChangeBoundary boundary : changeBoundaries) {
-            boundary.draw(graphics);
-        }
     }
 
     @Override
     public void tick() {
-        Entities.PLAYER.tick();
+        super.tick();
+
         for (DefaultTree tree : trees) {
             tree.tick();
         }
         for (DefaultRock rock : rocks) {
             rock.tick();
-        }
-        for (MapSectorChangeCollision collision : changeCollisions) {
-            collision.tick();
         }
     }
 
@@ -80,14 +72,14 @@ public class Sector1 extends MapSector {
 
         // sector-specific entities
         trees = new ArrayList<>();
-        Sprite s = Entities.TREE.sprite;
+        Sprite s = Entities.getSpriteTemplate(Entities.TREE);
         trees.add(new DefaultTree(s, 100, 200));
         trees.add(new DefaultTree(s, 36, 200));
 
         rocks = new ArrayList<>();
         // re-use same sprite variable, no use in creating a new one if there is already
         // one in memory
-        s = Entities.ROCK.sprite;
+        s = Entities.getSpriteTemplate(Entities.ROCK);
         rocks.add(new DefaultRock(s, 300, 160));
         rocks.add(new DefaultRock(s, 270, 310));
         rocks.add(new DefaultRock(s, 150, 370));
@@ -97,7 +89,6 @@ public class Sector1 extends MapSector {
 
     @Override
     public void onPlayerLeave(MapSector to) {
-        // de-register all sector-specific entities
         for (DefaultTree tree : trees) {
             tree.kill();
         }

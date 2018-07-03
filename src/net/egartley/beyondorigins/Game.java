@@ -1,7 +1,9 @@
 package net.egartley.beyondorigins;
 
 import net.egartley.beyondorigins.definitions.maps.AllSectors;
-import net.egartley.beyondorigins.entities.*;
+import net.egartley.beyondorigins.entities.Dummy;
+import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.entities.Player;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.input.Keyboard;
 import net.egartley.beyondorigins.maps.TileBuilder;
@@ -112,8 +114,7 @@ public class Game extends Canvas implements Runnable {
                     "The default player image (\"player-default.png\") doesn't exist, or there was a problem while loading it!");
             return;
         }
-        Entities.PLAYER = new Player(
-                new SpriteSheet(image, 15 * scale, 23 * scale, 2, (short) 4).getSpriteCollection());
+        Entities.PLAYER = new Player(new SpriteSheet(image, 15 * scale, 23 * scale, 2, 4).collection);
         // ************ PLAYER END ************
         Debug.out("Initialized the player");
 
@@ -125,22 +126,9 @@ public class Game extends Canvas implements Runnable {
             Debug.error("The dummy image (\"dummy.png\") doesn't exist, or there was a problem while loading it!");
             return;
         }
-        Entities.DUMMY = new Dummy(
-                new SpriteSheet(image, 15 * scale, 23 * scale, 2, (short) 4).getSpriteCollection().get(0));
+        Entities.DUMMY = new Dummy(new SpriteSheet(image, 15 * scale, 23 * scale, 2, 4).getSprite(0));
         // ************ DUMMY END *************
         Debug.out("Initialized the dummy");
-
-        // ******** DEFAULT TREE BEGIN ********
-        Entities.TREE = new DefaultTree(new SpriteSheet(ImageStore.treeDefault, ImageStore.treeDefault.getWidth(),
-                ImageStore.treeDefault.getHeight(), 1, (short) 1).getSpriteCollection().get(0));
-        // ******** DEFAULT TREE END **********
-        Debug.out("Initialized the default tree");
-
-        // ******** DEFAULT ROCK BEGIN ********
-        Entities.ROCK = new DefaultRock(new SpriteSheet(ImageStore.rockDefault, ImageStore.rockDefault.getWidth(),
-                ImageStore.rockDefault.getHeight(), 1, (short) 1).getSpriteCollection().get(0));
-        // ******** DEFAULT TREE END **********
-        Debug.out("Initialized the default rock");
     }
 
     /**
@@ -232,7 +220,6 @@ public class Game extends Canvas implements Runnable {
             }
         }
         Debug.out("Stopping master render thread...");
-        // end the game, thus terminating the process
         stop();
     }
 
