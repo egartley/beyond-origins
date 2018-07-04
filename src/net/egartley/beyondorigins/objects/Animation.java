@@ -5,8 +5,8 @@ import net.egartley.beyondorigins.Debug;
 import java.awt.*;
 
 /**
- * Represents a collection of {@link AnimationFrame AnimationFrame} objects,
- * which can be used for animating a {@link Sprite Sprite}
+ * Represents a collection of {@link AnimationFrame AnimationFrame} objects, which can be used for animating a {@link
+ * Sprite Sprite}
  *
  * @see AnimationFrame
  * @see Sprite
@@ -38,7 +38,8 @@ public class Animation {
     /**
      * Creates a new animation
      *
-     * @param s {@link Sprite} to animate
+     * @param s
+     *         {@link Sprite} to animate
      */
     public Animation(Sprite s) {
         sprite = s;
@@ -62,15 +63,17 @@ public class Animation {
      * Sets the animation's threshold, or interval, for when to go to the next frame
      * </p>
      * <p>
-     * The tick method should be called roughly 60 times per second, therefore each
-     * frame will be displayed for about <b>threshold � 60</b> seconds
+     * The tick method should be called roughly 60 times per second, therefore each frame will be displayed for about
+     * <b>threshold / 60</b> seconds
      * </p>
+     * <p>In other words, the higher the threshold, the longer each frame will show for</p>
      *
-     * @param t New value for {@link #threshold}
+     * @param t
+     *         New value for {@link #threshold}
      */
     public void setThreshold(int t) {
-        if (t > 127 || t < -128) {
-            Debug.warning("tried to set an animation threshold outside of the accepted range (-127 to 127)!");
+        if (t > 127 || t < -127) {
+            Debug.warning("tried to set an animation threshold outside of the accepted range [-127 to 127]!");
             return;
         }
         threshold = (byte) t;
@@ -78,6 +81,8 @@ public class Animation {
 
     /**
      * Resume the animation. Does nothing if already running
+     * <p>
+     * Sets {@link #isStopped} to <code>false</code>
      */
     public void resume() {
         isStopped = false;
@@ -85,14 +90,15 @@ public class Animation {
 
     /**
      * Pauses the animation. Does nothing if already paused
+     * <p>
+     * Sets {@link #isStopped} to <code>true</code>
      */
     public void pause() {
         isStopped = true;
     }
 
     /**
-     * Stops the animation, and resets the displayed frame to the starting frame.
-     * Does nothing if already stopped
+     * Stops the animation, and resets the displayed frame to the starting frame, but does nothing if already stopped
      */
     public void stop() {
         isStopped = true;
@@ -111,9 +117,13 @@ public class Animation {
     /**
      * Renders {@link Animation#frame frame}
      *
-     * @param graphics {@link java.awt.Graphics Graphics}
-     * @param x        The x-axis coordinate
-     * @param y        The y-axis coordinate
+     * @param graphics
+     *         {@link java.awt.Graphics Graphics}
+     * @param x
+     *         The x-axis coordinate
+     * @param y
+     *         The y-axis coordinate
+     *
      * @see AnimationFrame
      */
     public void render(Graphics graphics, int x, int y) {

@@ -22,20 +22,22 @@ public class DefaultTree extends StaticEntity {
     /**
      * Creates a new default tree
      *
-     * @param sprite {@link Sprite} to use while rendering
+     * @param sprite
+     *         {@link Sprite} to use while rendering
      */
     public DefaultTree(Sprite sprite) {
         this(sprite, 0.0, 0.0);
     }
 
     /**
-     * Creates a new instance of {@link DefaultTree} with the provided
-     * {@link Sprite} at the supplied coordinates
+     * Creates a new instance of {@link DefaultTree} with the provided {@link Sprite} at the supplied coordinates
      *
-     * @param sprite {@link net.egartley.beyondorigins.objects.Sprite Sprite} to use
-     *               while rendering
-     * @param x      The x-coordinate to render at
-     * @param y      The y-coordinate to render at
+     * @param sprite
+     *         {@link net.egartley.beyondorigins.objects.Sprite Sprite} to use while rendering
+     * @param x
+     *         The x-coordinate to render at
+     * @param y
+     *         The y-coordinate to render at
      */
     public DefaultTree(Sprite sprite, double x, double y) {
         super("Tree");
@@ -55,17 +57,16 @@ public class DefaultTree extends StaticEntity {
 
     /**
      * <p>
-     * Disables the direction of movement opposite of where the player collided with
-     * the tree
+     * Disables the direction of movement opposite of where the player collided with the tree
      * </p>
      * <p>
      * <b>Example:</b> player collides with top of the tree, so downward movement is
      * disabled
      * </p>
      *
-     * @param event The
-     *              {@link net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent
-     *              EntityEntityCollisionEvent} between the player and tree
+     * @param event
+     *         The {@link net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent EntityEntityCollisionEvent}
+     *         between the player and tree
      */
     private void onPlayerCollision(EntityEntityCollisionEvent event) {
         Entities.PLAYER.lastCollisionEvent = event;

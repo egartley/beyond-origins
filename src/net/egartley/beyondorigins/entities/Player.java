@@ -11,7 +11,7 @@ import net.egartley.beyondorigins.objects.AnimatedEntity;
 import net.egartley.beyondorigins.objects.Animation;
 import net.egartley.beyondorigins.objects.Sprite;
 
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
@@ -25,7 +25,7 @@ public class Player extends AnimatedEntity {
 
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
-    private final byte ANIMATION_THRESHOLD = 11;
+    private final byte ANIMATION_THRESHOLD = 7;
 
     public EntityBoundary boundary;
     EntityBoundary headBoundary;
@@ -101,10 +101,11 @@ public class Player extends AnimatedEntity {
     /**
      * Changes the animation to another one in the collection
      *
-     * @param i The index of the animation
+     * @param i
+     *         The index of the animation
      */
     private void switchAnimation(byte i) {
-        animation = animationCollection.get(i);
+        animation = animations.get(i);
     }
 
     /**
@@ -118,13 +119,13 @@ public class Player extends AnimatedEntity {
     }
 
     /**
-     * Disregards any movement restrictions imposed by the provided
-     * {@link net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent
+     * Disregards any movement restrictions imposed by the provided {@link net.egartley.beyondorigins.logic.events
+     * .EntityEntityCollisionEvent
      * EntityEntityCollisionEvent}
      *
-     * @param event The
-     *              {@link net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent
-     *              EntityEntityCollisionEvent} in which to annul
+     * @param event
+     *         The {@link net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent EntityEntityCollisionEvent}
+     *         in which to annul
      */
     void annulCollisionEvent(EntityEntityCollisionEvent event) {
         switch (event.collidedSide) {
@@ -148,9 +149,10 @@ public class Player extends AnimatedEntity {
     /**
      * Returns whether or not the player is currently moving in a certain direction
      *
-     * @param direction {@link #UP}, {@link #DOWN}, {@link #LEFT} or {@link #RIGHT}
-     * @return True if the player is moving in the given direction, false if not or
-     * the given direction was unknown
+     * @param direction
+     *         {@link #UP}, {@link #DOWN}, {@link #LEFT} or {@link #RIGHT}
+     *
+     * @return True if the player is moving in the given direction, false if not or the given direction was unknown
      */
     public boolean isMoving(byte direction) {
         switch (direction) {
@@ -163,7 +165,8 @@ public class Player extends AnimatedEntity {
             case RIGHT:
                 return isMovingRightwards;
             default:
-                Debug.warning("Tried to get an unknown movement from the player (" + direction + "), expected " + UP + ", "
+                Debug.warning("Tried to get an unknown movement from the player (" + direction + "), expected " + UP
+                        + ", "
                         + DOWN + ", " + LEFT + " or " + RIGHT + "");
                 return false;
         }
@@ -171,28 +174,25 @@ public class Player extends AnimatedEntity {
 
     @Override
     public void setAnimationCollection() {
-        animationCollection.clear();
+        animations.clear();
         // this allows variations of the player sprite to be added in the future
         for (Sprite s : sprites) {
             Animation a = new Animation(s);
             a.setThreshold(ANIMATION_THRESHOLD);
-            animationCollection.add(a);
+            animations.add(a);
         }
-        animation = animationCollection.get(0);
+        animation = animations.get(0);
     }
 
     @Override
     public void setBoundaries() {
-        boundary = new EntityBoundary(this, sprite.frameWidth, sprite.frameHeight, new BoundaryPadding(4, 3, 2, 3));
+        boundary = new EntityBoundary(this, sprite.width, sprite.height, new BoundaryPadding(4, 3, 2, 3));
         boundary.name = "Base";
-        headBoundary = new EntityBoundary(this, 19, 18, new BoundaryPadding(0, 0, 0, 0),
-                new BoundaryOffset(0, 0, 0, 5));
+        headBoundary = new EntityBoundary(this, 19, 18, new BoundaryPadding(0), new BoundaryOffset(0, 0, 0, 5));
         headBoundary.name = "Head";
-        bodyBoundary = new EntityBoundary(this, 30, 22, new BoundaryPadding(0, 0, 0, 0),
-                new BoundaryOffset(0, 13, 0, 0));
+        bodyBoundary = new EntityBoundary(this, 30, 22, new BoundaryPadding(0), new BoundaryOffset(0, 13, 0, 0));
         bodyBoundary.name = "Body";
-        feetBoundary = new EntityBoundary(this, 17, 16, new BoundaryPadding(0, 0, 0, 0),
-                new BoundaryOffset(0, 29, 0, 6));
+        feetBoundary = new EntityBoundary(this, 17, 16, new BoundaryPadding(0), new BoundaryOffset(0, 29, 0, 6));
         feetBoundary.name = "Feet";
         boundaries.add(boundary);
         boundaries.add(headBoundary);

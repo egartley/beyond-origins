@@ -1,6 +1,5 @@
 package net.egartley.beyondorigins.maps.testmap.sectors;
 
-import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.entities.DefaultRock;
 import net.egartley.beyondorigins.entities.DefaultTree;
 import net.egartley.beyondorigins.entities.Entities;
@@ -56,20 +55,7 @@ public class Sector1 extends MapSector {
     }
 
     @Override
-    public void onPlayerEnter(MapSector from) {
-        if (from == null) {
-            Entities.PLAYER.x = 200;
-            Entities.PLAYER.y = 200;
-        } else {
-            if (from.equals(parent.sectors.get(1))) {
-                // from sector 2
-                Entities.PLAYER.y = 50;
-            } else if (from.equals(parent.sectors.get(3))) {
-                // from sector 4
-                Entities.PLAYER.x = Game.WINDOW_WIDTH - 84;
-            }
-        }
-
+    public void initialize() {
         // sector-specific entities
         trees = new ArrayList<>();
         Sprite s = Entities.getSpriteTemplate(Entities.TREE);
@@ -84,7 +70,17 @@ public class Sector1 extends MapSector {
         rocks.add(new DefaultRock(s, 270, 310));
         rocks.add(new DefaultRock(s, 150, 370));
         rocks.add(new DefaultRock(s, 460, 350));
-        rocks.add(new DefaultRock(s, 200, 115));
+    }
+
+    @Override
+    public void onPlayerEnter(MapSector from) {
+        if (from == null) {
+            Entities.PLAYER.x = 200;
+            Entities.PLAYER.y = 200;
+        } else {
+            updatePlayerPosition(from);
+        }
+        initialize();
     }
 
     @Override

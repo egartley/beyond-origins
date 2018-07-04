@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * Represents a collection of "sectors" for a map, "level", or "world"
+ * Collection of "sectors" that make up a map, like a "level", or "world"
  */
 public abstract class Map {
 
@@ -31,7 +31,8 @@ public abstract class Map {
     /**
      * Creates a new map, with no sectors
      *
-     * @param id Name or identifier for the map
+     * @param id
+     *         Name or identifier for the map
      */
     public Map(String id) {
         sectors = new ArrayList<>();
@@ -43,9 +44,16 @@ public abstract class Map {
     public abstract void render(Graphics graphics);
 
     /**
+     * Called when the current sector changes ({@link #changeSector(MapSector)})
+     */
+    public abstract void onSectorChange(MapSectorChangeEvent event);
+
+    /**
      * Changes the current sector
      *
-     * @param to The new {@link MapSector} to go to
+     * @param to
+     *         The sector to move to
+     *
      * @see MapSector
      */
     public void changeSector(MapSector to, MapSector from) {
@@ -56,13 +64,6 @@ public abstract class Map {
         MapSector previousSector = currentSector;
         currentSector = to;
         currentSector.onPlayerEnter(previousSector);
-    }
-
-    /**
-     * Called when the current sector changes ({@link #changeSector(MapSector)})
-     */
-    public void onSectorChange(MapSectorChangeEvent event) {
-
     }
 
     public String toString() {

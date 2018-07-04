@@ -19,8 +19,7 @@ public class Sprite {
      */
     BufferedImage strip;
     /**
-     * All of the possible frameCollection that the sprite could use, which are
-     * derived from {@link #strip}
+     * All of the possible frameCollection that the sprite could use, which are derived from {@link #strip}
      *
      * @see AnimatedEntity
      * @see StaticEntity
@@ -29,23 +28,25 @@ public class Sprite {
     /**
      * The width in pixels for each frame
      */
-    public int frameWidth;
+    public int width;
     /**
      * The height in pixels for each frame
      */
-    public int frameHeight;
+    public int height;
     private short currentFrameIndex = 0;
 
     public Sprite(BufferedImage image, int width, int height) {
         strip = image;
-        frameWidth = width;
-        frameHeight = height;
+        this.width = width;
+        this.height = height;
     }
 
     /**
      * Returns the frame at the given index (from {@link #frameCollection})
      *
-     * @param index Index of the frame to return
+     * @param index
+     *         Index of the frame to return
+     *
      * @return {@link AnimationFrame}
      */
     public AnimationFrame getFrameAt(int index) {
@@ -55,8 +56,7 @@ public class Sprite {
     }
 
     /**
-     * Returns the current frame
-     * ({@link #frameCollection}[{@link #currentFrameIndex}]) as a buffered image
+     * Returns the current frame ({@link #frameCollection}[{@link #currentFrameIndex}]) as a buffered image
      *
      * @return {@link java.awt.image.BufferedImage BufferedImage}
      */
@@ -65,10 +65,11 @@ public class Sprite {
     }
 
     /**
-     * Resets the frame collection and re-loads it with the given number of
-     * frameCollection
+     * Resets the frame collection and re-loads it with the given number of frameCollection
      *
-     * @param numberOfFrames How many frameCollection to use (must be at least 1)
+     * @param numberOfFrames
+     *         How many frameCollection to use (must be at least 1)
+     *
      * @see AnimationFrame
      */
     void setFrames(int numberOfFrames) {

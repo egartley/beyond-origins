@@ -111,7 +111,8 @@ public class Game extends Canvas implements Runnable {
             image = Util.resized(image, image.getWidth() * scale, image.getHeight() * scale);
         } else {
             Debug.error(
-                    "The default player image (\"player-default.png\") doesn't exist, or there was a problem while loading it!");
+                    "The default player image (\"player-default.png\") doesn't exist, or there was a problem while " +
+                            "loading it!");
             return;
         }
         Entities.PLAYER = new Player(new SpriteSheet(image, 15 * scale, 23 * scale, 2, 4).collection);

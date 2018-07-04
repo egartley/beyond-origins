@@ -29,9 +29,13 @@ public class Util {
     /**
      * Returns a resized image of the original with the supplied width and height
      *
-     * @param image The original image to resize (won't be changed)
-     * @param w     New width to resize to
-     * @param h     New height to resize to
+     * @param image
+     *         The original image to resize (won't be changed)
+     * @param w
+     *         New width to resize to
+     * @param h
+     *         New height to resize to
+     *
      * @return A resized version of the given buffered image
      */
     static BufferedImage resized(BufferedImage image, int w, int h) {
@@ -39,11 +43,14 @@ public class Util {
     }
 
     /**
-     * Returns a random integer, using {@link java.util.concurrent.ThreadLocalRandom
-     * ThreadLocalRandom}, between the supplied maximum and minimum values
+     * Returns a random integer, using {@link java.util.concurrent.ThreadLocalRandom ThreadLocalRandom}, between the
+     * supplied maximum and minimum values
      *
-     * @param maximum The maximum value the random integer could be
-     * @param minimum The minimum value the random integer could be
+     * @param maximum
+     *         The maximum value the random integer could be
+     * @param minimum
+     *         The minimum value the random integer could be
+     *
      * @return A randon integer between the given maximum and minimum
      */
     private static int randomInt(int maximum, int minimum) {
@@ -53,18 +60,21 @@ public class Util {
 
     /**
      * <p>
-     * Returns a random integer between the supplied maximum and minimum values
-     * (uses {@link #randomInt(int, int) randomInt(minimum, maximum)})
+     * Returns a random integer between the supplied maximum and minimum values (uses {@link #randomInt(int, int)
+     * randomInt(minimum, maximum)})
      * </p>
      *
      * <p>
-     * If inclusive, then {@link #randomInt(int, int) randomInt(minimum, maximum +
-     * 1)} will be used
+     * If inclusive, then {@link #randomInt(int, int) randomInt(minimum, maximum + 1)} will be used
      * </p>
      *
-     * @param maximum   The maximum value the random integer could be
-     * @param minimum   The minimum value the random integer could be
-     * @param inclusive Whether or not the include the maximum as a possible value
+     * @param maximum
+     *         The maximum value the random integer could be
+     * @param minimum
+     *         The minimum value the random integer could be
+     * @param inclusive
+     *         Whether or not the include the maximum as a possible value
+     *
      * @return A randon integer between the given maximum and minimum
      */
     public static int randomInt(int maximum, int minimum, boolean inclusive) {
@@ -78,19 +88,21 @@ public class Util {
     /**
      * Returns generated entity-to-entity collisions around the given parameters
      *
-     * @param baseEvent    The
-     *                     {@link net.egartley.beyondorigins.logic.collision.EntityEntityCollision
-     *                     EntityEntityCollision} in which to base all of the returned ones
-     *                     on
-     * @param entity       The {@link net.egartley.beyondorigins.objects.Entity Entity} in
-     *                     which to generate collisions around each of its boundaries
-     * @param baseBoundary The other
-     *                     {@link net.egartley.beyondorigins.logic.interaction.EntityBoundary
-     *                     EntityBounadry} in which to base the generated collisions around
+     * @param baseEvent
+     *         The {@link net.egartley.beyondorigins.logic.collision.EntityEntityCollision EntityEntityCollision} in
+     *         which to base all of the returned ones on
+     * @param entity
+     *         The {@link net.egartley.beyondorigins.objects.Entity Entity} in which to generate collisions around each
+     *         of its boundaries
+     * @param baseBoundary
+     *         The other {@link net.egartley.beyondorigins.logic.interaction.EntityBoundary EntityBounadry} in which to
+     *         base the generated collisions around
+     *
      * @return Generated entity-to-entity collisions based on the given parameters
      */
     public static ArrayList<EntityEntityCollision> getAllBoundaryCollisions(EntityEntityCollision baseEvent,
-                                                                            Entity entity, EntityBoundary baseBoundary) {
+                                                                            Entity entity, EntityBoundary
+                                                                                    baseBoundary) {
         ArrayList<EntityEntityCollision> collisions = new ArrayList<EntityEntityCollision>();
         for (EntityBoundary boundary : entity.boundaries) {
             collisions.add(new EntityEntityCollision(boundary, baseBoundary) {

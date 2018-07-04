@@ -36,8 +36,10 @@ public class EntityEntityCollision {
     /**
      * Creates a new collision between two entity boundaries
      *
-     * @param boundary1 First entity's boundary
-     * @param boundary2 Second entity's boundary
+     * @param boundary1
+     *         First entity's boundary
+     * @param boundary2
+     *         Second entity's boundary
      */
     protected EntityEntityCollision(EntityBoundary boundary1, EntityBoundary boundary2) {
         this.boundary1 = boundary1;
@@ -52,9 +54,9 @@ public class EntityEntityCollision {
     }
 
     /**
-     * Checks to see if the two boundaries are collided with one another, and calls
-     * {@link #onCollide(EntityEntityCollisionEvent)} when collided, then
-     * {@link #onCollisionEnd(EntityEntityCollisionEvent)} after it has ended
+     * Checks to see if the two boundaries are collided with one another, and calls {@link
+     * #onCollide(EntityEntityCollisionEvent)} when collided, then {@link #onCollisionEnd(EntityEntityCollisionEvent)}
+     * after it has ended
      */
     public void tick() {
         rectangle1.x = boundary1.x - 1;
@@ -85,7 +87,8 @@ public class EntityEntityCollision {
     /**
      * This is called <b>once</b> after the collision occurs
      *
-     * @param event The collision's event
+     * @param event
+     *         The collision's event
      */
     public void onCollide(EntityEntityCollisionEvent event) {
 
@@ -94,7 +97,8 @@ public class EntityEntityCollision {
     /**
      * This is called <b>once</b> after the collision ends
      *
-     * @param event The collision's event
+     * @param event
+     *         The collision's event
      */
     public void onCollisionEnd(EntityEntityCollisionEvent event) {
 

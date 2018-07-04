@@ -1,6 +1,5 @@
 package net.egartley.beyondorigins.logic.collision;
 
-import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.logic.interaction.Boundary;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.logic.interaction.MapSectorChangeBoundary;
@@ -14,16 +13,16 @@ public class MapSectorChangeCollision {
     private boolean isCollided;
     private boolean firedEvent;
 
-    public Boundary boundary1;
-    public Boundary boundary2;
-
     private Map map;
     private MapSector from;
     private MapSector to;
+    private Boundary boundary1;
+    private Boundary boundary2;
     private Rectangle rectangle1;
     private Rectangle rectangle2;
 
-    public MapSectorChangeCollision(MapSectorChangeBoundary changeBoundary, EntityBoundary playerBoundary, MapSector to, MapSector from, Map map) {
+    public MapSectorChangeCollision(MapSectorChangeBoundary changeBoundary, EntityBoundary playerBoundary, MapSector
+            to, MapSector from, Map map) {
         boundary1 = changeBoundary;
         boundary2 = playerBoundary;
         rectangle1 = boundary1.asRectangle();

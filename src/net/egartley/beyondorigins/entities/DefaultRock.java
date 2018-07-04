@@ -18,19 +18,23 @@ public class DefaultRock extends StaticEntity {
     /**
      * Creates a new rock, however this should only be used when first initializing
      *
-     * @param sprite The rock's sprite
+     * @param sprite
+     *         The rock's sprite
      */
     public DefaultRock(Sprite sprite) {
         this(sprite, 0, 0);
     }
 
     /**
-     * Creates a new rock. This constructor should be used in map sector
-     * constructors or anywhere else that the rock has already been initialized
+     * Creates a new rock. This constructor should be used in map sector constructors or anywhere else that the rock has
+     * already been initialized
      *
-     * @param sprite The rock's sprite
-     * @param x      The x-axis coordinate to set the rock at initially
-     * @param y      The y-axis coordinate to set the rock at initially
+     * @param sprite
+     *         The rock's sprite
+     * @param x
+     *         The x-axis coordinate to set the rock at initially
+     * @param y
+     *         The y-axis coordinate to set the rock at initially
      */
     public DefaultRock(Sprite sprite, double x, double y) {
         super("Rock");
@@ -52,15 +56,15 @@ public class DefaultRock extends StaticEntity {
 
     /**
      * <p>
-     * Disables the direction of movement opposite of where the player collided with
-     * the rock
+     * Disables the direction of movement opposite of where the player collided with the rock
      * </p>
      * <p>
      * <b>Example:</b> player collides with top of the rock, so downward movement is
      * disabled
      * </p>
      *
-     * @param event The collision event between the player and rock
+     * @param event
+     *         The collision event between the player and rock
      */
     private void onPlayerCollision(EntityEntityCollisionEvent event) {
         Entities.PLAYER.lastCollisionEvent = event;

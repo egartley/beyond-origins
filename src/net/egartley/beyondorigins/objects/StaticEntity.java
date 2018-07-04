@@ -16,10 +16,12 @@ public abstract class StaticEntity extends Entity {
     protected BufferedImage frame;
 
     /**
-     * Creates a new static entity, while setting {@link Entity#isAnimated} to false
-     * and {@link Entity#isStatic} to true
+     * Creates a new static entity, while setting {@link Entity#isAnimated} to false and {@link Entity#isStatic} to
+     * true
      *
-     * @param id Human-readable ID for the entity
+     * @param id
+     *         Human-readable ID for the entity
+     *
      * @see Entity
      */
     public StaticEntity(String id) {

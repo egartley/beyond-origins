@@ -4,8 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
- * An image that contains multiple sprites, each represented by a row, or
- * "strip" that is specified in the constructor
+ * An image that contains multiple sprites, each represented by a row, or "strip" that is specified in the constructor
  *
  * @see Sprite
  */
@@ -36,8 +35,7 @@ public class SpriteSheet {
     }
 
     /**
-     * Builds the sprite collection from the sheet image (should have already been
-     * set)
+     * Builds the sprite collection from the sheet image (should have already been set)
      */
     private void loadAllSprites() {
         collection = new ArrayList<>(strips);
@@ -52,7 +50,9 @@ public class SpriteSheet {
     /**
      * Returns the "strip" at the given row index
      *
-     * @param rowIndex The row number, or index, of the "strip" to return in the strip
+     * @param rowIndex
+     *         The row number, or index, of the "strip" to return in the strip
+     *
      * @return The specified "strip" as a BufferedImage
      */
     private BufferedImage getStripAsBufferedImage(int rowIndex) {

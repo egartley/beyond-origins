@@ -49,8 +49,7 @@ public abstract class Boundary {
     public boolean isCollided;
 
     /**
-     * This boundary's padding (extra space added/subtracted from any or all of the
-     * four sides)
+     * This boundary's padding (extra space added/subtracted from any or all of the four sides)
      */
     BoundaryPadding padding;
     /**
@@ -63,11 +62,11 @@ public abstract class Boundary {
     public Color drawColor;
 
     /**
-     * Uses {@link java.awt.Graphics#drawRect(int, int, int, int) drawRect} to
-     * render this boundary (only if {@link net.egartley.beyondorigins.Game#debug
-     * Game.debug} is enabled)
+     * Uses {@link java.awt.Graphics#drawRect(int, int, int, int) drawRect} to render this boundary (only if {@link
+     * net.egartley.beyondorigins.Game#debug Game.debug} is enabled)
      *
-     * @param graphics Graphics object to use
+     * @param graphics
+     *         Graphics object to use
      */
     public void draw(Graphics graphics) {
         if (Game.debug) {
@@ -77,8 +76,7 @@ public abstract class Boundary {
     }
 
     /**
-     * Update {@link #x}, {@link #y}, {@link #top}, {@link #left}, {@link #bottom}
-     * and {@link #right}
+     * Update {@link #x}, {@link #y}, {@link #top}, {@link #left}, {@link #bottom} and {@link #right}
      */
     public void tick() {
         top = y;

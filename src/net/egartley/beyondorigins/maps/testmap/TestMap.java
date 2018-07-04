@@ -9,7 +9,7 @@ import net.egartley.beyondorigins.maps.testmap.sectors.Sector4;
 import net.egartley.beyondorigins.objects.Map;
 import net.egartley.beyondorigins.objects.MapSector;
 
-import java.awt.Graphics;
+import java.awt.*;
 
 public class TestMap extends Map {
 

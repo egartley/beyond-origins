@@ -34,7 +34,7 @@ public class Dummy extends StaticEntity {
 
     @Override
     public void setBoundaries() {
-        boundaries.add(new EntityBoundary(this, sprite.frameWidth, sprite.frameHeight, new BoundaryPadding(12)));
+        boundaries.add(new EntityBoundary(this, sprite.width, sprite.height, new BoundaryPadding(12)));
     }
 
     @Override

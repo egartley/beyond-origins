@@ -15,14 +15,15 @@ public class AnimationFrame {
     /**
      * Creates a new frame for use in an {@link Animation}
      *
-     * @param parent The {@link net.egartley.beyondorigins.objects.Sprite Sprite} in
-     *               which to base the frame around
-     * @param index  The index of the frame within its parent's {@link Sprite#strip}
+     * @param parent
+     *         The {@link net.egartley.beyondorigins.objects.Sprite Sprite} in which to base the frame around
+     * @param index
+     *         The index of the frame within its parent's {@link Sprite#strip}
      */
     AnimationFrame(Sprite parent, int index) {
         this.parent = parent;
         try {
-            bufferedImage = parent.strip.getSubimage(index * parent.frameWidth, 0, parent.frameWidth, parent.frameHeight);
+            bufferedImage = parent.strip.getSubimage(index * parent.width, 0, parent.width, parent.height);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -6,10 +6,9 @@ import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 
 /**
- * A custom "event" that can be used for gathering information from a collision
- * that has occured
- * {@link net.egartley.beyondorigins.logic.collision.EntityEntityCollision
- * EntityEntityCollision}
+ * A custom "event" that can be used for gathering information from a collision that has occurred between two entities
+ *
+ * @see EntityEntityCollision
  */
 public class EntityEntityCollisionEvent {
 
@@ -29,15 +28,15 @@ public class EntityEntityCollisionEvent {
     public byte collidedSide = -1;
 
     /**
-     * Creates a new entity-entity collision event, then calculates
-     * {@link #collidedSide}
+     * Creates a new entity-entity collision event, then determines {@link #collidedSide}
      *
-     * @param invoker The
-     *                {@link net.egartley.beyondorigins.logic.collision.EntityEntityCollision
-     *                EntityEntityCollision} that occurred
+     * @param invoker
+     *         The collision that occurred
      */
     public EntityEntityCollisionEvent(EntityEntityCollision invoker) {
         // round player speed to int, ex. 1.6 would be 2
+        // setting the tolerance based on player speed makes it so that regardless of the player speed, the collided
+        // side should still be able to be determined
         int tolerance = (int) (Entities.PLAYER.speed + 0.5);
 
         EntityBoundary collider = invoker.boundary1;
@@ -52,7 +51,8 @@ public class EntityEntityCollisionEvent {
         } else if (into.bottom - tolerance <= collider.top && collider.top <= into.bottom) {
             collidedSide = BOTTOM_SIDE;
         } else {
-            Debug.error("Could not calculate a collided side! (between " + invoker.entities.get(0) + " and " + invoker.entities.get(1) + ")");
+            Debug.error("Could not calculate a collided side! (between " + invoker.entities.get(0) + " and " +
+                    invoker.entities.get(1) + ")");
         }
     }
 

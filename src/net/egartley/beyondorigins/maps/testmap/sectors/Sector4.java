@@ -1,8 +1,6 @@
 package net.egartley.beyondorigins.maps.testmap.sectors;
 
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.logic.collision.MapSectorChangeCollision;
-import net.egartley.beyondorigins.logic.interaction.MapSectorChangeBoundary;
 import net.egartley.beyondorigins.objects.Map;
 import net.egartley.beyondorigins.objects.MapSector;
 import net.egartley.beyondorigins.objects.MapSectorDefinition;
@@ -24,6 +22,11 @@ public class Sector4 extends MapSector {
     @Override
     public void tick() {
         super.tick();
+    }
+
+    @Override
+    public void initialize() {
+
     }
 
     @Override

@@ -8,15 +8,12 @@ import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.logic.math.Calculate;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
- * An object or character that can rendered with a sprite and have a specific
- * position
+ * An object or character that can rendered with a sprite and have a specific position
  *
  * @see AnimatedEntity
  * @see StaticEntity
@@ -48,13 +45,12 @@ public abstract class Entity {
      */
     protected BufferedImage secondLayer;
     /**
-     * The most recent collision that has occurred for this entity. If no collisions
-     * have occurred within this entity's lifetime, this will be null
+     * The most recent collision that has occurred for this entity. If no collisions have occurred within this entity's
+     * lifetime, this will be null
      */
     public EntityEntityCollision lastCollision = null;
     /**
-     * The most recent collision event to have occurred. This will be null if no
-     * collision event has yet to take place
+     * The most recent collision event to have occurred. This will be null if no collision event has yet to take place
      */
     public EntityEntityCollisionEvent lastCollisionEvent = null;
     /**
@@ -66,8 +62,7 @@ public abstract class Entity {
      */
     public double y;
     /**
-     * The entity's unique identification number. Use {@link #id} for user-friendly
-     * identification
+     * The entity's unique identification number. Use {@link #id} for user-friendly identification
      */
     public int uuid;
     /**
@@ -83,8 +78,7 @@ public abstract class Entity {
      */
     public boolean isCollided;
     /**
-     * Whether or not this entity has two different "layers" that are rendered
-     * before and after the player
+     * Whether or not this entity has two different "layers" that are rendered before and after the player
      */
     protected boolean isDualRendered;
     /**
@@ -92,8 +86,7 @@ public abstract class Entity {
      */
     public boolean isRegistered;
     /**
-     * Whether or not this entity is "bound" to, or only exists in, a specific map
-     * sector
+     * Whether or not this entity is "bound" to, or only exists in, a specific map sector
      */
     protected boolean isSectorSpecific;
     /**
@@ -112,10 +105,10 @@ public abstract class Entity {
     private int nameY;
 
     /**
-     * Creates a new entity with a randomly generated UUID, then adds it to the
-     * entity store
+     * Creates a new entity with a randomly generated UUID, then adds it to the entity store
      *
-     * @param id Human-readable ID for the entity
+     * @param id
+     *         Human-readable ID for the entity
      */
     Entity(String id) {
         generateUUID();
@@ -128,7 +121,8 @@ public abstract class Entity {
     /**
      * Renders the entity
      *
-     * @param graphics Graphics object to use
+     * @param graphics
+     *         Graphics object to use
      */
     public void render(Graphics graphics) {
         graphics.drawImage(sprite.getCurrentFrameAsBufferedImage(), (int) x, (int) y, null);
@@ -138,17 +132,18 @@ public abstract class Entity {
     /**
      * Draws the first "layer" if {@link #isDualRendered} is true (below the player)
      *
-     * @param graphics Graphics object to use
+     * @param graphics
+     *         Graphics object to use
      */
     public void drawFirstLayer(Graphics graphics) {
         graphics.drawImage(firstLayer, (int) x, (int) y + secondLayer.getHeight(), null);
     }
 
     /**
-     * Draws the second "layer" if {@link #isDualRendered} is true (above the
-     * player)
+     * Draws the second "layer" if {@link #isDualRendered} is true (above the player)
      *
-     * @param graphics Graphics object to use
+     * @param graphics
+     *         Graphics object to use
      */
     public void drawSecondLayer(Graphics graphics) {
         graphics.drawImage(secondLayer, (int) x, (int) y, null);
@@ -158,7 +153,8 @@ public abstract class Entity {
     /**
      * Renders debug information, such as the entity's boundaries and "name tag"
      *
-     * @param graphics Graphics object to use
+     * @param graphics
+     *         Graphics object to use
      */
     protected void drawDebug(Graphics graphics) {
         if (Game.debug) {
@@ -168,17 +164,17 @@ public abstract class Entity {
     }
 
     /**
-     * Draws the entity's "name tag", which displays its {@link #id} and
-     * {@link #uuid}
+     * Draws the entity's "name tag", which displays its {@link #id} and {@link #uuid}
      *
-     * @param graphics Graphics object to use
+     * @param graphics
+     *         Graphics object to use
      */
     private void drawNameTag(Graphics graphics) {
         if (!setFontMetrics) {
             // init, only run once
             name = toString();
             nameTagWidth = graphics.getFontMetrics(nameTagFont).stringWidth(name) + 8; // 4px padding on both sides
-            entityWidth = sprite.frameWidth;
+            entityWidth = sprite.width;
             // don't initialize again, not needed
             setFontMetrics = true;
         }
@@ -196,7 +192,8 @@ public abstract class Entity {
     /**
      * Draws all of the entity's boundaries
      *
-     * @param graphics Graphics object to use
+     * @param graphics
+     *         Graphics object to use
      */
     private void drawBoundaries(Graphics graphics) {
         for (EntityBoundary boundary : boundaries) {
@@ -205,8 +202,7 @@ public abstract class Entity {
     }
 
     /**
-     * "Kills" this entity by removing it from the entity store. Only for
-     * sector-specific entities
+     * "Kills" this entity by removing it from the entity store. Only for sector-specific entities
      */
     public void kill() {
         if (isSectorSpecific) {
@@ -232,8 +228,8 @@ public abstract class Entity {
     /**
      * Sets the current sprite
      *
-     * @param index Position of a sprite within the sprite collection
-     *              ({@link #sprites}) to set as the current one
+     * @param index
+     *         Position of a sprite within the sprite collection ({@link #sprites}) to set as the current one
      */
     public void setCurrentSprite(int index) {
         sprite = sprites.get(index);
@@ -247,8 +243,7 @@ public abstract class Entity {
     }
 
     /**
-     * Returns this entity as a human-readable string, in the format
-     * "{@link #id}#{@link #uuid}"
+     * Returns this entity as a human-readable string, in the format "{@link #id}#{@link #uuid}"
      */
     public String toString() {
         return id + "#" + uuid;

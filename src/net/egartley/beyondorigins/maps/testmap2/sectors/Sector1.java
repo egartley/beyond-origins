@@ -24,6 +24,11 @@ public class Sector1 extends MapSector {
     }
 
     @Override
+    public void initialize() {
+
+    }
+
+    @Override
     public void onPlayerEnter(MapSector from) {
 
     }
