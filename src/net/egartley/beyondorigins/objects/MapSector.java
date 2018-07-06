@@ -10,7 +10,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * Specific part of a map
+ * Specific part, or area, of a map
  *
  * @see Map
  */
@@ -38,17 +38,11 @@ public abstract class MapSector {
     public static final byte BOTTOM = 2;
     public static final byte LEFT = 3;
 
-    /**
-     * Change in x-axis while rendering
-     */
     private int deltaX;
-    /**
-     * Change in y-axis while rendering
-     */
     private int deltaY;
 
     /**
-     * The map in which the sector is located
+     * The sector's map
      */
     protected Map parent;
     /**
@@ -90,6 +84,7 @@ public abstract class MapSector {
         neighbors = new ArrayList<>(MAX_NEIGHBORS);
         for (byte i = 0; i < MAX_NEIGHBORS; i++)
             neighbors.add(null);
+        entities = new ArrayList<>();
     }
 
     /**

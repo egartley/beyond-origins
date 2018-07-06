@@ -12,37 +12,13 @@ import java.util.ArrayList;
 
 /**
  * Basic tree that the player can walk under, but not over
- *
- * @see StaticEntity
  */
 public class DefaultTree extends StaticEntity {
 
     private EntityBoundary boundary;
 
-    /**
-     * Creates a new default tree
-     *
-     * @param sprite
-     *         {@link Sprite} to use while rendering
-     */
-    public DefaultTree(Sprite sprite) {
-        this(sprite, 0.0, 0.0);
-    }
-
-    /**
-     * Creates a new instance of {@link DefaultTree} with the provided {@link Sprite} at the supplied coordinates
-     *
-     * @param sprite
-     *         {@link net.egartley.beyondorigins.objects.Sprite Sprite} to use while rendering
-     * @param x
-     *         The x-coordinate to render at
-     * @param y
-     *         The y-coordinate to render at
-     */
     public DefaultTree(Sprite sprite, double x, double y) {
-        super("Tree");
-        this.sprite = sprite;
-        frame = this.sprite.getCurrentFrameAsBufferedImage();
+        super("Tree", sprite);
         this.x = x;
         this.y = y;
         setBoundaries();
@@ -50,9 +26,9 @@ public class DefaultTree extends StaticEntity {
 
         isSectorSpecific = true;
         // set the first layer as the leaves
-        firstLayer = frame.getSubimage(0, 45, frame.getWidth(), 19);
+        firstLayer = image.getSubimage(0, 45, image.getWidth(), 19);
         // set the second layer as the trunk
-        secondLayer = frame.getSubimage(0, 0, frame.getWidth(), 45);
+        secondLayer = image.getSubimage(0, 0, image.getWidth(), 45);
     }
 
     /**
@@ -65,8 +41,7 @@ public class DefaultTree extends StaticEntity {
      * </p>
      *
      * @param event
-     *         The {@link net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent EntityEntityCollisionEvent}
-     *         between the player and tree
+     *         The collision event between the player and tree
      */
     private void onPlayerCollision(EntityEntityCollisionEvent event) {
         Entities.PLAYER.lastCollisionEvent = event;
@@ -94,7 +69,7 @@ public class DefaultTree extends StaticEntity {
 
     @Override
     protected void setBoundaries() {
-        boundary = new EntityBoundary(this, frame.getWidth(), frame.getHeight(),
+        boundary = new EntityBoundary(this, image.getWidth(), image.getHeight(),
                 new BoundaryPadding(-24, -24, -24, -24));
         boundaries.add(boundary);
     }
@@ -107,20 +82,17 @@ public class DefaultTree extends StaticEntity {
                 onPlayerCollision(event);
             }
 
-            ;
-
             public void onCollisionEnd(EntityEntityCollisionEvent event) {
                 if (!Entities.PLAYER.isCollided)
                     Entities.PLAYER.allowAllMovement();
                 else
                     Entities.PLAYER.annulCollisionEvent(event);
             }
-
-            ;
         };
         collisions.add(withPlayer);
+
         for (EntityEntityCollision collision : Util.getAllBoundaryCollisions(withPlayer, Entities.PLAYER, boundary)) {
-            if (collision.boundary1 != Entities.PLAYER.boundary)
+            if (collision.boundaries[0] != Entities.PLAYER.boundary)
                 collisions.add(collision);
         }
     }

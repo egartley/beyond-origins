@@ -31,13 +31,7 @@ public class Sector4 extends MapSector {
 
     @Override
     public void onPlayerEnter(MapSector from) {
-        if (from.equals(parent.sectors.get(2))) {
-            // from sector 3
-            Entities.PLAYER.y = 50;
-        } else if (from.equals(parent.sectors.get(0))) {
-            // from sector 1
-            Entities.PLAYER.x = 84;
-        }
+        updatePlayerPosition(from);
     }
 
     @Override

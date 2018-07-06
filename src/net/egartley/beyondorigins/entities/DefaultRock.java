@@ -1,5 +1,6 @@
 package net.egartley.beyondorigins.entities;
 
+import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
@@ -13,45 +14,19 @@ import net.egartley.beyondorigins.objects.StaticEntity;
  */
 public class DefaultRock extends StaticEntity {
 
-    private EntityBoundary boundary;
-
-    /**
-     * Creates a new rock, however this should only be used when first initializing
-     *
-     * @param sprite
-     *         The rock's sprite
-     */
-    public DefaultRock(Sprite sprite) {
-        this(sprite, 0, 0);
-    }
-
-    /**
-     * Creates a new rock. This constructor should be used in map sector constructors or anywhere else that the rock has
-     * already been initialized
-     *
-     * @param sprite
-     *         The rock's sprite
-     * @param x
-     *         The x-axis coordinate to set the rock at initially
-     * @param y
-     *         The y-axis coordinate to set the rock at initially
-     */
     public DefaultRock(Sprite sprite, double x, double y) {
-        super("Rock");
-        this.sprite = sprite;
-        frame = this.sprite.getCurrentFrameAsBufferedImage();
+        super("Rock", sprite);
         this.x = x;
         this.y = y;
         setBoundaries();
         setCollisions();
 
-        // entity-specific stuff
         isSectorSpecific = true;
         isDualRendered = true;
-        // set the first layer as the top half
-        firstLayer = frame.getSubimage(0, frame.getHeight() / 2, frame.getWidth(), frame.getHeight() / 2);
-        // set the second layer as the bottom half
-        secondLayer = frame.getSubimage(0, 0, frame.getWidth(), frame.getHeight() / 2);
+        // top half
+        firstLayer = image.getSubimage(0, image.getHeight() / 2, image.getWidth(), image.getHeight() / 2);
+        // bottom half
+        secondLayer = image.getSubimage(0, 0, image.getWidth(), image.getHeight() / 2);
     }
 
     /**
@@ -92,41 +67,38 @@ public class DefaultRock extends StaticEntity {
 
     @Override
     public void tick() {
-        for (EntityEntityCollision collision : collisions) {
-            collision.tick();
-        }
+        collisions.forEach(EntityEntityCollision::tick);
     }
 
     @Override
     protected void setBoundaries() {
-        boundary = new EntityBoundary(this, frame.getWidth(), frame.getHeight(), new BoundaryPadding(-4, 1, -8, 1));
-        boundaries.add(boundary);
+        boundaries.add(new EntityBoundary(this, image.getWidth(), image.getHeight(),
+                new BoundaryPadding(-4, 1, -8, 1)));
     }
 
     @Override
     protected void setCollisions() {
-        EntityEntityCollision withPlayer = new EntityEntityCollision(Entities.PLAYER.headBoundary, boundary) {
+        EntityEntityCollision withPlayer = new EntityEntityCollision(Entities.PLAYER.headBoundary, boundaries.get(0)) {
             public void onCollide(EntityEntityCollisionEvent event) {
                 onPlayerCollision(event);
             }
 
-            ;
-
             public void onCollisionEnd(EntityEntityCollisionEvent event) {
-                if (Entities.PLAYER.isCollided == false)
+                if (!Entities.PLAYER.isCollided) {
                     Entities.PLAYER.allowAllMovement();
-                else
+                } else {
                     Entities.PLAYER.annulCollisionEvent(event);
+                }
             }
-
-            ;
         };
         collisions.add(withPlayer);
-        // add collisions with all of the player's boundaries, except the main one. The
-        // events will be the same as the given "base" event
-        for (EntityEntityCollision collision : Util.getAllBoundaryCollisions(withPlayer, Entities.PLAYER, boundary)) {
-            if (collision.boundary1 != Entities.PLAYER.boundary)
+
+        for (EntityEntityCollision collision : Util.getAllBoundaryCollisions(withPlayer, Entities.PLAYER, boundaries
+                .get(0))) {
+            if (collision.boundaries[0] != Entities.PLAYER.boundary && collision.boundaries[0] != Entities.PLAYER
+                    .headBoundary) {
                 collisions.add(collision);
+            }
         }
     }
 

@@ -32,13 +32,7 @@ public class Sector2 extends MapSector {
 
     @Override
     public void onPlayerEnter(MapSector from) {
-        if (from.equals(parent.sectors.get(0))) {
-            // from sector 1
-            Entities.PLAYER.y = Game.WINDOW_HEIGHT - 84;
-        } else if (from.equals(parent.sectors.get(2))) {
-            // from sector 3
-            Entities.PLAYER.x = Game.WINDOW_WIDTH - 84;
-        }
+        updatePlayerPosition(from);
     }
 
     @Override

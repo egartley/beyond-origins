@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins.logic.interaction;
 
 import net.egartley.beyondorigins.objects.Entity;
+import net.egartley.beyondorigins.objects.Sprite;
 
 import java.awt.*;
 
@@ -17,6 +18,20 @@ public class EntityBoundary extends Boundary {
      * Human-readable identification for this entity boundary
      */
     public String name;
+
+    /**
+     * Creates a new boundary for the given entity
+     *
+     * @param entity
+     *         The entity to use
+     * @param sprite
+     *         Sprite to use for getting width and height
+     * @param padding
+     *         The padding to apply
+     */
+    public EntityBoundary(Entity entity, Sprite sprite, BoundaryPadding padding) {
+        this(entity, sprite.width, sprite.height, padding);
+    }
 
     /**
      * Creates a new boundary for the given entity
@@ -58,9 +73,10 @@ public class EntityBoundary extends Boundary {
         this.width = width + padding.left + padding.right;
         this.height = height + padding.top + padding.bottom;
         this.offset = offset;
-        horizontalOffset = padding.left + this.offset.left - this.offset.right;
-        verticalOffset = padding.top + this.offset.top - this.offset.bottom;
-        name = "EntityBoundary#" + hashCode();
+        horizontalOffset = padding.left + offset.left - offset.right;
+        verticalOffset = padding.top + offset.top - offset.bottom;
+        name = "EntityBoundary#" + entity;
+        // call tick so that x and y are actually set
         tick();
         setColor();
     }

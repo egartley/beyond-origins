@@ -17,11 +17,11 @@ import java.util.ArrayList;
 
 public class Player extends AnimatedEntity {
 
-    private final byte UP = 1;
-    private final byte DOWN = 2;
-    private final byte LEFT = 3;
-    private final byte RIGHT = 4;
-    private final double SPEED = 2;
+    public final byte UP = 1;
+    public final byte DOWN = 2;
+    public final byte LEFT = 3;
+    public final byte RIGHT = 4;
+    public final double SPEED = 2;
 
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
@@ -31,8 +31,6 @@ public class Player extends AnimatedEntity {
     EntityBoundary headBoundary;
     EntityBoundary bodyBoundary;
     EntityBoundary feetBoundary;
-
-    public double speed;
 
     private int maximumX;
     private int maximumY;
@@ -65,32 +63,33 @@ public class Player extends AnimatedEntity {
         if (animation.isStopped) {
             // animation was stopped, so restart it because we're moving
             animation.restart();
+            animation.setFrame(1);
         }
         switch (direction) {
             case UP:
                 if (boundary.top <= 0 || !isAllowedToMoveUpwards) {
                     break; // top of window or can't move upwards
                 }
-                y -= speed;
+                y -= SPEED;
                 break;
             case DOWN:
                 if (boundary.bottom >= maximumY || !isAllowedToMoveDownwards) {
                     break; // bottom of window or can't move downwards
                 }
-                y += speed;
+                y += SPEED;
                 break;
             case LEFT:
                 if (boundary.left <= 0 || !isAllowedToMoveLeftwards) {
                     break; // left of window or can't move leftwards
                 }
-                x -= speed;
+                x -= SPEED;
                 switchAnimation(LEFT_ANIMATION);
                 break;
             case RIGHT:
                 if (boundary.right >= maximumX || !isAllowedToMoveRightwards) {
                     break; // right of window or can't move rightwards
                 }
-                x += speed;
+                x += SPEED;
                 switchAnimation(RIGHT_ANIMATION);
                 break;
             default:
@@ -119,9 +118,8 @@ public class Player extends AnimatedEntity {
     }
 
     /**
-     * Disregards any movement restrictions imposed by the provided {@link net.egartley.beyondorigins.logic.events
-     * .EntityEntityCollisionEvent
-     * EntityEntityCollisionEvent}
+     * Cancels any movement restrictions imposed by the provided {@link net.egartley.beyondorigins.logic.events
+     * .EntityEntityCollisionEvent EntityEntityCollisionEvent}
      *
      * @param event
      *         The {@link net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent EntityEntityCollisionEvent}
@@ -166,8 +164,7 @@ public class Player extends AnimatedEntity {
                 return isMovingRightwards;
             default:
                 Debug.warning("Tried to get an unknown movement from the player (" + direction + "), expected " + UP
-                        + ", "
-                        + DOWN + ", " + LEFT + " or " + RIGHT + "");
+                        + ", " + DOWN + ", " + LEFT + " or " + RIGHT + "");
                 return false;
         }
     }
@@ -175,25 +172,22 @@ public class Player extends AnimatedEntity {
     @Override
     public void setAnimationCollection() {
         animations.clear();
-        // this allows variations of the player sprite to be added in the future
-        for (Sprite s : sprites) {
-            Animation a = new Animation(s);
-            a.setThreshold(ANIMATION_THRESHOLD);
-            animations.add(a);
-        }
+        animations.add(new Animation(sprites.get(0), ANIMATION_THRESHOLD));
+        animations.add(new Animation(sprites.get(1), ANIMATION_THRESHOLD));
         animation = animations.get(0);
     }
 
     @Override
     public void setBoundaries() {
-        boundary = new EntityBoundary(this, sprite.width, sprite.height, new BoundaryPadding(4, 3, 2, 3));
+        boundary = new EntityBoundary(this, sprite, new BoundaryPadding(4, 3, 2, 3));
         boundary.name = "Base";
         headBoundary = new EntityBoundary(this, 19, 18, new BoundaryPadding(0), new BoundaryOffset(0, 0, 0, 5));
         headBoundary.name = "Head";
-        bodyBoundary = new EntityBoundary(this, 30, 22, new BoundaryPadding(0), new BoundaryOffset(0, 13, 0, 0));
+        bodyBoundary = new EntityBoundary(this, 30, 19, new BoundaryPadding(0), new BoundaryOffset(0, 16, 0, 0));
         bodyBoundary.name = "Body";
         feetBoundary = new EntityBoundary(this, 17, 16, new BoundaryPadding(0), new BoundaryOffset(0, 29, 0, 6));
         feetBoundary.name = "Feet";
+
         boundaries.add(boundary);
         boundaries.add(headBoundary);
         boundaries.add(bodyBoundary);
@@ -210,23 +204,14 @@ public class Player extends AnimatedEntity {
     public void tick() {
         // get keyboard input (typical WASD)
         boolean up = Keyboard.isKeyPressed(KeyEvent.VK_W);
-        boolean down = Keyboard.isKeyPressed(KeyEvent.VK_S);
         boolean left = Keyboard.isKeyPressed(KeyEvent.VK_A);
+        boolean down = Keyboard.isKeyPressed(KeyEvent.VK_S);
         boolean right = Keyboard.isKeyPressed(KeyEvent.VK_D);
         // reset all booleans for player's current movement
         isMovingUpwards = false;
         isMovingDownwards = false;
         isMovingLeftwards = false;
         isMovingRightwards = false;
-
-        // check if moving diagonal
-        if ((up && left) || (up && right) || (down && left) || (down && right)) {
-            // slightly reduce speed to keep diagonal speed the same as when moving only one
-            // direction
-            speed = SPEED - 0.05;
-        } else {
-            speed = SPEED;
-        }
 
         if (up) {
             isMovingUpwards = true;
@@ -249,18 +234,13 @@ public class Player extends AnimatedEntity {
             animation.stop();
         }
 
-        animation.tick();
-        for (EntityBoundary boundary : boundaries) {
-            boundary.tick();
-        }
+        animations.forEach(Animation::tick);
+        boundaries.forEach(EntityBoundary::tick);
     }
 
     @Override
     protected void setCollisions() {
-        // nothing here right now because the player is not sector-specific, therefore
-        // sector-specific entities are to define collisions with the player
 
-        // this could change in the future, though
     }
 
 }

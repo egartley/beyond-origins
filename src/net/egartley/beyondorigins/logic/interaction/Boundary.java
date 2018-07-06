@@ -62,8 +62,7 @@ public abstract class Boundary {
     public Color drawColor;
 
     /**
-     * Uses {@link java.awt.Graphics#drawRect(int, int, int, int) drawRect} to render this boundary (only if {@link
-     * net.egartley.beyondorigins.Game#debug Game.debug} is enabled)
+     * Renders the boundary (only if {@link net.egartley.beyondorigins.Game#debug Game.debug} is <code>true</code>)
      *
      * @param graphics
      *         Graphics object to use
@@ -76,7 +75,7 @@ public abstract class Boundary {
     }
 
     /**
-     * Update {@link #x}, {@link #y}, {@link #top}, {@link #left}, {@link #bottom} and {@link #right}
+     * Updates {@link #x}, {@link #y}, {@link #top}, {@link #left}, {@link #bottom} and {@link #right}
      */
     public void tick() {
         top = y;
@@ -85,9 +84,6 @@ public abstract class Boundary {
         right = left + width;
     }
 
-    /**
-     * @return The boundary as a {@link java.awt.Rectangle Rectangle} object
-     */
     public Rectangle asRectangle() {
         return new Rectangle(x, y, width, height);
     }

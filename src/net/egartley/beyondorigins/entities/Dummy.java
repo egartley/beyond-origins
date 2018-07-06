@@ -10,8 +10,7 @@ import java.awt.*;
 public class Dummy extends StaticEntity {
 
     public Dummy(Sprite sprite) {
-        super("Dummy");
-        this.sprite = sprite;
+        super("Dummy", sprite);
         x = 470.0;
         y = 190.0;
         setBoundaries();
@@ -23,8 +22,7 @@ public class Dummy extends StaticEntity {
 
     @Override
     public void render(Graphics graphics) {
-        graphics.drawImage(sprite.getCurrentFrameAsBufferedImage(), (int) x, (int) y, null);
-        drawDebug(graphics);
+        super.render(graphics);
     }
 
     @Override

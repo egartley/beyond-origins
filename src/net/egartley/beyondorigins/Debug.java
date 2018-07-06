@@ -40,6 +40,10 @@ public class Debug {
      */
     private static int rowOffset = 18;
     /**
+     * What row to render the line on, for {@link #drawLine(String, Graphics)}
+     */
+    private static int row = 0;
+    /**
      * Number of pixels to add as padding around each line of text
      */
     private static final byte TEXT_PADDING = 4;
@@ -87,7 +91,7 @@ public class Debug {
         out("ERROR: " + object);
     }
 
-    private static void drawLine(String s, Graphics graphics, int row) {
+    private static void drawLine(String s, Graphics graphics) {
         if (!setFontMetrics) {
             fontMetrics = graphics.getFontMetrics();
             // don't do this every tick, only once
@@ -100,6 +104,7 @@ public class Debug {
         graphics.setColor(Color.WHITE);
         // draw line text
         graphics.drawString(s, lx, ly + (row * rowOffset));
+        row++;
     }
 
     /**
@@ -110,16 +115,43 @@ public class Debug {
      */
     public static void render(Graphics graphics) {
         if (Game.debug) {
+            row = 0;
             graphics.setFont(font);
-            drawLine("Player (x: " + (int) Entities.PLAYER.x + ", y: " + (int) Entities.PLAYER.y + ")", graphics, 0);
-            drawLine("isCollided = " + Entities.PLAYER.isCollided, graphics, 1);
-            drawLine("Location: " + TestMap.currentSector, graphics, 2);
-            drawLine("EntityStore: " + EntityStore.amount, graphics, 3);
+            drawLine("Player (x: " + (int) Entities.PLAYER.x + ", y: " + (int) Entities.PLAYER.y + ")", graphics);
+            drawLine("isCollided = " + Entities.PLAYER.isCollided, graphics);
+            drawLine("Location: " + TestMap.currentSector, graphics);
+            drawLine("EntityStore: " + EntityStore.amount, graphics);
             if (Entities.PLAYER.lastCollision != null) {
-                drawLine("Last collision: " + Entities.PLAYER.lastCollision.boundary1 + " and "
-                        + Entities.PLAYER.lastCollision.boundary2.parent + " (collidedSide = "
-                        + Entities.PLAYER.lastCollisionEvent.collidedSide + ")", graphics, 4);
+                drawLine("Last collision: " + Entities.PLAYER.lastCollision.boundaries[0] + " and "
+                        + Entities.PLAYER.lastCollision.boundaries[1].parent + " (collidedSide = "
+                        + Entities.PLAYER.lastCollisionEvent.collidedSide + ")", graphics);
             }
+            String move = "   [";
+            if (Entities.PLAYER.isMoving(Entities.PLAYER.UP)) {
+                move += "^]   ";
+            } else {
+                move += " ]   ";
+            }
+            drawLine(move, graphics);
+            move = "[";
+            if (Entities.PLAYER.isMoving(Entities.PLAYER.LEFT)) {
+                move += "<]   ";
+            } else {
+                move += " ]   ";
+            }
+            if (Entities.PLAYER.isMoving(Entities.PLAYER.RIGHT)) {
+                move += "[>]";
+            } else {
+                move += "[ ]";
+            }
+            drawLine(move, graphics);
+            move = "   [";
+            if (Entities.PLAYER.isMoving(Entities.PLAYER.DOWN)) {
+                move += "v]   ";
+            } else {
+                move += " ]   ";
+            }
+            drawLine(move, graphics);
         }
     }
 

@@ -21,15 +21,21 @@ import java.util.ArrayList;
 public abstract class Entity {
 
     /**
-     * Collection of this entity's sprites
+     * The entity's sprites
      */
     protected ArrayList<Sprite> sprites;
     /**
-     * Collection of this entity's collisions
+     * The entity's collisions
      */
-    protected ArrayList<EntityEntityCollision> collisions;
+    public ArrayList<EntityEntityCollision> collisions;
     /**
-     * Collection of this entity's boundaries
+     * The entity's collisions, but only those that are currently collided
+     *
+     * @see EntityEntityCollision#isCollided
+     */
+    public ArrayList<EntityEntityCollision> concurrentCollisions;
+    /**
+     * Collection of the entity's boundaries
      */
     public ArrayList<EntityBoundary> boundaries;
     /**
@@ -45,7 +51,7 @@ public abstract class Entity {
      */
     protected BufferedImage secondLayer;
     /**
-     * The most recent collision that has occurred for this entity. If no collisions have occurred within this entity's
+     * The most recent collision that has occurred for the entity. If no collisions have occurred within the entity's
      * lifetime, this will be null
      */
     public EntityEntityCollision lastCollision = null;
@@ -66,31 +72,31 @@ public abstract class Entity {
      */
     public int uuid;
     /**
-     * Whether or not this entity is animated
+     * Whether or not the entity is animated
      */
     boolean isAnimated;
     /**
-     * Whether or not this entity is static (no animation)
+     * Whether or not the entity is static (no animation)
      */
     public boolean isStatic;
     /**
-     * Whether ot not this entity is currently collided with another entity
+     * Whether ot not the entity is currently collided with another entity
      */
     public boolean isCollided;
     /**
-     * Whether or not this entity has two different "layers" that are rendered before and after the player
+     * Whether or not the entity has two different "layers" that are rendered before and after the player
      */
     protected boolean isDualRendered;
     /**
-     * Whether or not this entity is currently registered in the entity store
+     * Whether or not the entity is currently registered in the entity store
      */
     public boolean isRegistered;
     /**
-     * Whether or not this entity is "bound" to, or only exists in, a specific map sector
+     * Whether or not the entity is "bound" to, or only exists in, a specific map sector
      */
     protected boolean isSectorSpecific;
     /**
-     * Human-readable identifier for this entity
+     * Human-readable identifier for the entity
      */
     private String id;
 
@@ -115,6 +121,7 @@ public abstract class Entity {
         this.id = id;
         boundaries = new ArrayList<>();
         collisions = new ArrayList<>();
+        concurrentCollisions = new ArrayList<>();
         EntityStore.register(this);
     }
 
@@ -125,7 +132,7 @@ public abstract class Entity {
      *         Graphics object to use
      */
     public void render(Graphics graphics) {
-        graphics.drawImage(sprite.getCurrentFrameAsBufferedImage(), (int) x, (int) y, null);
+        graphics.drawImage(sprite.asBufferedImage(0), (int) x, (int) y, null);
         drawDebug(graphics);
     }
 
@@ -171,7 +178,6 @@ public abstract class Entity {
      */
     private void drawNameTag(Graphics graphics) {
         if (!setFontMetrics) {
-            // init, only run once
             name = toString();
             nameTagWidth = graphics.getFontMetrics(nameTagFont).stringWidth(name) + 8; // 4px padding on both sides
             entityWidth = sprite.width;
@@ -196,13 +202,11 @@ public abstract class Entity {
      *         Graphics object to use
      */
     private void drawBoundaries(Graphics graphics) {
-        for (EntityBoundary boundary : boundaries) {
-            boundary.draw(graphics);
-        }
+        boundaries.forEach(boundary -> boundary.draw(graphics));
     }
 
     /**
-     * "Kills" this entity by removing it from the entity store. Only for sector-specific entities
+     * "Kills" the entity by removing it from the entity store. Only for sector-specific entities
      */
     public void kill() {
         if (isSectorSpecific) {
@@ -213,15 +217,18 @@ public abstract class Entity {
     /**
      * Should be called 60 times per second within a tick thread
      */
-    public abstract void tick();
+    public void tick() {
+        boundaries.forEach(EntityBoundary::tick);
+        collisions.forEach(EntityEntityCollision::tick);
+    }
 
     /**
-     * Sets this entity's boundaries
+     * Sets the entity's boundaries
      */
     protected abstract void setBoundaries();
 
     /**
-     * Sets this entity's collisions
+     * Sets the entity's collisions
      */
     protected abstract void setCollisions();
 
@@ -231,7 +238,7 @@ public abstract class Entity {
      * @param index
      *         Position of a sprite within the sprite collection ({@link #sprites}) to set as the current one
      */
-    public void setCurrentSprite(int index) {
+    public void setSprite(int index) {
         sprite = sprites.get(index);
     }
 
@@ -243,7 +250,7 @@ public abstract class Entity {
     }
 
     /**
-     * Returns this entity as a human-readable string, in the format "{@link #id}#{@link #uuid}"
+     * Returns the entity as a human-readable string, in the format "{@link #id}#{@link #uuid}"
      */
     public String toString() {
         return id + "#" + uuid;

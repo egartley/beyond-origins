@@ -37,10 +37,10 @@ public class EntityEntityCollisionEvent {
         // round player speed to int, ex. 1.6 would be 2
         // setting the tolerance based on player speed makes it so that regardless of the player speed, the collided
         // side should still be able to be determined
-        int tolerance = (int) (Entities.PLAYER.speed + 0.5);
+        int tolerance = (int) Entities.PLAYER.SPEED;
 
-        EntityBoundary collider = invoker.boundary1;
-        EntityBoundary into = invoker.boundary2;
+        EntityBoundary collider = invoker.boundaries[0];
+        EntityBoundary into = invoker.boundaries[1];
 
         if (into.right - tolerance <= collider.left && collider.left <= into.right) {
             collidedSide = RIGHT_SIDE;
@@ -51,8 +51,8 @@ public class EntityEntityCollisionEvent {
         } else if (into.bottom - tolerance <= collider.top && collider.top <= into.bottom) {
             collidedSide = BOTTOM_SIDE;
         } else {
-            Debug.error("Could not calculate a collided side! (between " + invoker.entities.get(0) + " and " +
-                    invoker.entities.get(1) + ")");
+            Debug.error("Could not calculate a collided side! (between " + collider.parent + " and " + into.parent +
+                    ")");
         }
     }
 

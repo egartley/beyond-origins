@@ -14,13 +14,16 @@ import java.awt.*;
  */
 public class Animation {
 
-    private byte delay = 0, threshold = 10;
-    private int frameIndex, startIndex;
+    private int frameIndex;
+    private int startIndex;
+    private byte delay = 0;
+    private byte threshold = 10;
+    private boolean setStopFrame;
+
     /**
      * Set to true when the animation is no longer changing frames, false otherwise
      */
     public boolean isStopped;
-    private boolean setStopFrame;
 
     /**
      * The {@link Sprite} to animate
@@ -39,23 +42,56 @@ public class Animation {
      * Creates a new animation
      *
      * @param s
-     *         {@link Sprite} to animate
+     *         Sprite to animate
      */
     public Animation(Sprite s) {
         sprite = s;
         frameIndex = 0;
         startIndex = 0;
-        startFrame = sprite.frameCollection.get(startIndex);
+        startFrame = sprite.frames.get(startIndex);
         frame = startFrame;
     }
 
+    /**
+     * Creates a new animation
+     *
+     * @param s
+     *         Sprite to animate
+     * @param threshold
+     *         The animation's threshold, see {@link #setThreshold(int)}
+     */
+    public Animation(Sprite s, byte threshold) {
+        this(s);
+        this.threshold = threshold;
+    }
+
+    /**
+     * Creates a new animation
+     *
+     * @param s
+     *         Sprite to animate
+     * @param threshold
+     *         The animation's threshold, see {@link #setThreshold(int)}
+     * @param startIndex
+     *         The frame index to start the animation at
+     */
+    public Animation(Sprite s, byte threshold, int startIndex) {
+        this(s, threshold);
+        this.startIndex = startIndex;
+        startFrame = sprite.frames.get(startIndex);
+    }
+
+    private AnimationFrame getFrame() {
+        return sprite.frames.get(frameIndex);
+    }
+
     private AnimationFrame nextFrame() {
-        if (frameIndex + 1 == sprite.frameCollection.size()) {
+        if (frameIndex + 1 == sprite.frames.size()) {
             frameIndex = 0;
         } else {
             frameIndex++;
         }
-        return sprite.frameCollection.get(frameIndex);
+        return getFrame();
     }
 
     /**
@@ -77,6 +113,15 @@ public class Animation {
             return;
         }
         threshold = (byte) t;
+    }
+
+    public void setFrame(int index) {
+        if (index >= sprite.frames.size()) {
+            Debug.warning("Tried to set the frame for an animation to an invalid index");
+            return;
+        }
+        frameIndex = index;
+        frame = getFrame();
     }
 
     /**

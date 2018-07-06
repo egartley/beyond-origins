@@ -28,8 +28,6 @@ public abstract class AnimatedEntity extends Entity {
      *
      * @param id
      *         Human-readable ID for the entity
-     *
-     * @see Entity
      */
     public AnimatedEntity(String id) {
         super(id);
@@ -44,4 +42,10 @@ public abstract class AnimatedEntity extends Entity {
      */
     public abstract void setAnimationCollection();
 
+    @Override
+    public void tick() {
+        super.tick();
+
+        animations.forEach(Animation::tick);
+    }
 }
