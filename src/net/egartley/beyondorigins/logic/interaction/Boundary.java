@@ -20,27 +20,27 @@ public abstract class Boundary {
     int horizontalOffset;
     int verticalOffset;
     /**
-     * The boundary's width (calculated with padding)
+     * The boundary's width (includes padding)
      */
     public int width;
     /**
-     * The boundary's height (calculated with padding)
+     * The boundary's height (includes padding)
      */
     public int height;
     /**
-     * Top side of the boundary, which is its y-coordinate
+     * Top side of the boundary, which is the y-coordinate
      */
     public int top;
     /**
-     * Right side of the boundary, which is its x-coordinate
+     * Right side of the boundary, which is the x-coordinate + width
      */
     public int right;
     /**
-     * Bottom side of the boundary, which is its y-coordinate
+     * Bottom side of the boundary, which is the y-coordinate + height
      */
     public int bottom;
     /**
-     * Left side of the boundary, which is its x-coordinate
+     * Left side of the boundary, which is the x-coordinate
      */
     public int left;
     /**

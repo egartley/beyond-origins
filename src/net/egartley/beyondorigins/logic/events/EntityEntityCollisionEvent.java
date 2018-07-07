@@ -1,6 +1,5 @@
 package net.egartley.beyondorigins.logic.events;
 
-import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
@@ -27,6 +26,8 @@ public class EntityEntityCollisionEvent {
      */
     public byte collidedSide = -1;
 
+    public EntityEntityCollision invoker;
+
     /**
      * Creates a new entity-entity collision event, then determines {@link #collidedSide}
      *
@@ -34,25 +35,29 @@ public class EntityEntityCollisionEvent {
      *         The collision that occurred
      */
     public EntityEntityCollisionEvent(EntityEntityCollision invoker) {
-        // round player speed to int, ex. 1.6 would be 2
-        // setting the tolerance based on player speed makes it so that regardless of the player speed, the collided
-        // side should still be able to be determined
+        this.invoker = invoker;
         int tolerance = (int) Entities.PLAYER.SPEED;
+        EntityBoundary player = invoker.boundaries[0];
+        EntityBoundary rock = invoker.boundaries[1];
 
-        EntityBoundary collider = invoker.boundaries[0];
-        EntityBoundary into = invoker.boundaries[1];
+        boolean top = rock.top - tolerance <= player.bottom && player.top < rock.top && player.bottom - rock.top <=
+                tolerance;
+        boolean bottom = rock.bottom + tolerance >= player.top && player.bottom > rock.bottom && rock.bottom - player
+                .top <= tolerance;
+        boolean left = rock.left <= player.right + tolerance && player.left < rock.left && player.right - rock.left
+                <= tolerance;
+        boolean right = rock.right + tolerance >= player.left && player.left > rock.left && rock.right - player.left
+                <= tolerance;
 
-        if (into.right - tolerance <= collider.left && collider.left <= into.right) {
-            collidedSide = RIGHT_SIDE;
-        } else if (into.left <= collider.right && collider.right <= into.left + tolerance) {
+        if (left) {
             collidedSide = LEFT_SIDE;
-        } else if (into.top <= collider.bottom && collider.bottom <= into.top + tolerance) {
+        } else if (right) {
+            collidedSide = RIGHT_SIDE;
+        }
+        if (top) {
             collidedSide = TOP_SIDE;
-        } else if (into.bottom - tolerance <= collider.top && collider.top <= into.bottom) {
+        } else if (bottom) {
             collidedSide = BOTTOM_SIDE;
-        } else {
-            Debug.error("Could not calculate a collided side! (between " + collider.parent + " and " + into.parent +
-                    ")");
         }
     }
 

@@ -1,6 +1,5 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;

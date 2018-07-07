@@ -27,8 +27,11 @@ public class EntityEntityCollision {
     public boolean isCollided;
 
     private Rectangle[] rectangles;
-    private EntityEntityCollisionEvent event;
 
+    /**
+     * The collision's most recent event
+     */
+    public EntityEntityCollisionEvent lastEvent;
     public EntityBoundary[] boundaries;
 
     /**
@@ -78,14 +81,14 @@ public class EntityEntityCollision {
         isCollided = rectangles[0].intersects(rectangles[1]);
 
         if (isCollided && !firedEvent) {
-            event = new EntityEntityCollisionEvent(this);
+            lastEvent = new EntityEntityCollisionEvent(this);
             onCollide_internal();
-            onCollide(event);
+            onCollide(lastEvent);
             firedEvent = true;
         }
         if (!isCollided && firedEvent) {
             onCollisionEnd_internal();
-            onCollisionEnd(event);
+            onCollisionEnd(lastEvent);
             firedEvent = false;
         }
         if (previouslyCollided != isCollided) {
@@ -149,11 +152,13 @@ public class EntityEntityCollision {
      */
     private void onCollide_internal() {
         for (Entity e : entities) {
+            // both entities are collided
             e.lastCollision = this;
             e.concurrentCollisions.add(this);
             e.isCollided = true;
         }
         for (EntityBoundary b : boundaries) {
+            // both boundaries are collided
             b.isCollided = true;
         }
     }
@@ -162,24 +167,20 @@ public class EntityEntityCollision {
      * Called right before {@link #onCollisionEnd(EntityEntityCollisionEvent)}
      */
     private void onCollisionEnd_internal() {
+        // determine boundary.isCollided (before entity.isCollided)
         for (EntityBoundary boundary : boundaries) {
-            // Debug.info("Checking " + boundary + "...");
-            for (EntityBoundary parentBoundary : boundary.parent.boundaries) {
-                // Debug.info("|---- Checking " + parentBoundary + "...");
-                for (EntityEntityCollision parentCollision : parentBoundary.parent.concurrentCollisions) {
-                    // Debug.info("|-------- Checking " + parentCollision + "...");
-                    if (parentCollision.isCollided) {
-                        boundary.isCollided = parentCollision.boundaries[0] == boundary || parentCollision
-                                .boundaries[1] == boundary;
-                    } else {
-                        boundary.isCollided = parentCollision.boundaries[0] != boundary && parentCollision
-                                .boundaries[1] != boundary;
-                    }
-                    // Debug.info(boundary + " is now " + boundary.isCollided);
+            for (EntityEntityCollision parentCollision : boundary.parent.concurrentCollisions) {
+                if (parentCollision.isCollided) {
+                    boundary.isCollided = parentCollision.boundaries[0] == boundary || parentCollision
+                            .boundaries[1] == boundary;
                     break;
+                } else {
+                    boundary.isCollided = false;
                 }
             }
         }
+
+        // now determine entity.isCollided
         for (Entity entity : entities) {
             entity.concurrentCollisions.remove(this);
             for (EntityBoundary boundary : entity.boundaries) {
@@ -192,7 +193,6 @@ public class EntityEntityCollision {
                 entity.isCollided = false;
             }
         }
-        // Debug.info("|---------------------------------------");
     }
 
     @Override

@@ -3,6 +3,7 @@ package net.egartley.beyondorigins.entities;
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.input.Keyboard;
+import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.logic.interaction.BoundaryOffset;
 import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
@@ -126,6 +127,14 @@ public class Player extends AnimatedEntity {
      *         in which to annul
      */
     void annulCollisionEvent(EntityEntityCollisionEvent event) {
+        // check for other movement restrictions
+        for (EntityEntityCollision c : concurrentCollisions) {
+            if (c.lastEvent.collidedSide == event.collidedSide && c.lastEvent.invoker != event.invoker) {
+                // there is another collision that has the same movement restriction, so don't annul it
+                return;
+            }
+        }
+
         switch (event.collidedSide) {
             case EntityEntityCollisionEvent.TOP_SIDE:
                 isAllowedToMoveDownwards = true;
