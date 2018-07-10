@@ -94,7 +94,7 @@ public abstract class Entity {
     /**
      * Whether or not the entity is "bound" to, or only exists in, a specific map sector
      */
-    protected boolean isSectorSpecific;
+    public boolean isSectorSpecific;
     /**
      * Human-readable identifier for the entity
      */

@@ -118,6 +118,13 @@ public class EntityEntityCollision {
 
     }
 
+    public void end() {
+        isCollided = false;
+        onCollisionEnd_internal();
+        onCollisionEnd(lastEvent);
+        firedEvent = false;
+    }
+
     /**
      * Sets or updates the colors for both boundaries
      */
@@ -136,7 +143,7 @@ public class EntityEntityCollision {
             if (e.parent.isStatic) {
                 e.drawColor = Color.BLACK;
             } else {
-                e.drawColor = Color.YELLOW;
+                e.drawColor = Color.ORANGE;
             }
         } else {
             if (e.parent.isStatic) {

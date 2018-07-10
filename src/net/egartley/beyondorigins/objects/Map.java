@@ -44,7 +44,7 @@ public abstract class Map {
     public abstract void render(Graphics graphics);
 
     /**
-     * Called when the current sector changes ({@link #changeSector(MapSector)})
+     * Called when the current sector changes ({@link #changeSector(MapSector, MapSector)})
      */
     public abstract void onSectorChange(MapSectorChangeEvent event);
 
@@ -59,11 +59,13 @@ public abstract class Map {
     public void changeSector(MapSector to, MapSector from) {
         onSectorChange(new MapSectorChangeEvent(from, to));
         if (currentSector != null) {
+            currentSector.onPlayerLeave_internal(to);
             currentSector.onPlayerLeave(to);
         }
-        MapSector previousSector = currentSector;
+        MapSector previous = currentSector;
         currentSector = to;
-        currentSector.onPlayerEnter(previousSector);
+        currentSector.onPlayerEnter_internal(previous);
+        currentSector.onPlayerEnter(previous);
     }
 
     public String toString() {

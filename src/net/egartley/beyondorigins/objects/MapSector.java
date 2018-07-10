@@ -2,8 +2,11 @@ package net.egartley.beyondorigins.objects;
 
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
+import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.collision.MapSectorChangeCollision;
+import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.logic.interaction.MapSectorChangeBoundary;
 
 import java.awt.*;
@@ -101,6 +104,14 @@ public abstract class MapSector {
      * Initialize things such as sector-specific entities
      */
     public abstract void initialize();
+
+    public void onPlayerEnter_internal(MapSector from) {
+        Util.fixCrossSectorCollisions(entities);
+    }
+
+    public void onPlayerLeave_internal(MapSector to) {
+        Util.fixCrossSectorCollisions(entities);
+    }
 
     /**
      * Minimum requirement for rendering, must be called first in any implementation

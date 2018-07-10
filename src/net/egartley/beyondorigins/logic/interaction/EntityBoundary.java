@@ -81,11 +81,11 @@ public class EntityBoundary extends Boundary {
         setColor();
     }
 
-    private void setColor() {
+    public void setColor() {
         if (parent.isStatic) {
             drawColor = Color.BLACK;
         } else {
-            drawColor = Color.YELLOW;
+            drawColor = Color.ORANGE;
         }
     }
 

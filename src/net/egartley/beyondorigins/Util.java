@@ -100,26 +100,37 @@ public class Util {
      *
      * @return Generated entity-to-entity collisions based on the given parameters
      */
-    public static ArrayList<EntityEntityCollision> getAllBoundaryCollisions(EntityEntityCollision baseEvent,
-                                                                            Entity entity, EntityBoundary
-                                                                                    baseBoundary) {
-        ArrayList<EntityEntityCollision> collisions = new ArrayList<EntityEntityCollision>();
+    public static ArrayList<EntityEntityCollision> getAllBoundaryCollisions(EntityEntityCollision baseEvent, Entity
+            entity, EntityBoundary baseBoundary) {
+        ArrayList<EntityEntityCollision> collisions = new ArrayList<>();
         for (EntityBoundary boundary : entity.boundaries) {
             collisions.add(new EntityEntityCollision(boundary, baseBoundary) {
                 public void onCollide(EntityEntityCollisionEvent event) {
                     baseEvent.onCollide(event);
                 }
 
-                ;
-
                 public void onCollisionEnd(EntityEntityCollisionEvent event) {
                     baseEvent.onCollisionEnd(event);
                 }
-
-                ;
             });
         }
         return collisions;
+    }
+
+    public static void fixCrossSectorCollisions(ArrayList<Entity> entities) {
+        for (Entity e : entities) {
+            for (EntityEntityCollision c : e.collisions) {
+                if (c.isCollided) {
+                    for (EntityBoundary eb : c.boundaries) {
+                        if (!eb.parent.isSectorSpecific) {
+                            eb.isCollided = false;
+                            eb.parent.isCollided = false;
+                            eb.setColor();
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

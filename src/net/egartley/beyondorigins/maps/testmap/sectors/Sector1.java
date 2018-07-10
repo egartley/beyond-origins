@@ -43,8 +43,8 @@ public class Sector1 extends MapSector {
         // one in memory
         s = Entities.getSpriteTemplate(Entities.ROCK);
         int off = 0;
-        for (byte i = 0; i < 23; i++)
-            entities.add(new DefaultRock(s, (s.width) * off++ + 48, 180));
+        for (byte i = 0; i < 16; i++)
+            entities.add(new DefaultRock(s, (s.width * 2) * off++ + 48, 400));
         /*entities.add(new DefaultRock(s, 300, 160));
         entities.add(new DefaultRock(s, 270, 310));
         entities.add(new DefaultRock(s, 150, 370));
