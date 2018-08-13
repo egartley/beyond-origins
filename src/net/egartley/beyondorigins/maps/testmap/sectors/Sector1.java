@@ -29,6 +29,8 @@ public class Sector1 extends MapSector {
     public void tick() {
         super.tick();
 
+        Entities.DUMMY.tick();
+
         entities.forEach(Entity::tick);
     }
 

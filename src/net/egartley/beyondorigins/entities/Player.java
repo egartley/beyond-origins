@@ -1,7 +1,6 @@
 package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Debug;
-import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.input.Keyboard;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
@@ -18,12 +17,6 @@ import java.util.ArrayList;
 
 public class Player extends AnimatedEntity {
 
-    public final byte UP = 1;
-    public final byte DOWN = 2;
-    public final byte LEFT = 3;
-    public final byte RIGHT = 4;
-    public final double SPEED = 2;
-
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
     private final byte ANIMATION_THRESHOLD = 7;
@@ -32,9 +25,6 @@ public class Player extends AnimatedEntity {
     EntityBoundary headBoundary;
     EntityBoundary bodyBoundary;
     EntityBoundary feetBoundary;
-
-    private int maximumX;
-    private int maximumY;
 
     boolean isAllowedToMoveUpwards = true;
     boolean isAllowedToMoveDownwards = true;
@@ -50,62 +40,25 @@ public class Player extends AnimatedEntity {
         super("Player");
         this.sprites = sprites;
         sprite = sprites.get(0);
-        maximumX = Game.WINDOW_WIDTH;
-        maximumY = Game.WINDOW_HEIGHT;
         setAnimationCollection();
         setBoundaries();
         setCollisions();
 
         isSectorSpecific = false;
         isDualRendered = false;
-    }
-
-    private void move(byte direction) {
-        if (animation.isStopped) {
-            // animation was stopped, so restart it because we're moving
-            animation.restart();
-            animation.setFrame(1);
-        }
-        switch (direction) {
-            case UP:
-                if (boundary.top <= 0 || !isAllowedToMoveUpwards) {
-                    break; // top of window or can't move upwards
-                }
-                y -= SPEED;
-                break;
-            case DOWN:
-                if (boundary.bottom >= maximumY || !isAllowedToMoveDownwards) {
-                    break; // bottom of window or can't move downwards
-                }
-                y += SPEED;
-                break;
-            case LEFT:
-                if (boundary.left <= 0 || !isAllowedToMoveLeftwards) {
-                    break; // left of window or can't move leftwards
-                }
-                x -= SPEED;
-                switchAnimation(LEFT_ANIMATION);
-                break;
-            case RIGHT:
-                if (boundary.right >= maximumX || !isAllowedToMoveRightwards) {
-                    break; // right of window or can't move rightwards
-                }
-                x += SPEED;
-                switchAnimation(RIGHT_ANIMATION);
-                break;
-            default:
-                break;
-        }
+        speed = 2;
     }
 
     /**
      * Changes the animation to another one in the collection
      *
-     * @param i
-     *         The index of the animation
+     * @param i The index of the animation
      */
     private void switchAnimation(byte i) {
-        animation = animations.get(i);
+        if (!animation.equals(animations.get(i))) {
+            // this prevents the same animation being set again
+            animation = animations.get(i);
+        }
     }
 
     /**
@@ -122,9 +75,8 @@ public class Player extends AnimatedEntity {
      * Cancels any movement restrictions imposed by the provided {@link net.egartley.beyondorigins.logic.events
      * .EntityEntityCollisionEvent EntityEntityCollisionEvent}
      *
-     * @param event
-     *         The {@link net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent EntityEntityCollisionEvent}
-     *         in which to annul
+     * @param event The {@link net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent EntityEntityCollisionEvent}
+     *              in which to annul
      */
     void annulCollisionEvent(EntityEntityCollisionEvent event) {
         // check for other movement restrictions
@@ -156,9 +108,7 @@ public class Player extends AnimatedEntity {
     /**
      * Returns whether or not the player is currently moving in a certain direction
      *
-     * @param direction
-     *         {@link #UP}, {@link #DOWN}, {@link #LEFT} or {@link #RIGHT}
-     *
+     * @param direction {@link #UP}, {@link #DOWN}, {@link #LEFT} or {@link #RIGHT}
      * @return True if the player is moving in the given direction, false if not or the given direction was unknown
      */
     public boolean isMoving(byte direction) {
@@ -190,6 +140,7 @@ public class Player extends AnimatedEntity {
     public void setBoundaries() {
         boundary = new EntityBoundary(this, sprite, new BoundaryPadding(4, 3, 2, 3));
         boundary.name = "Base";
+        defaultBoundary = boundary;
         headBoundary = new EntityBoundary(this, 19, 18, new BoundaryPadding(0), new BoundaryOffset(0, 0, 0, 5));
         headBoundary.name = "Head";
         bodyBoundary = new EntityBoundary(this, 30, 19, new BoundaryPadding(0), new BoundaryOffset(0, 16, 0, 0));
@@ -222,29 +173,51 @@ public class Player extends AnimatedEntity {
         isMovingLeftwards = false;
         isMovingRightwards = false;
 
-        if (up) {
-            isMovingUpwards = true;
-            move(UP);
-        } else if (down) {
-            // cannot be moving up and down at the same time
-            isMovingDownwards = true;
-            move(DOWN);
-        }
-        if (left) {
-            isMovingLeftwards = true;
-            move(LEFT);
-        } else if (right) {
-            // cannot be moving left and right at the same time
-            isMovingRightwards = true;
-            move(RIGHT);
-        }
+        // actually move the player, with animations and all
+        move(up, down, left, right);
+
         if (!left && !right && !down && !up) {
-            // not moving at all, so stop the animation
+            // not moving, so stop the animation if not already
             animation.stop();
         }
 
-        animations.forEach(Animation::tick);
-        boundaries.forEach(EntityBoundary::tick);
+        super.tick();
+    }
+
+    private void move(boolean up, boolean down, boolean left, boolean right) {
+        if (animation.isStopped) {
+            // animation was stopped, so restart it because we're moving
+            animation.restart();
+            animation.setFrame(1);
+        }
+
+        if (up) {
+            isMovingUpwards = true;
+            if (isAllowedToMoveUpwards) {
+                move(UP, boundary);
+            }
+        } else if (down) {
+            isMovingDownwards = true;
+            if (isAllowedToMoveDownwards) {
+                move(DOWN, boundary);
+            }
+        }
+
+        if (left) {
+            isMovingLeftwards = true;
+            if (isAllowedToMoveLeftwards) {
+                move(LEFT, boundary);
+            }
+
+            switchAnimation(LEFT_ANIMATION);
+        } else if (right) {
+            isMovingRightwards = true;
+            if (isAllowedToMoveRightwards) {
+                move(RIGHT, boundary);
+            }
+
+            switchAnimation(RIGHT_ANIMATION);
+        }
     }
 
     @Override

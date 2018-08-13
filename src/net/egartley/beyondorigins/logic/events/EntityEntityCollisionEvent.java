@@ -3,6 +3,8 @@ package net.egartley.beyondorigins.logic.events;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
+import net.egartley.beyondorigins.logic.math.Calculate;
+import net.egartley.beyondorigins.objects.Entity;
 
 /**
  * A custom "event" that can be used for gathering information from a collision that has occurred between two entities
@@ -31,23 +33,18 @@ public class EntityEntityCollisionEvent {
     /**
      * Creates a new entity-entity collision event, then determines {@link #collidedSide}
      *
-     * @param invoker
-     *         The collision that occurred
+     * @param invoker The collision that occurred
      */
     public EntityEntityCollisionEvent(EntityEntityCollision invoker) {
         this.invoker = invoker;
-        int tolerance = (int) Entities.PLAYER.SPEED;
+        int tolerance = (int) Entities.PLAYER.speed;
         EntityBoundary player = invoker.boundaries[0];
         EntityBoundary rock = invoker.boundaries[1];
 
-        boolean top = rock.top - tolerance <= player.bottom && player.top < rock.top && player.bottom - rock.top <=
-                tolerance;
-        boolean bottom = rock.bottom + tolerance >= player.top && player.bottom > rock.bottom && rock.bottom - player
-                .top <= tolerance;
-        boolean left = rock.left <= player.right + tolerance && player.left < rock.left && player.right - rock.left
-                <= tolerance;
-        boolean right = rock.right + tolerance >= player.left && player.left > rock.left && rock.right - player.left
-                <= tolerance;
+        boolean top = Calculate.isEntityWithinToleranceOf(player, rock, Entity.UP, tolerance);
+        boolean bottom = Calculate.isEntityWithinToleranceOf(player, rock, Entity.DOWN, tolerance);
+        boolean left = Calculate.isEntityWithinToleranceOf(player, rock, Entity.LEFT, tolerance);
+        boolean right = Calculate.isEntityWithinToleranceOf(player, rock, Entity.RIGHT, tolerance);
 
         if (left) {
             collidedSide = LEFT_SIDE;

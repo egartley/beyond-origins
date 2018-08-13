@@ -5,6 +5,7 @@ import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.entities.EntityStore;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
+import net.egartley.beyondorigins.logic.interaction.Boundary;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.logic.math.Calculate;
 
@@ -13,12 +14,17 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
- * An object or character that can rendered with a sprite and have a specific position
+ * An object or character that can rendered with a {@link Sprite} at a specified location
  *
  * @see AnimatedEntity
  * @see StaticEntity
  */
 public abstract class Entity {
+
+    public static final byte UP = 1;
+    public static final byte DOWN = 2;
+    public static final byte LEFT = 3;
+    public static final byte RIGHT = 4;
 
     /**
      * The entity's sprites
@@ -33,6 +39,7 @@ public abstract class Entity {
      *
      * @see EntityEntityCollision#isCollided
      */
+    // "concurrent" may not be the best word to use here, but it sounds cool, so...
     public ArrayList<EntityEntityCollision> concurrentCollisions;
     /**
      * Collection of the entity's boundaries
@@ -60,6 +67,10 @@ public abstract class Entity {
      */
     public EntityEntityCollisionEvent lastCollisionEvent = null;
     /**
+     *
+     */
+    public EntityBoundary defaultBoundary = null;
+    /**
      * The entity's x-axis coordinate (absolute)
      */
     public double x;
@@ -67,6 +78,10 @@ public abstract class Entity {
      * The entity's y-axis coordinate (absolute)
      */
     public double y;
+    /**
+     * The entity's speed
+     */
+    public double speed;
     /**
      * The entity's unique identification number. Use {@link #id} for user-friendly identification
      */
@@ -99,26 +114,31 @@ public abstract class Entity {
      * Human-readable identifier for the entity
      */
     private String id;
-
+    /**
+     * The entity's generic, non-specific name, such as "Rock" or "Tree"
+     */
     private String name;
-    private Font nameTagFont = new Font("Arial", Font.PLAIN, 11);
-    private Color nameTagBackgroundColor = new Color(0, 0, 0, 128);
-    private boolean setFontMetrics = false;
+
+    // the font and color are static because they're always the same
+    private static Font nameTagFont = new Font("Arial", Font.PLAIN, 11);
+    private static Color nameTagBackgroundColor = new Color(0, 0, 0, 128);
 
     private int nameTagWidth;
     private int entityWidth;
     private int nameX;
     private int nameY;
+    /**
+     * Whether or not font metrics have been initialized. Since {@link #render(Graphics)} is called about 60 times a second, and the resulting font metrics object will always be the same, there is no need to keep re-setting it each time {@link #render(Graphics)} is called, only the first
+     */
+    private boolean setFontMetrics = false;
 
     /**
-     * Creates a new entity with a randomly generated UUID, then adds it to the entity store
-     *
-     * @param id
-     *         Human-readable ID for the entity
+     * Creates a new entity with a randomly generated UUID, an initial speed of <code>1.0</code>, then adds it to the entity store
      */
     Entity(String id) {
         generateUUID();
         this.id = id;
+        speed = 1.0;
         boundaries = new ArrayList<>();
         collisions = new ArrayList<>();
         concurrentCollisions = new ArrayList<>();
@@ -126,10 +146,7 @@ public abstract class Entity {
     }
 
     /**
-     * Renders the entity
-     *
-     * @param graphics
-     *         Graphics object to use
+     * Renders the entity, using {@link #sprite}, at ({@link #x}, {@link #y})
      */
     public void render(Graphics graphics) {
         graphics.drawImage(sprite.asBufferedImage(0), (int) x, (int) y, null);
@@ -138,9 +155,6 @@ public abstract class Entity {
 
     /**
      * Draws the first "layer" if {@link #isDualRendered} is true (below the player)
-     *
-     * @param graphics
-     *         Graphics object to use
      */
     public void drawFirstLayer(Graphics graphics) {
         graphics.drawImage(firstLayer, (int) x, (int) y + secondLayer.getHeight(), null);
@@ -148,9 +162,6 @@ public abstract class Entity {
 
     /**
      * Draws the second "layer" if {@link #isDualRendered} is true (above the player)
-     *
-     * @param graphics
-     *         Graphics object to use
      */
     public void drawSecondLayer(Graphics graphics) {
         graphics.drawImage(secondLayer, (int) x, (int) y, null);
@@ -160,8 +171,7 @@ public abstract class Entity {
     /**
      * Renders debug information, such as the entity's boundaries and "name tag"
      *
-     * @param graphics
-     *         Graphics object to use
+     * @see Game#debug
      */
     protected void drawDebug(Graphics graphics) {
         if (Game.debug) {
@@ -172,14 +182,11 @@ public abstract class Entity {
 
     /**
      * Draws the entity's "name tag", which displays its {@link #id} and {@link #uuid}
-     *
-     * @param graphics
-     *         Graphics object to use
      */
     private void drawNameTag(Graphics graphics) {
         if (!setFontMetrics) {
             name = toString();
-            nameTagWidth = graphics.getFontMetrics(nameTagFont).stringWidth(name) + 8; // 4px padding on both sides
+            nameTagWidth = graphics.getFontMetrics(nameTagFont).stringWidth(name) + 8; // 4px padding on both sides, so add double of 4
             entityWidth = sprite.width;
             // don't initialize again, not needed
             setFontMetrics = true;
@@ -198,15 +205,14 @@ public abstract class Entity {
     /**
      * Draws all of the entity's boundaries
      *
-     * @param graphics
-     *         Graphics object to use
+     * @see Boundary#draw(Graphics)
      */
     private void drawBoundaries(Graphics graphics) {
         boundaries.forEach(boundary -> boundary.draw(graphics));
     }
 
     /**
-     * "Kills" the entity by removing it from the entity store. Only for sector-specific entities
+     * "Kills" the entity by removing it from the entity store, but only if it is sector-specific
      */
     public void kill() {
         if (isSectorSpecific) {
@@ -223,20 +229,116 @@ public abstract class Entity {
     }
 
     /**
+     * Changes the entity's location ({@link #x} and {@link #y}) at the specified speed, unless the specified boundary is outside of the window
+     */
+    protected void move(byte direction, EntityBoundary boundary) {
+        switch (direction) {
+            case UP:
+                if (boundary.top <= 0) {
+                    break; // top of window
+                }
+                y -= speed;
+                break;
+            case DOWN:
+                if (boundary.bottom >= Game.WINDOW_HEIGHT) {
+                    break; // bottom of window
+                }
+                y += speed;
+                break;
+            case LEFT:
+                if (boundary.left <= 0) {
+                    break; // left side of window
+                }
+                x -= speed;
+                break;
+            case RIGHT:
+                if (boundary.right >= Game.WINDOW_WIDTH) {
+                    break; // right side of window
+                }
+                x += speed;
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Have the entity "follow", or constantly move towards, the other
+     *
+     * @see #move(byte, EntityBoundary)
+     */
+    protected void follow(Entity e) {
+        boolean left = isLeftOf(e);
+        boolean below = isBelow(e);
+        boolean above = isAbove(e);
+        boolean right = isRightOf(e);
+
+        // check horizontal alignment
+        if (Calculate.getDifference(defaultBoundary.left, e.defaultBoundary.right) >= 8 && Calculate.getDifference(defaultBoundary.right, e.defaultBoundary.left) >= 8) {
+            if (right) {
+                move(LEFT, defaultBoundary);
+            } else if (left) {
+                move(RIGHT, defaultBoundary);
+            }
+        }
+
+        // check for vertical alignment
+        if (Calculate.getDifference(defaultBoundary.top, e.defaultBoundary.top) < 2)
+            return;
+
+        if (above) {
+            move(DOWN, defaultBoundary);
+        } else if (below) {
+            move(UP, defaultBoundary);
+        }
+    }
+
+    /**
+     * Returns whether or not the entity is to the "right" of the other
+     */
+    boolean isRightOf(Entity e) {
+        return x > e.x;
+    }
+
+    /**
+     * Returns whether or not the entity is to the "left" of the other
+     */
+    boolean isLeftOf(Entity e) {
+        return !isRightOf(e);
+    }
+
+    /**
+     * Returns whether or not the entity is "above" the other
+     */
+    boolean isAbove(Entity e) {
+        return y < e.y;
+    }
+
+    /**
+     * Returns whether or not the entity is "below" the other
+     */
+    boolean isBelow(Entity e) {
+        return !isAbove(e);
+    }
+
+    /**
      * Sets the entity's boundaries
+     *
+     * @see #boundaries
      */
     protected abstract void setBoundaries();
 
     /**
      * Sets the entity's collisions
+     *
+     * @see #collisions
      */
     protected abstract void setCollisions();
 
     /**
      * Sets the current sprite
      *
-     * @param index
-     *         Position of a sprite within the sprite collection ({@link #sprites}) to set as the current one
+     * @see #sprite
      */
     public void setSprite(int index) {
         sprite = sprites.get(index);
@@ -244,6 +346,8 @@ public abstract class Entity {
 
     /**
      * Generates a new UUID
+     *
+     * @see #uuid
      */
     private void generateUUID() {
         uuid = Util.randomInt(9999, 1000, true);
@@ -251,6 +355,9 @@ public abstract class Entity {
 
     /**
      * Returns the entity as a human-readable string, in the format "{@link #id}#{@link #uuid}"
+     *
+     * @see #id
+     * @see #uuid
      */
     public String toString() {
         return id + "#" + uuid;

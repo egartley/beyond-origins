@@ -18,6 +18,7 @@ public class Dummy extends StaticEntity {
 
         isSectorSpecific = false;
         isDualRendered = false;
+        speed = 2;
     }
 
     @Override
@@ -27,12 +28,14 @@ public class Dummy extends StaticEntity {
 
     @Override
     public void tick() {
-
+        follow(Entities.PLAYER);
+        super.tick();
     }
 
     @Override
     public void setBoundaries() {
-        boundaries.add(new EntityBoundary(this, sprite.width, sprite.height, new BoundaryPadding(12)));
+        boundaries.add(new EntityBoundary(this, sprite, new BoundaryPadding(4, 4, 3, 4)));
+        defaultBoundary = boundaries.get(0);
     }
 
     @Override
