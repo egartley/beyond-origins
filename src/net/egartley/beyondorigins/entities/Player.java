@@ -1,6 +1,5 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.input.Keyboard;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
@@ -11,7 +10,6 @@ import net.egartley.beyondorigins.objects.AnimatedEntity;
 import net.egartley.beyondorigins.objects.Animation;
 import net.egartley.beyondorigins.objects.Sprite;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
@@ -31,11 +29,6 @@ public class Player extends AnimatedEntity {
     boolean isAllowedToMoveLeftwards = true;
     boolean isAllowedToMoveRightwards = true;
 
-    private boolean isMovingUpwards = false;
-    private boolean isMovingDownwards = false;
-    private boolean isMovingLeftwards = false;
-    private boolean isMovingRightwards = false;
-
     public Player(ArrayList<Sprite> sprites) {
         super("Player");
         this.sprites = sprites;
@@ -46,7 +39,7 @@ public class Player extends AnimatedEntity {
 
         isSectorSpecific = false;
         isDualRendered = false;
-        speed = 2;
+        speed = 2.0;
     }
 
     /**
@@ -105,29 +98,6 @@ public class Player extends AnimatedEntity {
         }
     }
 
-    /**
-     * Returns whether or not the player is currently moving in a certain direction
-     *
-     * @param direction {@link #UP}, {@link #DOWN}, {@link #LEFT} or {@link #RIGHT}
-     * @return True if the player is moving in the given direction, false if not or the given direction was unknown
-     */
-    public boolean isMoving(byte direction) {
-        switch (direction) {
-            case UP:
-                return isMovingUpwards;
-            case DOWN:
-                return isMovingDownwards;
-            case LEFT:
-                return isMovingLeftwards;
-            case RIGHT:
-                return isMovingRightwards;
-            default:
-                Debug.warning("Tried to get an unknown movement from the player (" + direction + "), expected " + UP
-                        + ", " + DOWN + ", " + LEFT + " or " + RIGHT + "");
-                return false;
-        }
-    }
-
     @Override
     public void setAnimationCollection() {
         animations.clear();
@@ -155,23 +125,12 @@ public class Player extends AnimatedEntity {
     }
 
     @Override
-    public void render(Graphics graphics) {
-        animation.render(graphics, (int) x, (int) y);
-        drawDebug(graphics);
-    }
-
-    @Override
     public void tick() {
         // get keyboard input (typical WASD)
         boolean up = Keyboard.isKeyPressed(KeyEvent.VK_W);
         boolean left = Keyboard.isKeyPressed(KeyEvent.VK_A);
         boolean down = Keyboard.isKeyPressed(KeyEvent.VK_S);
         boolean right = Keyboard.isKeyPressed(KeyEvent.VK_D);
-        // reset all booleans for player's current movement
-        isMovingUpwards = false;
-        isMovingDownwards = false;
-        isMovingLeftwards = false;
-        isMovingRightwards = false;
 
         // actually move the player, with animations and all
         move(up, down, left, right);
@@ -192,30 +151,24 @@ public class Player extends AnimatedEntity {
         }
 
         if (up) {
-            isMovingUpwards = true;
             if (isAllowedToMoveUpwards) {
-                move(UP, boundary);
+                move(UP);
             }
         } else if (down) {
-            isMovingDownwards = true;
             if (isAllowedToMoveDownwards) {
-                move(DOWN, boundary);
+                move(DOWN);
             }
         }
 
         if (left) {
-            isMovingLeftwards = true;
             if (isAllowedToMoveLeftwards) {
-                move(LEFT, boundary);
+                move(LEFT);
             }
-
             switchAnimation(LEFT_ANIMATION);
         } else if (right) {
-            isMovingRightwards = true;
             if (isAllowedToMoveRightwards) {
-                move(RIGHT, boundary);
+                move(RIGHT);
             }
-
             switchAnimation(RIGHT_ANIMATION);
         }
     }

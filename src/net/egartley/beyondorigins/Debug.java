@@ -127,26 +127,26 @@ public class Debug {
                         + Entities.PLAYER.lastCollisionEvent.collidedSide + ")", graphics);
             }
             String move = "   [";
-            if (Entities.PLAYER.isMoving(Entities.PLAYER.UP)) {
+            if (Entities.PLAYER.isMovingUpwards) {
                 move += "^]   ";
             } else {
                 move += " ]   ";
             }
             drawLine(move, graphics);
             move = "[";
-            if (Entities.PLAYER.isMoving(Entities.PLAYER.LEFT)) {
+            if (Entities.PLAYER.isMovingLeftwards) {
                 move += "<]   ";
             } else {
                 move += " ]   ";
             }
-            if (Entities.PLAYER.isMoving(Entities.PLAYER.RIGHT)) {
+            if (Entities.PLAYER.isMovingRightwards) {
                 move += "[>]";
             } else {
                 move += "[ ]";
             }
             drawLine(move, graphics);
             move = "   [";
-            if (Entities.PLAYER.isMoving(Entities.PLAYER.DOWN)) {
+            if (Entities.PLAYER.isMovingDownwards) {
                 move += "v]   ";
             } else {
                 move += " ]   ";

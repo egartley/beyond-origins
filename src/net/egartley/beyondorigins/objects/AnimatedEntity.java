@@ -1,5 +1,6 @@
 package net.egartley.beyondorigins.objects;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -45,7 +46,12 @@ public abstract class AnimatedEntity extends Entity {
     @Override
     public void tick() {
         super.tick();
-
         animations.forEach(Animation::tick);
+    }
+
+    @Override
+    public void render(Graphics graphics) {
+        animation.render(graphics, (int) x, (int) y);
+        drawDebug(graphics);
     }
 }

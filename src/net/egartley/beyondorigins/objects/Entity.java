@@ -95,9 +95,25 @@ public abstract class Entity {
      */
     public boolean isStatic;
     /**
-     * Whether ot not the entity is currently collided with another entity
+     * Whether or not the entity is currently collided with another entity
      */
     public boolean isCollided;
+    /**
+     * Whether or not the entity is currently moving upwards
+     */
+    public boolean isMovingUpwards = false;
+    /**
+     * Whether or not the entity is currently moving downwards
+     */
+    public boolean isMovingDownwards = false;
+    /**
+     * Whether or not the entity is currently moving leftwards
+     */
+    public boolean isMovingLeftwards = false;
+    /**
+     * Whether or not the entity is currently moving rightwards
+     */
+    public boolean isMovingRightwards = false;
     /**
      * Whether or not the entity has two different "layers" that are rendered before and after the player
      */
@@ -128,7 +144,7 @@ public abstract class Entity {
     private int nameX;
     private int nameY;
     /**
-     * Whether or not font metrics have been initialized. Since {@link #render(Graphics)} is called about 60 times a second, and the resulting font metrics object will always be the same, there is no need to keep re-setting it each time {@link #render(Graphics)} is called, only the first
+     * Whether or not font metrics have been initialized. Since {@link #render(Graphics)} is called about 60 times a second, and the resulting font metrics object will always be the same, there is no need to keep re-computing it each time {@link #render(Graphics)} is called, only the first
      */
     private boolean setFontMetrics = false;
 
@@ -232,40 +248,63 @@ public abstract class Entity {
      * Changes the entity's location ({@link #x} and {@link #y}) at the specified speed, unless the specified boundary is outside of the window
      */
     protected void move(byte direction, EntityBoundary boundary) {
+        isMovingUpwards = false;
+        isMovingDownwards = false;
+        isMovingLeftwards = false;
+        isMovingRightwards = false;
         switch (direction) {
             case UP:
                 if (boundary.top <= 0) {
                     break; // top of window
                 }
+                isMovingUpwards = true;
                 y -= speed;
+                onMove(UP);
                 break;
             case DOWN:
                 if (boundary.bottom >= Game.WINDOW_HEIGHT) {
                     break; // bottom of window
                 }
+                isMovingDownwards = true;
                 y += speed;
+                onMove(DOWN);
                 break;
             case LEFT:
                 if (boundary.left <= 0) {
                     break; // left side of window
                 }
+                isMovingLeftwards = true;
                 x -= speed;
+                onMove(LEFT);
                 break;
             case RIGHT:
                 if (boundary.right >= Game.WINDOW_WIDTH) {
                     break; // right side of window
                 }
+                isMovingRightwards = true;
                 x += speed;
+                onMove(RIGHT);
                 break;
             default:
                 break;
         }
     }
 
+    protected void onMove(byte direction) {
+
+    }
+
+    /**
+     * Changes the entity's location ({@link #x} and {@link #y}) at a rate of {@link #speed} per call. Since there is no boundary parameter, the entity's {@link #defaultBoundary} will be used
+     */
+    protected void move(byte direction) {
+        move(direction, defaultBoundary);
+    }
+
     /**
      * Have the entity "follow", or constantly move towards, the other
      *
-     * @see #move(byte, EntityBoundary)
+     * @see #move(byte)
      */
     protected void follow(Entity e) {
         boolean left = isLeftOf(e);
@@ -273,18 +312,32 @@ public abstract class Entity {
         boolean above = isAbove(e);
         boolean right = isRightOf(e);
 
-        // check horizontal alignment
-        if (Calculate.getDifference(defaultBoundary.left, e.defaultBoundary.right) >= 8 && Calculate.getDifference(defaultBoundary.right, e.defaultBoundary.left) >= 8) {
-            if (right) {
-                move(LEFT, defaultBoundary);
-            } else if (left) {
-                move(RIGHT, defaultBoundary);
+        boolean caughtUpRight = Calculate.getDifference(defaultBoundary.left, e.defaultBoundary.right) <= 8;
+        boolean caughtUpLeft = Calculate.getDifference(defaultBoundary.right, e.defaultBoundary.left) <= 8;
+
+        if (caughtUpLeft || caughtUpRight) {
+            if (this instanceof AnimatedEntity) {
+                AnimatedEntity ae = (AnimatedEntity) this;
+                ae.animation.stop();
             }
         }
 
-        // check for vertical alignment
+        // Debug.info("right diff: " + Calculate.getDifference(defaultBoundary.left, e.defaultBoundary.right) + ", left diff: " + Calculate.getDifference(defaultBoundary.right, e.defaultBoundary.left));
+        // Debug.info("left: " + left + ", right: " + right);
+
+        // horizontal
+        if (Calculate.getDifference(defaultBoundary.left, e.defaultBoundary.left) >= e.defaultBoundary.width) {
+            // prevent "shaking" left and right
+            if (!caughtUpRight && right) {
+                move(LEFT);
+            } else if (!caughtUpLeft && left) {
+                move(RIGHT);
+            }
+        }
+
+        // vertical
         if (Calculate.getDifference(defaultBoundary.top, e.defaultBoundary.top) < 2)
-            return;
+            return; // prevent "shaking" up and down
 
         if (above) {
             move(DOWN, defaultBoundary);
@@ -296,28 +349,28 @@ public abstract class Entity {
     /**
      * Returns whether or not the entity is to the "right" of the other
      */
-    boolean isRightOf(Entity e) {
+    private boolean isRightOf(Entity e) {
         return x > e.x;
     }
 
     /**
      * Returns whether or not the entity is to the "left" of the other
      */
-    boolean isLeftOf(Entity e) {
+    private boolean isLeftOf(Entity e) {
         return !isRightOf(e);
     }
 
     /**
      * Returns whether or not the entity is "above" the other
      */
-    boolean isAbove(Entity e) {
+    private boolean isAbove(Entity e) {
         return y < e.y;
     }
 
     /**
      * Returns whether or not the entity is "below" the other
      */
-    boolean isBelow(Entity e) {
+    private boolean isBelow(Entity e) {
         return !isAbove(e);
     }
 

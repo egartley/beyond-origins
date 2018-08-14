@@ -127,7 +127,7 @@ public class Game extends Canvas implements Runnable {
             Debug.error("The dummy image (\"dummy.png\") doesn't exist, or there was a problem while loading it!");
             return;
         }
-        Entities.DUMMY = new Dummy(new SpriteSheet(image, 15 * scale, 23 * scale, 2, 4).getSprite(0));
+        Entities.DUMMY = new Dummy(new SpriteSheet(image, 15 * scale, 23 * scale, 2, 4).collection);
         // ************ DUMMY END *************
         Debug.out("Initialized the dummy");
     }

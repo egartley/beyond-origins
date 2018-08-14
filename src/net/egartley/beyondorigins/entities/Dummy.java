@@ -2,28 +2,38 @@ package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
+import net.egartley.beyondorigins.objects.AnimatedEntity;
+import net.egartley.beyondorigins.objects.Animation;
 import net.egartley.beyondorigins.objects.Sprite;
-import net.egartley.beyondorigins.objects.StaticEntity;
 
-import java.awt.*;
+import java.util.ArrayList;
 
-public class Dummy extends StaticEntity {
+public class Dummy extends AnimatedEntity {
 
-    public Dummy(Sprite sprite) {
-        super("Dummy", sprite);
+    private final byte LEFT_ANIMATION = 0;
+    private final byte RIGHT_ANIMATION = 1;
+    private final byte ANIMATION_THRESHOLD = 7;
+
+    public Dummy(ArrayList<Sprite> sprites) {
+        super("Dummy");
+        this.sprites = sprites;
+        sprite = sprites.get(0);
         x = 470.0;
-        y = 190.0;
+        y = 240.0;
+        setAnimationCollection();
         setBoundaries();
         setCollisions();
 
         isSectorSpecific = false;
         isDualRendered = false;
-        speed = 2;
+        speed = 2.0;
     }
 
-    @Override
-    public void render(Graphics graphics) {
-        super.render(graphics);
+    private void switchAnimation(byte i) {
+        if (!animation.equals(animations.get(i))) {
+            // this prevents the same animation being set again
+            animation = animations.get(i);
+        }
     }
 
     @Override
@@ -33,9 +43,30 @@ public class Dummy extends StaticEntity {
     }
 
     @Override
+    public void onMove(byte direction) {
+        if (animation.isStopped) {
+            // animation was stopped, so restart it because we're moving
+            animation.resume();
+        }
+
+        if (direction == RIGHT)
+            switchAnimation(RIGHT_ANIMATION);
+        else if (direction == LEFT)
+            switchAnimation(LEFT_ANIMATION);
+    }
+
+    @Override
     public void setBoundaries() {
-        boundaries.add(new EntityBoundary(this, sprite, new BoundaryPadding(4, 4, 3, 4)));
+        boundaries.add(new EntityBoundary(this, sprite, new BoundaryPadding(4, 4, 2, 4)));
         defaultBoundary = boundaries.get(0);
+    }
+
+    @Override
+    public void setAnimationCollection() {
+        animations.clear();
+        animations.add(new Animation(sprites.get(0), ANIMATION_THRESHOLD));
+        animations.add(new Animation(sprites.get(1), ANIMATION_THRESHOLD));
+        animation = animations.get(0);
     }
 
     @Override
