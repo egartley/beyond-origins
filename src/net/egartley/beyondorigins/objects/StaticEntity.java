@@ -4,25 +4,22 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * An entity that cannot be animated
+ * An entity that does have not any animations
  *
  * @see Entity
  */
 public abstract class StaticEntity extends Entity {
 
     /**
-     * The entity's frame that is used while rendering
+     * The buffered image to use when rendering
      */
     protected BufferedImage image;
 
     /**
-     * Creates a new static entity, while setting {@link Entity#isAnimated} to false and {@link Entity#isStatic} to
-     * true
+     * Creates a new static entity, while setting {@link Entity#isAnimated} to <code>false</code> and {@link
+     * Entity#isStatic} to <code>true</code>
      *
-     * @param id
-     *         Human-readable ID for the entity
-     *
-     * @see Entity
+     * @see Entity#Entity(String) Entity(String)
      */
     private StaticEntity(String id) {
         super(id);
@@ -31,20 +28,13 @@ public abstract class StaticEntity extends Entity {
     }
 
     /**
-     * Creates a new static entity, while setting {@link Entity#isAnimated} to false and {@link Entity#isStatic} to
-     * true
-     *
-     * @param id
-     *         Human-readable ID for the entity
-     * @param sprite
-     *         The sprite to use
-     *
-     * @see Entity
+     * Calls {@link #StaticEntity(String)}, sets {@link #sprite}, then sets {@link #image} to
+     * {@link Sprite#toBufferedImage()}
      */
     public StaticEntity(String id, Sprite sprite) {
         this(id);
         this.sprite = sprite;
-        image = sprite.asBufferedImage(0);
+        image = sprite.toBufferedImage();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package net.egartley.beyondorigins.entities;
 
+import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.objects.AnimatedEntity;
@@ -30,6 +31,10 @@ public class Dummy extends AnimatedEntity {
     }
 
     private void switchAnimation(byte i) {
+        if (i >= animations.size()) {
+            Debug.warning("Tried to switch to an animation at an invalid index");
+            return;
+        }
         if (!animation.equals(animations.get(i))) {
             // this prevents the same animation being set again
             animation = animations.get(i);

@@ -1,11 +1,13 @@
 package net.egartley.beyondorigins.objects;
 
+import net.egartley.beyondorigins.Debug;
+
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Objects;
 
 /**
- * A row, or "strip", of individual frames of an entity or object
+ * A row, or "strip", of individual frames for an entity (they are all the same height and width)
  *
  * @see SpriteSheet
  * @see Entity
@@ -13,9 +15,8 @@ import java.util.Objects;
 public class Sprite {
 
     /**
-     * The image that contains all of the sprite's possible frames
+     * The image that contains all of the sprite's frames (its width must be a multiple of {@link #width})
      *
-     * @see AnimationFrame
      * @see #frames
      */
     BufferedImage strip;
@@ -55,27 +56,37 @@ public class Sprite {
     }
 
     /**
-     * Returns the current frame as a buffered image
+     * Returns the first frame ({@link #getFrame(int) getFrame(0)}) as a buffered image
      */
-    public BufferedImage asBufferedImage(int index) {
+    BufferedImage toBufferedImage() {
+        return toBufferedImage(0);
+    }
+
+    /**
+     * Returns {@link #getFrame(int) getFrame(index)} as a buffered image
+     */
+    BufferedImage toBufferedImage(int index) {
         return Objects.requireNonNull(getFrame(index)).asBufferedImage();
     }
 
     /**
-     * Resets {@link #frames} and re-loads it with the given number of frames
+     * Sets {@link #frames}, clearing it if previously set
      *
-     * @param quantity
-     *         How many frames to use (must be at least 1)
+     * @param number
+     *         The amount of frames to set (must be at least 1)
      */
-    void setFrames(int quantity) {
+    void setFrames(int number) {
         frames.clear();
-        if (quantity == 1) {
+        if (number == 1) {
+            // just one frame, so don't use a for loop
             frames.add(new AnimationFrame(this, 0));
             return;
+        } else if (number <= 0) {
+            Debug.error("When setting frames for a sprite, there needs to be at least one!");
+            return;
         }
-        for (int i = 0; i < quantity; i++) {
+        for (int i = 0; i < number; i++)
             frames.add(new AnimationFrame(this, i));
-        }
     }
 
 }

@@ -1,5 +1,6 @@
 package net.egartley.beyondorigins.objects;
 
+import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.entities.EntityStore;
@@ -39,7 +40,6 @@ public abstract class Entity {
      *
      * @see EntityEntityCollision#isCollided
      */
-    // "concurrent" may not be the best word to use here, but it sounds cool, so...
     public ArrayList<EntityEntityCollision> concurrentCollisions;
     /**
      * Collection of the entity's boundaries
@@ -71,15 +71,15 @@ public abstract class Entity {
      */
     public EntityBoundary defaultBoundary = null;
     /**
-     * The entity's x-axis coordinate (absolute)
+     * The entity's x-axis coordinate
      */
     public double x;
     /**
-     * The entity's y-axis coordinate (absolute)
+     * The entity's y-axis coordinate
      */
     public double y;
     /**
-     * The entity's speed
+     * The entity's speed (magnitude of its location change when moving)
      */
     public double speed;
     /**
@@ -116,6 +116,9 @@ public abstract class Entity {
     public boolean isMovingRightwards = false;
     /**
      * Whether or not the entity has two different "layers" that are rendered before and after the player
+     *
+     * @see #drawFirstLayer(Graphics)
+     * @see #drawSecondLayer(Graphics)
      */
     protected boolean isDualRendered;
     /**
@@ -144,12 +147,15 @@ public abstract class Entity {
     private int nameX;
     private int nameY;
     /**
-     * Whether or not font metrics have been initialized. Since {@link #render(Graphics)} is called about 60 times a second, and the resulting font metrics object will always be the same, there is no need to keep re-computing it each time {@link #render(Graphics)} is called, only the first
+     * Whether or not font metrics have been initialized. Since {@link #render(Graphics)} is called about 60 times a
+     * second, and the resulting font metrics object will always be the same, there is no need to keep re-computing it
+     * each time {@link #render(Graphics)} is called, only the first
      */
     private boolean setFontMetrics = false;
 
     /**
-     * Creates a new entity with a randomly generated UUID, an initial speed of <code>1.0</code>, then adds it to the entity store
+     * Creates a new entity with a randomly generated UUID, an initial speed of <code>1.0</code>, then adds it to the
+     * entity store
      */
     Entity(String id) {
         generateUUID();
@@ -165,7 +171,7 @@ public abstract class Entity {
      * Renders the entity, using {@link #sprite}, at ({@link #x}, {@link #y})
      */
     public void render(Graphics graphics) {
-        graphics.drawImage(sprite.asBufferedImage(0), (int) x, (int) y, null);
+        graphics.drawImage(sprite.toBufferedImage(0), (int) x, (int) y, null);
         drawDebug(graphics);
     }
 
@@ -197,17 +203,17 @@ public abstract class Entity {
     }
 
     /**
-     * Draws the entity's "name tag", which displays its {@link #id} and {@link #uuid}
+     * Draws the entity's "name tag", which is {@link #toString()} with a half-opaque black background
      */
     private void drawNameTag(Graphics graphics) {
         if (!setFontMetrics) {
-            name = toString();
-            nameTagWidth = graphics.getFontMetrics(nameTagFont).stringWidth(name) + 8; // 4px padding on both sides, so add double of 4
+            if (name == null || name.equals(""))
+                name = toString();
+            nameTagWidth = graphics.getFontMetrics(nameTagFont).stringWidth(name) + 8; // 4px padding both sides
             entityWidth = sprite.width;
-            // don't initialize again, not needed
             setFontMetrics = true;
         }
-        nameX = Calculate.horizontalCenter((int) x, entityWidth) - Calculate.horizontalCenter(0, nameTagWidth);
+        nameX = Calculate.getCenter((int) x, entityWidth) - nameTagWidth / 2;
         nameY = (int) y - 18;
 
         graphics.setColor(nameTagBackgroundColor);
@@ -231,13 +237,17 @@ public abstract class Entity {
      * "Kills" the entity by removing it from the entity store, but only if it is sector-specific
      */
     public void kill() {
-        if (isSectorSpecific) {
+        if (isSectorSpecific)
             EntityStore.remove(this);
-        }
+        else
+            Debug.warning("Tried to kill \"" + this + "\", but it is not sector-specific");
     }
 
     /**
-     * Should be called 60 times per second within a tick thread
+     * Calls {@link EntityBoundary#tick()} and {@link EntityEntityCollision#tick()}
+     *
+     * @see #boundaries
+     * @see #collisions
      */
     public void tick() {
         boundaries.forEach(EntityBoundary::tick);
@@ -245,7 +255,7 @@ public abstract class Entity {
     }
 
     /**
-     * Changes the entity's location ({@link #x} and {@link #y}) at the specified speed, unless the specified boundary is outside of the window
+     * Updates the entity's location by {@link #speed}, unless the specified boundary is outside of the game's window
      */
     protected void move(byte direction, EntityBoundary boundary) {
         isMovingUpwards = false;
@@ -290,19 +300,32 @@ public abstract class Entity {
         }
     }
 
+    /**
+     * Called whenever the entity moves
+     *
+     * @param direction
+     *         Which direction the entity moved in
+     *
+     * @see #UP
+     * @see #DOWN
+     * @see #LEFT
+     * @see #RIGHT
+     * @see #move(byte)
+     */
     protected void onMove(byte direction) {
 
     }
 
     /**
-     * Changes the entity's location ({@link #x} and {@link #y}) at a rate of {@link #speed} per call. Since there is no boundary parameter, the entity's {@link #defaultBoundary} will be used
+     * Changes the entity's location ({@link #x} and {@link #y}) at a rate of {@link #speed} per call. Since there is no
+     * boundary parameter, the entity's {@link #defaultBoundary} will be used
      */
     protected void move(byte direction) {
         move(direction, defaultBoundary);
     }
 
     /**
-     * Have the entity "follow", or constantly move towards, the other
+     * Have the entity "follow", or constantly move towards, the other entity
      *
      * @see #move(byte)
      */
@@ -317,13 +340,12 @@ public abstract class Entity {
 
         if (caughtUpLeft || caughtUpRight) {
             if (this instanceof AnimatedEntity) {
+                // this entity is animated
                 AnimatedEntity ae = (AnimatedEntity) this;
+                // stop the current animation
                 ae.animation.stop();
             }
         }
-
-        // Debug.info("right diff: " + Calculate.getDifference(defaultBoundary.left, e.defaultBoundary.right) + ", left diff: " + Calculate.getDifference(defaultBoundary.right, e.defaultBoundary.left));
-        // Debug.info("left: " + left + ", right: " + right);
 
         // horizontal
         if (Calculate.getDifference(defaultBoundary.left, e.defaultBoundary.left) >= e.defaultBoundary.width) {
@@ -347,28 +369,28 @@ public abstract class Entity {
     }
 
     /**
-     * Returns whether or not the entity is to the "right" of the other
+     * Returns whether or not the entity is to the "right" of the other entity
      */
     private boolean isRightOf(Entity e) {
         return x > e.x;
     }
 
     /**
-     * Returns whether or not the entity is to the "left" of the other
+     * Returns whether or not the entity is to the "left" of the other entity
      */
     private boolean isLeftOf(Entity e) {
         return !isRightOf(e);
     }
 
     /**
-     * Returns whether or not the entity is "above" the other
+     * Returns whether or not the entity is "above" the other entity
      */
     private boolean isAbove(Entity e) {
         return y < e.y;
     }
 
     /**
-     * Returns whether or not the entity is "below" the other
+     * Returns whether or not the entity is "below" the other entity
      */
     private boolean isBelow(Entity e) {
         return !isAbove(e);
@@ -394,20 +416,25 @@ public abstract class Entity {
      * @see #sprite
      */
     public void setSprite(int index) {
-        sprite = sprites.get(index);
+        if (index < sprites.size())
+            sprite = sprites.get(index);
+        else
+            Debug.warning("Tried to get a sprite for \"" + this + "\" at an valid index, " + index + " (must be less " +
+                    "than" +
+                    " " + sprites.size() + ")");
     }
 
     /**
-     * Generates a new UUID
+     * Generates a new value for {@link #uuid}
      *
-     * @see #uuid
+     * @see Util#randomInt(int, int, boolean)
      */
     private void generateUUID() {
         uuid = Util.randomInt(9999, 1000, true);
     }
 
     /**
-     * Returns the entity as a human-readable string, in the format "{@link #id}#{@link #uuid}"
+     * Returns the entity as a string, in the format <code>id#uuid</code>
      *
      * @see #id
      * @see #uuid

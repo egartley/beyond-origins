@@ -101,14 +101,14 @@ public class Game extends Canvas implements Runnable {
     private void loadGraphicsAndEntities() {
         Debug.out("Loading images...");
         ImageStore.loadAll();
-        // this upscales all images to a factor of 2 (i.e. each pixel in an image will
-        // be rendered as 2x2 pixels)
+
+        // this up-scales all images to a factor of 2 (each pixel in the source image will be rendered as 2x2 pixel)
         byte scale = 2;
 
         // *********** PLAYER BEGIN ***********
         BufferedImage image = ImageStore.playerDefault;
         if (image != null) {
-            image = Util.resized(image, image.getWidth() * scale, image.getHeight() * scale);
+            image = Util.resize(image, image.getWidth() * scale, image.getHeight() * scale);
         } else {
             Debug.error(
                     "The default player image (\"player-default.png\") doesn't exist, or there was a problem while " +
@@ -122,7 +122,7 @@ public class Game extends Canvas implements Runnable {
         // ************ DUMMY BEGIN ***********
         image = ImageStore.dummy;
         if (image != null) {
-            image = Util.resized(image, image.getWidth() * scale, image.getHeight() * scale);
+            image = Util.resize(image, image.getWidth() * scale, image.getHeight() * scale);
         } else {
             Debug.error("The dummy image (\"dummy.png\") doesn't exist, or there was a problem while loading it!");
             return;

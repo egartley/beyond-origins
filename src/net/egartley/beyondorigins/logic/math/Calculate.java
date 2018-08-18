@@ -8,25 +8,20 @@ public class Calculate {
     /**
      * Returns the "center" of b from a
      *
-     * @param a Base x-axis or y-axis coordinate
-     * @param b Width or height
+     * @param a
+     *         Base x-axis or y-axis coordinate
+     * @param b
+     *         Width or height
+     *
      * @return a + (b / 2)
      */
-    private static int getCenter(int a, int b) {
+    public static int getCenter(int a, int b) {
         return a + (b / 2);
     }
 
     /**
-     * Returns the horizontal "center"
-     *
-     * @param x     The base x-axis coordinate
-     * @param width The width to use
-     * @return x + (width / 2)
+     * Returns the difference between the two integers
      */
-    public static int horizontalCenter(int x, int width) {
-        return getCenter(x, width);
-    }
-
     public static int getDifference(int a, int b) {
         if (a > b)
             return a - b;
@@ -34,6 +29,9 @@ public class Calculate {
             return b - a;
     }
 
+    /**
+     * Returns the difference between the two doubles
+     */
     public static double getDifference(double a, double b) {
         if (a > b)
             return a - b;
@@ -42,9 +40,11 @@ public class Calculate {
     }
 
     /**
-     * Returns whether or not the first entity is within "tolerance", or distance of, the second entity, in the specified direction
+     * Returns whether or not the first entity is within "tolerance", or distance of, the second entity, in the
+     * specified direction
      */
-    public static boolean isEntityWithinToleranceOf(EntityBoundary e1, EntityBoundary e2, byte direction, int tolerance) {
+    public static boolean isEntityWithinToleranceOf(EntityBoundary e1, EntityBoundary e2, byte direction,
+                                                    int tolerance) {
         switch (direction) {
             case Entity.UP:
                 return e2.top - tolerance <= e1.bottom && e1.top < e2.top && e1.bottom - e2.top <= tolerance;
@@ -60,10 +60,13 @@ public class Calculate {
     }
 
     /**
-     * Returns whether or not the first entity is within "tolerance", or distance of, the second entity, in the specified direction
+     * Returns whether or not the first entity is within "tolerance", or distance of, the second entity, in the
+     * specified direction (uses each entity's {@link Entity#defaultBoundary})
      */
-    public static boolean isEntityWithinToleranceOf(Entity baseEntity, Entity targetEntity, byte direction, int tolerance) {
-        return isEntityWithinToleranceOf(baseEntity.defaultBoundary, targetEntity.defaultBoundary, direction, tolerance);
+    public static boolean isEntityWithinToleranceOf(Entity baseEntity, Entity targetEntity, byte direction,
+                                                    int tolerance) {
+        return isEntityWithinToleranceOf(baseEntity.defaultBoundary, targetEntity.defaultBoundary, direction,
+                tolerance);
     }
 
 }

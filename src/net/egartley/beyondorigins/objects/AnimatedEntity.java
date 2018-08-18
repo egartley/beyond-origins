@@ -4,31 +4,28 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * An {@link net.egartley.beyondorigins.objects.Entity Entity} with associated animations
+ * An {@link net.egartley.beyondorigins.objects.Entity Entity} with animations
  *
- * @see Entity
  * @see Animation
  */
 public abstract class AnimatedEntity extends Entity {
 
     /**
-     * The current animation that is used while rendering and in tick()
+     * The animation that is being used while rendering
      */
     protected Animation animation;
     /**
-     * All of the animations that <i>could</i> be used while rendering
+     * All of the animations that available to use
      *
      * @see Animation
      */
     protected ArrayList<Animation> animations = new ArrayList<>();
 
     /**
-     * Creates a new animated entity, while setting {@link net.egartley.beyondorigins.objects.Entity#isAnimated
-     * Entity.isAnimated} to <code>true</code> and {@link net.egartley.beyondorigins.objects.Entity#isStatic
-     * Entity.isStatic} to <code>false</code>
+     * Creates a new animated entity, while setting {@link Entity#isAnimated} to <code>true</code> and {@link
+     * Entity#isStatic} to <code>false</code>
      *
-     * @param id
-     *         Human-readable ID for the entity
+     * @see Entity#Entity(String) Entity(String)
      */
     public AnimatedEntity(String id) {
         super(id);
@@ -37,18 +34,24 @@ public abstract class AnimatedEntity extends Entity {
     }
 
     /**
-     * Sets {@link #animations}
+     * Sets the entity's animations
      *
-     * @see Animation
+     * @see #animations
      */
     public abstract void setAnimationCollection();
 
+    /**
+     * Calls {@link Entity#tick()} and then {@link Animation#tick()} for each animation in {@link #animations}
+     */
     @Override
     public void tick() {
         super.tick();
         animations.forEach(Animation::tick);
     }
 
+    /**
+     * Calls {@link Animation#render(Graphics, int, int)} for {@link #animation} and then {@link #drawDebug(Graphics)}
+     */
     @Override
     public void render(Graphics graphics) {
         animation.render(graphics, (int) x, (int) y);

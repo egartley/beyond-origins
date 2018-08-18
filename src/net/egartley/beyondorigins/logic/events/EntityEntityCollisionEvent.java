@@ -7,9 +7,7 @@ import net.egartley.beyondorigins.logic.math.Calculate;
 import net.egartley.beyondorigins.objects.Entity;
 
 /**
- * A custom "event" that can be used for gathering information from a collision that has occurred between two entities
- *
- * @see EntityEntityCollision
+ * A "event" that can be used for accessing information about an {@link EntityEntityCollision}
  */
 public class EntityEntityCollisionEvent {
 
@@ -19,7 +17,7 @@ public class EntityEntityCollisionEvent {
     public static final byte RIGHT_SIDE = 3;
 
     /**
-     * The numerical representation for the side that the collision occurred at
+     * The side that the collision occurred at
      *
      * @see #TOP_SIDE
      * @see #BOTTOM_SIDE
@@ -27,33 +25,29 @@ public class EntityEntityCollisionEvent {
      * @see #RIGHT_SIDE
      */
     public byte collidedSide = -1;
-
+    /**
+     * The collision that caused the event
+     */
     public EntityEntityCollision invoker;
 
     /**
-     * Creates a new entity-entity collision event, then determines {@link #collidedSide}
-     *
-     * @param invoker The collision that occurred
+     * Creates a new entity-entity collision event, which calculates its {@link #collidedSide}
      */
     public EntityEntityCollisionEvent(EntityEntityCollision invoker) {
         this.invoker = invoker;
-        int tolerance = (int) Entities.PLAYER.speed;
-        EntityBoundary player = invoker.boundaries[0];
-        EntityBoundary rock = invoker.boundaries[1];
+        // calculate the side in which the collision occurred
+        calculateCollidedSide((int) Entities.PLAYER.speed, invoker.boundaries[0], invoker.boundaries[1]);
+    }
 
-        boolean top = Calculate.isEntityWithinToleranceOf(player, rock, Entity.UP, tolerance);
-        boolean bottom = Calculate.isEntityWithinToleranceOf(player, rock, Entity.DOWN, tolerance);
-        boolean left = Calculate.isEntityWithinToleranceOf(player, rock, Entity.LEFT, tolerance);
-        boolean right = Calculate.isEntityWithinToleranceOf(player, rock, Entity.RIGHT, tolerance);
-
-        if (left) {
+    private void calculateCollidedSide(int tolerance, EntityBoundary player, EntityBoundary rock) {
+        if (Calculate.isEntityWithinToleranceOf(player, rock, Entity.LEFT, tolerance)) {
             collidedSide = LEFT_SIDE;
-        } else if (right) {
+        } else if (Calculate.isEntityWithinToleranceOf(player, rock, Entity.RIGHT, tolerance)) {
             collidedSide = RIGHT_SIDE;
         }
-        if (top) {
+        if (Calculate.isEntityWithinToleranceOf(player, rock, Entity.UP, tolerance)) {
             collidedSide = TOP_SIDE;
-        } else if (bottom) {
+        } else if (Calculate.isEntityWithinToleranceOf(player, rock, Entity.DOWN, tolerance)) {
             collidedSide = BOTTOM_SIDE;
         }
     }

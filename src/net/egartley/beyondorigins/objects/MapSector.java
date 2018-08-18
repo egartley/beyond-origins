@@ -4,9 +4,7 @@ import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.collision.MapSectorChangeCollision;
-import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.logic.interaction.MapSectorChangeBoundary;
 
 import java.awt.*;
@@ -24,7 +22,7 @@ public abstract class MapSector {
      */
     private final byte MAX_NEIGHBORS = 4;
     /**
-     * Default tile size in pixels
+     * Default tile size
      */
     private final short TILE_SIZE = 32;
     /**
@@ -105,11 +103,11 @@ public abstract class MapSector {
      */
     public abstract void initialize();
 
-    public void onPlayerEnter_internal(MapSector from) {
+    void onPlayerEnter_internal() {
         Util.fixCrossSectorCollisions(entities);
     }
 
-    public void onPlayerLeave_internal(MapSector to) {
+    void onPlayerLeave_internal() {
         Util.fixCrossSectorCollisions(entities);
     }
 
