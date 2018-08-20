@@ -28,7 +28,6 @@ public class TestMap extends Map {
         // go to the first sector by default
         changeSector(sec1, null);
 
-        // much better :)
         sec1.setNeighborAt(sec2, MapSector.TOP);
         sec2.setNeighborAt(sec3, MapSector.RIGHT);
         sec3.setNeighborAt(sec4, MapSector.BOTTOM);

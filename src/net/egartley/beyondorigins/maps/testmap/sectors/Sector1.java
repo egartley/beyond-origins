@@ -19,7 +19,7 @@ public class Sector1 extends MapSector {
 
         entities.forEach(entity -> entity.drawFirstLayer(graphics));
 
-        Entities.DUMMY.render(graphics);
+        // Entities.DUMMY.render(graphics);
         Entities.PLAYER.render(graphics);
 
         entities.forEach(entity -> entity.drawSecondLayer(graphics));
@@ -29,7 +29,7 @@ public class Sector1 extends MapSector {
     public void tick() {
         super.tick();
 
-        Entities.DUMMY.tick();
+        // Entities.DUMMY.tick();
 
         entities.forEach(Entity::tick);
     }
@@ -62,10 +62,12 @@ public class Sector1 extends MapSector {
             updatePlayerPosition(from);
         }
         initialize();
+        Entities.PLAYER.onSectorEnter(this);
     }
 
     @Override
     public void onPlayerLeave(MapSector to) {
+        Entities.PLAYER.onSectorLeave(this);
         entities.forEach(Entity::kill);
     }
 

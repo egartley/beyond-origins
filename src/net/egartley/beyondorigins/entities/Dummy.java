@@ -21,7 +21,7 @@ public class Dummy extends AnimatedEntity {
         sprite = sprites.get(0);
         x = 470.0;
         y = 240.0;
-        setAnimationCollection();
+        setAnimations();
         setBoundaries();
         setCollisions();
 
@@ -43,8 +43,15 @@ public class Dummy extends AnimatedEntity {
 
     @Override
     public void tick() {
+        isMovingUpwards = false;
+        isMovingDownwards = false;
+        isMovingLeftwards = false;
+        isMovingRightwards = false;
         follow(Entities.PLAYER);
         super.tick();
+
+        if (!isMovingRightwards && !isMovingLeftwards && !isMovingUpwards && !isMovingDownwards)
+            animation.stop();
     }
 
     @Override
@@ -67,7 +74,7 @@ public class Dummy extends AnimatedEntity {
     }
 
     @Override
-    public void setAnimationCollection() {
+    public void setAnimations() {
         animations.clear();
         animations.add(new Animation(sprites.get(0), ANIMATION_THRESHOLD));
         animations.add(new Animation(sprites.get(1), ANIMATION_THRESHOLD));

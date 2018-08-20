@@ -38,7 +38,7 @@ public abstract class AnimatedEntity extends Entity {
      *
      * @see #animations
      */
-    public abstract void setAnimationCollection();
+    public abstract void setAnimations();
 
     /**
      * Calls {@link Entity#tick()} and then {@link Animation#tick()} for each animation in {@link #animations}

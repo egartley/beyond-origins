@@ -50,6 +50,10 @@ public abstract class Entity {
      */
     public Sprite sprite;
     /**
+     * The buffered image to use when rendering (default)
+     */
+    protected BufferedImage image;
+    /**
      * If {@link #isDualRendered} is true, render this before the player ("below")
      */
     protected BufferedImage firstLayer;
@@ -67,7 +71,7 @@ public abstract class Entity {
      */
     public EntityEntityCollisionEvent lastCollisionEvent = null;
     /**
-     *
+     * The boundary to use if not specified
      */
     public EntityBoundary defaultBoundary = null;
     /**
@@ -94,6 +98,10 @@ public abstract class Entity {
      * Whether or not the entity is static (no animation)
      */
     public boolean isStatic;
+    /**
+     * Whether or not other entities, mainly the player, can walk over it or not
+     */
+    public boolean isTraversable;
     /**
      * Whether or not the entity is currently collided with another entity
      */

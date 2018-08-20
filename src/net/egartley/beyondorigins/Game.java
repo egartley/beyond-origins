@@ -71,9 +71,6 @@ public class Game extends Canvas implements Runnable {
     public static void main(String[] args) {
         startTime = System.currentTimeMillis();
         Game game = new Game();
-        game.setPreferredSize(windowDimension);
-        game.setMaximumSize(windowDimension);
-        game.setMinimumSize(windowDimension);
         // initialize jframe with title
         frame = new JFrame("Beyond Origins");
         // set window size
@@ -115,7 +112,7 @@ public class Game extends Canvas implements Runnable {
                             "loading it!");
             return;
         }
-        Entities.PLAYER = new Player(new SpriteSheet(image, 15 * scale, 23 * scale, 2, 4).collection);
+        Entities.PLAYER = new Player(new SpriteSheet(image, 15 * scale, 23 * scale, 2, 4).sprites);
         // ************ PLAYER END ************
         Debug.out("Initialized the player");
 
@@ -127,7 +124,7 @@ public class Game extends Canvas implements Runnable {
             Debug.error("The dummy image (\"dummy.png\") doesn't exist, or there was a problem while loading it!");
             return;
         }
-        Entities.DUMMY = new Dummy(new SpriteSheet(image, 15 * scale, 23 * scale, 2, 4).collection);
+        Entities.DUMMY = new Dummy(new SpriteSheet(image, 15 * scale, 23 * scale, 2, 4).sprites);
         // ************ DUMMY END *************
         Debug.out("Initialized the dummy");
     }
@@ -220,7 +217,6 @@ public class Game extends Canvas implements Runnable {
                 e.printStackTrace();
             }
         }
-        Debug.out("Stopping master render thread...");
         stop();
     }
 

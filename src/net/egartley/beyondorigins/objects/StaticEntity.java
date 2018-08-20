@@ -1,7 +1,6 @@
 package net.egartley.beyondorigins.objects;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 /**
  * An entity that does have not any animations
@@ -9,11 +8,6 @@ import java.awt.image.BufferedImage;
  * @see Entity
  */
 public abstract class StaticEntity extends Entity {
-
-    /**
-     * The buffered image to use when rendering
-     */
-    protected BufferedImage image;
 
     /**
      * Creates a new static entity, while setting {@link Entity#isAnimated} to <code>false</code> and {@link

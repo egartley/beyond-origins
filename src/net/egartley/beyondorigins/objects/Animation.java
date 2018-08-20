@@ -3,6 +3,7 @@ package net.egartley.beyondorigins.objects;
 import net.egartley.beyondorigins.Debug;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 
 /**
@@ -47,17 +48,16 @@ public class Animation {
     /**
      * The frame that is currently being used when rendering
      */
-    private AnimationFrame frame;
+    private BufferedImage frame;
     /**
      * The frame that the animation will start at
      */
-    private AnimationFrame startFrame;
+    private BufferedImage startFrame;
 
     /**
      * Creates a new animation
      *
-     * @param s
-     *         Sprite to animate
+     * @param s Sprite to animate
      */
     public Animation(Sprite s) {
         sprite = s;
@@ -70,10 +70,8 @@ public class Animation {
     /**
      * Creates a new animation
      *
-     * @param s
-     *         Sprite to animate
-     * @param threshold
-     *         The animation's {@link #threshold}
+     * @param s         Sprite to animate
+     * @param threshold The animation's {@link #threshold}
      */
     public Animation(Sprite s, byte threshold) {
         this(s);
@@ -83,28 +81,26 @@ public class Animation {
     /**
      * Creates a new animation
      *
-     * @param s
-     *         Sprite to animate
-     * @param threshold
-     *         The animation's {@link #threshold}
-     * @param startIndex
-     *         The index to begin at within {@link Sprite#frames}
+     * @param s          Sprite to animate
+     * @param threshold  The animation's {@link #threshold}
+     * @param startIndex The index to begin at within {@link Sprite#frames}
      */
     public Animation(Sprite s, byte threshold, int startIndex) {
         this(s, threshold);
         this.startIndex = startIndex;
         startFrame = sprite.frames.get(startIndex);
+        frame = startFrame;
     }
 
     /**
      * Returns the frame at {@link #frameIndex} within {@link #sprite}'s {@link Sprite#frames}
      */
-    private AnimationFrame getFrame() {
+    private BufferedImage getFrame() {
         return sprite.frames.get(frameIndex);
     }
 
-    private AnimationFrame nextFrame() {
-        // check if we need to go back to the start of the animation
+    private BufferedImage nextFrame() {
+        // check if we need to go back to the start of the animation or just go to the next one
         if (frameIndex + 1 >= sprite.frames.size())
             frameIndex = 0;
         else
@@ -118,7 +114,6 @@ public class Animation {
             Debug.warning("Tried to set the frame of an animation to an index that is out-of-bounds");
             return;
         }
-        // update frameIndex because it's used in other places
         frameIndex = index;
         frame = getFrame();
     }
@@ -161,7 +156,7 @@ public class Animation {
      * Renders {@link Animation#frame frame} with {@link Graphics#drawImage(Image, int, int, ImageObserver)}
      */
     public void render(Graphics graphics, int x, int y) {
-        graphics.drawImage(frame.asBufferedImage(), x, y, null);
+        graphics.drawImage(frame, x, y, null);
     }
 
     /**
@@ -174,7 +169,7 @@ public class Animation {
                 // we haven't reached the threshold yet, so increment delay until it's reached
                 delay++;
             } else {
-                // reset delay
+                // reached the threshold, reset delay
                 delay = 0;
                 // progress to next frame
                 frame = nextFrame();

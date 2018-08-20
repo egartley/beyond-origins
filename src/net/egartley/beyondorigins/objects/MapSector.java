@@ -22,11 +22,11 @@ public abstract class MapSector {
      */
     private final byte MAX_NEIGHBORS = 4;
     /**
-     * Default tile size
+     * Tile width and height in pixels
      */
     private final short TILE_SIZE = 32;
     /**
-     * Default width or height of a {@link MapSectorChangeBoundary}
+     * Default width/height of a {@link MapSectorChangeBoundary}
      */
     private final short BOUNDARY_SIZE = 18;
     /**
@@ -116,9 +116,8 @@ public abstract class MapSector {
      */
     public void render(Graphics graphics) {
         drawTiles(graphics);
-        for (MapSectorChangeBoundary boundary : changeBoundaries) {
+        for (MapSectorChangeBoundary boundary : changeBoundaries)
             boundary.draw(graphics);
-        }
     }
 
     /**
@@ -126,9 +125,8 @@ public abstract class MapSector {
      */
     public void tick() {
         Entities.PLAYER.tick();
-        for (MapSectorChangeCollision collision : changeCollisions) {
+        for (MapSectorChangeCollision collision : changeCollisions)
             collision.tick();
-        }
     }
 
     /**

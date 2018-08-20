@@ -4,7 +4,6 @@ import net.egartley.beyondorigins.Debug;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * A row, or "strip", of individual frames for an entity (they are all the same height and width)
@@ -15,78 +14,53 @@ import java.util.Objects;
 public class Sprite {
 
     /**
-     * The image that contains all of the sprite's frames (its width must be a multiple of {@link #width})
-     *
-     * @see #frames
-     */
-    BufferedImage strip;
-    /**
      * All of the possible frames that the sprite could use, which are derived from {@link #strip}
      *
      * @see AnimatedEntity
      * @see StaticEntity
      */
-    ArrayList<AnimationFrame> frames = new ArrayList<>();
+    ArrayList<BufferedImage> frames = new ArrayList<>();
     /**
-     * The width in pixels for each frame
+     * Width in pixels
      */
     public int width;
     /**
-     * The height in pixels for each frame
+     * Height in pixels
      */
     public int height;
 
-    public Sprite(BufferedImage image, int width, int height) {
-        strip = image;
+    public Sprite(BufferedImage row, int width, int height, int frames) {
         this.width = width;
         this.height = height;
-    }
 
-    /**
-     * Returns the frame at the given index (from {@link #frames})
-     *
-     * @param index
-     *         Index of the frame to return
-     */
-    private AnimationFrame getFrame(int index) {
-        if (index >= frames.size()) {
-            return null;
+        this.frames.clear();
+        if (frames == 1) {
+            this.frames.add(row.getSubimage(0, 0, width, height));
+            return;
+        } else if (frames <= 0) {
+            Debug.error("When setting frames for a sprite, there needs to be at least one!");
+            return;
         }
-        return frames.get(index);
+        for (int i = 0; i < frames; i++) {
+            this.frames.add(row.getSubimage(i * width, 0, width, height));
+        }
     }
 
     /**
-     * Returns the first frame ({@link #getFrame(int) getFrame(0)}) as a buffered image
+     * Returns the first frame in {@link #frames} as a buffered image
      */
     BufferedImage toBufferedImage() {
         return toBufferedImage(0);
     }
 
     /**
-     * Returns {@link #getFrame(int) getFrame(index)} as a buffered image
+     * Returns the frame at the index as a buffered image
      */
     BufferedImage toBufferedImage(int index) {
-        return Objects.requireNonNull(getFrame(index)).asBufferedImage();
-    }
-
-    /**
-     * Sets {@link #frames}, clearing it if previously set
-     *
-     * @param number
-     *         The amount of frames to set (must be at least 1)
-     */
-    void setFrames(int number) {
-        frames.clear();
-        if (number == 1) {
-            // just one frame, so don't use a for loop
-            frames.add(new AnimationFrame(this, 0));
-            return;
-        } else if (number <= 0) {
-            Debug.error("When setting frames for a sprite, there needs to be at least one!");
-            return;
+        if (index >= frames.size()) {
+            return null;
         }
-        for (int i = 0; i < number; i++)
-            frames.add(new AnimationFrame(this, i));
+        return frames.get(index);
     }
 
 }
