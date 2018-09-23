@@ -87,7 +87,7 @@ public class Dummy extends AnimatedEntity {
         isMovingDownwards = false;
         isMovingLeftwards = false;
         isMovingRightwards = false;
-        follow(Entities.PLAYER);
+        follow(Entities.PLAYER, Entity.FOLLOW_AGGRESSIVE, 2);
         super.tick();
 
         if (!isMovingRightwards && !isMovingLeftwards && !isMovingUpwards && !isMovingDownwards)

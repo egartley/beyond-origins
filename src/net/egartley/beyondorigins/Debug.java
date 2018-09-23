@@ -126,32 +126,6 @@ public class Debug {
                         + Entities.PLAYER.lastCollision.boundaries[1].parent + " (collidedSide = "
                         + Entities.PLAYER.lastCollisionEvent.collidedSide + ")", graphics);
             }
-            String move = "   [";
-            if (Entities.PLAYER.isMovingUpwards) {
-                move += "^]   ";
-            } else {
-                move += " ]   ";
-            }
-            drawLine(move, graphics);
-            move = "[";
-            if (Entities.PLAYER.isMovingLeftwards) {
-                move += "<]   ";
-            } else {
-                move += " ]   ";
-            }
-            if (Entities.PLAYER.isMovingRightwards) {
-                move += "[>]";
-            } else {
-                move += "[ ]";
-            }
-            drawLine(move, graphics);
-            move = "   [";
-            if (Entities.PLAYER.isMovingDownwards) {
-                move += "v]   ";
-            } else {
-                move += " ]   ";
-            }
-            drawLine(move, graphics);
         }
     }
 

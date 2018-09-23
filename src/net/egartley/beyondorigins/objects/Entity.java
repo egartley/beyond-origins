@@ -26,6 +26,8 @@ public abstract class Entity {
     public static final byte DOWN = 2;
     public static final byte LEFT = 3;
     public static final byte RIGHT = 4;
+    public static final byte FOLLOW_PASSIVE = 0;
+    public static final byte FOLLOW_AGGRESSIVE = 1;
 
     /**
      * The entity's sprites
@@ -153,6 +155,7 @@ public abstract class Entity {
      * Whether or not the entity is "bound" to, or only exists in, a specific map sector
      */
     public boolean isSectorSpecific;
+    private boolean isFollowingAggressive = false;
     /**
      * Human-readable identifier for the entity
      */
@@ -369,42 +372,55 @@ public abstract class Entity {
      *
      * @see #move(byte)
      */
-    protected void follow(Entity e) {
-        boolean left = isLeftOf(e);
-        boolean below = isBelow(e);
-        boolean above = isAbove(e);
-        boolean right = isRightOf(e);
+    protected void follow(Entity other, byte mode, int boundaryDifference) {
+        boolean left = isLeftOf(other);
+        boolean below = isBelow(other);
+        boolean above = isAbove(other);
+        boolean right = isRightOf(other);
 
-        boolean caughtUpRight = Calculate.getDifference(defaultBoundary.left, e.defaultBoundary.right) <= 8;
-        boolean caughtUpLeft = Calculate.getDifference(defaultBoundary.right, e.defaultBoundary.left) <= 8;
+        boolean caughtUpRight = Calculate.getDifference(defaultBoundary.left, other.defaultBoundary.right) <= 8 || Calculate.getDifference(defaultBoundary.right, other.defaultBoundary.right) <= 2;
+        boolean caughtUpLeft = Calculate.getDifference(defaultBoundary.right, other.defaultBoundary.left) <= 8 || Calculate.getDifference(defaultBoundary.left, other.defaultBoundary.left) <= 2;
+        boolean caughtUpVertical = Calculate.getDifference(defaultBoundary.top, other.defaultBoundary.top) <= boundaryDifference;
 
-        if (caughtUpLeft || caughtUpRight) {
-            if (this instanceof AnimatedEntity) {
-                // this entity is animated
-                AnimatedEntity ae = (AnimatedEntity) this;
-                // stop the current animation
-                ae.animation.stop();
+        if (!isFollowingAggressive) {
+            if (caughtUpLeft || caughtUpRight) {
+                if (this instanceof AnimatedEntity) {
+                    AnimatedEntity ae = (AnimatedEntity) this;
+                    ae.animation.stop();
+                }
+            }
+            if (Calculate.getDifference(defaultBoundary.left, other.defaultBoundary.left) >= other.defaultBoundary.width) {
+                if (!caughtUpRight && right) {
+                    move(LEFT);
+                } else if (!caughtUpLeft && left) {
+                    move(RIGHT);
+                }
+            }
+
+            if (!caughtUpVertical) {
+                if (above) {
+                    move(DOWN);
+                } else if (below) {
+                    move(UP);
+                }
             }
         }
 
-        // horizontal
-        if (Calculate.getDifference(defaultBoundary.left, e.defaultBoundary.left) >= e.defaultBoundary.width) {
-            // prevent "shaking" left and right
-            if (!caughtUpRight && right) {
-                move(LEFT);
-            } else if (!caughtUpLeft && left) {
-                move(RIGHT);
+        if (mode == FOLLOW_AGGRESSIVE) {
+            if (!isAllowedToMoveDownwards || !isAllowedToMoveUpwards) {
+                if (Calculate.getDifference(defaultBoundary.left, other.defaultBoundary.right) < Calculate.getDifference(defaultBoundary.right, other.defaultBoundary.left) && (!caughtUpLeft || !caughtUpRight)) {
+                    move(LEFT);
+                } else {
+                    move(RIGHT);
+                }
             }
-        }
-
-        // vertical
-        if (Calculate.getDifference(defaultBoundary.top, e.defaultBoundary.top) < 2)
-            return; // prevent "shaking" up and down
-
-        if (above) {
-            move(DOWN, defaultBoundary);
-        } else if (below) {
-            move(UP, defaultBoundary);
+            if (!isAllowedToMoveLeftwards || !isAllowedToMoveRightwards) {
+                if (Calculate.getDifference(defaultBoundary.bottom, other.defaultBoundary.top) < Calculate.getDifference(defaultBoundary.top, other.defaultBoundary.bottom) && !caughtUpVertical) {
+                    move(DOWN);
+                } else {
+                    move(UP);
+                }
+            }
         }
     }
 
