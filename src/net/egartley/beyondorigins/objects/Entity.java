@@ -123,6 +123,22 @@ public abstract class Entity {
      */
     public boolean isMovingRightwards = false;
     /**
+     * Whether or not the entity is allowed to move upwards
+     */
+    protected boolean isAllowedToMoveUpwards = true;
+    /**
+     * Whether or not the entity is allowed to move downwards
+     */
+    protected boolean isAllowedToMoveDownwards = true;
+    /**
+     * Whether or not the entity is allowed to move leftwards
+     */
+    protected boolean isAllowedToMoveLeftwards = true;
+    /**
+     * Whether or not the entity is allowed to move rightwards
+     */
+    protected boolean isAllowedToMoveRightwards = true;
+    /**
      * Whether or not the entity has two different "layers" that are rendered before and after the player
      *
      * @see #drawFirstLayer(Graphics)
@@ -270,6 +286,14 @@ public abstract class Entity {
         isMovingDownwards = false;
         isMovingLeftwards = false;
         isMovingRightwards = false;
+        if (direction == UP && !isAllowedToMoveUpwards)
+            return;
+        if (direction == DOWN && !isAllowedToMoveDownwards)
+            return;
+        if (direction == LEFT && !isAllowedToMoveLeftwards)
+            return;
+        if (direction == RIGHT && !isAllowedToMoveRightwards)
+            return;
         switch (direction) {
             case UP:
                 if (boundary.top <= 0) {
@@ -309,11 +333,19 @@ public abstract class Entity {
     }
 
     /**
+     * Allows the entity to move in all directions
+     */
+    protected void allowAllMovement() {
+        isAllowedToMoveUpwards = true;
+        isAllowedToMoveDownwards = true;
+        isAllowedToMoveLeftwards = true;
+        isAllowedToMoveRightwards = true;
+    }
+
+    /**
      * Called whenever the entity moves
      *
-     * @param direction
-     *         Which direction the entity moved in
-     *
+     * @param direction Which direction the entity moved in
      * @see #UP
      * @see #DOWN
      * @see #LEFT
@@ -373,6 +405,64 @@ public abstract class Entity {
             move(DOWN, defaultBoundary);
         } else if (below) {
             move(UP, defaultBoundary);
+        }
+    }
+
+    /**
+     * Disallows movement opposite of the side of the collision. For example, if the player collided with a tree on its top side, downward movement would no longer be allowed
+     */
+    protected void onCollisionWithNonTraversableEntity(EntityEntityCollisionEvent event) {
+        lastCollisionEvent = event;
+        switch (event.collidedSide) {
+            case EntityEntityCollisionEvent.RIGHT_SIDE:
+                // collided on the right, so disable leftwards movement
+                isAllowedToMoveLeftwards = false;
+                break;
+            case EntityEntityCollisionEvent.LEFT_SIDE:
+                // collided on the left, so disable rightwards movement
+                isAllowedToMoveRightwards = false;
+                break;
+            case EntityEntityCollisionEvent.TOP_SIDE:
+                // collided at the top, so disable downwards movement
+                isAllowedToMoveDownwards = false;
+                break;
+            case EntityEntityCollisionEvent.BOTTOM_SIDE:
+                // collided at the bottom, so disable upwards movement
+                isAllowedToMoveUpwards = false;
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Cancels any movement restrictions imposed by the provided {@link net.egartley.beyondorigins.logic.events
+     * .EntityEntityCollisionEvent EntityEntityCollisionEvent}
+     */
+    protected void annulCollisionEvent(EntityEntityCollisionEvent event) {
+        // check for other movement restrictions
+        for (EntityEntityCollision c : concurrentCollisions) {
+            if (c.lastEvent.collidedSide == event.collidedSide && c.lastEvent.invoker != event.invoker) {
+                // there is another collision that has the same movement restriction, so don't annul it
+                return;
+            }
+        }
+
+        switch (event.collidedSide) {
+            case EntityEntityCollisionEvent.TOP_SIDE:
+                isAllowedToMoveDownwards = true;
+                break;
+            case EntityEntityCollisionEvent.BOTTOM_SIDE:
+                isAllowedToMoveUpwards = true;
+                break;
+            case EntityEntityCollisionEvent.LEFT_SIDE:
+                isAllowedToMoveRightwards = true;
+                break;
+            case EntityEntityCollisionEvent.RIGHT_SIDE:
+                isAllowedToMoveLeftwards = true;
+                break;
+            default:
+                break;
         }
     }
 

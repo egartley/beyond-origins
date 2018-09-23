@@ -1,11 +1,11 @@
 package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Debug;
+import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
+import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
-import net.egartley.beyondorigins.objects.AnimatedEntity;
-import net.egartley.beyondorigins.objects.Animation;
-import net.egartley.beyondorigins.objects.Sprite;
+import net.egartley.beyondorigins.objects.*;
 
 import java.util.ArrayList;
 
@@ -39,6 +39,46 @@ public class Dummy extends AnimatedEntity {
             // this prevents the same animation being set again
             animation = animations.get(i);
         }
+    }
+
+    public void onSectorEnter(MapSector sector) {
+        // generate collisions with sector entities that aren't traversable
+        for (Entity e : sector.entities) {
+            if (!e.isTraversable && e.isSectorSpecific) {
+                EntityEntityCollision baseCollision = new EntityEntityCollision(boundaries.get(0), e.defaultBoundary) {
+                    public void onCollide(EntityEntityCollisionEvent event) {
+                        onCollisionWithNonTraversableEntity(event);
+                    }
+
+                    public void onCollisionEnd(EntityEntityCollisionEvent event) {
+                        if (!Entities.DUMMY.isCollided) {
+                            allowAllMovement();
+                        } else {
+                            annulCollisionEvent(event);
+                        }
+                    }
+                };
+                collisions.add(baseCollision);
+            }
+        }
+    }
+
+    public void onSectorLeave(MapSector sector) {
+        // remove the generated collisions
+
+        // prevents concurrent modification
+        ArrayList<EntityEntityCollision> removeCollisions = new ArrayList<>();
+
+        for (Entity e : sector.entities)
+            if (!e.isTraversable && e.isSectorSpecific)
+                for (EntityEntityCollision c : collisions)
+                    if (c.entities[0].equals(e) || c.entities[1].equals(e))
+                        removeCollisions.add(c);
+
+        for (EntityEntityCollision c : removeCollisions)
+            collisions.remove(c);
+
+        removeCollisions.clear();
     }
 
     @Override

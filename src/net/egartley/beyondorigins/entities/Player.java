@@ -23,11 +23,6 @@ public class Player extends AnimatedEntity {
     EntityBoundary bodyBoundary;
     EntityBoundary feetBoundary;
 
-    boolean isAllowedToMoveUpwards = true;
-    boolean isAllowedToMoveDownwards = true;
-    boolean isAllowedToMoveLeftwards = true;
-    boolean isAllowedToMoveRightwards = true;
-
     public Player(ArrayList<Sprite> sprites) {
         super("Player");
         this.sprites = sprites;
@@ -50,74 +45,6 @@ public class Player extends AnimatedEntity {
         if (!animation.equals(animations.get(i))) {
             // this prevents the same animation being set again
             animation = animations.get(i);
-        }
-    }
-
-    /**
-     * Allows the player to move in all directions
-     */
-    void allowAllMovement() {
-        isAllowedToMoveUpwards = true;
-        isAllowedToMoveDownwards = true;
-        isAllowedToMoveLeftwards = true;
-        isAllowedToMoveRightwards = true;
-    }
-
-    /**
-     * Cancels any movement restrictions imposed by the provided {@link net.egartley.beyondorigins.logic.events
-     * .EntityEntityCollisionEvent EntityEntityCollisionEvent}
-     *
-     * @param event The {@link net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent EntityEntityCollisionEvent}
-     *              in which to annul
-     */
-    private void annulCollisionEvent(EntityEntityCollisionEvent event) {
-        // check for other movement restrictions
-        for (EntityEntityCollision c : concurrentCollisions) {
-            if (c.lastEvent.collidedSide == event.collidedSide && c.lastEvent.invoker != event.invoker) {
-                // there is another collision that has the same movement restriction, so don't annul it
-                return;
-            }
-        }
-
-        switch (event.collidedSide) {
-            case EntityEntityCollisionEvent.TOP_SIDE:
-                isAllowedToMoveDownwards = true;
-                break;
-            case EntityEntityCollisionEvent.BOTTOM_SIDE:
-                isAllowedToMoveUpwards = true;
-                break;
-            case EntityEntityCollisionEvent.LEFT_SIDE:
-                isAllowedToMoveRightwards = true;
-                break;
-            case EntityEntityCollisionEvent.RIGHT_SIDE:
-                isAllowedToMoveLeftwards = true;
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void onCollisionWithNonTraversableEntity(EntityEntityCollisionEvent event) {
-        lastCollisionEvent = event;
-        switch (event.collidedSide) {
-            case EntityEntityCollisionEvent.RIGHT_SIDE:
-                // collided on the right, so disable leftwards movement
-                isAllowedToMoveLeftwards = false;
-                break;
-            case EntityEntityCollisionEvent.LEFT_SIDE:
-                // collided on the left, so disable rightwards movement
-                isAllowedToMoveRightwards = false;
-                break;
-            case EntityEntityCollisionEvent.TOP_SIDE:
-                // collided at the top, so disable downwards movement
-                isAllowedToMoveDownwards = false;
-                break;
-            case EntityEntityCollisionEvent.BOTTOM_SIDE:
-                // collided at the bottom, so disable upwards movement
-                isAllowedToMoveUpwards = false;
-                break;
-            default:
-                break;
         }
     }
 
