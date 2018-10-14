@@ -15,7 +15,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
- * An object or character that can rendered with a {@link Sprite} at a specified location
+ * An object or character that can rendered with a {@link Sprite} at a
+ * specified location
  *
  * @see AnimatedEntity
  * @see StaticEntity
@@ -26,8 +27,13 @@ public abstract class Entity {
     public static final byte DOWN = 2;
     public static final byte LEFT = 3;
     public static final byte RIGHT = 4;
+
     public static final byte FOLLOW_PASSIVE = 0;
     public static final byte FOLLOW_AGGRESSIVE = 1;
+
+    public static final byte CAUGHT_UP_LEFT = 0;
+    public static final byte CAUGHT_UP_RIGHT = 1;
+    public static final byte CAUGHT_UP_VERTICAL = 2;
 
     /**
      * The entity's sprites
@@ -56,20 +62,24 @@ public abstract class Entity {
      */
     protected BufferedImage image;
     /**
-     * If {@link #isDualRendered} is true, render this before the player ("below")
+     * If {@link #isDualRendered} is true, render this before the player
+     * ("below")
      */
     protected BufferedImage firstLayer;
     /**
-     * If {@link #isDualRendered} is true, render this after the player ("above")
+     * If {@link #isDualRendered} is true, render this after the player
+     * ("above")
      */
     protected BufferedImage secondLayer;
     /**
-     * The most recent collision that has occurred for the entity. If no collisions have occurred within the entity's
-     * lifetime, this will be null
+     * The most recent collision that has occurred for the entity. If no
+     * collisions have occurred within the entity's lifetime, this will be
+     * null
      */
     public EntityEntityCollision lastCollision = null;
     /**
-     * The most recent collision event to have occurred. This will be null if no collision event has yet to take place
+     * The most recent collision event to have occurred. This will be null
+     * if no collision event has yet to take place
      */
     public EntityEntityCollisionEvent lastCollisionEvent = null;
     /**
@@ -89,7 +99,8 @@ public abstract class Entity {
      */
     public double speed;
     /**
-     * The entity's unique identification number. Use {@link #id} for user-friendly identification
+     * The entity's unique identification number. Use {@link #id} for
+     * user-friendly identification
      */
     public int uuid;
     /**
@@ -101,7 +112,8 @@ public abstract class Entity {
      */
     public boolean isStatic;
     /**
-     * Whether or not other entities, mainly the player, can walk over it or not
+     * Whether or not other entities, mainly the player, can walk over it
+     * or not
      */
     public boolean isTraversable;
     /**
@@ -141,21 +153,23 @@ public abstract class Entity {
      */
     protected boolean isAllowedToMoveRightwards = true;
     /**
-     * Whether or not the entity has two different "layers" that are rendered before and after the player
+     * Whether or not the entity has two different "layers" that are
+     * rendered before and after the player
      *
      * @see #drawFirstLayer(Graphics)
      * @see #drawSecondLayer(Graphics)
      */
     protected boolean isDualRendered;
     /**
-     * Whether or not the entity is currently registered in the entity store
+     * Whether or not the entity is currently registered in the entity
+     * store
      */
     public boolean isRegistered;
     /**
-     * Whether or not the entity is "bound" to, or only exists in, a specific map sector
+     * Whether or not the entity is "bound" to, or only exists in, a
+     * specific map sector
      */
     public boolean isSectorSpecific;
-    private boolean isFollowingAggressive = false;
     /**
      * Human-readable identifier for the entity
      */
@@ -173,16 +187,23 @@ public abstract class Entity {
     private int entityWidth;
     private int nameX;
     private int nameY;
+    private byte lastCaughtUpDirection = -1;
     /**
-     * Whether or not font metrics have been initialized. Since {@link #render(Graphics)} is called about 60 times a
-     * second, and the resulting font metrics object will always be the same, there is no need to keep re-computing it
-     * each time {@link #render(Graphics)} is called, only the first
+     * Whether or not font metrics have been initialized. Since {@link
+     * #render(Graphics)} is called about 60 times a second, and the
+     * resulting font metrics object will always be the same, there is no
+     * need to keep re-computing it each time {@link #render(Graphics)} is
+     * called, only the first
      */
     private boolean setFontMetrics = false;
+    /**
+     * Whether or not the {@link #onCaughtUp(byte)} event has been fired
+     */
+    private boolean didFireCatchUpEvent = false;
 
     /**
-     * Creates a new entity with a randomly generated UUID, an initial speed of <code>1.0</code>, then adds it to the
-     * entity store
+     * Creates a new entity with a randomly generated UUID, an initial
+     * speed of <code>1.0</code>, then adds it to the entity store
      */
     Entity(String id) {
         generateUUID();
@@ -195,22 +216,27 @@ public abstract class Entity {
     }
 
     /**
-     * Renders the entity, using {@link #sprite}, at ({@link #x}, {@link #y})
+     * Renders the entity, using {@link #sprite}, at ({@link #x}, {@link
+     * #y})
      */
     public void render(Graphics graphics) {
-        graphics.drawImage(sprite.toBufferedImage(0), (int) x, (int) y, null);
+        graphics.drawImage(sprite.toBufferedImage(0), (int) x, (int) y,
+                null);
         drawDebug(graphics);
     }
 
     /**
-     * Draws the first "layer" if {@link #isDualRendered} is true (below the player)
+     * Draws the first "layer" if {@link #isDualRendered} is true (below
+     * the player)
      */
     public void drawFirstLayer(Graphics graphics) {
-        graphics.drawImage(firstLayer, (int) x, (int) y + secondLayer.getHeight(), null);
+        graphics.drawImage(firstLayer, (int) x,
+                (int) y + secondLayer.getHeight(), null);
     }
 
     /**
-     * Draws the second "layer" if {@link #isDualRendered} is true (above the player)
+     * Draws the second "layer" if {@link #isDualRendered} is true (above
+     * the player)
      */
     public void drawSecondLayer(Graphics graphics) {
         graphics.drawImage(secondLayer, (int) x, (int) y, null);
@@ -218,7 +244,8 @@ public abstract class Entity {
     }
 
     /**
-     * Renders debug information, such as the entity's boundaries and "name tag"
+     * Renders debug information, such as the entity's boundaries and "name
+     * tag"
      *
      * @see Game#debug
      */
@@ -230,13 +257,15 @@ public abstract class Entity {
     }
 
     /**
-     * Draws the entity's "name tag", which is {@link #toString()} with a half-opaque black background
+     * Draws the entity's "name tag", which is {@link #toString()} with a
+     * half-opaque black background
      */
     private void drawNameTag(Graphics graphics) {
         if (!setFontMetrics) {
             if (name == null || name.equals(""))
                 name = toString();
-            nameTagWidth = graphics.getFontMetrics(nameTagFont).stringWidth(name) + 8; // 4px padding both sides
+            nameTagWidth =
+                    graphics.getFontMetrics(nameTagFont).stringWidth(name) + 8; // 4px padding both sides
             entityWidth = sprite.width;
             setFontMetrics = true;
         }
@@ -261,17 +290,20 @@ public abstract class Entity {
     }
 
     /**
-     * "Kills" the entity by removing it from the entity store, but only if it is sector-specific
+     * "Kills" the entity by removing it from the entity store, but only if
+     * it is sector-specific
      */
     public void kill() {
         if (isSectorSpecific)
             EntityStore.remove(this);
         else
-            Debug.warning("Tried to kill \"" + this + "\", but it is not sector-specific");
+            Debug.warning("Tried to kill \"" + this + "\", but it is not" +
+                    " sector-specific");
     }
 
     /**
-     * Calls {@link EntityBoundary#tick()} and {@link EntityEntityCollision#tick()}
+     * Calls {@link EntityBoundary#tick()} and {@link
+     * EntityEntityCollision#tick()}
      *
      * @see #boundaries
      * @see #collisions
@@ -282,7 +314,8 @@ public abstract class Entity {
     }
 
     /**
-     * Updates the entity's location by {@link #speed}, unless the specified boundary is outside of the game's window
+     * Updates the entity's location by {@link #speed}, unless the
+     * specified boundary is outside of the game's window
      */
     protected void move(byte direction, EntityBoundary boundary) {
         isMovingUpwards = false;
@@ -348,7 +381,9 @@ public abstract class Entity {
     /**
      * Called whenever the entity moves
      *
-     * @param direction Which direction the entity moved in
+     * @param direction
+     *         Which direction the entity moved in
+     *
      * @see #UP
      * @see #DOWN
      * @see #LEFT
@@ -360,72 +395,148 @@ public abstract class Entity {
     }
 
     /**
-     * Changes the entity's location ({@link #x} and {@link #y}) at a rate of {@link #speed} per call. Since there is no
-     * boundary parameter, the entity's {@link #defaultBoundary} will be used
+     * Changes the entity's location ({@link #x} and {@link #y}) at a rate
+     * of {@link #speed} per call. Since there is no boundary parameter,
+     * the entity's {@link #defaultBoundary} will be used
      */
     protected void move(byte direction) {
         move(direction, defaultBoundary);
     }
 
     /**
-     * Have the entity "follow", or constantly move towards, the other entity
+     * Have the entity "follow", or constantly move towards, the other
+     * entity
      *
      * @see #move(byte)
      */
-    protected void follow(Entity other, byte mode, int boundaryDifference) {
-        boolean left = isLeftOf(other);
-        boolean below = isBelow(other);
-        boolean above = isAbove(other);
-        boolean right = isRightOf(other);
+    protected void follow(Entity toFollow, byte mode,
+                          int boundaryDifference) {
+        boolean left = isLeftOf(toFollow);
+        boolean below = isBelow(toFollow);
+        boolean above = isAbove(toFollow);
+        boolean right = isRightOf(toFollow);
 
-        boolean caughtUpRight = Calculate.getDifference(defaultBoundary.left, other.defaultBoundary.right) <= 8 || Calculate.getDifference(defaultBoundary.right, other.defaultBoundary.right) <= 2;
-        boolean caughtUpLeft = Calculate.getDifference(defaultBoundary.right, other.defaultBoundary.left) <= 8 || Calculate.getDifference(defaultBoundary.left, other.defaultBoundary.left) <= 2;
-        boolean caughtUpVertical = Calculate.getDifference(defaultBoundary.top, other.defaultBoundary.top) <= boundaryDifference;
+        boolean caughtUpRight =
+                Calculate.getDifference(defaultBoundary.left,
+                        toFollow.defaultBoundary.right) <= 8;
+        boolean caughtUpLeft =
+                Calculate.getDifference(defaultBoundary.right,
+                        toFollow.defaultBoundary.left) <= 8;
+        boolean caughtUpVertical =
+                Calculate.getDifference(defaultBoundary.top,
+                        toFollow.defaultBoundary.top) <= boundaryDifference;
 
-        if (!isFollowingAggressive) {
-            if (caughtUpLeft || caughtUpRight) {
-                if (this instanceof AnimatedEntity) {
-                    AnimatedEntity ae = (AnimatedEntity) this;
-                    ae.animation.stop();
-                }
+        // Debug.info(caughtUpLeft + " " + caughtUpRight + " " +
+        // caughtUpVertical);
+        // Debug.info(didFireCatchUpEvent);
+
+        if (!didFireCatchUpEvent && (caughtUpLeft || caughtUpRight || caughtUpVertical)) {
+            if (caughtUpLeft) {
+                lastCaughtUpDirection = CAUGHT_UP_LEFT;
+            } else if (caughtUpRight) {
+                lastCaughtUpDirection = CAUGHT_UP_RIGHT;
+            } else {
+                lastCaughtUpDirection = CAUGHT_UP_VERTICAL;
             }
-            if (Calculate.getDifference(defaultBoundary.left, other.defaultBoundary.left) >= other.defaultBoundary.width) {
-                if (!caughtUpRight && right) {
-                    move(LEFT);
-                } else if (!caughtUpLeft && left) {
-                    move(RIGHT);
-                }
+            onCaughtUp(lastCaughtUpDirection);
+            didFireCatchUpEvent = true;
+        } else if (didFireCatchUpEvent) {
+            boolean end = false;
+            switch (lastCaughtUpDirection) {
+                case CAUGHT_UP_LEFT:
+                    if (!caughtUpLeft) {
+                        end = true;
+                    }
+                    break;
+                case CAUGHT_UP_RIGHT:
+                    if (!caughtUpRight) {
+                        end = true;
+                    }
+                    break;
+                case CAUGHT_UP_VERTICAL:
+                    if (!caughtUpVertical) {
+                        end = true;
+                    }
+                    break;
+                default:
+                    // still caught up, do not trigger end event
+                    break;
             }
-
-            if (!caughtUpVertical) {
-                if (above) {
-                    move(DOWN);
-                } else if (below) {
-                    move(UP);
-                }
+            if (end) {
+                onCaughtUpEnd(lastCaughtUpDirection);
+                didFireCatchUpEvent = false;
             }
         }
 
-        if (mode == FOLLOW_AGGRESSIVE) {
-            if (!isAllowedToMoveDownwards || !isAllowedToMoveUpwards) {
-                if (Calculate.getDifference(defaultBoundary.left, other.defaultBoundary.right) < Calculate.getDifference(defaultBoundary.right, other.defaultBoundary.left) && (!caughtUpLeft || !caughtUpRight)) {
-                    move(LEFT);
-                } else {
-                    move(RIGHT);
-                }
+        if (Calculate.getDifference(defaultBoundary.left,
+                toFollow.defaultBoundary.left) >= toFollow.defaultBoundary.width) {
+            if (!caughtUpRight && right) {
+                move(LEFT);
+            } else if (!caughtUpLeft && left) {
+                move(RIGHT);
             }
-            if (!isAllowedToMoveLeftwards || !isAllowedToMoveRightwards) {
-                if (Calculate.getDifference(defaultBoundary.bottom, other.defaultBoundary.top) < Calculate.getDifference(defaultBoundary.top, other.defaultBoundary.bottom) && !caughtUpVertical) {
-                    move(DOWN);
-                } else {
-                    move(UP);
-                }
+        }
+        if (!caughtUpVertical) {
+            if (above) {
+                move(DOWN);
+            } else if (below) {
+                move(UP);
             }
+        }
+
+        switch (mode) {
+            case FOLLOW_AGGRESSIVE:
+                if (!isAllowedToMoveDownwards || !isAllowedToMoveUpwards) {
+                    if (Calculate.getDifference(defaultBoundary.left,
+                            toFollow.defaultBoundary.right) < Calculate.getDifference(defaultBoundary.right, toFollow.defaultBoundary.left) && (!caughtUpLeft || !caughtUpRight)) {
+                        move(LEFT);
+                    } else {
+                        move(RIGHT);
+                    }
+                }
+                if (!isAllowedToMoveLeftwards || !isAllowedToMoveRightwards) {
+                    if (Calculate.getDifference(defaultBoundary.bottom,
+                            toFollow.defaultBoundary.top) < Calculate.getDifference(defaultBoundary.top, toFollow.defaultBoundary.bottom) && !caughtUpVertical) {
+                        move(DOWN);
+                    } else {
+                        move(UP);
+                    }
+                }
+                break;
         }
     }
 
     /**
-     * Disallows movement opposite of the side of the collision. For example, if the player collided with a tree on its top side, downward movement would no longer be allowed
+     * Called <b>once</b> when the entity "catches up" with the other
+     *
+     * @param direction
+     *         {@link #CAUGHT_UP_LEFT}, {@link #CAUGHT_UP_RIGHT} or {@link
+     *         #CAUGHT_UP_VERTICAL}
+     *
+     * @see #follow(Entity, byte, int)
+     */
+    protected void onCaughtUp(byte direction) {
+        Debug.info("start");
+    }
+
+    /**
+     * Called <b>once</b> when the entity is no longer "caught up" with the
+     * other
+     *
+     * @param direction
+     *         {@link #CAUGHT_UP_LEFT}, {@link #CAUGHT_UP_RIGHT} or {@link
+     *         #CAUGHT_UP_VERTICAL}
+     *
+     * @see #follow(Entity, byte, int)
+     */
+    protected void onCaughtUpEnd(byte direction) {
+        Debug.info("end");
+    }
+
+    /**
+     * Disallows movement opposite of the side of the collision. For
+     * example, if the player collided with a tree on its top side,
+     * downward movement would no longer be allowed
      */
     protected void onCollisionWithNonTraversableEntity(EntityEntityCollisionEvent event) {
         lastCollisionEvent = event;
@@ -452,14 +563,16 @@ public abstract class Entity {
     }
 
     /**
-     * Cancels any movement restrictions imposed by the provided {@link net.egartley.beyondorigins.logic.events
-     * .EntityEntityCollisionEvent EntityEntityCollisionEvent}
+     * Cancels any movement restrictions imposed by the provided {@link
+     * net.egartley.beyondorigins.logic.events .EntityEntityCollisionEvent
+     * EntityEntityCollisionEvent}
      */
     protected void annulCollisionEvent(EntityEntityCollisionEvent event) {
         // check for other movement restrictions
         for (EntityEntityCollision c : concurrentCollisions) {
             if (c.lastEvent.collidedSide == event.collidedSide && c.lastEvent.invoker != event.invoker) {
-                // there is another collision that has the same movement restriction, so don't annul it
+                // there is another collision that has the same movement
+                // restriction, so don't annul it
                 return;
             }
         }
@@ -483,14 +596,16 @@ public abstract class Entity {
     }
 
     /**
-     * Returns whether or not the entity is to the "right" of the other entity
+     * Returns whether or not the entity is to the "right" of the other
+     * entity
      */
     private boolean isRightOf(Entity e) {
         return x > e.x;
     }
 
     /**
-     * Returns whether or not the entity is to the "left" of the other entity
+     * Returns whether or not the entity is to the "left" of the other
+     * entity
      */
     private boolean isLeftOf(Entity e) {
         return !isRightOf(e);
@@ -533,7 +648,8 @@ public abstract class Entity {
         if (index < sprites.size())
             sprite = sprites.get(index);
         else
-            Debug.warning("Tried to get a sprite for \"" + this + "\" at an valid index, " + index + " (must be less " +
+            Debug.warning("Tried to get a sprite for \"" + this + "\" at" +
+                    " an valid index, " + index + " (must be less " +
                     "than" +
                     " " + sprites.size() + ")");
     }

@@ -87,7 +87,7 @@ public class Dummy extends AnimatedEntity {
         isMovingDownwards = false;
         isMovingLeftwards = false;
         isMovingRightwards = false;
-        follow(Entities.PLAYER, Entity.FOLLOW_AGGRESSIVE, 2);
+        follow(Entities.PLAYER, Entity.FOLLOW_AGGRESSIVE, 0);
         super.tick();
 
         if (!isMovingRightwards && !isMovingLeftwards && !isMovingUpwards && !isMovingDownwards)
@@ -95,7 +95,7 @@ public class Dummy extends AnimatedEntity {
     }
 
     @Override
-    public void onMove(byte direction) {
+    protected void onMove(byte direction) {
         if (animation.isStopped) {
             // animation was stopped, so restart it because we're moving
             animation.resume();
@@ -105,6 +105,14 @@ public class Dummy extends AnimatedEntity {
             switchAnimation(RIGHT_ANIMATION);
         else if (direction == LEFT)
             switchAnimation(LEFT_ANIMATION);
+    }
+
+    protected void onCaughtUp(byte direction) {
+        animation.stop();
+    }
+
+    protected void onCaughtUpEnd(byte direction) {
+
     }
 
     @Override
