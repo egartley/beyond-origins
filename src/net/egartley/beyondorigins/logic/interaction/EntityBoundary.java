@@ -1,12 +1,12 @@
 package net.egartley.beyondorigins.logic.interaction;
 
 import net.egartley.beyondorigins.objects.Entity;
+import net.egartley.beyondorigins.objects.Sprite;
 
 import java.awt.*;
 
 /**
- * Represents a {@link Boundary} that is specifically tailored for use with an
- * {@link Entity}
+ * Represents a {@link Boundary} that is specifically tailored for use with an {@link Entity}
  */
 public class EntityBoundary extends Boundary {
 
@@ -22,10 +22,29 @@ public class EntityBoundary extends Boundary {
     /**
      * Creates a new boundary for the given entity
      *
-     * @param entity  The entity to use
-     * @param width   Width of the boundary (not including the left or right padding)
-     * @param height  Height of the boundary (not including the top or bottom padding)
-     * @param padding The padding to apply
+     * @param entity
+     *         The entity to use
+     * @param sprite
+     *         Sprite to use for getting width and height
+     * @param padding
+     *         The padding to apply
+     */
+    public EntityBoundary(Entity entity, Sprite sprite, BoundaryPadding padding) {
+        this(entity, sprite.width, sprite.height, padding);
+    }
+
+    /**
+     * Creates a new boundary for the given entity
+     *
+     * @param entity
+     *         The entity to use
+     * @param width
+     *         Width of the boundary (not including the left or right padding)
+     * @param height
+     *         Height of the boundary (not including the top or bottom padding)
+     * @param padding
+     *         The padding to apply
+     *
      * @see Boundary
      */
     public EntityBoundary(Entity entity, int width, int height, BoundaryPadding padding) {
@@ -35,11 +54,17 @@ public class EntityBoundary extends Boundary {
     /**
      * Creates a new boundary for the given entity
      *
-     * @param entity  The entity to use
-     * @param width   Width of the boundary (not including the left or right padding)
-     * @param height  Height of the boundary (not including the top or bottom padding)
-     * @param padding The padding to apply
-     * @param offset  The offset to apply
+     * @param entity
+     *         The entity to use
+     * @param width
+     *         Width of the boundary (not including the left or right padding)
+     * @param height
+     *         Height of the boundary (not including the top or bottom padding)
+     * @param padding
+     *         The padding to apply
+     * @param offset
+     *         The offset to apply
+     *
      * @see Boundary
      */
     public EntityBoundary(Entity entity, int width, int height, BoundaryPadding padding, BoundaryOffset offset) {
@@ -48,18 +73,19 @@ public class EntityBoundary extends Boundary {
         this.width = width + padding.left + padding.right;
         this.height = height + padding.top + padding.bottom;
         this.offset = offset;
-        horizontalOffset = padding.left + this.offset.left - this.offset.right;
-        verticalOffset = padding.top + this.offset.top - this.offset.bottom;
-        name = "EntityBoundary#" + hashCode();
+        horizontalOffset = padding.left + offset.left - offset.right;
+        verticalOffset = padding.top + offset.top - offset.bottom;
+        name = "EntityBoundary#" + entity;
+        // call tick so that x and y are actually set
         tick();
         setColor();
     }
 
-    private void setColor() {
+    public void setColor() {
         if (parent.isStatic) {
             drawColor = Color.BLACK;
         } else {
-            drawColor = Color.YELLOW;
+            drawColor = Color.ORANGE;
         }
     }
 

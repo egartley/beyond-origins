@@ -22,10 +22,10 @@ public class EntityStore {
     public static int amount = 0;
 
     /**
-     * Addes the given entity to the store. Prints out a warning if it has already
-     * been registered
+     * Addes the given entity to the store. Prints out a warning if it has already been registered
      *
-     * @param entity The entity to add to the store
+     * @param entity
+     *         The entity to add to the store
      */
     public static void register(Entity entity) {
         if (!entity.isRegistered) {
@@ -38,26 +38,26 @@ public class EntityStore {
     }
 
     /**
-     * Removes the given entity from the registry. Prints out a warning if the
-     * entity was never registered in the first place
+     * Removes the given entity from the registry. Prints out a warning if the entity was never registered in the first
+     * place
      *
-     * @param entity Entity to remove
+     * @param entity
+     *         Entity to remove
      */
     public static void remove(Entity entity) {
-        // Debug.out("Removing entity from store... (" + entity + ")");
-        if (entities.remove(entity) && !entity.isRegistered) {
-            Debug.warning("Tried to remove an entity (" + entity + ") from the store, but it was never registered in the first place");
-        } else {
+        if (entity.isRegistered) {
+            entities.remove(entity);
             entity.isRegistered = false;
             amount--;
         }
     }
 
     /**
-     * Returns the entity that has the given UUID, null if no entity with that
-     * particular UUID is registered
+     * Returns the entity that has the given UUID, null if no entity with that particular UUID is registered
      *
-     * @param uuid UUID number to look for in the store
+     * @param uuid
+     *         UUID number to look for in the store
+     *
      * @return Entity with the provided UUID, null if not found
      */
     public static Entity getEntityByUUID(int uuid) {

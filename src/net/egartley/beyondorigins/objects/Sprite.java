@@ -1,10 +1,12 @@
 package net.egartley.beyondorigins.objects;
 
+import net.egartley.beyondorigins.Debug;
+
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
- * A row, or "strip", of individual frames of a specific entity or object
+ * A row, or "strip", of individual frames for an entity (they are all the same height and width)
  *
  * @see SpriteSheet
  * @see Entity
@@ -12,75 +14,53 @@ import java.util.ArrayList;
 public class Sprite {
 
     /**
-     * The image that contains all of the sprite's possible frames
-     *
-     * @see AnimationFrame
-     * @see #frameCollection
-     */
-    BufferedImage strip;
-    /**
-     * All of the possible frameCollection that the sprite could use, which are
-     * derived from {@link #strip}
+     * All of the possible frames that the sprite could use, which are derived from {@link #strip}
      *
      * @see AnimatedEntity
      * @see StaticEntity
      */
-    ArrayList<AnimationFrame> frameCollection = new ArrayList<>();
+    ArrayList<BufferedImage> frames = new ArrayList<>();
     /**
-     * The width in pixels for each frame
+     * Width in pixels
      */
-    public int frameWidth;
+    public int width;
     /**
-     * The height in pixels for each frame
+     * Height in pixels
      */
-    public int frameHeight;
-    private short currentFrameIndex = 0;
+    public int height;
 
-    public Sprite(BufferedImage image, int width, int height) {
-        strip = image;
-        frameWidth = width;
-        frameHeight = height;
-    }
+    public Sprite(BufferedImage row, int width, int height, int frames) {
+        this.width = width;
+        this.height = height;
 
-    /**
-     * Returns the frame at the given index (from {@link #frameCollection})
-     *
-     * @param index Index of the frame to return
-     * @return {@link AnimationFrame}
-     */
-    public AnimationFrame getFrameAt(int index) {
-        if (index >= frameCollection.size())
-            return null;
-        return frameCollection.get(index);
-    }
-
-    /**
-     * Returns the current frame
-     * ({@link #frameCollection}[{@link #currentFrameIndex}]) as a buffered image
-     *
-     * @return {@link java.awt.image.BufferedImage BufferedImage}
-     */
-    public BufferedImage getCurrentFrameAsBufferedImage() {
-        return frameCollection.get(currentFrameIndex).asBufferedImage();
-    }
-
-    /**
-     * Resets the frame collection and re-loads it with the given number of
-     * frameCollection
-     *
-     * @param numberOfFrames How many frameCollection to use (must be at least 1)
-     * @see AnimationFrame
-     */
-    void setFrames(int numberOfFrames) {
-        // clear frame collection if previously set
-        frameCollection.clear();
-        if (numberOfFrames == 1) {
-            frameCollection.add(new AnimationFrame(this, 0));
+        this.frames.clear();
+        if (frames == 1) {
+            this.frames.add(row.getSubimage(0, 0, width, height));
+            return;
+        } else if (frames <= 0) {
+            Debug.error("When setting frames for a sprite, there needs to be at least one!");
             return;
         }
-        for (int i = 0; i < numberOfFrames; i++) {
-            frameCollection.add(new AnimationFrame(this, i));
+        for (int i = 0; i < frames; i++) {
+            this.frames.add(row.getSubimage(i * width, 0, width, height));
         }
+    }
+
+    /**
+     * Returns the first frame in {@link #frames} as a buffered image
+     */
+    BufferedImage toBufferedImage() {
+        return toBufferedImage(0);
+    }
+
+    /**
+     * Returns the frame at the index as a buffered image
+     */
+    BufferedImage toBufferedImage(int index) {
+        if (index >= frames.size()) {
+            return null;
+        }
+        return frames.get(index);
     }
 
 }

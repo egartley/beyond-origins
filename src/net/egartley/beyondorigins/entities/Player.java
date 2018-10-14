@@ -1,101 +1,39 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.beyondorigins.Debug;
-import net.egartley.beyondorigins.Game;
+import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.input.Keyboard;
+import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.logic.interaction.BoundaryOffset;
 import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
-import net.egartley.beyondorigins.objects.AnimatedEntity;
-import net.egartley.beyondorigins.objects.Animation;
-import net.egartley.beyondorigins.objects.Sprite;
+import net.egartley.beyondorigins.objects.*;
 
-import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 public class Player extends AnimatedEntity {
 
-    private final byte UP = 1;
-    private final byte DOWN = 2;
-    private final byte LEFT = 3;
-    private final byte RIGHT = 4;
-    private final double SPEED = 2;
-
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
-    private final byte ANIMATION_THRESHOLD = 11;
+    private final byte ANIMATION_THRESHOLD = 7;
 
     public EntityBoundary boundary;
     EntityBoundary headBoundary;
     EntityBoundary bodyBoundary;
     EntityBoundary feetBoundary;
 
-    public double speed;
-
-    private int maximumX;
-    private int maximumY;
-
-    boolean isAllowedToMoveUpwards = true;
-    boolean isAllowedToMoveDownwards = true;
-    boolean isAllowedToMoveLeftwards = true;
-    boolean isAllowedToMoveRightwards = true;
-
-    private boolean isMovingUpwards = false;
-    private boolean isMovingDownwards = false;
-    private boolean isMovingLeftwards = false;
-    private boolean isMovingRightwards = false;
-
     public Player(ArrayList<Sprite> sprites) {
         super("Player");
         this.sprites = sprites;
         sprite = sprites.get(0);
-        maximumX = Game.WINDOW_WIDTH;
-        maximumY = Game.WINDOW_HEIGHT;
-        setAnimationCollection();
+        setAnimations();
         setBoundaries();
         setCollisions();
 
         isSectorSpecific = false;
         isDualRendered = false;
-    }
-
-    private void move(byte direction) {
-        if (animation.isStopped) {
-            // animation was stopped, so restart it because we're moving
-            animation.restart();
-        }
-        switch (direction) {
-            case UP:
-                if (boundary.top <= 0 || !isAllowedToMoveUpwards) {
-                    break; // top of window or can't move upwards
-                }
-                y -= speed;
-                break;
-            case DOWN:
-                if (boundary.bottom >= maximumY || !isAllowedToMoveDownwards) {
-                    break; // bottom of window or can't move downwards
-                }
-                y += speed;
-                break;
-            case LEFT:
-                if (boundary.left <= 0 || !isAllowedToMoveLeftwards) {
-                    break; // left of window or can't move leftwards
-                }
-                x -= speed;
-                switchAnimation(LEFT_ANIMATION);
-                break;
-            case RIGHT:
-                if (boundary.right >= maximumX || !isAllowedToMoveRightwards) {
-                    break; // right of window or can't move rightwards
-                }
-                x += speed;
-                switchAnimation(RIGHT_ANIMATION);
-                break;
-            default:
-                break;
-        }
+        speed = 2.0;
     }
 
     /**
@@ -104,96 +42,78 @@ public class Player extends AnimatedEntity {
      * @param i The index of the animation
      */
     private void switchAnimation(byte i) {
-        animation = animationCollection.get(i);
-    }
-
-    /**
-     * Allows the player to move in all directions
-     */
-    void allowAllMovement() {
-        isAllowedToMoveUpwards = true;
-        isAllowedToMoveDownwards = true;
-        isAllowedToMoveLeftwards = true;
-        isAllowedToMoveRightwards = true;
-    }
-
-    /**
-     * Disregards any movement restrictions imposed by the provided
-     * {@link net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent
-     * EntityEntityCollisionEvent}
-     *
-     * @param event The
-     *              {@link net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent
-     *              EntityEntityCollisionEvent} in which to annul
-     */
-    void annulCollisionEvent(EntityEntityCollisionEvent event) {
-        switch (event.collidedSide) {
-            case EntityEntityCollisionEvent.TOP_SIDE:
-                isAllowedToMoveDownwards = true;
-                break;
-            case EntityEntityCollisionEvent.BOTTOM_SIDE:
-                isAllowedToMoveUpwards = true;
-                break;
-            case EntityEntityCollisionEvent.LEFT_SIDE:
-                isAllowedToMoveRightwards = true;
-                break;
-            case EntityEntityCollisionEvent.RIGHT_SIDE:
-                isAllowedToMoveLeftwards = true;
-                break;
-            default:
-                break;
+        if (!animation.equals(animations.get(i))) {
+            // this prevents the same animation being set again
+            animation = animations.get(i);
         }
     }
 
-    /**
-     * Returns whether or not the player is currently moving in a certain direction
-     *
-     * @param direction {@link #UP}, {@link #DOWN}, {@link #LEFT} or {@link #RIGHT}
-     * @return True if the player is moving in the given direction, false if not or
-     * the given direction was unknown
-     */
-    public boolean isMoving(byte direction) {
-        switch (direction) {
-            case UP:
-                return isMovingUpwards;
-            case DOWN:
-                return isMovingDownwards;
-            case LEFT:
-                return isMovingLeftwards;
-            case RIGHT:
-                return isMovingRightwards;
-            default:
-                Debug.warning("Tried to get an unknown movement from the player (" + direction + "), expected " + UP + ", "
-                        + DOWN + ", " + LEFT + " or " + RIGHT + "");
-                return false;
+    public void onSectorEnter(MapSector sector) {
+        // generate collisions with sector entities that aren't traversable
+        for (Entity e : sector.entities) {
+            if (!e.isTraversable && e.isSectorSpecific) {
+                EntityEntityCollision baseCollision = new EntityEntityCollision(headBoundary, e.defaultBoundary) {
+                    public void onCollide(EntityEntityCollisionEvent event) {
+                        onCollisionWithNonTraversableEntity(event);
+                    }
+
+                    public void onCollisionEnd(EntityEntityCollisionEvent event) {
+                        if (!Entities.PLAYER.isCollided) {
+                            allowAllMovement();
+                        } else {
+                            annulCollisionEvent(event);
+                        }
+                    }
+                };
+                collisions.add(baseCollision);
+
+                for (EntityEntityCollision collision : Util.getAllBoundaryCollisions(baseCollision, this, e.defaultBoundary)) {
+                    if (collision.boundaries[0] != boundary && collision.boundaries[0] != headBoundary) {
+                        collisions.add(collision);
+                    }
+                }
+            }
         }
+    }
+
+    public void onSectorLeave(MapSector sector) {
+        // remove the generated collisions
+
+        // prevents concurrent modification
+        ArrayList<EntityEntityCollision> removeCollisions = new ArrayList<>();
+
+        for (Entity e : sector.entities)
+            if (!e.isTraversable && e.isSectorSpecific)
+                for (EntityEntityCollision c : collisions)
+                    if (c.entities[0].equals(e) || c.entities[1].equals(e))
+                        removeCollisions.add(c);
+
+        for (EntityEntityCollision c : removeCollisions)
+            collisions.remove(c);
+
+        removeCollisions.clear();
     }
 
     @Override
-    public void setAnimationCollection() {
-        animationCollection.clear();
-        // this allows variations of the player sprite to be added in the future
-        for (Sprite s : sprites) {
-            Animation a = new Animation(s);
-            a.setThreshold(ANIMATION_THRESHOLD);
-            animationCollection.add(a);
-        }
-        animation = animationCollection.get(0);
+    public void setAnimations() {
+        animations.clear();
+        animations.add(new Animation(sprites.get(0), ANIMATION_THRESHOLD));
+        animations.add(new Animation(sprites.get(1), ANIMATION_THRESHOLD));
+        animation = animations.get(0);
     }
 
     @Override
     public void setBoundaries() {
-        boundary = new EntityBoundary(this, sprite.frameWidth, sprite.frameHeight, new BoundaryPadding(4, 3, 2, 3));
+        boundary = new EntityBoundary(this, sprite, new BoundaryPadding(4, 3, 2, 3));
         boundary.name = "Base";
-        headBoundary = new EntityBoundary(this, 19, 18, new BoundaryPadding(0, 0, 0, 0),
-                new BoundaryOffset(0, 0, 0, 5));
+        defaultBoundary = boundary;
+        headBoundary = new EntityBoundary(this, 19, 18, new BoundaryPadding(0), new BoundaryOffset(0, 0, 0, 5));
         headBoundary.name = "Head";
-        bodyBoundary = new EntityBoundary(this, 30, 22, new BoundaryPadding(0, 0, 0, 0),
-                new BoundaryOffset(0, 13, 0, 0));
+        bodyBoundary = new EntityBoundary(this, 30, 19, new BoundaryPadding(0), new BoundaryOffset(0, 16, 0, 0));
         bodyBoundary.name = "Body";
-        feetBoundary = new EntityBoundary(this, 17, 16, new BoundaryPadding(0, 0, 0, 0),
-                new BoundaryOffset(0, 29, 0, 6));
+        feetBoundary = new EntityBoundary(this, 17, 16, new BoundaryPadding(0), new BoundaryOffset(0, 29, 0, 6));
         feetBoundary.name = "Feet";
+
         boundaries.add(boundary);
         boundaries.add(headBoundary);
         boundaries.add(bodyBoundary);
@@ -201,66 +121,61 @@ public class Player extends AnimatedEntity {
     }
 
     @Override
-    public void render(Graphics graphics) {
-        animation.render(graphics, (int) x, (int) y);
-        drawDebug(graphics);
-    }
-
-    @Override
     public void tick() {
         // get keyboard input (typical WASD)
         boolean up = Keyboard.isKeyPressed(KeyEvent.VK_W);
-        boolean down = Keyboard.isKeyPressed(KeyEvent.VK_S);
         boolean left = Keyboard.isKeyPressed(KeyEvent.VK_A);
+        boolean down = Keyboard.isKeyPressed(KeyEvent.VK_S);
         boolean right = Keyboard.isKeyPressed(KeyEvent.VK_D);
-        // reset all booleans for player's current movement
+
+        // actually move the player, with animations and all
+        move(up, down, left, right);
+
+        if (!left && !right && !down && !up) {
+            // not moving, so stop the animation if not already
+            animation.stop();
+        }
+
+        super.tick();
+    }
+
+    private void move(boolean up, boolean down, boolean left, boolean right) {
+        if (animation.isStopped) {
+            // animation was stopped, so restart it because we're moving
+            animation.restart();
+            animation.setFrame(1);
+        }
+
         isMovingUpwards = false;
         isMovingDownwards = false;
         isMovingLeftwards = false;
         isMovingRightwards = false;
-
-        // check if moving diagonal
-        if ((up && left) || (up && right) || (down && left) || (down && right)) {
-            // slightly reduce speed to keep diagonal speed the same as when moving only one
-            // direction
-            speed = SPEED - 0.05;
-        } else {
-            speed = SPEED;
-        }
-
         if (up) {
-            isMovingUpwards = true;
-            move(UP);
+            if (isAllowedToMoveUpwards) {
+                move(UP);
+            }
         } else if (down) {
-            // cannot be moving up and down at the same time
-            isMovingDownwards = true;
-            move(DOWN);
-        }
-        if (left) {
-            isMovingLeftwards = true;
-            move(LEFT);
-        } else if (right) {
-            // cannot be moving left and right at the same time
-            isMovingRightwards = true;
-            move(RIGHT);
-        }
-        if (!left && !right && !down && !up) {
-            // not moving at all, so stop the animation
-            animation.stop();
+            if (isAllowedToMoveDownwards) {
+                move(DOWN);
+            }
         }
 
-        animation.tick();
-        for (EntityBoundary boundary : boundaries) {
-            boundary.tick();
+        if (left) {
+            if (isAllowedToMoveLeftwards) {
+                move(LEFT);
+            }
+            switchAnimation(LEFT_ANIMATION);
+        } else if (right) {
+            if (isAllowedToMoveRightwards) {
+                move(RIGHT);
+            }
+            switchAnimation(RIGHT_ANIMATION);
         }
     }
 
     @Override
     protected void setCollisions() {
-        // nothing here right now because the player is not sector-specific, therefore
-        // sector-specific entities are to define collisions with the player
-
-        // this could change in the future, though
+        // see onSectorEnter and onSectorLeave
     }
 
 }

@@ -1,37 +1,45 @@
 package net.egartley.beyondorigins.objects;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 /**
- * An entity that cannot be animated
+ * An entity that does have not any animations
  *
  * @see Entity
  */
 public abstract class StaticEntity extends Entity {
 
     /**
-     * The entity's frame that is used while rendering
-     */
-    protected BufferedImage frame;
-
-    /**
-     * Creates a new static entity, while setting {@link Entity#isAnimated} to false
-     * and {@link Entity#isStatic} to true
+     * Creates a new static entity, while setting {@link Entity#isAnimated} to <code>false</code> and {@link
+     * Entity#isStatic} to <code>true</code>
      *
-     * @param id Human-readable ID for the entity
-     * @see Entity
+     * @see Entity#Entity(String) Entity(String)
      */
-    public StaticEntity(String id) {
+    private StaticEntity(String id) {
         super(id);
         isAnimated = false;
         isStatic = true;
     }
 
+    /**
+     * Calls {@link #StaticEntity(String)}, sets {@link #sprite}, then sets {@link #image} to
+     * {@link Sprite#toBufferedImage()}
+     */
+    public StaticEntity(String id, Sprite sprite) {
+        this(id);
+        this.sprite = sprite;
+        image = sprite.toBufferedImage();
+    }
+
     @Override
     public void render(Graphics graphics) {
-        graphics.drawImage(frame, (int) x, (int) y, null);
+        graphics.drawImage(image, (int) x, (int) y, null);
         drawDebug(graphics);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
     }
 
 }

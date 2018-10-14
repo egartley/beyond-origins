@@ -13,10 +13,14 @@ public class BoundaryOffset {
     /**
      * Creates a new boundary offset
      *
-     * @param top    Top offset
-     * @param bottom Bottom offset
-     * @param left   Left offset
-     * @param right  Right offset
+     * @param top
+     *         Top offset
+     * @param bottom
+     *         Bottom offset
+     * @param left
+     *         Left offset
+     * @param right
+     *         Right offset
      */
     public BoundaryOffset(int top, int bottom, int left, int right) {
         this.top = top;

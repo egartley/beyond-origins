@@ -13,7 +13,9 @@ public class MapSectorDefinition {
     /**
      * Creates a new map sector definition
      *
-     * @param tileArray Collection of map tiles
+     * @param tileArray
+     *         Collection of map tiles
+     *
      * @see MapSector
      * @see MapTile
      */

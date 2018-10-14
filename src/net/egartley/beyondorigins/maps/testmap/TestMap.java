@@ -9,7 +9,7 @@ import net.egartley.beyondorigins.maps.testmap.sectors.Sector4;
 import net.egartley.beyondorigins.objects.Map;
 import net.egartley.beyondorigins.objects.MapSector;
 
-import java.awt.Graphics;
+import java.awt.*;
 
 public class TestMap extends Map {
 
@@ -28,7 +28,6 @@ public class TestMap extends Map {
         // go to the first sector by default
         changeSector(sec1, null);
 
-        // much better :)
         sec1.setNeighborAt(sec2, MapSector.TOP);
         sec2.setNeighborAt(sec3, MapSector.RIGHT);
         sec3.setNeighborAt(sec4, MapSector.BOTTOM);

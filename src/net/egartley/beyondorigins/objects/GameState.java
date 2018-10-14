@@ -5,24 +5,18 @@ import java.util.ArrayList;
 
 /**
  * One of the game's "states" that has unique render and tick methods
- *
- * @see SubGameState
  */
 public abstract class GameState {
 
     /**
      * The ID number used while actually playing the game
-     *
-     * @see GameState
      */
     public static final int IN_GAME = 0;
 
     /**
-     * Collection of possible "sub", or lower level, game states
-     *
-     * @see SubGameState
+     * Collection of "sub", or secondary, game states
      */
-    public ArrayList<SubGameState> subStates;
+    public ArrayList<GameState> subStates;
     /**
      * Unique integer used to identify different game states
      */

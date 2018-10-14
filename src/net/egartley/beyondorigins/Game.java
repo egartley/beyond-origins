@@ -1,7 +1,9 @@
 package net.egartley.beyondorigins;
 
 import net.egartley.beyondorigins.definitions.maps.AllSectors;
-import net.egartley.beyondorigins.entities.*;
+import net.egartley.beyondorigins.entities.Dummy;
+import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.entities.Player;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.input.Keyboard;
 import net.egartley.beyondorigins.maps.TileBuilder;
@@ -69,9 +71,6 @@ public class Game extends Canvas implements Runnable {
     public static void main(String[] args) {
         startTime = System.currentTimeMillis();
         Game game = new Game();
-        game.setPreferredSize(windowDimension);
-        game.setMaximumSize(windowDimension);
-        game.setMinimumSize(windowDimension);
         // initialize jframe with title
         frame = new JFrame("Beyond Origins");
         // set window size
@@ -99,48 +98,35 @@ public class Game extends Canvas implements Runnable {
     private void loadGraphicsAndEntities() {
         Debug.out("Loading images...");
         ImageStore.loadAll();
-        // this upscales all images to a factor of 2 (i.e. each pixel in an image will
-        // be rendered as 2x2 pixels)
+
+        // this up-scales all images to a factor of 2 (each pixel in the source image will be rendered as 2x2 pixel)
         byte scale = 2;
 
         // *********** PLAYER BEGIN ***********
         BufferedImage image = ImageStore.playerDefault;
         if (image != null) {
-            image = Util.resized(image, image.getWidth() * scale, image.getHeight() * scale);
+            image = Util.resize(image, image.getWidth() * scale, image.getHeight() * scale);
         } else {
             Debug.error(
-                    "The default player image (\"player-default.png\") doesn't exist, or there was a problem while loading it!");
+                    "The default player image (\"player-default.png\") doesn't exist, or there was a problem while " +
+                            "loading it!");
             return;
         }
-        Entities.PLAYER = new Player(
-                new SpriteSheet(image, 15 * scale, 23 * scale, 2, (short) 4).getSpriteCollection());
+        Entities.PLAYER = new Player(new SpriteSheet(image, 15 * scale, 23 * scale, 2, 4).sprites);
         // ************ PLAYER END ************
         Debug.out("Initialized the player");
 
         // ************ DUMMY BEGIN ***********
         image = ImageStore.dummy;
         if (image != null) {
-            image = Util.resized(image, image.getWidth() * scale, image.getHeight() * scale);
+            image = Util.resize(image, image.getWidth() * scale, image.getHeight() * scale);
         } else {
             Debug.error("The dummy image (\"dummy.png\") doesn't exist, or there was a problem while loading it!");
             return;
         }
-        Entities.DUMMY = new Dummy(
-                new SpriteSheet(image, 15 * scale, 23 * scale, 2, (short) 4).getSpriteCollection().get(0));
+        Entities.DUMMY = new Dummy(new SpriteSheet(image, 15 * scale, 23 * scale, 2, 4).sprites);
         // ************ DUMMY END *************
         Debug.out("Initialized the dummy");
-
-        // ******** DEFAULT TREE BEGIN ********
-        Entities.TREE = new DefaultTree(new SpriteSheet(ImageStore.treeDefault, ImageStore.treeDefault.getWidth(),
-                ImageStore.treeDefault.getHeight(), 1, (short) 1).getSpriteCollection().get(0));
-        // ******** DEFAULT TREE END **********
-        Debug.out("Initialized the default tree");
-
-        // ******** DEFAULT ROCK BEGIN ********
-        Entities.ROCK = new DefaultRock(new SpriteSheet(ImageStore.rockDefault, ImageStore.rockDefault.getWidth(),
-                ImageStore.rockDefault.getHeight(), 1, (short) 1).getSpriteCollection().get(0));
-        // ******** DEFAULT TREE END **********
-        Debug.out("Initialized the default rock");
     }
 
     /**
@@ -231,8 +217,6 @@ public class Game extends Canvas implements Runnable {
                 e.printStackTrace();
             }
         }
-        Debug.out("Stopping master render thread...");
-        // end the game, thus terminating the process
         stop();
     }
 

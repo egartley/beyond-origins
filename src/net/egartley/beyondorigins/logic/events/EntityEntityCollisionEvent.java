@@ -1,15 +1,13 @@
 package net.egartley.beyondorigins.logic.events;
 
-import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
+import net.egartley.beyondorigins.logic.math.Calculate;
+import net.egartley.beyondorigins.objects.Entity;
 
 /**
- * A custom "event" that can be used for gathering information from a collision
- * that has occured
- * {@link net.egartley.beyondorigins.logic.collision.EntityEntityCollision
- * EntityEntityCollision}
+ * A "event" that can be used for accessing information about an {@link EntityEntityCollision}
  */
 public class EntityEntityCollisionEvent {
 
@@ -19,7 +17,7 @@ public class EntityEntityCollisionEvent {
     public static final byte RIGHT_SIDE = 3;
 
     /**
-     * The numerical representation for the side that the collision occurred at
+     * The side that the collision occurred at
      *
      * @see #TOP_SIDE
      * @see #BOTTOM_SIDE
@@ -27,32 +25,30 @@ public class EntityEntityCollisionEvent {
      * @see #RIGHT_SIDE
      */
     public byte collidedSide = -1;
+    /**
+     * The collision that caused the event
+     */
+    public EntityEntityCollision invoker;
 
     /**
-     * Creates a new entity-entity collision event, then calculates
-     * {@link #collidedSide}
-     *
-     * @param invoker The
-     *                {@link net.egartley.beyondorigins.logic.collision.EntityEntityCollision
-     *                EntityEntityCollision} that occurred
+     * Creates a new entity-entity collision event, which calculates its {@link #collidedSide}
      */
     public EntityEntityCollisionEvent(EntityEntityCollision invoker) {
-        // round player speed to int, ex. 1.6 would be 2
-        int tolerance = (int) (Entities.PLAYER.speed + 0.5);
+        this.invoker = invoker;
+        // calculate the side in which the collision occurred
+        calculateCollidedSide((int) Entities.PLAYER.speed, invoker.boundaries[0], invoker.boundaries[1]);
+    }
 
-        EntityBoundary collider = invoker.boundary1;
-        EntityBoundary into = invoker.boundary2;
-
-        if (into.right - tolerance <= collider.left && collider.left <= into.right) {
-            collidedSide = RIGHT_SIDE;
-        } else if (into.left <= collider.right && collider.right <= into.left + tolerance) {
+    private void calculateCollidedSide(int tolerance, EntityBoundary player, EntityBoundary rock) {
+        if (Calculate.isEntityWithinToleranceOf(player, rock, Entity.LEFT, tolerance)) {
             collidedSide = LEFT_SIDE;
-        } else if (into.top <= collider.bottom && collider.bottom <= into.top + tolerance) {
+        } else if (Calculate.isEntityWithinToleranceOf(player, rock, Entity.RIGHT, tolerance)) {
+            collidedSide = RIGHT_SIDE;
+        }
+        if (Calculate.isEntityWithinToleranceOf(player, rock, Entity.UP, tolerance)) {
             collidedSide = TOP_SIDE;
-        } else if (into.bottom - tolerance <= collider.top && collider.top <= into.bottom) {
+        } else if (Calculate.isEntityWithinToleranceOf(player, rock, Entity.DOWN, tolerance)) {
             collidedSide = BOTTOM_SIDE;
-        } else {
-            Debug.error("Could not calculate a collided side! (between " + invoker.entities.get(0) + " and " + invoker.entities.get(1) + ")");
         }
     }
 

@@ -11,7 +11,9 @@ public class Keyboard implements KeyListener {
     private static ArrayList<Integer> pressedKeyCodes = new ArrayList<Integer>();
 
     /**
-     * @param keycode The key code from {@link java.awt.event.KeyEvent KeyEvent }
+     * @param keycode
+     *         The key code from {@link java.awt.event.KeyEvent KeyEvent }
+     *
      * @return Whether or not the provided key is currently being pressed down
      */
     public static boolean isKeyPressed(int keycode) {

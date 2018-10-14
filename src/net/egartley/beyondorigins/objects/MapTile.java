@@ -17,7 +17,8 @@ public class MapTile {
     /**
      * Creates a new map tile with the provided {@link BufferedImage}
      *
-     * @param image The tile's image
+     * @param image
+     *         The tile's image
      */
     public MapTile(BufferedImage image) {
         bufferedImage = image;

@@ -2,8 +2,6 @@ package net.egartley.beyondorigins.maps.testmap.sectors;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.logic.collision.MapSectorChangeCollision;
-import net.egartley.beyondorigins.logic.interaction.MapSectorChangeBoundary;
 import net.egartley.beyondorigins.objects.Map;
 import net.egartley.beyondorigins.objects.MapSector;
 import net.egartley.beyondorigins.objects.MapSectorDefinition;
@@ -20,30 +18,21 @@ public class Sector2 extends MapSector {
     public void render(Graphics graphics) {
         super.render(graphics);
         Entities.PLAYER.render(graphics);
-
-        for (MapSectorChangeBoundary boundary : changeBoundaries) {
-            boundary.draw(graphics);
-        }
     }
 
     @Override
     public void tick() {
-        Entities.PLAYER.tick();
+        super.tick();
+    }
 
-        for (MapSectorChangeCollision collision : changeCollisions) {
-            collision.tick();
-        }
+    @Override
+    public void initialize() {
+
     }
 
     @Override
     public void onPlayerEnter(MapSector from) {
-        if (from.equals(parent.sectors.get(0))) {
-            // from sector 1
-            Entities.PLAYER.y = Game.WINDOW_HEIGHT - 84;
-        } else if (from.equals(parent.sectors.get(2))) {
-            // from sector 3
-            Entities.PLAYER.x = Game.WINDOW_WIDTH - 84;
-        }
+        updatePlayerPosition(from);
     }
 
     @Override

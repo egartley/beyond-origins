@@ -10,8 +10,7 @@ import java.awt.*;
 public class MapSectorChangeBoundary extends Boundary {
 
     /**
-     * The map sector where the player will be going to after colliding with this
-     * boundary
+     * The map sector where the player will be going to after colliding with this boundary
      */
     public MapSector to;
 
@@ -24,7 +23,7 @@ public class MapSectorChangeBoundary extends Boundary {
         bottom = top + height;
         left = x;
         right = left + width;
-        drawColor = Color.ORANGE;
+        drawColor = Color.MAGENTA;
         this.to = to;
     }
 

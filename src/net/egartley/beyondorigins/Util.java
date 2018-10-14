@@ -15,8 +15,8 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class Util {
 
-    // https://stackoverflow.com/a/13605411
     private static BufferedImage toBufferedImage(Image img) {
+        // https://stackoverflow.com/a/13605411
         if (img instanceof BufferedImage)
             return (BufferedImage) img;
         BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
@@ -27,87 +27,116 @@ public class Util {
     }
 
     /**
-     * Returns a resized image of the original with the supplied width and height
+     * Returns a re-sized image of the original, at the given width and height
      *
-     * @param image The original image to resize (won't be changed)
-     * @param w     New width to resize to
-     * @param h     New height to resize to
-     * @return A resized version of the given buffered image
+     * @param image
+     *         The original image to resize (will not be altered)
+     * @param width
+     *         New width to resize to
+     * @param height
+     *         New height to resize to
+     *
+     * @return {@link #resize(BufferedImage, int, int, int) resize(image, width, height, Image.SCALE_DEFAULT)}
      */
-    static BufferedImage resized(BufferedImage image, int w, int h) {
-        return toBufferedImage(image.getScaledInstance(w, h, Image.SCALE_DEFAULT));
+    static BufferedImage resize(BufferedImage image, int width, int height) {
+        return resize(image, width, height, Image.SCALE_DEFAULT);
     }
 
     /**
-     * Returns a random integer, using {@link java.util.concurrent.ThreadLocalRandom
-     * ThreadLocalRandom}, between the supplied maximum and minimum values
+     * Returns a re-sized image of the original, at the given width and height
      *
-     * @param maximum The maximum value the random integer could be
-     * @param minimum The minimum value the random integer could be
-     * @return A randon integer between the given maximum and minimum
+     * @param image
+     *         The original image to resize (will not be altered)
+     * @param width
+     *         New width to resize to
+     * @param height
+     *         New height to resize to
+     * @param hints
+     *         Scaling algorithm to use (see {@link Image})
+     *
+     * @return {@link #toBufferedImage(Image) toBufferedImage(image.getScaledInstance(width, height, hints))}
+     */
+    static BufferedImage resize(BufferedImage image, int width, int height, int hints) {
+        return toBufferedImage(image.getScaledInstance(width, height, hints));
+    }
+
+    /**
+     * Returns a random integer between the supplied maximum and minimum values
+     *
+     * @param maximum
+     *         The maximum value
+     * @param minimum
+     *         The minimum value
+     *
+     * @return A random integer in between the maximum and minimum
      */
     private static int randomInt(int maximum, int minimum) {
-        // this is using ThreadLocalRandom because that is apparently more efficient
         return ThreadLocalRandom.current().nextInt(minimum, maximum);
     }
 
     /**
-     * <p>
      * Returns a random integer between the supplied maximum and minimum values
-     * (uses {@link #randomInt(int, int) randomInt(minimum, maximum)})
-     * </p>
      *
-     * <p>
-     * If inclusive, then {@link #randomInt(int, int) randomInt(minimum, maximum +
-     * 1)} will be used
-     * </p>
+     * @param maximum
+     *         The maximum value
+     * @param minimum
+     *         The minimum value
+     * @param inclusive
+     *         Whether or not the include the maximum as a possible value
      *
-     * @param maximum   The maximum value the random integer could be
-     * @param minimum   The minimum value the random integer could be
-     * @param inclusive Whether or not the include the maximum as a possible value
-     * @return A randon integer between the given maximum and minimum
+     * @return {@link #randomInt(int, int) randomInt(maximum + 1, minimum)}
      */
     public static int randomInt(int maximum, int minimum, boolean inclusive) {
-        if (inclusive) {
+        if (inclusive)
             return randomInt(maximum + 1, minimum);
-        } else {
+        else
             return randomInt(maximum, minimum);
-        }
     }
 
     /**
-     * Returns generated entity-to-entity collisions around the given parameters
+     * Returns generated entity-to-entity collisions based on the given event, entity and boundary
      *
-     * @param baseEvent    The
-     *                     {@link net.egartley.beyondorigins.logic.collision.EntityEntityCollision
-     *                     EntityEntityCollision} in which to base all of the returned ones
-     *                     on
-     * @param entity       The {@link net.egartley.beyondorigins.objects.Entity Entity} in
-     *                     which to generate collisions around each of its boundaries
-     * @param baseBoundary The other
-     *                     {@link net.egartley.beyondorigins.logic.interaction.EntityBoundary
-     *                     EntityBounadry} in which to base the generated collisions around
-     * @return Generated entity-to-entity collisions based on the given parameters
+     * @param baseEvent
+     *         The {@link EntityEntityCollision} in which to base all of the returned ones on
+     * @param entity
+     *         The {@link Entity Entity} in which to generate collisions around each of its boundaries
+     * @param baseBoundary
+     *         The other entity's {@link EntityBoundary boundary}
+     *
+     * @see EntityEntityCollision#onCollide(EntityEntityCollisionEvent)
+     * @see EntityEntityCollision#onCollisionEnd(EntityEntityCollisionEvent)
      */
-    public static ArrayList<EntityEntityCollision> getAllBoundaryCollisions(EntityEntityCollision baseEvent,
-                                                                            Entity entity, EntityBoundary baseBoundary) {
-        ArrayList<EntityEntityCollision> collisions = new ArrayList<EntityEntityCollision>();
+    public static ArrayList<EntityEntityCollision> getAllBoundaryCollisions(EntityEntityCollision baseEvent, Entity
+            entity, EntityBoundary baseBoundary) {
+        ArrayList<EntityEntityCollision> collisions = new ArrayList<>();
         for (EntityBoundary boundary : entity.boundaries) {
             collisions.add(new EntityEntityCollision(boundary, baseBoundary) {
                 public void onCollide(EntityEntityCollisionEvent event) {
                     baseEvent.onCollide(event);
                 }
 
-                ;
-
                 public void onCollisionEnd(EntityEntityCollisionEvent event) {
                     baseEvent.onCollisionEnd(event);
                 }
-
-                ;
             });
         }
         return collisions;
+    }
+
+    public static void fixCrossSectorCollisions(ArrayList<Entity> entities) {
+        for (Entity e : entities) {
+            for (EntityEntityCollision c : e.collisions) {
+                if (c.isCollided) {
+                    for (EntityBoundary eb : c.boundaries) {
+                        if (!eb.parent.isSectorSpecific) {
+                            eb.isCollided = false;
+                            eb.parent.isCollided = false;
+                            eb.setColor();
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

@@ -20,27 +20,27 @@ public abstract class Boundary {
     int horizontalOffset;
     int verticalOffset;
     /**
-     * The boundary's width (calculated with padding)
+     * The boundary's width (includes padding)
      */
     public int width;
     /**
-     * The boundary's height (calculated with padding)
+     * The boundary's height (includes padding)
      */
     public int height;
     /**
-     * Top side of the boundary, which is its y-coordinate
+     * Top side of the boundary, which is the y-coordinate
      */
     public int top;
     /**
-     * Right side of the boundary, which is its x-coordinate
+     * Right side of the boundary, which is the x-coordinate + width
      */
     public int right;
     /**
-     * Bottom side of the boundary, which is its y-coordinate
+     * Bottom side of the boundary, which is the y-coordinate + height
      */
     public int bottom;
     /**
-     * Left side of the boundary, which is its x-coordinate
+     * Left side of the boundary, which is the x-coordinate
      */
     public int left;
     /**
@@ -49,8 +49,7 @@ public abstract class Boundary {
     public boolean isCollided;
 
     /**
-     * This boundary's padding (extra space added/subtracted from any or all of the
-     * four sides)
+     * This boundary's padding (extra space added/subtracted from any or all of the four sides)
      */
     BoundaryPadding padding;
     /**
@@ -63,11 +62,10 @@ public abstract class Boundary {
     public Color drawColor;
 
     /**
-     * Uses {@link java.awt.Graphics#drawRect(int, int, int, int) drawRect} to
-     * render this boundary (only if {@link net.egartley.beyondorigins.Game#debug
-     * Game.debug} is enabled)
+     * Renders the boundary (only if {@link net.egartley.beyondorigins.Game#debug Game.debug} is <code>true</code>)
      *
-     * @param graphics Graphics object to use
+     * @param graphics
+     *         Graphics object to use
      */
     public void draw(Graphics graphics) {
         if (Game.debug) {
@@ -77,8 +75,7 @@ public abstract class Boundary {
     }
 
     /**
-     * Update {@link #x}, {@link #y}, {@link #top}, {@link #left}, {@link #bottom}
-     * and {@link #right}
+     * Updates {@link #x}, {@link #y}, {@link #top}, {@link #left}, {@link #bottom} and {@link #right}
      */
     public void tick() {
         top = y;
@@ -87,9 +84,6 @@ public abstract class Boundary {
         right = left + width;
     }
 
-    /**
-     * @return The boundary as a {@link java.awt.Rectangle Rectangle} object
-     */
     public Rectangle asRectangle() {
         return new Rectangle(x, y, width, height);
     }

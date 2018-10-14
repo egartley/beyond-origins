@@ -3,104 +3,148 @@ package net.egartley.beyondorigins.objects;
 import net.egartley.beyondorigins.Debug;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 
 /**
- * Represents a collection of {@link AnimationFrame AnimationFrame} objects,
- * which can be used for animating a {@link Sprite Sprite}
+ * Represents a collection of {@link AnimationFrame} objects, used for animating sprites
  *
- * @see AnimationFrame
  * @see Sprite
  * @see AnimatedEntity
  */
 public class Animation {
 
-    private byte delay = 0, threshold = 10;
-    private int frameIndex, startIndex;
+    /**
+     * Index in {@link Sprite#frames} for the frame to use when rendering (the current frame)
+     */
+    private int frameIndex;
+    private int startIndex;
+    /**
+     * Number of calls to {@link #tick()} until {@link #threshold} is reached
+     */
+    private byte delay = 0;
+    /**
+     * Whether or not the "stop" frame has been set (the frame displayed when the animation is stopped)
+     */
+    private boolean setStopFrame;
+    /**
+     * Number of calls to {@link #tick()} before switching to the next frame (which should be called 60 times per
+     * second)
+     *
+     * @see #nextFrame()
+     */
+    private byte threshold = 10;
     /**
      * Set to true when the animation is no longer changing frames, false otherwise
+     *
+     * @see #stop()
+     * @see #pause()
      */
     public boolean isStopped;
-    private boolean setStopFrame;
-
     /**
      * The {@link Sprite} to animate
      */
     public Sprite sprite;
     /**
-     * The frame that is currently being used while rendering
+     * The frame that is currently being used when rendering
      */
-    private AnimationFrame frame;
+    private BufferedImage frame;
     /**
      * The frame that the animation will start at
      */
-    private AnimationFrame startFrame;
+    private BufferedImage startFrame;
 
     /**
      * Creates a new animation
      *
-     * @param s {@link Sprite} to animate
+     * @param s Sprite to animate
      */
     public Animation(Sprite s) {
         sprite = s;
         frameIndex = 0;
         startIndex = 0;
-        startFrame = sprite.frameCollection.get(startIndex);
+        startFrame = sprite.frames.get(startIndex);
         frame = startFrame;
     }
 
-    private AnimationFrame nextFrame() {
-        if (frameIndex + 1 == sprite.frameCollection.size()) {
-            frameIndex = 0;
-        } else {
-            frameIndex++;
-        }
-        return sprite.frameCollection.get(frameIndex);
+    /**
+     * Creates a new animation
+     *
+     * @param s         Sprite to animate
+     * @param threshold The animation's {@link #threshold}
+     */
+    public Animation(Sprite s, byte threshold) {
+        this(s);
+        this.threshold = threshold;
     }
 
     /**
-     * <p>
-     * Sets the animation's threshold, or interval, for when to go to the next frame
-     * </p>
-     * <p>
-     * The tick method should be called roughly 60 times per second, therefore each
-     * frame will be displayed for about <b>threshold � 60</b> seconds
-     * </p>
+     * Creates a new animation
      *
-     * @param t New value for {@link #threshold}
+     * @param s          Sprite to animate
+     * @param threshold  The animation's {@link #threshold}
+     * @param startIndex The index to begin at within {@link Sprite#frames}
      */
-    public void setThreshold(int t) {
-        if (t > 127 || t < -128) {
-            Debug.warning("tried to set an animation threshold outside of the accepted range (-127 to 127)!");
+    public Animation(Sprite s, byte threshold, int startIndex) {
+        this(s, threshold);
+        this.startIndex = startIndex;
+        startFrame = sprite.frames.get(startIndex);
+        frame = startFrame;
+    }
+
+    /**
+     * Returns the frame at {@link #frameIndex} within {@link #sprite}'s {@link Sprite#frames}
+     */
+    private BufferedImage getFrame() {
+        return sprite.frames.get(frameIndex);
+    }
+
+    private BufferedImage nextFrame() {
+        // check if we need to go back to the start of the animation or just go to the next one
+        if (frameIndex + 1 >= sprite.frames.size())
+            frameIndex = 0;
+        else
+            frameIndex++;
+
+        return getFrame();
+    }
+
+    public void setFrame(int index) {
+        if (index >= sprite.frames.size()) {
+            Debug.warning("Tried to set the frame of an animation to an index that is out-of-bounds");
             return;
         }
-        threshold = (byte) t;
+        frameIndex = index;
+        frame = getFrame();
     }
 
     /**
      * Resume the animation. Does nothing if already running
+     * <p>
+     * Sets {@link #isStopped} to <code>false</code>
      */
     public void resume() {
         isStopped = false;
     }
 
     /**
-     * Pauses the animation. Does nothing if already paused
+     * Pauses the animation, by setting {@link #isStopped} to <code>true</code> (does nothing if already paused)
      */
     public void pause() {
         isStopped = true;
     }
 
     /**
-     * Stops the animation, and resets the displayed frame to the starting frame.
-     * Does nothing if already stopped
+     * Stops the animation, and resets the current frame to the starting frame (does nothing if already stopped)
      */
     public void stop() {
-        isStopped = true;
+        pause();
         setStopFrame = false;
     }
 
     /**
-     * Restarts the animation. If already running, the animation will start over
+     * Restarts the animation, by setting {@link #frameIndex} to {@link #startIndex}, {@link #delay} to <code>0</code>,
+     * and {@link #isStopped} to <code>false</code>
      */
     public void restart() {
         frameIndex = startIndex;
@@ -109,33 +153,32 @@ public class Animation {
     }
 
     /**
-     * Renders {@link Animation#frame frame}
-     *
-     * @param graphics {@link java.awt.Graphics Graphics}
-     * @param x        The x-axis coordinate
-     * @param y        The y-axis coordinate
-     * @see AnimationFrame
+     * Renders {@link Animation#frame frame} with {@link Graphics#drawImage(Image, int, int, ImageObserver)}
      */
     public void render(Graphics graphics, int x, int y) {
-        graphics.drawImage(frame.asBufferedImage(), x, y, null);
+        graphics.drawImage(frame, x, y, null);
     }
 
     /**
-     * Should be called 60 times per second, within a tick thread
+     * Progresses the animation in accordance with {@link #threshold}, assuming 60 calls per second
      */
     public void tick() {
         if (!isStopped) {
+            // animation isn't stopped, so progress it
             if (delay < threshold) {
+                // we haven't reached the threshold yet, so increment delay until it's reached
                 delay++;
             } else {
+                // reached the threshold, reset delay
                 delay = 0;
+                // progress to next frame
                 frame = nextFrame();
             }
-        } else {
-            if (!setStopFrame) {
-                frame = startFrame;
-                setStopFrame = true;
-            }
+        } else if (!setStopFrame) {
+            // set current frame to the "start" frame
+            frame = startFrame;
+            // prevent from being set again until the animation finishes again
+            setStopFrame = true;
         }
     }
 
