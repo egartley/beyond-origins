@@ -3,7 +3,7 @@
 RPG (role-playing video game) written in Java, which is not using any sort of game engine - <b>everything is from scratch.</b> 
 The primary goal right now is to have a viable framework, or scaffolding, that is highly configurable and easy to modify.
 
-<img src="https://github.com/egartley/beyond-origins/blob/master/resources/images/screenshot.png">
+<img src="https://raw.githubusercontent.com/egartley/media/master/screenshots/beyond-origins.png">
 
 JavaDoc can be found <a href="https://docs.egartley.net/beyond-origins/?via=githubreadme">here</a> (updated periodically)
 
