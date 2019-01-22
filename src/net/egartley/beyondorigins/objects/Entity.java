@@ -31,9 +31,9 @@ public abstract class Entity {
     public static final byte FOLLOW_PASSIVE = 0;
     public static final byte FOLLOW_AGGRESSIVE = 1;
 
-    public static final byte CAUGHT_UP_LEFT = 0;
-    public static final byte CAUGHT_UP_RIGHT = 1;
-    public static final byte CAUGHT_UP_VERTICAL = 2;
+    private static final byte CAUGHT_UP_LEFT = 0;
+    private static final byte CAUGHT_UP_RIGHT = 1;
+    private static final byte CAUGHT_UP_VERTICAL = 2;
 
     /**
      * The entity's sprites
@@ -123,19 +123,19 @@ public abstract class Entity {
     /**
      * Whether or not the entity is currently moving upwards
      */
-    public boolean isMovingUpwards = false;
+    protected boolean isMovingUpwards = false;
     /**
      * Whether or not the entity is currently moving downwards
      */
-    public boolean isMovingDownwards = false;
+    protected boolean isMovingDownwards = false;
     /**
      * Whether or not the entity is currently moving leftwards
      */
-    public boolean isMovingLeftwards = false;
+    protected boolean isMovingLeftwards = false;
     /**
      * Whether or not the entity is currently moving rightwards
      */
-    public boolean isMovingRightwards = false;
+    protected boolean isMovingRightwards = false;
     /**
      * Whether or not the entity is allowed to move upwards
      */
@@ -249,7 +249,7 @@ public abstract class Entity {
      *
      * @see Game#debug
      */
-    protected void drawDebug(Graphics graphics) {
+    void drawDebug(Graphics graphics) {
         if (Game.debug) {
             drawBoundaries(graphics);
             drawNameTag(graphics);
@@ -317,7 +317,7 @@ public abstract class Entity {
      * Updates the entity's location by {@link #speed}, unless the
      * specified boundary is outside of the game's window
      */
-    protected void move(byte direction, EntityBoundary boundary) {
+    private void move(byte direction, EntityBoundary boundary) {
         isMovingUpwards = false;
         isMovingDownwards = false;
         isMovingLeftwards = false;
@@ -410,12 +410,12 @@ public abstract class Entity {
      * @see #move(byte)
      */
     protected void follow(Entity toFollow, byte mode,
-                          int boundaryDifference) {
-        boolean left = isLeftOf(toFollow);
+                          int verticalBoundaryDifference) {
+        // initial calc
+        boolean leftOf = isLeftOf(toFollow);
         boolean below = isBelow(toFollow);
         boolean above = isAbove(toFollow);
-        boolean right = isRightOf(toFollow);
-
+        boolean rightOf = isRightOf(toFollow);
         boolean caughtUpRight =
                 Calculate.getDifference(defaultBoundary.left,
                         toFollow.defaultBoundary.right) <= 8;
@@ -424,12 +424,9 @@ public abstract class Entity {
                         toFollow.defaultBoundary.left) <= 8;
         boolean caughtUpVertical =
                 Calculate.getDifference(defaultBoundary.top,
-                        toFollow.defaultBoundary.top) <= boundaryDifference;
+                        toFollow.defaultBoundary.top) <= verticalBoundaryDifference;
 
-        // Debug.info(caughtUpLeft + " " + caughtUpRight + " " +
-        // caughtUpVertical);
-        // Debug.info(didFireCatchUpEvent);
-
+        // "caught up" event firing
         if (!didFireCatchUpEvent && (caughtUpLeft || caughtUpRight || caughtUpVertical)) {
             if (caughtUpLeft) {
                 lastCaughtUpDirection = CAUGHT_UP_LEFT;
@@ -468,46 +465,58 @@ public abstract class Entity {
             }
         }
 
+        // determine what direction(s) to move in
+        byte directionToMove = -1;
+        // HORIZONTAL
         if (Calculate.getDifference(defaultBoundary.left,
                 toFollow.defaultBoundary.left) >= toFollow.defaultBoundary.width) {
-            if (!caughtUpRight && right) {
-                move(LEFT);
-            } else if (!caughtUpLeft && left) {
-                move(RIGHT);
+            if (!caughtUpRight && rightOf) {
+                directionToMove = LEFT;
+            } else if (!caughtUpLeft && leftOf) {
+                directionToMove = RIGHT;
             }
         }
+        if (mode == FOLLOW_AGGRESSIVE) {
+            if ((!isAllowedToMoveDownwards || !isAllowedToMoveUpwards) && !caughtUpVertical) {
+                if (rightOf) {
+                    directionToMove = LEFT;
+                    // Debug.info("left");
+                } else {
+                    directionToMove = RIGHT;
+                    // Debug.info("right");
+                }
+            }
+        }
+        if (directionToMove != -1) {
+            move(directionToMove);
+        }
+        // VERTICAL
         if (!caughtUpVertical) {
             if (above) {
-                move(DOWN);
+                directionToMove = DOWN;
             } else if (below) {
-                move(UP);
+                directionToMove = UP;
             }
         }
-
-        switch (mode) {
-            case FOLLOW_AGGRESSIVE:
-                if (!isAllowedToMoveDownwards || !isAllowedToMoveUpwards) {
-                    if (Calculate.getDifference(defaultBoundary.left,
-                            toFollow.defaultBoundary.right) < Calculate.getDifference(defaultBoundary.right, toFollow.defaultBoundary.left) && (!caughtUpLeft || !caughtUpRight)) {
-                        move(LEFT);
-                    } else {
-                        move(RIGHT);
-                    }
+        if (mode == FOLLOW_AGGRESSIVE) {
+            if (!isAllowedToMoveLeftwards || !isAllowedToMoveRightwards) {
+                if (above) {
+                    // Debug.info("down");
+                    directionToMove = DOWN;
+                } else {
+                    // Debug.info("up");
+                    directionToMove = UP;
                 }
-                if (!isAllowedToMoveLeftwards || !isAllowedToMoveRightwards) {
-                    if (Calculate.getDifference(defaultBoundary.bottom,
-                            toFollow.defaultBoundary.top) < Calculate.getDifference(defaultBoundary.top, toFollow.defaultBoundary.bottom) && !caughtUpVertical) {
-                        move(DOWN);
-                    } else {
-                        move(UP);
-                    }
-                }
-                break;
+            }
+        }
+        if (directionToMove != LEFT && directionToMove != RIGHT && directionToMove != -1) {
+            move(directionToMove);
         }
     }
 
     /**
-     * Called <b>once</b> when the entity "catches up" with the other
+     * Called <b>once</b> when the entity "catches up" with the one it is
+     * following
      *
      * @param direction
      *         {@link #CAUGHT_UP_LEFT}, {@link #CAUGHT_UP_RIGHT} or {@link
@@ -516,12 +525,12 @@ public abstract class Entity {
      * @see #follow(Entity, byte, int)
      */
     protected void onCaughtUp(byte direction) {
-        Debug.info("start");
+
     }
 
     /**
      * Called <b>once</b> when the entity is no longer "caught up" with the
-     * other
+     * one it is following
      *
      * @param direction
      *         {@link #CAUGHT_UP_LEFT}, {@link #CAUGHT_UP_RIGHT} or {@link
@@ -530,7 +539,7 @@ public abstract class Entity {
      * @see #follow(Entity, byte, int)
      */
     protected void onCaughtUpEnd(byte direction) {
-        Debug.info("end");
+
     }
 
     /**

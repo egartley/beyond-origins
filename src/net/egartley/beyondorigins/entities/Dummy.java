@@ -87,7 +87,7 @@ public class Dummy extends AnimatedEntity {
         isMovingDownwards = false;
         isMovingLeftwards = false;
         isMovingRightwards = false;
-        follow(Entities.PLAYER, Entity.FOLLOW_AGGRESSIVE, 0);
+        follow(Entities.PLAYER, Entity.FOLLOW_AGGRESSIVE, 1);
         super.tick();
 
         if (!isMovingRightwards && !isMovingLeftwards && !isMovingUpwards && !isMovingDownwards)
@@ -117,7 +117,7 @@ public class Dummy extends AnimatedEntity {
 
     @Override
     public void setBoundaries() {
-        boundaries.add(new EntityBoundary(this, sprite, new BoundaryPadding(4, 4, 2, 4)));
+        boundaries.add(new EntityBoundary(this, sprite, new BoundaryPadding(4, 4, 0, 4)));
         defaultBoundary = boundaries.get(0);
     }
 
