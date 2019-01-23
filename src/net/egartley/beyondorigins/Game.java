@@ -12,7 +12,6 @@ import net.egartley.beyondorigins.maps.TileBuilder;
 import net.egartley.beyondorigins.media.images.ImageStore;
 import net.egartley.beyondorigins.objects.GameState;
 import net.egartley.beyondorigins.objects.SpriteSheet;
-import net.egartley.beyondorigins.threads.MasterTick;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,9 +27,9 @@ public class Game extends Canvas implements Runnable {
     private static final long serialVersionUID = 8213282993283826186L;
     private static long startTime;
     private static short frames;
-    private static short currentFrames;
     private static JFrame frame;
     private static Dimension windowDimension = new Dimension(998, 573);
+    private static boolean running = false;
     private Graphics graphics;
     private BufferStrategy bufferStrategy;
 
@@ -39,18 +38,9 @@ public class Game extends Canvas implements Runnable {
     public static final int WINDOW_HEIGHT = windowDimension.height - 30;
 
     // THREADS
-    private static Thread masterRenderThread;
-    private static Thread masterTickThread;
-
-    // THREAD OBJECTS
-    private static MasterTick tick = new MasterTick();
+    private static Thread mainThread;
 
     // FLAGS
-    public static boolean running = false;
-    /**
-     * Whether or not the main tick thread ({@link #tick}) is runnning
-     */
-    public static boolean runTickThread = true;
     /**
      * Whether or not to perform debug related operations
      */
@@ -58,7 +48,6 @@ public class Game extends Canvas implements Runnable {
 
     // GAME STATES
     public static GameState currentGameState;
-
     public static InGameState inGameState;
     public static MainMenuState mainMenuState;
 
@@ -72,7 +61,6 @@ public class Game extends Canvas implements Runnable {
 
         inGameState = new InGameState();
         mainMenuState = new MainMenuState();
-
         currentGameState = mainMenuState;
 
         this.addKeyListener(new Keyboard());
@@ -84,24 +72,16 @@ public class Game extends Canvas implements Runnable {
     public static void main(String[] args) {
         startTime = System.currentTimeMillis();
         Game game = new Game();
-        // initialize jframe with title
         frame = new JFrame("Beyond Origins");
-        // set window size
         frame.setSize(windowDimension.width, windowDimension.height);
-        // normal close operation
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         // enforce window size (for now)
         frame.setResizable(false);
-        // "add" the game to the frame so things will actually display and update
         frame.add(game);
         // center the frame's window in the user's screen
         frame.setLocationRelativeTo(null);
-        // actually show it
         frame.setVisible(true);
-
         Debug.out("Initialized the JFrame");
-
-        // actually start the game
         game.start();
     }
 
@@ -147,38 +127,29 @@ public class Game extends Canvas implements Runnable {
      */
     private void loadMaps() {
         Debug.out("Loading tiles...");
-        // load map tiles used while rendering individual sectors
         TileBuilder.load();
         Debug.out("Defining sectors...");
-        // define all of the map sectors, which is basically just their tile layout
         AllSectors.define();
     }
 
     private synchronized void start() {
         if (running) {
-            // already "running" so the render and tick threads should have already been
-            // started
             return;
         }
         running = true;
-        masterRenderThread = new Thread(this);
-        masterRenderThread.setPriority(1);
-        masterRenderThread.setName("Main-Render");
-
-        // this actually starts the tick thread for the first time
-        restartMainTickThread();
-        // starts the rendering thread
-        masterRenderThread.start();
+        mainThread = new Thread(this);
+        mainThread.setPriority(1);
+        mainThread.setName("GameThread");
+        mainThread.start();
     }
 
     private synchronized void stop() {
         if (!running) {
             return;
         }
-        // stops the fps system, thus ending calls to render and tick methods
         running = false;
         try {
-            masterRenderThread.join();
+            mainThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -186,26 +157,21 @@ public class Game extends Canvas implements Runnable {
 
     @Override
     public void run() {
-        Debug.out("Starting master render thread...");
+        Debug.out("Starting main game thread...");
         // load images, save data, etc.
         init();
-        // enable double buffering
+        // double buffering
         createBufferStrategy(2);
         bufferStrategy = getBufferStrategy();
-        // get graphics object to render to
         graphics = bufferStrategy.getDrawGraphics();
         // enable anti-aliasing for strings
         Graphics2D g2d = (Graphics2D) graphics;
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        // actually render (for the first time)
-        Debug.out("Rendering for the first time...");
-        render();
         // setup system for ensuring that the game runs at most 60 fps
         long lastTime = System.nanoTime();
         long timer = System.currentTimeMillis();
         double ns = 16666666.666666666;
         double delta = 0.0D;
-        // request user's operating system "focus", i.e. mouse and keyboard input
         requestFocus();
         Debug.out("Startup: " + ((System.currentTimeMillis() - startTime) / 1000.0) + " seconds");
         while (running) {
@@ -213,17 +179,15 @@ public class Game extends Canvas implements Runnable {
             delta += (now - lastTime) / ns;
             lastTime = now;
             if (delta >= 1.0D) {
-                // render with the graphics object (tick is in a separate thread)
+                tick();
                 render();
                 delta -= 1.0D;
                 frames += 1;
                 if (System.currentTimeMillis() - timer > 1000L) {
                     timer += 1000L;
-                    currentFrames = frames;
                     frames = 0;
                 }
             }
-            // this helps to stabilize the fps system
             try {
                 Thread.sleep(1L);
             } catch (InterruptedException e) {
@@ -233,30 +197,13 @@ public class Game extends Canvas implements Runnable {
         stop();
     }
 
+    private synchronized void tick() {
+        currentGameState.tick();
+    }
+
     private synchronized void render() {
         currentGameState.render(graphics);
         bufferStrategy.show();
-    }
-
-    /**
-     * Restarts the main tick thread, which enables calls to tick methods
-     */
-    private static void restartMainTickThread() {
-        Debug.out("Starting main tick thread...");
-        runTickThread = true;
-        masterTickThread = new Thread(tick);
-        masterTickThread.setPriority(2);
-        masterTickThread.setName("Main-Tick");
-        masterTickThread.start();
-    }
-
-    /**
-     * Returns the current FPS, which should always be somewhere between 60 and 57
-     *
-     * @return Current frames per second
-     */
-    public static short getFramesPerSecond() {
-        return currentFrames;
     }
 
 }
