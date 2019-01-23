@@ -30,8 +30,9 @@ public class Keyboard implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (pressedKeyCodes.indexOf(e.getKeyCode()) != -1) {
-            pressedKeyCodes.remove(pressedKeyCodes.indexOf(e.getKeyCode()));
+        int i = pressedKeyCodes.indexOf(e.getKeyCode());
+        if (i != -1) {
+            pressedKeyCodes.remove(i);
         }
         if (e.getKeyCode() == KeyEvent.VK_F3) {
             Game.debug = !Game.debug;

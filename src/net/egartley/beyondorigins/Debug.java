@@ -54,7 +54,7 @@ public class Debug {
      * @param object
      *         The object to print out
      */
-    static void out(Object object) {
+    public static void out(Object object) {
         System.out.println(object);
     }
 

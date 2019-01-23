@@ -14,13 +14,18 @@ public abstract class GameState {
     public static final int IN_GAME = 0;
 
     /**
+     * The ID number used while in the main menu (shown on startup)
+     */
+    public static final int MAIN_MENU = 1;
+
+    /**
      * Collection of "sub", or secondary, game states
      */
     public ArrayList<GameState> subStates;
     /**
      * Unique integer used to identify different game states
      */
-    protected int identificationNumber;
+    public int identificationNumber;
 
     public abstract void render(Graphics graphics);
 

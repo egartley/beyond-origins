@@ -5,7 +5,9 @@ import net.egartley.beyondorigins.entities.Dummy;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.Player;
 import net.egartley.beyondorigins.gamestates.InGameState;
+import net.egartley.beyondorigins.gamestates.MainMenuState;
 import net.egartley.beyondorigins.input.Keyboard;
+import net.egartley.beyondorigins.input.Mouse;
 import net.egartley.beyondorigins.maps.TileBuilder;
 import net.egartley.beyondorigins.media.images.ImageStore;
 import net.egartley.beyondorigins.objects.GameState;
@@ -54,8 +56,11 @@ public class Game extends Canvas implements Runnable {
      */
     public static boolean debug = true;
 
-    // GAMESTATES
+    // GAME STATES
     public static GameState currentGameState;
+
+    public static InGameState inGameState;
+    public static MainMenuState mainMenuState;
 
     private void init() {
         Debug.out("Initializing graphics and entities...");
@@ -64,8 +69,16 @@ public class Game extends Canvas implements Runnable {
         Debug.out("Loading maps...");
         loadMaps();
         Debug.out("Maps were loaded");
-        currentGameState = new InGameState();
+
+        inGameState = new InGameState();
+        mainMenuState = new MainMenuState();
+
+        currentGameState = mainMenuState;
+
         this.addKeyListener(new Keyboard());
+        Mouse m = new Mouse();
+        this.addMouseListener(m);
+        this.addMouseMotionListener(m);
     }
 
     public static void main(String[] args) {
