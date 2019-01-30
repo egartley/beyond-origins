@@ -82,7 +82,7 @@ public class Util {
      * @param minimum
      *         The minimum value
      * @param inclusive
-     *         Whether or not the include the maximum as a possible value
+     *         Whether or not to include the maximum as a possible value
      *
      * @return {@link #randomInt(int, int) randomInt(maximum + 1, minimum)}
      */

@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Util;
+import net.egartley.beyondorigins.graphics.EntityExpression;
 import net.egartley.beyondorigins.input.Keyboard;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
@@ -9,6 +10,7 @@ import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.objects.*;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
@@ -23,6 +25,8 @@ public class Player extends AnimatedEntity {
     EntityBoundary bodyBoundary;
     EntityBoundary feetBoundary;
 
+    EntityExpression exp;
+
     public Player(ArrayList<Sprite> sprites) {
         super("Player");
         this.sprites = sprites;
@@ -34,6 +38,8 @@ public class Player extends AnimatedEntity {
         isSectorSpecific = false;
         isDualRendered = false;
         speed = 2.0;
+
+        exp = new EntityExpression(EntityExpression.CONFUSION, this);
     }
 
     /**
@@ -136,7 +142,14 @@ public class Player extends AnimatedEntity {
             animation.stop();
         }
 
+        exp.tick();
+
         super.tick();
+    }
+
+    public void render(Graphics graphics) {
+        exp.render(graphics);
+        super.render(graphics);
     }
 
     private void move(boolean up, boolean down, boolean left, boolean right) {

@@ -25,6 +25,10 @@ public class EntityEntityCollision {
      * Whether or not the two entities are collided
      */
     public boolean isCollided;
+    /**
+     * Whether or not the collision is currently being used
+     */
+    public boolean isActive = true;
 
     private Rectangle[] rectangles;
 
@@ -71,6 +75,10 @@ public class EntityEntityCollision {
      * @see #onCollisionEnd(EntityEntityCollisionEvent)
      */
     public void tick() {
+        if (!isActive) {
+            return;
+        }
+
         rectangles[0].x = boundaries[0].x - 1;
         rectangles[1].x = boundaries[1].x - 1;
         rectangles[0].y = boundaries[0].y - 1;
@@ -121,6 +129,14 @@ public class EntityEntityCollision {
         firedEvent = false;
     }
 
+    public void deactivate() {
+        isActive = false;
+    }
+
+    public void activate() {
+        isActive = true;
+    }
+
     /**
      * Sets or updates the colors for both boundaries
      */
@@ -130,7 +146,6 @@ public class EntityEntityCollision {
     }
 
     private void determineBoundaryColors(ArrayList<EntityBoundary> e) {
-        // fancy :O
         e.forEach(this::determineBoundaryColor);
     }
 

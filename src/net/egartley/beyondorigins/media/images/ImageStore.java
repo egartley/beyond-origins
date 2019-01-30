@@ -16,12 +16,14 @@ public class ImageStore {
     public static BufferedImage dummy;
     public static BufferedImage treeDefault;
     public static BufferedImage rockDefault;
+    public static BufferedImage expression_confusion;
 
     public static void loadAll() {
         // TODO: Better handling of image paths (rather than hard-coded variables)
         String path = "resources/images/";
         String mapTilePath = path + "map-tiles/";
         String entityPath = path + "entities/";
+        String expressionPath = entityPath + "expressions/";
         try {
             playerDefault = ImageIO.read(new File(entityPath + "player-default.png"));
             dummy = ImageIO.read(new File(entityPath + "dummy.png"));
@@ -32,6 +34,8 @@ public class ImageStore {
             // memory. Right now since there are only a few, it does not really matter
             grassDefault = ImageIO.read(new File(mapTilePath + "grass-default.png"));
             sandDefault = ImageIO.read(new File(mapTilePath + "sand-default.png"));
+
+            expression_confusion = ImageIO.read(new File(expressionPath + "confusion.png"));
         } catch (IOException e) {
             Debug.error("There was an error while attempting to load source images!");
             if (e instanceof FileNotFoundException)

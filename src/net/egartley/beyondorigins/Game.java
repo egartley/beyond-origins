@@ -6,6 +6,7 @@ import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.Player;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.gamestates.MainMenuState;
+import net.egartley.beyondorigins.graphics.EntityExpression;
 import net.egartley.beyondorigins.input.Keyboard;
 import net.egartley.beyondorigins.input.Mouse;
 import net.egartley.beyondorigins.maps.TileBuilder;
@@ -61,7 +62,11 @@ public class Game extends Canvas implements Runnable {
 
         inGameState = new InGameState();
         mainMenuState = new MainMenuState();
-        currentGameState = mainMenuState;
+        if (debug) {
+            currentGameState = inGameState;
+        } else {
+            currentGameState = mainMenuState;
+        }
 
         this.addKeyListener(new Keyboard());
         Mouse m = new Mouse();
@@ -91,6 +96,10 @@ public class Game extends Canvas implements Runnable {
     private void loadGraphicsAndEntities() {
         Debug.out("Loading images...");
         ImageStore.loadAll();
+
+        // ************ EXPRESSIONS BEGIN *****
+        EntityExpression.init();
+        // ************ EXPRESSIONS END *******
 
         // this up-scales all images to a factor of 2 (each pixel in the source image will be rendered as 2x2 pixel)
         byte scale = 2;
