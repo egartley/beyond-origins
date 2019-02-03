@@ -75,7 +75,7 @@ public class EntityBoundary extends Boundary {
         this.offset = offset;
         horizontalOffset = padding.left + offset.left - offset.right;
         verticalOffset = padding.top + offset.top - offset.bottom;
-        name = "EntityBoundary#" + entity;
+        name = "Boundary>>" + entity;
         // call tick so that x and y are actually set
         tick();
         setColor();

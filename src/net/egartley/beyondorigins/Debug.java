@@ -6,9 +6,6 @@ import net.egartley.beyondorigins.maps.testmap.TestMap;
 
 import java.awt.*;
 
-/**
- * Stuff for debugging
- */
 public class Debug {
 
     /**
@@ -109,9 +106,6 @@ public class Debug {
 
     /**
      * Render debug information
-     *
-     * @param graphics
-     *         The {@link java.awt.Graphics Graphics} object to use
      */
     public static void render(Graphics graphics) {
         if (Game.debug) {
@@ -122,9 +116,7 @@ public class Debug {
             drawLine("Location: " + TestMap.currentSector, graphics);
             drawLine("EntityStore: " + EntityStore.amount, graphics);
             if (Entities.PLAYER.lastCollision != null) {
-                drawLine("Last collision: " + Entities.PLAYER.lastCollision.boundaries[0] + " and "
-                        + Entities.PLAYER.lastCollision.boundaries[1].parent + " (collidedSide = "
-                        + Entities.PLAYER.lastCollisionEvent.collidedSide + ")", graphics);
+                drawLine("Last collision: " + Entities.PLAYER.lastCollision, graphics);
             }
         }
     }

@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Debug;
+import net.egartley.beyondorigins.definitions.dialogue.DummyDialogue;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
@@ -107,14 +108,6 @@ public class Dummy extends AnimatedEntity {
             switchAnimation(LEFT_ANIMATION);
     }
 
-    protected void onCaughtUp(byte direction) {
-        animation.stop();
-    }
-
-    protected void onCaughtUpEnd(byte direction) {
-
-    }
-
     @Override
     public void setBoundaries() {
         boundaries.add(new EntityBoundary(this, sprite, new BoundaryPadding(4, 4, 0, 4)));
@@ -131,7 +124,18 @@ public class Dummy extends AnimatedEntity {
 
     @Override
     protected void setCollisions() {
+        collisions.clear();
+        collisions.add(new EntityEntityCollision(defaultBoundary, Entities.PLAYER.defaultBoundary) {
+            public void onCollide(EntityEntityCollisionEvent event) {
+                if (Entities.DIALOGUE_PANEL.isShowing)
+                    return;
+                Entities.DIALOGUE_PANEL.setDialogue(DummyDialogue.CAUGHT_UP_WITH_PLAYER);
+                Entities.DIALOGUE_PANEL.isShowing = true;
+            }
 
+            public void onCollisionEnd(EntityEntityCollisionEvent event) {
+            }
+        });
     }
 
 }

@@ -29,6 +29,10 @@ public class EntityEntityCollision {
      * Whether or not the collision is currently being used
      */
     public boolean isActive = true;
+    /**
+     * Whether or not the collision would impose movement restrictions, typically on the player
+     */
+    public boolean isMovementRestricting;
 
     private Rectangle[] rectangles;
 
@@ -220,7 +224,7 @@ public class EntityEntityCollision {
 
     @Override
     public String toString() {
-        return boundaries[0] + "/" + boundaries[1];
+        return boundaries[0] + " -> " + boundaries[1];
     }
 
 }

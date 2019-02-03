@@ -39,7 +39,7 @@ public class Keyboard implements KeyListener {
             Game.debug = !Game.debug;
         }
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            Entities.DIALOGUE_PANEL.nextLine();
+            Entities.DIALOGUE_PANEL.advance();
         }
     }
 

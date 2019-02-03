@@ -64,13 +64,21 @@ public class Player extends AnimatedEntity {
                     }
 
                     public void onCollisionEnd(EntityEntityCollisionEvent event) {
-                        if (!Entities.PLAYER.isCollided) {
+                        boolean noMovementRestrictions = true;
+                        for (EntityEntityCollision c : Entities.PLAYER.concurrentCollisions) {
+                            if (c.isMovementRestricting) {
+                                noMovementRestrictions = false;
+                                break;
+                            }
+                        }
+                        if (!Entities.PLAYER.isCollided || noMovementRestrictions) {
                             allowAllMovement();
                         } else {
                             annulCollisionEvent(event);
                         }
                     }
                 };
+                baseCollision.isMovementRestricting = true;
                 collisions.add(baseCollision);
 
                 for (EntityEntityCollision collision : Util.getAllBoundaryCollisions(baseCollision, this, e.defaultBoundary)) {

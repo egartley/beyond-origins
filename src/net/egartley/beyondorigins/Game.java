@@ -1,5 +1,6 @@
 package net.egartley.beyondorigins;
 
+import net.egartley.beyondorigins.definitions.dialogue.DummyDialogue;
 import net.egartley.beyondorigins.definitions.maps.AllSectors;
 import net.egartley.beyondorigins.entities.Dummy;
 import net.egartley.beyondorigins.entities.Entities;
@@ -57,6 +58,9 @@ public class Game extends Canvas implements Runnable {
         Debug.out("Initializing graphics and entities...");
         loadGraphicsAndEntities();
         Debug.out("Graphics and entities were initialized");
+        Debug.out("Defining dummy dialogue...");
+        DummyDialogue.initialize();
+        Debug.out("Dummy dialogue was defined");
         Debug.out("Loading maps...");
         loadMaps();
         Debug.out("Maps were loaded");
@@ -110,9 +114,7 @@ public class Game extends Canvas implements Runnable {
         if (image != null) {
             image = Util.resize(image, image.getWidth() * scale, image.getHeight() * scale);
         } else {
-            Debug.error(
-                    "The default player image (\"player-default.png\") doesn't exist, or there was a problem while " +
-                            "loading it!");
+            Debug.error("The default player image (\"player-default.png\") doesn't exist, or there was a problem while loading it!");
             return;
         }
         Entities.PLAYER = new Player(new SpriteSheet(image, 15 * scale, 23 * scale, 2, 4).sprites);
@@ -150,8 +152,7 @@ public class Game extends Canvas implements Runnable {
         }
         running = true;
         mainThread = new Thread(this);
-        mainThread.setPriority(1);
-        mainThread.setName("GameThread");
+        mainThread.setName("Game-Main");
         mainThread.start();
     }
 
@@ -169,7 +170,7 @@ public class Game extends Canvas implements Runnable {
 
     @Override
     public void run() {
-        Debug.out("Starting main game thread...");
+        Debug.out("Starting main thread...");
         // load images, save data, etc.
         init();
         // double buffering

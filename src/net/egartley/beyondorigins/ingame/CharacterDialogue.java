@@ -60,6 +60,8 @@ public abstract class CharacterDialogue {
                 }
                 splits.add(dialogue);
             }
+        } else {
+            return new String[]{dialogue};
         }
 
         return splits.toArray(new String[]{});

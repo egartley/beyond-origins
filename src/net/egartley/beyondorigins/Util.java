@@ -10,13 +10,10 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-/**
- * Miscellaneous methods that don't fit into a specific class or object
- */
 public class Util {
 
+    // https://stackoverflow.com/a/13605411
     private static BufferedImage toBufferedImage(Image img) {
-        // https://stackoverflow.com/a/13605411
         if (img instanceof BufferedImage)
             return (BufferedImage) img;
         BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
@@ -29,13 +26,9 @@ public class Util {
     /**
      * Returns a re-sized image of the original, at the given width and height
      *
-     * @param image
-     *         The original image to resize (will not be altered)
-     * @param width
-     *         New width to resize to
-     * @param height
-     *         New height to resize to
-     *
+     * @param image  The original image to resize (will not be altered)
+     * @param width  New width to resize to
+     * @param height New height to resize to
      * @return {@link #resize(BufferedImage, int, int, int) resize(image, width, height, Image.SCALE_DEFAULT)}
      */
     static BufferedImage resize(BufferedImage image, int width, int height) {
@@ -45,15 +38,10 @@ public class Util {
     /**
      * Returns a re-sized image of the original, at the given width and height
      *
-     * @param image
-     *         The original image to resize (will not be altered)
-     * @param width
-     *         New width to resize to
-     * @param height
-     *         New height to resize to
-     * @param hints
-     *         Scaling algorithm to use (see {@link Image})
-     *
+     * @param image  The original image to resize (will not be altered)
+     * @param width  New width to resize to
+     * @param height New height to resize to
+     * @param hints  Scaling algorithm to use (see {@link Image})
      * @return {@link #toBufferedImage(Image) toBufferedImage(image.getScaledInstance(width, height, hints))}
      */
     static BufferedImage resize(BufferedImage image, int width, int height, int hints) {
@@ -63,12 +51,8 @@ public class Util {
     /**
      * Returns a random integer between the supplied maximum and minimum values
      *
-     * @param maximum
-     *         The maximum value
-     * @param minimum
-     *         The minimum value
-     *
-     * @return A random integer in between the maximum and minimum
+     * @param maximum The maximum value
+     * @param minimum The minimum value
      */
     private static int randomInt(int maximum, int minimum) {
         return ThreadLocalRandom.current().nextInt(minimum, maximum);
@@ -77,13 +61,9 @@ public class Util {
     /**
      * Returns a random integer between the supplied maximum and minimum values
      *
-     * @param maximum
-     *         The maximum value
-     * @param minimum
-     *         The minimum value
-     * @param inclusive
-     *         Whether or not to include the maximum as a possible value
-     *
+     * @param maximum   The maximum value
+     * @param minimum   The minimum value
+     * @param inclusive Whether or not to include the maximum as a possible value
      * @return {@link #randomInt(int, int) randomInt(maximum + 1, minimum)}
      */
     public static int randomInt(int maximum, int minimum, boolean inclusive) {
@@ -96,21 +76,15 @@ public class Util {
     /**
      * Returns generated entity-to-entity collisions based on the given event, entity and boundary
      *
-     * @param baseEvent
-     *         The {@link EntityEntityCollision} in which to base all of the returned ones on
-     * @param entity
-     *         The {@link Entity Entity} in which to generate collisions around each of its boundaries
-     * @param baseBoundary
-     *         The other entity's {@link EntityBoundary boundary}
-     *
-     * @see EntityEntityCollision#onCollide(EntityEntityCollisionEvent)
-     * @see EntityEntityCollision#onCollisionEnd(EntityEntityCollisionEvent)
+     * @param baseEvent    The {@link EntityEntityCollision} in which to base all of the returned ones on
+     * @param entity       The {@link Entity} in which to generate collisions around each of its boundaries
+     * @param baseBoundary The other entity's {@link EntityBoundary}
      */
     public static ArrayList<EntityEntityCollision> getAllBoundaryCollisions(EntityEntityCollision baseEvent, Entity
             entity, EntityBoundary baseBoundary) {
         ArrayList<EntityEntityCollision> collisions = new ArrayList<>();
         for (EntityBoundary boundary : entity.boundaries) {
-            collisions.add(new EntityEntityCollision(boundary, baseBoundary) {
+            EntityEntityCollision c = new EntityEntityCollision(boundary, baseBoundary) {
                 public void onCollide(EntityEntityCollisionEvent event) {
                     baseEvent.onCollide(event);
                 }
@@ -118,7 +92,9 @@ public class Util {
                 public void onCollisionEnd(EntityEntityCollisionEvent event) {
                     baseEvent.onCollisionEnd(event);
                 }
-            });
+            };
+            c.isMovementRestricting = baseEvent.isMovementRestricting;
+            collisions.add(c);
         }
         return collisions;
     }

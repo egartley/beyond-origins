@@ -6,7 +6,6 @@ import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.entities.EntityStore;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
-import net.egartley.beyondorigins.logic.interaction.Boundary;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.logic.math.Calculate;
 
@@ -30,10 +29,6 @@ public abstract class Entity {
 
     public static final byte FOLLOW_PASSIVE = 0;
     public static final byte FOLLOW_AGGRESSIVE = 1;
-
-    private static final byte CAUGHT_UP_LEFT = 0;
-    private static final byte CAUGHT_UP_RIGHT = 1;
-    private static final byte CAUGHT_UP_VERTICAL = 2;
 
     /**
      * The entity's sprites
@@ -123,19 +118,19 @@ public abstract class Entity {
     /**
      * Whether or not the entity is currently moving upwards
      */
-    protected boolean isMovingUpwards = false;
+    protected boolean isMovingUpwards;
     /**
      * Whether or not the entity is currently moving downwards
      */
-    protected boolean isMovingDownwards = false;
+    protected boolean isMovingDownwards;
     /**
      * Whether or not the entity is currently moving leftwards
      */
-    protected boolean isMovingLeftwards = false;
+    protected boolean isMovingLeftwards;
     /**
      * Whether or not the entity is currently moving rightwards
      */
-    protected boolean isMovingRightwards = false;
+    protected boolean isMovingRightwards;
     /**
      * Whether or not the entity is allowed to move upwards
      */
@@ -187,19 +182,14 @@ public abstract class Entity {
     private int entityWidth;
     private int nameX;
     private int nameY;
-    private byte lastCaughtUpDirection = -1;
     /**
      * Whether or not font metrics have been initialized. Since {@link
      * #render(Graphics)} is called about 60 times a second, and the
      * resulting font metrics object will always be the same, there is no
      * need to keep re-computing it each time {@link #render(Graphics)} is
-     * called, only the first
+     * called
      */
-    private boolean setFontMetrics = false;
-    /**
-     * Whether or not the {@link #onCaughtUp(byte)} event has been fired
-     */
-    private boolean didFireCatchUpEvent = false;
+    private boolean setFontMetrics;
 
     /**
      * Creates a new entity with a randomly generated UUID, an initial
@@ -257,8 +247,7 @@ public abstract class Entity {
     }
 
     /**
-     * Draws the entity's "name tag", which is {@link #toString()} with a
-     * half-opaque black background
+     * Draws the entity's "name tag", which is {@link #toString()} with a half-opaque black background
      */
     private void drawNameTag(Graphics graphics) {
         if (!setFontMetrics) {
@@ -282,8 +271,6 @@ public abstract class Entity {
 
     /**
      * Draws all of the entity's boundaries
-     *
-     * @see Boundary#draw(Graphics)
      */
     private void drawBoundaries(Graphics graphics) {
         boundaries.forEach(boundary -> boundary.draw(graphics));
@@ -302,8 +289,7 @@ public abstract class Entity {
     }
 
     /**
-     * Calls {@link EntityBoundary#tick()} and {@link
-     * EntityEntityCollision#tick()}
+     * Calls {@link EntityBoundary#tick()} and {@link EntityEntityCollision#tick()}
      *
      * @see #boundaries
      * @see #collisions
@@ -381,9 +367,7 @@ public abstract class Entity {
     /**
      * Called whenever the entity moves
      *
-     * @param direction
-     *         Which direction the entity moved in
-     *
+     * @param direction Which direction the entity moved in
      * @see #UP
      * @see #DOWN
      * @see #LEFT
@@ -411,7 +395,6 @@ public abstract class Entity {
      */
     protected void follow(Entity toFollow, byte mode,
                           int verticalBoundaryDifference) {
-        // initial calc
         boolean leftOf = isLeftOf(toFollow);
         boolean below = isBelow(toFollow);
         boolean above = isAbove(toFollow);
@@ -425,45 +408,6 @@ public abstract class Entity {
         boolean caughtUpVertical =
                 Calculate.getDifference(defaultBoundary.top,
                         toFollow.defaultBoundary.top) <= verticalBoundaryDifference;
-
-        // "caught up" event firing
-        if (!didFireCatchUpEvent && (caughtUpLeft || caughtUpRight || caughtUpVertical)) {
-            if (caughtUpLeft) {
-                lastCaughtUpDirection = CAUGHT_UP_LEFT;
-            } else if (caughtUpRight) {
-                lastCaughtUpDirection = CAUGHT_UP_RIGHT;
-            } else {
-                lastCaughtUpDirection = CAUGHT_UP_VERTICAL;
-            }
-            onCaughtUp(lastCaughtUpDirection);
-            didFireCatchUpEvent = true;
-        } else if (didFireCatchUpEvent) {
-            boolean end = false;
-            switch (lastCaughtUpDirection) {
-                case CAUGHT_UP_LEFT:
-                    if (!caughtUpLeft) {
-                        end = true;
-                    }
-                    break;
-                case CAUGHT_UP_RIGHT:
-                    if (!caughtUpRight) {
-                        end = true;
-                    }
-                    break;
-                case CAUGHT_UP_VERTICAL:
-                    if (!caughtUpVertical) {
-                        end = true;
-                    }
-                    break;
-                default:
-                    // still caught up, do not trigger end event
-                    break;
-            }
-            if (end) {
-                onCaughtUpEnd(lastCaughtUpDirection);
-                didFireCatchUpEvent = false;
-            }
-        }
 
         // determine what direction(s) to move in
         byte directionToMove = -1;
@@ -480,10 +424,8 @@ public abstract class Entity {
             if ((!isAllowedToMoveDownwards || !isAllowedToMoveUpwards) && !caughtUpVertical) {
                 if (rightOf) {
                     directionToMove = LEFT;
-                    // Debug.info("left");
                 } else {
                     directionToMove = RIGHT;
-                    // Debug.info("right");
                 }
             }
         }
@@ -501,10 +443,8 @@ public abstract class Entity {
         if (mode == FOLLOW_AGGRESSIVE) {
             if (!isAllowedToMoveLeftwards || !isAllowedToMoveRightwards) {
                 if (above) {
-                    // Debug.info("down");
                     directionToMove = DOWN;
                 } else {
-                    // Debug.info("up");
                     directionToMove = UP;
                 }
             }
@@ -512,34 +452,6 @@ public abstract class Entity {
         if (directionToMove != LEFT && directionToMove != RIGHT && directionToMove != -1) {
             move(directionToMove);
         }
-    }
-
-    /**
-     * Called <b>once</b> when the entity "catches up" with the one it is
-     * following
-     *
-     * @param direction
-     *         {@link #CAUGHT_UP_LEFT}, {@link #CAUGHT_UP_RIGHT} or {@link
-     *         #CAUGHT_UP_VERTICAL}
-     *
-     * @see #follow(Entity, byte, int)
-     */
-    protected void onCaughtUp(byte direction) {
-
-    }
-
-    /**
-     * Called <b>once</b> when the entity is no longer "caught up" with the
-     * one it is following
-     *
-     * @param direction
-     *         {@link #CAUGHT_UP_LEFT}, {@link #CAUGHT_UP_RIGHT} or {@link
-     *         #CAUGHT_UP_VERTICAL}
-     *
-     * @see #follow(Entity, byte, int)
-     */
-    protected void onCaughtUpEnd(byte direction) {
-
     }
 
     /**
@@ -572,9 +484,7 @@ public abstract class Entity {
     }
 
     /**
-     * Cancels any movement restrictions imposed by the provided {@link
-     * net.egartley.beyondorigins.logic.events .EntityEntityCollisionEvent
-     * EntityEntityCollisionEvent}
+     * Cancels any movement restrictions imposed by the provided {@link net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent EntityEntityCollisionEvent}
      */
     protected void annulCollisionEvent(EntityEntityCollisionEvent event) {
         // check for other movement restrictions
@@ -657,10 +567,7 @@ public abstract class Entity {
         if (index < sprites.size())
             sprite = sprites.get(index);
         else
-            Debug.warning("Tried to get a sprite for \"" + this + "\" at" +
-                    " an valid index, " + index + " (must be less " +
-                    "than" +
-                    " " + sprites.size() + ")");
+            Debug.warning("Tried to get a sprite for \"" + this + "\" at an valid index, " + index + " (must be less than " + sprites.size() + ")");
     }
 
     /**
