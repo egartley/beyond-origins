@@ -7,7 +7,7 @@ The primary goal right now is to have a viable framework, or scaffolding, that i
 
 JavaDoc can be found <a href="https://docs.egartley.net/beyond-origins/?via=githubreadme">here</a> (updated periodically)
 
-This was inspired by many <a href="https://en.wikipedia.org/wiki/Game_Boy_Color" rel="noopener">Game Boy Color</a>, <a href="https://en.wikipedia.org/wiki/Nintendo_DS" rel="noopener">Nintendo DS</a>, <a href="https://en.wikipedia.org/wiki/PlayStation_(console)" rel="noopener">PlayStation 1</a> and <a href="https://en.wikipedia.org/wiki/Wii" rel="noopener">Wii</a> games, including:
+This was inspired by many <a href="https://en.wikipedia.org/wiki/Game_Boy_Color" rel="noopener">Game Boy Color</a>, <a href="https://en.wikipedia.org/wiki/Nintendo_DS" rel="noopener">Nintendo DS</a>, <a href="https://en.wikipedia.org/wiki/PlayStation_(console)" rel="noopener">PlayStation</a> and <a href="https://en.wikipedia.org/wiki/Wii" rel="noopener">Wii</a> games, including:
 
 - <a href="https://en.wikipedia.org/wiki/Mario_%26_Luigi:_Bowser%27s_Inside_Story" rel="noopener">Mario & Luigi: Bowser's Inside Story</a>
 - <a href="https://en.wikipedia.org/wiki/MySims_Agents" rel="noopener">MySims Agents</a>
