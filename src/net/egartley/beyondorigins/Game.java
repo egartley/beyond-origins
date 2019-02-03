@@ -7,6 +7,7 @@ import net.egartley.beyondorigins.entities.Player;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.gamestates.MainMenuState;
 import net.egartley.beyondorigins.graphics.EntityExpression;
+import net.egartley.beyondorigins.ingame.DialoguePanel;
 import net.egartley.beyondorigins.input.Keyboard;
 import net.egartley.beyondorigins.input.Mouse;
 import net.egartley.beyondorigins.maps.TileBuilder;
@@ -129,6 +130,8 @@ public class Game extends Canvas implements Runnable {
         Entities.DUMMY = new Dummy(new SpriteSheet(image, 15 * scale, 23 * scale, 2, 4).sprites);
         // ************ DUMMY END *************
         Debug.out("Initialized the dummy");
+
+        Entities.DIALOGUE_PANEL = new DialoguePanel(Entities.getSpriteTemplate(Entities.DIALOGUE));
     }
 
     /**

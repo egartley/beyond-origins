@@ -17,6 +17,7 @@ public class ImageStore {
     public static BufferedImage treeDefault;
     public static BufferedImage rockDefault;
     public static BufferedImage expression_confusion;
+    public static BufferedImage dialoguePanel;
 
     public static void loadAll() {
         // TODO: Better handling of image paths (rather than hard-coded variables)
@@ -36,6 +37,8 @@ public class ImageStore {
             sandDefault = ImageIO.read(new File(mapTilePath + "sand-default.png"));
 
             expression_confusion = ImageIO.read(new File(expressionPath + "confusion.png"));
+
+            dialoguePanel = ImageIO.read(new File(entityPath + "dialogue-panel.png"));
         } catch (IOException e) {
             Debug.error("There was an error while attempting to load source images!");
             if (e instanceof FileNotFoundException)

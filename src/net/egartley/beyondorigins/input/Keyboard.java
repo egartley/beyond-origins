@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins.input;
 
 import net.egartley.beyondorigins.Game;
+import net.egartley.beyondorigins.entities.Entities;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -36,6 +37,9 @@ public class Keyboard implements KeyListener {
         }
         if (e.getKeyCode() == KeyEvent.VK_F3) {
             Game.debug = !Game.debug;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            Entities.DIALOGUE_PANEL.nextLine();
         }
     }
 

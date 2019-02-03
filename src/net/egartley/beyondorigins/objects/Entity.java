@@ -669,7 +669,13 @@ public abstract class Entity {
      * @see Util#randomInt(int, int, boolean)
      */
     private void generateUUID() {
-        uuid = Util.randomInt(9999, 1000, true);
+        int gen = Util.randomInt(9999, 1000, true);
+        if (EntityStore.getEntityByUUID(gen) != null) {
+            // there's already an entity with the same uuid, so generate another one
+            generateUUID();
+            return;
+        }
+        uuid = gen;
     }
 
     /**

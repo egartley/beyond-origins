@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins.gamestates;
 
 import net.egartley.beyondorigins.Debug;
+import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.maps.testmap.TestMap;
 import net.egartley.beyondorigins.objects.GameState;
 import net.egartley.beyondorigins.objects.Map;
@@ -19,11 +20,14 @@ public class InGameState extends GameState {
     @Override
     public void render(Graphics graphics) {
         currentMap.render(graphics);
+        DialogueController.render(graphics);
+
         Debug.render(graphics);
     }
 
     @Override
     public void tick() {
+        DialogueController.tick();
         currentMap.tick();
     }
 
