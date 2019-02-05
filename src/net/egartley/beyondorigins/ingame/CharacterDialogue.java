@@ -17,22 +17,20 @@ public abstract class CharacterDialogue {
     }
 
     /**
-     * Returns an array containing the dialogue split into seperate lines, wrapped at words
+     * Returns an array containing the given dialogue split into seperate lines, wrapped at words
      *
-     * @param dialogue Full, un-split dialogue (all one line)
+     * @param dialogue Full, un-split dialogue (one line)
      */
     private String[] toLines(String dialogue) {
         ArrayList<String> splits = new ArrayList<>();
 
-        // ****************************************
-        // S T I L L   B R O K E N ,   F I X   I T
-        // ****************************************
-        // ? after receiver gets cut off
-
         if (!(dialogue.length() <= MAX_LINE_LENGTH)) {
             // longer than max length, so split it into lines
             int cap = dialogue.length() / MAX_LINE_LENGTH;
-            for (int i = 0; i < cap; i++) {
+            for (int i = 0; i < cap + 1; i++) {
+                if (dialogue.length() <= MAX_LINE_LENGTH) {
+                    continue;
+                }
                 // Debug.out("BEFORE: " + dialogue);
                 String l = dialogue.substring(0, MAX_LINE_LENGTH);
                 if (l.startsWith(" ")) {
@@ -43,7 +41,7 @@ public abstract class CharacterDialogue {
                     l = l.substring(0, l.length() - 1);
                 }
                 // Debug.out("L PRE: " + l);
-                if (java.lang.Character.isAlphabetic(dialogue.substring(dialogue.indexOf(l) + l.length(), dialogue.indexOf(l) + l.length() + 1).charAt(0))) {
+                if (!dialogue.substring(dialogue.indexOf(l) + l.length(), dialogue.indexOf(l) + l.length() + 1).equals(" ")) {
                     // max length within a word, so split from preceding
                     l = l.substring(0, l.lastIndexOf(" "));
                 }
