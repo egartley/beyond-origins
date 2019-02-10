@@ -1,9 +1,9 @@
 package net.egartley.beyondorigins.entities;
 
+import net.egartley.beyondorigins.graphics.Sprite;
+import net.egartley.beyondorigins.graphics.SpriteSheet;
 import net.egartley.beyondorigins.ingame.DialoguePanel;
 import net.egartley.beyondorigins.media.images.ImageStore;
-import net.egartley.beyondorigins.objects.Sprite;
-import net.egartley.beyondorigins.objects.SpriteSheet;
 
 public class Entities {
 

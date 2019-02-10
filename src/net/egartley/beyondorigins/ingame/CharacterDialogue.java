@@ -18,8 +18,6 @@ public abstract class CharacterDialogue {
 
     /**
      * Returns an array containing the given dialogue split into seperate lines, wrapped at words
-     *
-     * @param dialogue Full, un-split dialogue (one line)
      */
     private String[] toLines(String dialogue) {
         ArrayList<String> splits = new ArrayList<>();
@@ -31,7 +29,6 @@ public abstract class CharacterDialogue {
                 if (dialogue.length() <= MAX_LINE_LENGTH) {
                     continue;
                 }
-                // Debug.out("BEFORE: " + dialogue);
                 String l = dialogue.substring(0, MAX_LINE_LENGTH);
                 if (l.startsWith(" ")) {
                     // starts with space, probably from a previous split from within a word
@@ -40,15 +37,12 @@ public abstract class CharacterDialogue {
                     // ends with space at max length
                     l = l.substring(0, l.length() - 1);
                 }
-                // Debug.out("L PRE: " + l);
                 if (!dialogue.substring(dialogue.indexOf(l) + l.length(), dialogue.indexOf(l) + l.length() + 1).equals(" ")) {
                     // max length within a word, so split from preceding
                     l = l.substring(0, l.lastIndexOf(" "));
                 }
-                // Debug.out("L POST: " + l);
                 splits.add(l);
                 dialogue = dialogue.substring(l.length() + 1);
-                // Debug.out("AFTER: " + dialogue);
             }
             if (!dialogue.isEmpty() && !dialogue.equals(" ")) {
                 // add any remaining dialogue that isn't just a space

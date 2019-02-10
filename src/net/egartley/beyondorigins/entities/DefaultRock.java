@@ -1,8 +1,8 @@
 package net.egartley.beyondorigins.entities;
 
+import net.egartley.beyondorigins.graphics.Sprite;
 import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
-import net.egartley.beyondorigins.objects.Sprite;
 import net.egartley.beyondorigins.objects.StaticEntity;
 
 /**

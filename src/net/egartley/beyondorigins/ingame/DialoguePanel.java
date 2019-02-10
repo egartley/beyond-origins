@@ -1,7 +1,8 @@
 package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.objects.Sprite;
+import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.graphics.Sprite;
 import net.egartley.beyondorigins.objects.StaticEntity;
 
 import java.awt.*;
@@ -9,11 +10,14 @@ import java.util.Arrays;
 
 public class DialoguePanel extends StaticEntity {
 
+    public boolean isShowing;
+    private int characterNameStringWidth = 0;
     private short lineIndex = -1;
 
-    public boolean isShowing;
-
-    private Font lineFont = new Font("Bookman Old Style", Font.BOLD, 14);
+    private static boolean setFontMetrics;
+    private static Font lineFont = new Font("Bookman Old Style", Font.BOLD, 14);
+    private static Font characterNameFont = new Font("Arial", Font.PLAIN, 12);
+    private static FontMetrics characterNameFontMetrics;
 
     public String[] allLines;
     public String[] displayedLines;
@@ -46,7 +50,7 @@ public class DialoguePanel extends StaticEntity {
         }
     }
 
-    public void nextLine() {
+    private void nextLine() {
         System.arraycopy(displayedLines, 1, displayedLines, 0, 5);
         displayedLines[5] = queuedLines[0];
         queuedLines = Arrays.copyOfRange(queuedLines, 1, queuedLines.length);
@@ -59,11 +63,23 @@ public class DialoguePanel extends StaticEntity {
 
     @Override
     public void render(Graphics graphics) {
+        // TODO: no hardcode for character stuff
         if (!isShowing) {
             return;
         }
-        // render background (the "panel")
+        if (!setFontMetrics) {
+            characterNameFontMetrics = graphics.getFontMetrics(characterNameFont);
+            characterNameStringWidth = characterNameFontMetrics.stringWidth("Dummy");
+            setFontMetrics = true;
+        }
+        // render background (the "panel" (image))
         super.render(graphics);
+        // render character thing
+        Sprite s = Entities.DUMMY.sprite;
+        graphics.drawImage(s.toBufferedImage(), 288 - s.width / 2, 401, null);
+        graphics.setFont(characterNameFont);
+        graphics.drawString("Dummy", 288 - characterNameStringWidth / 2, 468);
+        // render text
         graphics.setFont(lineFont);
         graphics.setColor(Color.WHITE);
         for (String line : displayedLines) {
@@ -80,12 +96,12 @@ public class DialoguePanel extends StaticEntity {
 
     @Override
     protected void setBoundaries() {
-        // N/A
+
     }
 
     @Override
     protected void setCollisions() {
-        // N/A
+
     }
 
 }

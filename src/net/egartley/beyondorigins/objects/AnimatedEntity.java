@@ -1,5 +1,7 @@
 package net.egartley.beyondorigins.objects;
 
+import net.egartley.beyondorigins.graphics.Animation;
+
 import java.awt.*;
 import java.util.ArrayList;
 

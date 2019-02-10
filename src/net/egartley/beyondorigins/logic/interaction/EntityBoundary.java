@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins.logic.interaction;
 
+import net.egartley.beyondorigins.graphics.Sprite;
 import net.egartley.beyondorigins.objects.Entity;
-import net.egartley.beyondorigins.objects.Sprite;
 
 import java.awt.*;
 

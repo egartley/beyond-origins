@@ -3,9 +3,7 @@ package net.egartley.beyondorigins.graphics;
 import net.egartley.beyondorigins.logic.math.Calculate;
 import net.egartley.beyondorigins.media.images.ImageStore;
 import net.egartley.beyondorigins.objects.AnimatedEntity;
-import net.egartley.beyondorigins.objects.Animation;
 import net.egartley.beyondorigins.objects.Entity;
-import net.egartley.beyondorigins.objects.SpriteSheet;
 
 import java.awt.*;
 

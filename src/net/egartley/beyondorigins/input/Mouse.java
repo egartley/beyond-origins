@@ -1,8 +1,6 @@
 package net.egartley.beyondorigins.input;
 
 import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.gamestates.MainMenuState;
-import net.egartley.beyondorigins.objects.GameState;
 import net.egartley.beyondorigins.ui.MenuButton;
 
 import java.awt.event.MouseEvent;
@@ -11,7 +9,7 @@ import java.awt.event.MouseMotionListener;
 
 public class Mouse implements MouseListener, MouseMotionListener {
 
-    public static boolean isPressed = false;
+    // private static boolean isPressed = false;
 
     public static int x, y;
 
@@ -22,12 +20,12 @@ public class Mouse implements MouseListener, MouseMotionListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        isPressed = true;
+        // isPressed = true;
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        isPressed = false;
+        // isPressed = false;
         if (Game.currentGameState.equals(Game.mainMenuState)) {
             for (MenuButton b : Game.mainMenuState.buttons) {
                 b.checkClick(e);

@@ -1,4 +1,4 @@
-package net.egartley.beyondorigins.objects;
+package net.egartley.beyondorigins.graphics;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;

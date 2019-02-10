@@ -2,12 +2,18 @@ package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.definitions.dialogue.DummyDialogue;
+import net.egartley.beyondorigins.graphics.Animation;
+import net.egartley.beyondorigins.graphics.EntityExpression;
+import net.egartley.beyondorigins.graphics.Sprite;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
-import net.egartley.beyondorigins.objects.*;
+import net.egartley.beyondorigins.objects.AnimatedEntity;
+import net.egartley.beyondorigins.objects.Entity;
+import net.egartley.beyondorigins.objects.MapSector;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Dummy extends AnimatedEntity {
@@ -15,6 +21,8 @@ public class Dummy extends AnimatedEntity {
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
     private final byte ANIMATION_THRESHOLD = 7;
+
+    EntityExpression exp;
 
     public Dummy(ArrayList<Sprite> sprites) {
         super("Dummy");
@@ -29,6 +37,8 @@ public class Dummy extends AnimatedEntity {
         isSectorSpecific = false;
         isDualRendered = false;
         speed = 2.0;
+
+        exp = new EntityExpression(EntityExpression.CONFUSION, this);
     }
 
     private void switchAnimation(byte i) {
@@ -93,6 +103,14 @@ public class Dummy extends AnimatedEntity {
 
         if (!isMovingRightwards && !isMovingLeftwards && !isMovingUpwards && !isMovingDownwards)
             animation.stop();
+
+        exp.tick();
+    }
+
+    @Override
+    public void render(Graphics graphics) {
+        exp.render(graphics);
+        super.render(graphics);
     }
 
     @Override

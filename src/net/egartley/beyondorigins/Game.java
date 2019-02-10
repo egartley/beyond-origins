@@ -8,13 +8,13 @@ import net.egartley.beyondorigins.entities.Player;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.gamestates.MainMenuState;
 import net.egartley.beyondorigins.graphics.EntityExpression;
+import net.egartley.beyondorigins.graphics.SpriteSheet;
 import net.egartley.beyondorigins.ingame.DialoguePanel;
 import net.egartley.beyondorigins.input.Keyboard;
 import net.egartley.beyondorigins.input.Mouse;
 import net.egartley.beyondorigins.maps.TileBuilder;
 import net.egartley.beyondorigins.media.images.ImageStore;
 import net.egartley.beyondorigins.objects.GameState;
-import net.egartley.beyondorigins.objects.SpriteSheet;
 
 import javax.swing.*;
 import java.awt.*;

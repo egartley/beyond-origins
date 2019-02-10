@@ -2,6 +2,7 @@ package net.egartley.beyondorigins;
 
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.EntityStore;
+import net.egartley.beyondorigins.input.Mouse;
 import net.egartley.beyondorigins.maps.testmap.TestMap;
 
 import java.awt.*;
@@ -111,13 +112,14 @@ public class Debug {
         if (Game.debug) {
             row = 0;
             graphics.setFont(font);
-            drawLine("Player (x: " + (int) Entities.PLAYER.x + ", y: " + (int) Entities.PLAYER.y + ")", graphics);
+            drawLine("x = " + (int) Entities.PLAYER.x + ", y = " + (int) Entities.PLAYER.y, graphics);
             drawLine("isCollided = " + Entities.PLAYER.isCollided, graphics);
             drawLine("Location: " + TestMap.currentSector, graphics);
             drawLine("EntityStore: " + EntityStore.amount, graphics);
             if (Entities.PLAYER.lastCollision != null) {
                 drawLine("Last collision: " + Entities.PLAYER.lastCollision, graphics);
             }
+            drawLine("Mouse: " + Mouse.x + ", " + Mouse.y, graphics);
         }
     }
 
