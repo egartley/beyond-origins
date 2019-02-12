@@ -211,8 +211,7 @@ public abstract class Entity {
      * #y})
      */
     public void render(Graphics graphics) {
-        graphics.drawImage(sprite.toBufferedImage(0), (int) x, (int) y,
-                null);
+        graphics.drawImage(sprite.toBufferedImage(0), (int) x, (int) y, null);
         drawDebug(graphics);
     }
 
@@ -221,8 +220,7 @@ public abstract class Entity {
      * the player)
      */
     public void drawFirstLayer(Graphics graphics) {
-        graphics.drawImage(firstLayer, (int) x,
-                (int) y + secondLayer.getHeight(), null);
+        graphics.drawImage(firstLayer, (int) x, (int) y + secondLayer.getHeight(), null);
     }
 
     /**
@@ -317,6 +315,8 @@ public abstract class Entity {
             return;
         if (direction == RIGHT && !isAllowedToMoveRightwards)
             return;
+        if (direction == -1)
+            return;
         switch (direction) {
             case UP:
                 if (boundary.top <= 0) {
@@ -389,76 +389,10 @@ public abstract class Entity {
     }
 
     /**
-     * Have the entity "follow", or constantly move towards, the other
-     * entity
-     *
-     * @see #move(byte)
-     */
-    protected void follow(Entity toFollow, byte mode,
-                          int verticalBoundaryDifference) {
-        boolean leftOf = isLeftOf(toFollow);
-        boolean below = isBelow(toFollow);
-        boolean above = isAbove(toFollow);
-        boolean rightOf = isRightOf(toFollow);
-        boolean caughtUpRight =
-                Calculate.getDifference(defaultBoundary.left,
-                        toFollow.defaultBoundary.right) <= 8;
-        boolean caughtUpLeft =
-                Calculate.getDifference(defaultBoundary.right,
-                        toFollow.defaultBoundary.left) <= 8;
-        boolean caughtUpVertical =
-                Calculate.getDifference(defaultBoundary.top,
-                        toFollow.defaultBoundary.top) <= verticalBoundaryDifference;
-
-        // determine what direction(s) to move in
-        byte directionToMove = -1;
-        // HORIZONTAL
-        if (Calculate.getDifference(defaultBoundary.left,
-                toFollow.defaultBoundary.left) >= toFollow.defaultBoundary.width) {
-            if (!caughtUpRight && rightOf) {
-                directionToMove = LEFT;
-            } else if (!caughtUpLeft && leftOf) {
-                directionToMove = RIGHT;
-            }
-        }
-        if (mode == FOLLOW_AGGRESSIVE) {
-            if ((!isAllowedToMoveDownwards || !isAllowedToMoveUpwards) && !caughtUpVertical) {
-                if (rightOf) {
-                    directionToMove = LEFT;
-                } else {
-                    directionToMove = RIGHT;
-                }
-            }
-        }
-        if (directionToMove != -1) {
-            move(directionToMove);
-        }
-        // VERTICAL
-        if (!caughtUpVertical) {
-            if (above) {
-                directionToMove = DOWN;
-            } else if (below) {
-                directionToMove = UP;
-            }
-        }
-        if (mode == FOLLOW_AGGRESSIVE) {
-            if (!isAllowedToMoveLeftwards || !isAllowedToMoveRightwards) {
-                if (above) {
-                    directionToMove = DOWN;
-                } else {
-                    directionToMove = UP;
-                }
-            }
-        }
-        if (directionToMove != LEFT && directionToMove != RIGHT && directionToMove != -1) {
-            move(directionToMove);
-        }
-    }
-
-    /**
      * Disallows movement opposite of the side of the collision. For
      * example, if the player collided with a tree on its top side,
-     * downward movement would no longer be allowed
+     * downward movement would no longer be allowed until that collision
+     * is no longer active
      */
     protected void onCollisionWithNonTraversableEntity(EntityEntityCollisionEvent event) {
         lastCollisionEvent = event;

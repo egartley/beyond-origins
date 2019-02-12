@@ -41,13 +41,13 @@ public class Sector1 extends MapSector {
     @Override
     public void initialize() {
         // sector-specific entities
-        Sprite s = Entities.getSpriteTemplate(Entities.TREE);
+        Sprite s = Entities.getTemplate(Entities.TEMPLATE_TREE);
         entities.add(new DefaultTree(s, 100, 200));
         entities.add(new DefaultTree(s, 36, 200));
 
         // re-use same sprite variable, no use in creating a new one if there is already
         // one in memory
-        s = Entities.getSpriteTemplate(Entities.ROCK);
+        s = Entities.getTemplate(Entities.TEMPLATE_ROCK);
         int off = 0;
         for (byte i = 0; i < 14; i++) {
             entities.add(new DefaultRock(s, (s.width * 2) * off++ + 48, 400));

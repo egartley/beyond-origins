@@ -14,8 +14,8 @@ public class TileBuilder {
     private static MapTile sand;
 
     public static void load() {
-        grass = new MapTile(ImageStore.grassDefault);
-        sand = new MapTile(ImageStore.sandDefault);
+        grass = new MapTile(ImageStore.get(ImageStore.TILE_GRASS));
+        sand = new MapTile(ImageStore.get(ImageStore.TILE_SAND));
     }
 
     public static ArrayList<ArrayList<MapTile>> buildArrayList(byte b, int r, int c) {

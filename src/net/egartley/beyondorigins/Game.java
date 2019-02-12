@@ -56,15 +56,18 @@ public class Game extends Canvas implements Runnable {
 
     private void init() {
         Debug.out("Initializing graphics and entities...");
-        loadGraphicsAndEntities();
+        initializeEntities();
         Debug.out("Graphics and entities were initialized");
-        Debug.out("Defining dummy dialogue...");
+
+        Debug.out("Defining dialogue...");
         DummyDialogue.initialize();
-        Debug.out("Dummy dialogue was defined");
+        Debug.out("Dialogue was defined");
+
         Debug.out("Loading maps...");
         loadMaps();
         Debug.out("Maps were loaded");
 
+        Debug.out("Initializing game states...");
         inGameState = new InGameState();
         mainMenuState = new MainMenuState();
         if (debug) {
@@ -72,6 +75,7 @@ public class Game extends Canvas implements Runnable {
         } else {
             currentGameState = mainMenuState;
         }
+        Debug.out("Game states were initialized");
 
         this.addKeyListener(new Keyboard());
         Mouse m = new Mouse();
@@ -91,16 +95,10 @@ public class Game extends Canvas implements Runnable {
         // center the frame's window in the user's screen
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        Debug.out("Initialized the JFrame");
         game.start();
     }
 
-    /**
-     * Loads all of the images in "/resources/images"
-     */
-    private void loadGraphicsAndEntities() {
-        Debug.out("Loading images...");
-        ImageStore.loadAll();
+    private void initializeEntities() {
 
         // ************ EXPRESSIONS BEGIN *****
         EntityExpression.init();
@@ -110,7 +108,7 @@ public class Game extends Canvas implements Runnable {
         byte scale = 2;
 
         // *********** PLAYER BEGIN ***********
-        BufferedImage image = ImageStore.playerDefault;
+        BufferedImage image = ImageStore.get(ImageStore.PLAYER);
         if (image != null) {
             image = Util.resize(image, image.getWidth() * scale, image.getHeight() * scale);
         } else {
@@ -119,10 +117,9 @@ public class Game extends Canvas implements Runnable {
         }
         Entities.PLAYER = new Player(new SpriteSheet(image, 15 * scale, 23 * scale, 2, 4).sprites);
         // ************ PLAYER END ************
-        Debug.out("Initialized the player");
 
         // ************ DUMMY BEGIN ***********
-        image = ImageStore.dummy;
+        image = ImageStore.get(ImageStore.DUMMY);
         if (image != null) {
             image = Util.resize(image, image.getWidth() * scale, image.getHeight() * scale);
         } else {
@@ -131,18 +128,15 @@ public class Game extends Canvas implements Runnable {
         }
         Entities.DUMMY = new Dummy(new SpriteSheet(image, 15 * scale, 23 * scale, 2, 4).sprites);
         // ************ DUMMY END *************
-        Debug.out("Initialized the dummy");
 
-        Entities.DIALOGUE_PANEL = new DialoguePanel(Entities.getSpriteTemplate(Entities.DIALOGUE));
+        Entities.DIALOGUE_PANEL = new DialoguePanel(Entities.getTemplate(Entities.TEMPLATE_DIALOGUE));
     }
 
     /**
      * Loads all maps and their sectors' tile definitions
      */
     private void loadMaps() {
-        Debug.out("Loading tiles...");
         TileBuilder.load();
-        Debug.out("Defining sectors...");
         AllSectors.define();
     }
 
@@ -170,7 +164,6 @@ public class Game extends Canvas implements Runnable {
 
     @Override
     public void run() {
-        Debug.out("Starting main thread...");
         // load images, save data, etc.
         init();
         // double buffering

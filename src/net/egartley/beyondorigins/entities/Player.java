@@ -10,6 +10,7 @@ import net.egartley.beyondorigins.logic.interaction.BoundaryOffset;
 import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.objects.AnimatedEntity;
+import net.egartley.beyondorigins.objects.Character;
 import net.egartley.beyondorigins.objects.Entity;
 import net.egartley.beyondorigins.objects.MapSector;
 
@@ -17,7 +18,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-public class Player extends AnimatedEntity {
+public class Player extends AnimatedEntity implements Character {
 
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;

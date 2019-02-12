@@ -35,11 +35,18 @@ public class Keyboard implements KeyListener {
         if (i != -1) {
             pressedKeyCodes.remove(i);
         }
-        if (e.getKeyCode() == KeyEvent.VK_F3) {
-            Game.debug = !Game.debug;
-        }
-        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            Entities.DIALOGUE_PANEL.advance();
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_F3:
+                Game.debug = !Game.debug;
+                break;
+            case KeyEvent.VK_SPACE:
+                Entities.DIALOGUE_PANEL.advance();
+                break;
+            case KeyEvent.VK_E:
+                Game.inGameState.isInventoryVisible = !Game.inGameState.isInventoryVisible;
+                break;
+            default:
+                break;
         }
     }
 

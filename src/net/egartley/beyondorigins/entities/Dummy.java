@@ -10,17 +10,21 @@ import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.objects.AnimatedEntity;
+import net.egartley.beyondorigins.objects.Character;
 import net.egartley.beyondorigins.objects.Entity;
 import net.egartley.beyondorigins.objects.MapSector;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Dummy extends AnimatedEntity {
+public class Dummy extends AnimatedEntity implements Character {
 
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
-    private final byte ANIMATION_THRESHOLD = 7;
+    private final byte ANIMATION_THRESHOLD = 9;
+
+    private short walktime = 0;
+    private byte dir = RIGHT;
 
     EntityExpression exp;
 
@@ -29,14 +33,14 @@ public class Dummy extends AnimatedEntity {
         this.sprites = sprites;
         sprite = sprites.get(0);
         x = 470.0;
-        y = 240.0;
+        y = 180.0;
         setAnimations();
         setBoundaries();
         setCollisions();
 
         isSectorSpecific = false;
         isDualRendered = false;
-        speed = 2.0;
+        speed = 1.3;
 
         exp = new EntityExpression(EntityExpression.CONFUSION, this);
     }
@@ -98,8 +102,19 @@ public class Dummy extends AnimatedEntity {
         isMovingDownwards = false;
         isMovingLeftwards = false;
         isMovingRightwards = false;
-        follow(Entities.PLAYER, Entity.FOLLOW_AGGRESSIVE, 1);
         super.tick();
+
+        walktime++;
+        if (walktime >= 90) {
+            walktime = 0;
+            if (dir == RIGHT) {
+                dir = LEFT;
+            } else {
+                dir = RIGHT;
+            }
+        } else {
+            move(dir);
+        }
 
         if (!isMovingRightwards && !isMovingLeftwards && !isMovingUpwards && !isMovingDownwards)
             animation.stop();

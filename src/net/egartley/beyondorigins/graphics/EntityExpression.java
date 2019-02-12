@@ -42,7 +42,7 @@ public class EntityExpression extends AnimatedEntity {
     }
 
     public static void init() {
-        template_confusion = new Animation(new SpriteSheet(ImageStore.expression_confusion, 18, 18, 1, 4).sprites.get(0), (byte) 25);
+        template_confusion = new Animation(new SpriteSheet(ImageStore.get(ImageStore.EXPRESSION_CONFUSION), 18, 18, 1, 4).sprites.get(0), (byte) 25);
     }
 
     public void tick() {
