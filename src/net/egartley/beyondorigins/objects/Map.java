@@ -24,7 +24,7 @@ public abstract class Map {
     public static MapSector currentSector;
 
     /**
-     * Creates a new map, and initializes {@link #sectors} with {@link ArrayList#ArrayList() ArrayList<>()}
+     * Creates a new map, and initializes {@link #sectors}
      *
      * @param id
      *         Name or identifier for the map

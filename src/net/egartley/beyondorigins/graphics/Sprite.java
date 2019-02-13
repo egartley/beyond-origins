@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class Sprite {
 
     /**
-     * All of the possible frames that the sprite could use, which are derived from {@link #strip}
+     * All of the possible frames that the sprite could use
      *
      * @see AnimatedEntity
      * @see StaticEntity

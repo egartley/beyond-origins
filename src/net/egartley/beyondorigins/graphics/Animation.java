@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 
 /**
- * Represents a collection of {@link AnimationFrame} objects, used for animating sprites
+ * Represents a collection of images, used for animating sprites
  *
  * @see Sprite
  * @see AnimatedEntity

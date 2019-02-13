@@ -123,7 +123,7 @@ public class Player extends AnimatedEntity implements Character {
         defaultBoundary = boundary;
         headBoundary = new EntityBoundary(this, 19, 18, new BoundaryPadding(0), new BoundaryOffset(0, 0, 0, 5));
         headBoundary.name = "Head";
-        bodyBoundary = new EntityBoundary(this, 30, 19, new BoundaryPadding(0), new BoundaryOffset(0, 16, 0, 0));
+        bodyBoundary = new EntityBoundary(this, 30, 17, new BoundaryPadding(0), new BoundaryOffset(0, 18, 0, 0));
         bodyBoundary.name = "Body";
         feetBoundary = new EntityBoundary(this, 17, 16, new BoundaryPadding(0), new BoundaryOffset(0, 29, 0, 6));
         feetBoundary.name = "Feet";
