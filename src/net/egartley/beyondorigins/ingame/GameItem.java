@@ -18,7 +18,7 @@ public class GameItem {
 
     public void render(Graphics graphics) {
         graphics.setColor(Color.BLACK);
-        graphics.fillOval(slot.x + 2, slot.y + 2, InventorySlot.SIZE - 4, InventorySlot.SIZE - 4);
+        graphics.fillOval(slot.itemX, slot.itemY, InventorySlot.SIZE, InventorySlot.SIZE);
     }
 
 }

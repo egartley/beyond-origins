@@ -115,7 +115,7 @@ public class Util {
         }
     }
 
-    public static boolean isClickInBounds(int cx, int cy, int x, int y, int width, int height) {
+    public static boolean isWithinBounds(int cx, int cy, int x, int y, int width, int height) {
         return cx >= x && cx <= x + width && cy >= y && cy <= y + height;
     }
 

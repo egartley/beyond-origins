@@ -1,6 +1,8 @@
 package net.egartley.beyondorigins.ingame;
 
+import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
+import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.graphics.Sprite;
 import net.egartley.beyondorigins.objects.StaticEntity;
 
@@ -9,7 +11,8 @@ import java.util.ArrayList;
 
 public class Inventory extends StaticEntity {
 
-    public int size = 36;
+    public static final int ROWS = 6, COLUMNS = 6;
+
     public ArrayList<InventorySlot> slots;
     public ArrayList<GameItem> items;
 
@@ -20,14 +23,32 @@ public class Inventory extends StaticEntity {
         slots = new ArrayList<>();
         items = new ArrayList<>();
 
-        for (int r = 0; r < (int) Math.sqrt(size); r++) {
-            for (int c = 0; c < (int) Math.sqrt(size); c++) {
+        for (int r = 0; r < ROWS; r++) {
+            for (int c = 0; c < COLUMNS; c++) {
                 slots.add(new InventorySlot(r, c));
             }
         }
 
         items.add(new GameItem("Test Item", slots.get(3), null));
         slots.get(3).item = items.get(0);
+    }
+
+    public void onItemDragEnd(int dropX, int dropY, GameItem item) {
+        for (int r = 0; r < ROWS; r++) {
+            for (int c = 0; c < COLUMNS; c++) {
+                InventorySlot slot = slots.get(getSlotIndexFromRowColumn(r, c));
+                Debug.out("Checking " + getSlotIndexFromRowColumn(r, c));
+                if (Util.isWithinBounds(dropX, dropY, slot.x, slot.y, InventorySlot.SIZE, InventorySlot.SIZE) && !item.equals(slot.item)) {
+                    item.slot = slot;
+                    slot.item = item;
+                    break;
+                }
+            }
+        }
+    }
+
+    public int getSlotIndexFromRowColumn(int row, int column) {
+        return (row * ROWS) + column;
     }
 
     @Override
@@ -39,10 +60,15 @@ public class Inventory extends StaticEntity {
 
         for (InventorySlot s : slots)
             s.render(graphics);
+        for (GameItem i : items)
+            i.render(graphics);
     }
 
     @Override
     public void tick() {
+        for (InventorySlot s : slots)
+            s.tick();
+        // gameitem tick if needed
     }
 
     @Override

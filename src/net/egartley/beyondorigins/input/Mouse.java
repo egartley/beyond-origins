@@ -12,6 +12,7 @@ public class Mouse implements MouseListener, MouseMotionListener {
     // private static boolean isPressed = false;
 
     public static int x, y;
+    public static boolean isDragging;
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -31,6 +32,7 @@ public class Mouse implements MouseListener, MouseMotionListener {
                 b.checkClick(e);
             }
         }
+        isDragging = false;
     }
 
     @Override
@@ -45,7 +47,9 @@ public class Mouse implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-
+        isDragging = true;
+        x = e.getX();
+        y = e.getY();
     }
 
     @Override

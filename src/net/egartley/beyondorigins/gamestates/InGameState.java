@@ -13,7 +13,7 @@ import java.awt.*;
 public class InGameState extends GameState {
 
     private Map currentMap;
-    private Inventory inventory;
+    public Inventory inventory;
 
     public boolean isInventoryVisible;
 

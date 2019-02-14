@@ -94,7 +94,7 @@ public class MenuButton {
     }
 
     private boolean isClickInBounds(int cx, int cy) {
-        return Util.isClickInBounds(cx, cy, x, y, width, height);
+        return Util.isWithinBounds(cx, cy, x, y, width, height);
     }
 
 }
