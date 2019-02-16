@@ -9,8 +9,6 @@ import java.awt.event.MouseMotionListener;
 
 public class Mouse implements MouseListener, MouseMotionListener {
 
-    // private static boolean isPressed = false;
-
     public static int x, y;
     public static boolean isDragging;
 
@@ -21,12 +19,11 @@ public class Mouse implements MouseListener, MouseMotionListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        // isPressed = true;
+
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        // isPressed = false;
         if (Game.currentGameState.equals(Game.mainMenuState)) {
             for (MenuButton b : Game.mainMenuState.buttons) {
                 b.checkClick(e);

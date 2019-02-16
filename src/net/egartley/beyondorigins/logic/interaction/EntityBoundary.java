@@ -75,7 +75,7 @@ public class EntityBoundary extends Boundary {
         this.offset = offset;
         horizontalOffset = padding.left + offset.left - offset.right;
         verticalOffset = padding.top + offset.top - offset.bottom;
-        name = "Boundary>>" + entity;
+        name = entity + "/Boundary";
         // call tick so that x and y are actually set
         tick();
         setColor();
@@ -85,7 +85,7 @@ public class EntityBoundary extends Boundary {
         if (parent.isStatic) {
             drawColor = Color.BLACK;
         } else {
-            drawColor = Color.ORANGE;
+            drawColor = Color.ORANGE; // man bad!
         }
     }
 

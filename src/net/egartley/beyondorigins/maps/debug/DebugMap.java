@@ -1,19 +1,19 @@
-package net.egartley.beyondorigins.maps.testmap;
+package net.egartley.beyondorigins.maps.debug;
 
-import net.egartley.beyondorigins.definitions.maps.testmap.Sectors;
+import net.egartley.beyondorigins.definitions.maps.debug.Sectors;
 import net.egartley.beyondorigins.logic.events.MapSectorChangeEvent;
-import net.egartley.beyondorigins.maps.testmap.sectors.Sector1;
-import net.egartley.beyondorigins.maps.testmap.sectors.Sector2;
-import net.egartley.beyondorigins.maps.testmap.sectors.Sector3;
-import net.egartley.beyondorigins.maps.testmap.sectors.Sector4;
+import net.egartley.beyondorigins.maps.debug.sectors.Sector1;
+import net.egartley.beyondorigins.maps.debug.sectors.Sector2;
+import net.egartley.beyondorigins.maps.debug.sectors.Sector3;
+import net.egartley.beyondorigins.maps.debug.sectors.Sector4;
 import net.egartley.beyondorigins.objects.Map;
 import net.egartley.beyondorigins.objects.MapSector;
 
 import java.awt.*;
 
-public class TestMap extends Map {
+public class DebugMap extends Map {
 
-    public TestMap(String id) {
+    public DebugMap(String id) {
         super(id);
         sectors.add(new Sector1(this, Sectors.blankGrass));
         sectors.add(new Sector2(this, Sectors.blankGrass));

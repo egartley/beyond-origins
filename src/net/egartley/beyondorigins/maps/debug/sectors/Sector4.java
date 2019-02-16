@@ -1,4 +1,4 @@
-package net.egartley.beyondorigins.maps.testmap.sectors;
+package net.egartley.beyondorigins.maps.debug.sectors;
 
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.objects.Map;

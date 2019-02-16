@@ -224,7 +224,7 @@ public class EntityEntityCollision {
 
     @Override
     public String toString() {
-        return boundaries[0] + " -> " + boundaries[1];
+        return "\"" + boundaries[0] + "\" into \"" + boundaries[1] + "\"";
     }
 
 }

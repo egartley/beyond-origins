@@ -1,5 +1,7 @@
 package net.egartley.beyondorigins.ingame;
 
+import net.egartley.beyondorigins.Game;
+
 import java.awt.*;
 
 public class InventorySlot {
@@ -7,13 +9,13 @@ public class InventorySlot {
     public static final int BASE_X = 311, BASE_Y = 167, MARGIN = 3, SIZE = 32;
 
     public int row, column, x, y, baseItemX, baseItemY;
-    public GameItem item;
+    public InventoryItem item;
 
     public InventorySlot(int row, int column) {
         this(null, row, column);
     }
 
-    public InventorySlot(GameItem item, int row, int column) {
+    public InventorySlot(InventoryItem item, int row, int column) {
         this.item = item;
         this.row = row;
         this.column = column;
@@ -31,8 +33,10 @@ public class InventorySlot {
     public void render(Graphics graphics) {
         graphics.setColor(Color.GRAY);
         graphics.fillRect(x, y, SIZE, SIZE);
-        graphics.setColor(Color.WHITE);
-        graphics.drawString(String.valueOf((row * Inventory.ROWS) + column), x + 3, y + 12);
+        if (Game.debug) {
+            graphics.setColor(Color.WHITE);
+            graphics.drawString(String.valueOf((row * Inventory.ROWS) + column), x + 3, y + 12);
+        }
     }
 
     @Override

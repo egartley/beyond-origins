@@ -3,7 +3,7 @@ package net.egartley.beyondorigins;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.EntityStore;
 import net.egartley.beyondorigins.input.Mouse;
-import net.egartley.beyondorigins.maps.testmap.TestMap;
+import net.egartley.beyondorigins.maps.debug.DebugMap;
 
 import java.awt.*;
 
@@ -114,7 +114,7 @@ public class Debug {
             graphics.setFont(font);
             drawLine("x = " + (int) Entities.PLAYER.x + ", y = " + (int) Entities.PLAYER.y, graphics);
             drawLine("isCollided = " + Entities.PLAYER.isCollided, graphics);
-            drawLine("Location: " + TestMap.currentSector, graphics);
+            drawLine("Location: " + DebugMap.currentSector, graphics);
             drawLine("EntityStore: " + EntityStore.amount, graphics);
             if (Entities.PLAYER.lastCollision != null) {
                 drawLine("Last collision: " + Entities.PLAYER.lastCollision, graphics);
