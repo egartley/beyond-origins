@@ -33,21 +33,47 @@ public class Inventory extends StaticEntity {
 
     void onItemDragEnd(int dropX, int dropY, GameItem item) {
 
-        // TODO: move item to slot that's closest to item when it is within bounds of multiple slots
+        // TODO: change r2 width and height to item's sprite width and height
+
+        ArrayList<Rectangle> intersectionRectangles = new ArrayList<>();
+        ArrayList<InventorySlot> intersectedSlots = new ArrayList<>();
 
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMNS; c++) {
                 InventorySlot slot = slots.get(getSlotIndexFromRowColumn(r, c));
                 Rectangle r1 = new Rectangle(slot.x, slot.y, InventorySlot.SIZE, InventorySlot.SIZE);
-                // TODO: change r2 width and height to item's sprite width and height
                 Rectangle r2 = new Rectangle(dropX, dropY, InventorySlot.SIZE, InventorySlot.SIZE);
                 if (r1.intersects(r2) && !item.equals(slot.item)) {
-                    item.slot = slot;
-                    slot.item = item;
-                    break;
+                    // item is within bounds of another slot that is not its own
+                    intersectionRectangles.add(r1.intersection(r2));
+                    intersectedSlots.add(slot);
+                    if (intersectionRectangles.size() == 4) {
+                        // item can only be within bounds of up to four slots
+                        break;
+                    }
                 }
             }
         }
+
+        if (!intersectionRectangles.isEmpty()) {
+            // at least one slot
+            // i is the index of the closest intersection, n is a counter
+            int i = 0, n = 0;
+            Rectangle closest = intersectionRectangles.get(0);
+            // find the "biggest" intersection by each rectangle's area
+            for (Rectangle r : intersectionRectangles) {
+                if ((r.width * r.height) > (closest.width * closest.height)) {
+                    closest = r;
+                    i = n;
+                }
+                n++;
+            }
+            InventorySlot slot = intersectedSlots.get(i);
+            // now actually move the item to the slot it is closest to
+            item.slot = slot;
+            slot.item = item;
+        }
+        // else, there were no intersections with any slots, so just move it back
     }
 
     private int getSlotIndexFromRowColumn(int row, int column) {

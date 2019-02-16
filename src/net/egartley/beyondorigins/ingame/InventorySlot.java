@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Game;
+import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.input.Mouse;
 
 import java.awt.*;
@@ -32,7 +33,8 @@ public class InventorySlot {
 
     public void tick() {
         if (item != null) {
-            if (Mouse.isDragging) {
+            // TODO: change to item width and height
+            if (Mouse.isDragging && Util.isWithinBounds(Mouse.x, Mouse.y, itemX, itemY, SIZE, SIZE)) {
                 itemX = Mouse.x - (SIZE / 2);
                 itemY = Mouse.y - (SIZE / 2);
                 isBeingDragged = true;
