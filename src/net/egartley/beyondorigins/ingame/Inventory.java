@@ -1,5 +1,6 @@
 package net.egartley.beyondorigins.ingame;
 
+import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.graphics.Sprite;
 import net.egartley.beyondorigins.objects.StaticEntity;
@@ -31,7 +32,7 @@ public class Inventory extends StaticEntity {
         slots.get(3).item = items.get(0);
     }
 
-    void onItemDragEnd(int dropX, int dropY, GameItem item) {
+    void onItemDragEnd(GameItem dropItem) {
 
         // TODO: change r2 width and height to item's sprite width and height
 
@@ -42,11 +43,11 @@ public class Inventory extends StaticEntity {
             for (int c = 0; c < COLUMNS; c++) {
                 InventorySlot slot = slots.get(getSlotIndexFromRowColumn(r, c));
                 Rectangle r1 = new Rectangle(slot.x, slot.y, InventorySlot.SIZE, InventorySlot.SIZE);
-                Rectangle r2 = new Rectangle(dropX, dropY, InventorySlot.SIZE, InventorySlot.SIZE);
-                if (r1.intersects(r2) && !item.equals(slot.item)) {
-                    // item is within bounds of another slot that is not its own
+                Rectangle r2 = new Rectangle(dropItem.renderX, dropItem.renderY, InventorySlot.SIZE, InventorySlot.SIZE);
+                if (r1.intersects(r2)) {
                     intersectionRectangles.add(r1.intersection(r2));
                     intersectedSlots.add(slot);
+                    Debug.out("Intersects with slot " + slot);
                     if (intersectionRectangles.size() == 4) {
                         // item can only be within bounds of up to four slots
                         break;
@@ -62,6 +63,7 @@ public class Inventory extends StaticEntity {
             Rectangle closest = intersectionRectangles.get(0);
             // find the "biggest" intersection by each rectangle's area
             for (Rectangle r : intersectionRectangles) {
+                Debug.out("R(" + n + "): " + r.width * r.height + " (slot " + intersectedSlots.get(n) + ")");
                 if ((r.width * r.height) > (closest.width * closest.height)) {
                     closest = r;
                     i = n;
@@ -70,10 +72,12 @@ public class Inventory extends StaticEntity {
             }
             InventorySlot slot = intersectedSlots.get(i);
             // now actually move the item to the slot it is closest to
-            item.slot = slot;
-            slot.item = item;
+            Debug.out("Moving to " + slot);
+            dropItem.slot = slot;
+            slot.item = dropItem;
         }
         // else, there were no intersections with any slots, so just move it back
+        Debug.out("---------------------------------");
     }
 
     private int getSlotIndexFromRowColumn(int row, int column) {
@@ -95,9 +99,8 @@ public class Inventory extends StaticEntity {
 
     @Override
     public void tick() {
-        for (InventorySlot s : slots)
-            s.tick();
-        // gameitem tick if needed
+        for (GameItem i : items)
+            i.tick();
     }
 
     @Override
