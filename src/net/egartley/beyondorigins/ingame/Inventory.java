@@ -1,8 +1,6 @@
 package net.egartley.beyondorigins.ingame;
 
-import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.graphics.Sprite;
 import net.egartley.beyondorigins.objects.StaticEntity;
 
@@ -33,12 +31,17 @@ public class Inventory extends StaticEntity {
         slots.get(3).item = items.get(0);
     }
 
-    public void onItemDragEnd(int dropX, int dropY, GameItem item) {
+    void onItemDragEnd(int dropX, int dropY, GameItem item) {
+
+        // TODO: move item to slot that's closest to item when it is within bounds of multiple slots
+
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMNS; c++) {
                 InventorySlot slot = slots.get(getSlotIndexFromRowColumn(r, c));
-                Debug.out("Checking " + getSlotIndexFromRowColumn(r, c));
-                if (Util.isWithinBounds(dropX, dropY, slot.x, slot.y, InventorySlot.SIZE, InventorySlot.SIZE) && !item.equals(slot.item)) {
+                Rectangle r1 = new Rectangle(slot.x, slot.y, InventorySlot.SIZE, InventorySlot.SIZE);
+                // TODO: change r2 width and height to item's sprite width and height
+                Rectangle r2 = new Rectangle(dropX, dropY, InventorySlot.SIZE, InventorySlot.SIZE);
+                if (r1.intersects(r2) && !item.equals(slot.item)) {
                     item.slot = slot;
                     slot.item = item;
                     break;
@@ -47,7 +50,7 @@ public class Inventory extends StaticEntity {
         }
     }
 
-    public int getSlotIndexFromRowColumn(int row, int column) {
+    private int getSlotIndexFromRowColumn(int row, int column) {
         return (row * ROWS) + column;
     }
 

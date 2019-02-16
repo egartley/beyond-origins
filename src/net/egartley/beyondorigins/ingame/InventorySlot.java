@@ -40,7 +40,7 @@ public class InventorySlot {
                 itemX = baseItemX;
                 itemY = baseItemY;
                 if (isBeingDragged) {
-                    Game.inGameState.inventory.onItemDragEnd(Mouse.x, Mouse.y, item);
+                    Game.inGameState.inventory.onItemDragEnd(Mouse.x - (SIZE / 2), Mouse.y - (SIZE / 2), item);
                     isBeingDragged = false;
                 }
             }
