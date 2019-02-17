@@ -9,10 +9,8 @@ import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.gamestates.MainMenuState;
 import net.egartley.beyondorigins.graphics.EntityExpression;
 import net.egartley.beyondorigins.graphics.SpriteSheet;
-import net.egartley.beyondorigins.ingame.DialoguePanel;
 import net.egartley.beyondorigins.input.Keyboard;
 import net.egartley.beyondorigins.input.Mouse;
-import net.egartley.beyondorigins.maps.TileBuilder;
 import net.egartley.beyondorigins.media.images.ImageStore;
 import net.egartley.beyondorigins.objects.GameState;
 
@@ -22,14 +20,14 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 /**
- * @author Evan Gartley
+ * @author Evan Gartley (https://github.com/egartley)
+ * @version https://egartley.net/projects/beyond-origins/?via=javadocgameclass
  */
 public class Game extends Canvas implements Runnable {
 
     // SELF
     private static final long serialVersionUID = 8213282993283826186L;
     private static long startTime;
-    private static short frames;
     private static JFrame frame;
     private static Dimension windowDimension = new Dimension(998, 573);
     private static boolean running = false;
@@ -104,18 +102,18 @@ public class Game extends Canvas implements Runnable {
         EntityExpression.init();
         // ************ EXPRESSIONS END *******
 
-        // this up-scales all images to a factor of 2 (each pixel in the source image will be rendered as 2x2 pixel)
+        // this up-scales images to a factor of 2 (each pixel in the source image will be rendered as 2x2 pixel)
         byte scale = 2;
 
         // *********** PLAYER BEGIN ***********
         BufferedImage image = ImageStore.get(ImageStore.PLAYER);
         if (image != null) {
-            image = Util.resize(image, image.getWidth() * scale, image.getHeight() * scale);
+            image = Util.resize(image, image.getWidth(), image.getHeight());
         } else {
             Debug.error("The default player image (\"player-default.png\") doesn't exist, or there was a problem while loading it!");
             return;
         }
-        Entities.PLAYER = new Player(new SpriteSheet(image, 15 * scale, 23 * scale, 2, 4).sprites);
+        Entities.PLAYER = new Player(new SpriteSheet(image, 30, 46, 2, 4).sprites);
         // ************ PLAYER END ************
 
         // ************ DUMMY BEGIN ***********
@@ -128,15 +126,12 @@ public class Game extends Canvas implements Runnable {
         }
         Entities.DUMMY = new Dummy(new SpriteSheet(image, 15 * scale, 23 * scale, 2, 4).sprites);
         // ************ DUMMY END *************
-
-        Entities.DIALOGUE_PANEL = new DialoguePanel(Entities.getTemplate(Entities.TEMPLATE_DIALOGUE));
     }
 
     /**
      * Loads all maps and their sectors' tile definitions
      */
     private void loadMaps() {
-        TileBuilder.load();
         AllSectors.define();
     }
 
@@ -166,14 +161,15 @@ public class Game extends Canvas implements Runnable {
     public void run() {
         // load images, save data, etc.
         init();
-        // double buffering
+        // double buffering (so that animations, changes in x/y will show correctly)
         createBufferStrategy(2);
         bufferStrategy = getBufferStrategy();
         graphics = bufferStrategy.getDrawGraphics();
         // enable anti-aliasing for strings
         Graphics2D g2d = (Graphics2D) graphics;
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        // setup system for ensuring that the game runs at most 60 fps
+        // limit to 60 fps
+        // Credit: since-deleted YouTube channel with Java tutorials uploaded in late 2012
         long lastTime = System.nanoTime();
         long timer = System.currentTimeMillis();
         double ns = 16666666.666666666;
@@ -188,16 +184,11 @@ public class Game extends Canvas implements Runnable {
                 tick();
                 render();
                 delta -= 1.0D;
-                frames += 1;
+                // frames += 1;
                 if (System.currentTimeMillis() - timer > 1000L) {
                     timer += 1000L;
-                    frames = 0;
+                    // frames = 0;
                 }
-            }
-            try {
-                Thread.sleep(1L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
         stop();

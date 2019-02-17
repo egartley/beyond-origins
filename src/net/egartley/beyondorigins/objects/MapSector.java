@@ -72,10 +72,8 @@ public abstract class MapSector {
     /**
      * Creates a new sector with the given definition
      *
-     * @param parent
-     *         The map that this sector is in
-     * @param definition
-     *         The {@link MapSectorDefinition} to use
+     * @param parent     The map that this sector is in
+     * @param definition The {@link MapSectorDefinition} to use
      */
     public MapSector(Map parent, MapSectorDefinition definition) {
         this.parent = parent;
@@ -83,8 +81,9 @@ public abstract class MapSector {
         changeBoundaries = new ArrayList<>();
         changeCollisions = new ArrayList<>();
         neighbors = new ArrayList<>(MAX_NEIGHBORS);
-        for (byte i = 0; i < MAX_NEIGHBORS; i++)
+        for (byte i = 0; i < MAX_NEIGHBORS; i++) {
             neighbors.add(null);
+        }
         entities = new ArrayList<>();
     }
 
@@ -116,8 +115,9 @@ public abstract class MapSector {
      */
     public void render(Graphics graphics) {
         drawTiles(graphics);
-        for (MapSectorChangeBoundary boundary : changeBoundaries)
+        for (MapSectorChangeBoundary boundary : changeBoundaries) {
             boundary.draw(graphics);
+        }
     }
 
     /**
@@ -125,17 +125,16 @@ public abstract class MapSector {
      */
     public void tick() {
         Entities.PLAYER.tick();
-        for (MapSectorChangeCollision collision : changeCollisions)
+        for (MapSectorChangeCollision collision : changeCollisions) {
             collision.tick();
+        }
     }
 
     /**
      * Sets a neighboring sector in the direction, as well as reciprocating it
      *
-     * @param neighbor
-     *         The sector to set as a neighbor
-     * @param direction
-     *         {@link #TOP}, {@link #LEFT}, {@link #BOTTOM}, or {@link #RIGHT}
+     * @param neighbor  The sector to set as a neighbor
+     * @param direction {@link #TOP}, {@link #LEFT}, {@link #BOTTOM}, or {@link #RIGHT}
      */
     public void setNeighborAt(MapSector neighbor, byte direction) {
         setNeighborAt(neighbor, direction, false);
@@ -154,15 +153,13 @@ public abstract class MapSector {
                 if (!didSetInverse) {
                     neighbor.setNeighborAt(this, LEFT, true);
                 }
-                changeBoundary = new MapSectorChangeBoundary(Game.WINDOW_WIDTH - BOUNDARY_SIZE, 0, BOUNDARY_SIZE,
-                        Game.WINDOW_HEIGHT, neighbor);
+                changeBoundary = new MapSectorChangeBoundary(Game.WINDOW_WIDTH - BOUNDARY_SIZE, 0, BOUNDARY_SIZE, Game.WINDOW_HEIGHT, neighbor);
                 break;
             case BOTTOM:
                 if (!didSetInverse) {
                     neighbor.setNeighborAt(this, TOP, true);
                 }
-                changeBoundary = new MapSectorChangeBoundary(0, Game.WINDOW_HEIGHT - BOUNDARY_SIZE, Game
-                        .WINDOW_WIDTH, BOUNDARY_SIZE, neighbor);
+                changeBoundary = new MapSectorChangeBoundary(0, Game.WINDOW_HEIGHT - BOUNDARY_SIZE, Game.WINDOW_WIDTH, BOUNDARY_SIZE, neighbor);
                 break;
             case LEFT:
                 if (!didSetInverse) {
@@ -171,15 +168,13 @@ public abstract class MapSector {
                 changeBoundary = new MapSectorChangeBoundary(0, 0, BOUNDARY_SIZE, Game.WINDOW_HEIGHT, neighbor);
                 break;
             default:
-                Debug.warning("Unknown direction specified while attempting to set a sector neighbor! (" + direction
-                        + ")");
+                Debug.warning("Unknown direction specified while attempting to set a sector neighbor! (" + direction + ")");
                 break;
         }
 
         if (changeBoundary != null) {
             changeBoundaries.add(changeBoundary);
-            changeCollisions.add(new MapSectorChangeCollision(changeBoundary, Entities.PLAYER.boundary,
-                    changeBoundary.to, this, parent));
+            changeCollisions.add(new MapSectorChangeCollision(changeBoundary, Entities.PLAYER.boundary, changeBoundary.to, this, parent));
         } else {
             Debug.warning("Could not set a neighbor (\"" + neighbor + "\") for \"" + this + "\"!");
         }
@@ -208,9 +203,6 @@ public abstract class MapSector {
 
     /**
      * Updates the player's position in accordance with the sector it just came from
-     *
-     * @param from
-     *         The sector that the player came from
      */
     protected void updatePlayerPosition(MapSector from) {
         playerEnteredFrom(neighbors.indexOf(from));
@@ -218,16 +210,22 @@ public abstract class MapSector {
 
     /**
      * Renders all of the sector's tiles, defined by {@link #definition}
-     *
-     * @param graphics
-     *         The {@link java.awt.Graphics Graphics} object to use
      */
     private void drawTiles(Graphics graphics) {
         deltaX = 0;
         deltaY = 0;
-        for (ArrayList<MapTile> row : definition.tiles) {
-            for (MapTile tile : row) {
+        for (int r = 0; r < definition.tiles.size(); r++) {
+            ArrayList<MapTile> row = definition.tiles.get(r);
+            for (int c = 0; c < row.size(); c++) {
+                MapTile tile = row.get(c);
                 graphics.drawImage(tile.bufferedImage, deltaX, deltaY, null);
+                /* if (Game.debug) {
+                    graphics.setColor(Color.BLACK);
+                    graphics.drawRect(deltaX, deltaY, TILE_SIZE, TILE_SIZE);
+                    graphics.setFont(new Font(graphics.getFont().getFontName(), Font.PLAIN, 8));
+                    graphics.setColor(Color.WHITE);
+                    graphics.drawString(r + ", " + c, deltaX + 2, deltaY + 8);
+                } */
                 deltaX += TILE_SIZE;
             }
             deltaX = 0;
@@ -236,8 +234,7 @@ public abstract class MapSector {
     }
 
     /**
-     * @return <code>parent.toString()</code> + ", sector " +  <code>(parent.sectors.indexOf(this) + 1)</code>
-     *
+     * @return <code>parent.toString()</code> + ", sector " + <code>(parent.sectors.indexOf(this) + 1)</code>
      * @see #parent
      */
     public String toString() {

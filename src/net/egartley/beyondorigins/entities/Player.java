@@ -1,5 +1,6 @@
 package net.egartley.beyondorigins.entities;
 
+import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.graphics.Animation;
 import net.egartley.beyondorigins.graphics.Sprite;
@@ -39,7 +40,10 @@ public class Player extends AnimatedEntity implements Character {
 
         isSectorSpecific = false;
         isDualRendered = false;
-        speed = 2.0;
+        speed = 1.1;
+        if (Game.debug) {
+            speed = 2.0;
+        }
     }
 
     /**

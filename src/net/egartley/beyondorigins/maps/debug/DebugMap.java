@@ -15,10 +15,10 @@ public class DebugMap extends Map {
 
     public DebugMap(String id) {
         super(id);
-        sectors.add(new Sector1(this, Sectors.blankGrass));
-        sectors.add(new Sector2(this, Sectors.blankGrass));
-        sectors.add(new Sector3(this, Sectors.blankGrass));
-        sectors.add(new Sector4(this, Sectors.blankGrass));
+        sectors.add(new Sector1(this, Sectors.sector1));
+        sectors.add(new Sector2(this, Sectors.sector1));
+        sectors.add(new Sector3(this, Sectors.sector1));
+        sectors.add(new Sector4(this, Sectors.sector1));
 
         MapSector sec1 = sectors.get(0);
         MapSector sec2 = sectors.get(1);

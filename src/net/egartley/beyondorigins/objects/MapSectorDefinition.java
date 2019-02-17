@@ -11,10 +11,14 @@ import java.util.ArrayList;
 public class MapSectorDefinition {
 
     /**
-     * Creates a new map sector definition
+     * Collection of map tiles
      *
-     * @param tileArray
-     *         Collection of map tiles
+     * @see MapTile
+     */
+    public ArrayList<ArrayList<MapTile>> tiles;
+
+    /**
+     * Creates a new map sector definition
      *
      * @see MapSector
      * @see MapTile
@@ -22,12 +26,5 @@ public class MapSectorDefinition {
     public MapSectorDefinition(ArrayList<ArrayList<MapTile>> tileArray) {
         tiles = tileArray;
     }
-
-    /**
-     * Collection of map tiles
-     *
-     * @see MapTile
-     */
-    ArrayList<ArrayList<MapTile>> tiles;
 
 }

@@ -1,46 +1,40 @@
 package net.egartley.beyondorigins.maps;
 
-import net.egartley.beyondorigins.media.images.ImageStore;
 import net.egartley.beyondorigins.objects.MapTile;
 
 import java.util.ArrayList;
 
 public class TileBuilder {
 
-    public static final byte GRASS = 0;
-    private static final byte SAND = 1;
-
-    private static MapTile grass;
-    private static MapTile sand;
-
-    public static void load() {
-        grass = new MapTile(ImageStore.get(ImageStore.TILE_GRASS));
-        sand = new MapTile(ImageStore.get(ImageStore.TILE_SAND));
-    }
-
-    public static ArrayList<ArrayList<MapTile>> buildArrayList(byte b, int r, int c) {
-        byte[][] array = new byte[r][c];
-        for (int rr = 0; rr < r; rr++) {
-            byte[] col = new byte[c];
-            for (int cc = 0; cc < c; cc++)
-                col[cc] = b;
-
-            array[rr] = col;
+    /**
+     * Returns an array list of array lists of all the same map tiles with the specified ID
+     */
+    public static ArrayList<ArrayList<MapTile>> buildArrayList(byte tileID, int rows, int columns) {
+        byte[][] array = new byte[rows][columns];
+        for (int r = 0; r < rows; r++) {
+            byte[] col = new byte[columns];
+            for (int c = 0; c < columns; c++) {
+                col[c] = tileID;
+            }
+            array[r] = col;
         }
         return buildArrayList(array);
     }
 
+    /**
+     * Returns an array list of array lists corresponding to the given 2D array of tile ID's
+     */
     private static ArrayList<ArrayList<MapTile>> buildArrayList(byte[][] b) {
         ArrayList<ArrayList<MapTile>> array = new ArrayList<>();
-        for (byte[] aB : b) {
+        for (byte[] r : b) {
             ArrayList<MapTile> row = new ArrayList<>();
-            for (byte anAB : aB) {
-                switch (anAB) {
-                    case GRASS:
-                        row.add(grass);
+            for (byte c : r) {
+                switch (c) {
+                    case MapTile.GRASS:
+                        row.add(MapTile.get(MapTile.GRASS));
                         break;
-                    case SAND:
-                        row.add(sand);
+                    case MapTile.SAND:
+                        row.add(MapTile.get(MapTile.SAND));
                         break;
                     default:
                         break;

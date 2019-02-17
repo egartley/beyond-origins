@@ -33,7 +33,7 @@ public class Dummy extends AnimatedEntity implements Character {
         this.sprites = sprites;
         sprite = sprites.get(0);
         x = 470.0;
-        y = 180.0;
+        y = 132.0;
         setAnimations();
         setBoundaries();
         setCollisions();
@@ -143,7 +143,7 @@ public class Dummy extends AnimatedEntity implements Character {
 
     @Override
     public void setBoundaries() {
-        boundaries.add(new EntityBoundary(this, sprite, new BoundaryPadding(4, 4, 0, 4)));
+        boundaries.add(new EntityBoundary(this, sprite, new BoundaryPadding(0, 2, 0, 2)));
         defaultBoundary = boundaries.get(0);
     }
 
