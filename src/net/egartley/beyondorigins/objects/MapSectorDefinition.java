@@ -27,4 +27,11 @@ public class MapSectorDefinition {
         tiles = tileArray;
     }
 
+    public MapTile getTile(int row, int column) {
+        if (tiles.get(row) != null)
+            if (tiles.get(row).get(column) != null)
+                return tiles.get(row).get(column);
+        return null;
+    }
+
 }

@@ -2,6 +2,7 @@ package net.egartley.beyondorigins.definitions.maps.debug;
 
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.maps.TileBuilder;
+import net.egartley.beyondorigins.objects.MapSector;
 import net.egartley.beyondorigins.objects.MapSectorDefinition;
 import net.egartley.beyondorigins.objects.MapTile;
 
@@ -9,47 +10,95 @@ import java.util.ArrayList;
 
 public class Sectors {
 
-    public static MapSectorDefinition sector1;
+    public static MapSectorDefinition sector1, sector2, sector3, sector4;
 
     public static void define() {
-        sector1 = new MapSectorDefinition(TileBuilder.buildArrayList(MapTile.GRASS, 17, 31));
-
-        // randomly rotate tiles
+        // ----------- SECTOR 1 -----------
+        sector1 = new MapSectorDefinition(TileBuilder.buildArrayList(MapTile.GRASS, MapSector.TILE_COLUMNS, MapSector.TILE_ROWS));
         for (ArrayList<MapTile> row : sector1.tiles) {
             for (MapTile tile : row) {
                 if (Util.randomInt(10, 1, true) > 5) {
                     tile.rotate();
-                    if (Util.randomInt(10, 1, true) > 5) {
-                        // rotate again, why not
-                        tile.rotate();
-                    }
                 }
             }
         }
+        sector1.tiles.get(0).set(27, MapTile.get(MapTile.GRASS_PATH_1));
+        sector1.tiles.get(1).set(27, MapTile.get(MapTile.GRASS_PATH_1));
+        sector1.tiles.get(2).set(27, MapTile.get(MapTile.GRASS_PATH_1));
+        sector1.tiles.get(3).set(27, MapTile.get(MapTile.GRASS_PATH_2));
+        sector1.tiles.get(3).set(28, MapTile.get(MapTile.GRASS_PATH_1));
+        sector1.tiles.get(3).set(29, MapTile.get(MapTile.GRASS_PATH_1));
+        sector1.tiles.get(3).set(30, MapTile.get(MapTile.GRASS_PATH_1));
+        sector1.getTile(3, 27).rotate(1.5D * Math.PI);
+        sector1.getTile(3, 28).rotate();
+        sector1.getTile(3, 29).rotate();
+        sector1.getTile(3, 30).rotate();
+        // ----------- SECTOR 1 -----------
 
-        // test rotation by creating a "circular" path
-        sector1.tiles.get(5).set(11, MapTile.get(MapTile.GRASS_PATH_2));
-        sector1.tiles.get(5).set(19, MapTile.get(MapTile.GRASS_PATH_2));
-        sector1.tiles.get(9).set(11, MapTile.get(MapTile.GRASS_PATH_2));
-        sector1.tiles.get(9).set(19, MapTile.get(MapTile.GRASS_PATH_2));
-        sector1.tiles.get(5).get(19).rotate();
-        sector1.tiles.get(9).get(19).rotate(Math.PI);
-        sector1.tiles.get(9).get(11).rotate(1.5D * Math.PI);
-        // can't be bothered to copy and paste, so use for loops...
-        for (int i = 12; i <= 18; i++) {
-            sector1.tiles.get(5).set(i, MapTile.get(MapTile.GRASS_PATH_1));
-            sector1.tiles.get(5).get(i).rotate();
+        // ----------- SECTOR 2 -----------
+        sector2 = new MapSectorDefinition(TileBuilder.buildArrayList(MapTile.GRASS, MapSector.TILE_COLUMNS, MapSector.TILE_ROWS));
+        for (ArrayList<MapTile> row : sector2.tiles) {
+            for (MapTile tile : row) {
+                if (Util.randomInt(10, 1, true) > 5) {
+                    tile.rotate();
+                }
+            }
         }
-        for (int i = 12; i <= 18; i++) {
-            sector1.tiles.get(9).set(i, MapTile.get(MapTile.GRASS_PATH_1));
-            sector1.tiles.get(9).get(i).rotate();
+        sector2.tiles.get(14).set(27, MapTile.get(MapTile.GRASS_PATH_1));
+        sector2.tiles.get(15).set(27, MapTile.get(MapTile.GRASS_PATH_1));
+        sector2.tiles.get(16).set(27, MapTile.get(MapTile.GRASS_PATH_1));
+        sector2.tiles.get(13).set(27, MapTile.get(MapTile.GRASS_PATH_2));
+        sector2.tiles.get(13).set(28, MapTile.get(MapTile.GRASS_PATH_1));
+        sector2.tiles.get(13).set(29, MapTile.get(MapTile.GRASS_PATH_1));
+        sector2.tiles.get(13).set(30, MapTile.get(MapTile.GRASS_PATH_1));
+        sector2.getTile(13, 28).rotate();
+        sector2.getTile(13, 29).rotate();
+        sector2.getTile(13, 30).rotate();
+        // ----------- SECTOR 2 -----------
+
+        // ----------- SECTOR 3 -----------
+        sector3 = new MapSectorDefinition(TileBuilder.buildArrayList(MapTile.GRASS, MapSector.TILE_COLUMNS, MapSector.TILE_ROWS));
+        for (ArrayList<MapTile> row : sector3.tiles) {
+            for (MapTile tile : row) {
+                if (Util.randomInt(10, 1, true) > 5) {
+                    tile.rotate();
+                }
+            }
         }
-        for (int i = 6; i <= 8; i++) {
-            sector1.tiles.get(i).set(11, MapTile.get(MapTile.GRASS_PATH_1));
+        sector3.tiles.get(13).set(0, MapTile.get(MapTile.GRASS_PATH_1));
+        sector3.tiles.get(13).set(1, MapTile.get(MapTile.GRASS_PATH_1));
+        sector3.tiles.get(13).set(2, MapTile.get(MapTile.GRASS_PATH_1));
+        sector3.tiles.get(13).set(3, MapTile.get(MapTile.GRASS_PATH_2));
+        sector3.tiles.get(14).set(3, MapTile.get(MapTile.GRASS_PATH_1));
+        sector3.tiles.get(15).set(3, MapTile.get(MapTile.GRASS_PATH_1));
+        sector3.tiles.get(16).set(3, MapTile.get(MapTile.GRASS_PATH_1));
+        sector3.getTile(13, 3).rotate();
+        sector3.getTile(13, 0).rotate();
+        sector3.getTile(13, 1).rotate();
+        sector3.getTile(13, 2).rotate();
+        // ----------- SECTOR 3 -----------
+
+        // ----------- SECTOR 4 -----------
+        sector4 = new MapSectorDefinition(TileBuilder.buildArrayList(MapTile.GRASS, MapSector.TILE_COLUMNS, MapSector.TILE_ROWS));
+        for (ArrayList<MapTile> row : sector4.tiles) {
+            for (MapTile tile : row) {
+                if (Util.randomInt(10, 1, true) > 5) {
+                    tile.rotate();
+                }
+            }
         }
-        for (int i = 6; i <= 8; i++) {
-            sector1.tiles.get(i).set(19, MapTile.get(MapTile.GRASS_PATH_1));
-        }
+        sector4.tiles.get(3).set(0, MapTile.get(MapTile.GRASS_PATH_1));
+        sector4.tiles.get(3).set(1, MapTile.get(MapTile.GRASS_PATH_1));
+        sector4.tiles.get(3).set(2, MapTile.get(MapTile.GRASS_PATH_1));
+        sector4.tiles.get(3).set(3, MapTile.get(MapTile.GRASS_PATH_2));
+        sector4.tiles.get(0).set(3, MapTile.get(MapTile.GRASS_PATH_1));
+        sector4.tiles.get(1).set(3, MapTile.get(MapTile.GRASS_PATH_1));
+        sector4.tiles.get(2).set(3, MapTile.get(MapTile.GRASS_PATH_1));
+        sector4.getTile(3, 3).rotate(Math.PI);
+        sector4.getTile(3, 0).rotate();
+        sector4.getTile(3, 1).rotate();
+        sector4.getTile(3, 2).rotate();
+        // ----------- SECTOR 4 -----------
     }
 
 }

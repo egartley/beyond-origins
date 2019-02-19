@@ -13,6 +13,8 @@ public class MapTile {
 
     public static final byte GRASS = 0, SAND = 1, GRASS_PATH_1 = 2, GRASS_PATH_2 = 3;
 
+    private static MapTile grass, sand, grassPath1, grassPath2;
+
     /**
      * This tile as a {@link BufferedImage}
      */
@@ -29,16 +31,23 @@ public class MapTile {
         height = image.getHeight();
     }
 
+    public static void init() {
+        grass = new MapTile(ImageStore.get(ImageStore.TILE_GRASS));
+        sand = new MapTile(ImageStore.get(ImageStore.TILE_SAND));
+        grassPath1 = new MapTile(ImageStore.get("resources/images/map-tiles/grass-path-1.png"));
+        grassPath2 = new MapTile(ImageStore.get("resources/images/map-tiles/grass-path-2.png"));
+    }
+
     public static MapTile get(byte tileID) {
         switch (tileID) {
             case GRASS:
-                return new MapTile(ImageStore.get(ImageStore.TILE_GRASS));
+                return new MapTile(grass.bufferedImage);
             case SAND:
-                return new MapTile(ImageStore.get(ImageStore.TILE_SAND));
+                return new MapTile(sand.bufferedImage);
             case GRASS_PATH_1:
-                return new MapTile(ImageStore.get("resources/images/map-tiles/grass-path-1.png"));
+                return new MapTile(grassPath1.bufferedImage);
             case GRASS_PATH_2:
-                return new MapTile(ImageStore.get("resources/images/map-tiles/grass-path-2.png"));
+                return new MapTile(grassPath2.bufferedImage);
             default:
                 return null;
         }

@@ -13,6 +13,7 @@ import net.egartley.beyondorigins.input.Keyboard;
 import net.egartley.beyondorigins.input.Mouse;
 import net.egartley.beyondorigins.media.images.ImageStore;
 import net.egartley.beyondorigins.objects.GameState;
+import net.egartley.beyondorigins.objects.MapTile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -132,6 +133,7 @@ public class Game extends Canvas implements Runnable {
      * Loads all maps and their sectors' tile definitions
      */
     private void loadMaps() {
+        MapTile.init();
         AllSectors.define();
     }
 
