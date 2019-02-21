@@ -28,6 +28,7 @@ public class Inventory extends StaticEntity {
         }
 
         items.add(new InventoryItem("Test Item", slots.get(3), null, true));
+        items.add(new InventoryItem("Another One", slots.get(getSlotIndexFromRowColumn(3, 3)), null, true));
     }
 
     void onItemDragEnd(InventoryItem dropItem) {
@@ -36,6 +37,7 @@ public class Inventory extends StaticEntity {
 
         ArrayList<Rectangle> intersectionRectangles = new ArrayList<>();
         ArrayList<InventorySlot> intersectedSlots = new ArrayList<>();
+        InventorySlot originalSlot = dropItem.slot;
 
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMNS; c++) {
@@ -43,8 +45,10 @@ public class Inventory extends StaticEntity {
                 Rectangle r1 = new Rectangle(slot.x, slot.y, InventorySlot.SIZE, InventorySlot.SIZE);
                 Rectangle r2 = new Rectangle(dropItem.renderX, dropItem.renderY, InventorySlot.SIZE, InventorySlot.SIZE);
                 if (r1.intersects(r2)) {
-                    intersectionRectangles.add(r1.intersection(r2));
-                    intersectedSlots.add(slot);
+                    if (slot.isEmpty) {
+                        intersectionRectangles.add(r1.intersection(r2));
+                        intersectedSlots.add(slot);
+                    }
                     if (intersectionRectangles.size() == 4) {
                         // item can only be within bounds of up to four slots
                         break;
@@ -66,16 +70,22 @@ public class Inventory extends StaticEntity {
                 }
                 n++;
             }
-            InventorySlot slot = intersectedSlots.get(i);
             // now actually move the item to the slot it is closest to
-            dropItem.slot = slot;
-            slot.item = dropItem;
+            intersectedSlots.get(i).putItem(dropItem);
+            originalSlot.removeItem();
         }
-        // else, there were no intersections with any slots, so just move it back
+        // else, there were no intersections with any slots, so it will move back
+    }
+
+    public InventoryItem getItemBeingDragged() {
+        for (InventoryItem i : items)
+            if (i.isBeingDragged)
+                return i;
+        return null;
     }
 
     private int getSlotIndexFromRowColumn(int row, int column) {
-        return (row * ROWS) + column;
+        return row * ROWS + column;
     }
 
     @Override
@@ -89,6 +99,8 @@ public class Inventory extends StaticEntity {
             s.render(graphics);
         for (InventoryItem i : items)
             i.render(graphics);
+        for (InventoryItem i : items)
+            i.drawToolTip(graphics);
     }
 
     @Override

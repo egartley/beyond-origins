@@ -9,6 +9,7 @@ public class InventorySlot {
     public static final int BASE_X = 311, BASE_Y = 167, MARGIN = 3, SIZE = 32;
 
     public int row, column, x, y, baseItemX, baseItemY;
+    public boolean isEmpty;
     public InventoryItem item;
 
     public InventorySlot(int row, int column) {
@@ -16,7 +17,7 @@ public class InventorySlot {
     }
 
     public InventorySlot(InventoryItem item, int row, int column) {
-        this.item = item;
+        putItem(item);
         this.row = row;
         this.column = column;
         // calculate in constructor instead of calculating the same thing every tick
@@ -26,8 +27,26 @@ public class InventorySlot {
         baseItemY = y;
     }
 
-    public void tick() {
+    public void putItem(InventoryItem item) {
+        this.item = item;
+        if (item != null) {
+            item.slot = this;
+        }
+        isEmpty = item == null;
+    }
 
+    private InventoryItem replaceItem(InventoryItem toReplaceWith) {
+        InventoryItem old = item;
+        putItem(toReplaceWith);
+        return old;
+    }
+
+    public InventoryItem removeItem() {
+        return replaceItem(null);
+    }
+
+    public InventoryItem swapItem(InventoryItem toSwap) {
+        return replaceItem(toSwap);
     }
 
     public void render(Graphics graphics) {

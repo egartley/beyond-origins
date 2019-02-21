@@ -28,7 +28,7 @@ public class InventoryItem {
         renderX = slot.baseItemX;
         renderY = slot.baseItemY;
         if (setToSlot) {
-            this.slot.item = this;
+            slot.putItem(this);
         }
     }
 
@@ -36,12 +36,12 @@ public class InventoryItem {
         // TODO: change to sprite width and height
         mouseHover = Util.isWithinBounds(Mouse.x, Mouse.y, renderX, renderY, InventorySlot.SIZE, InventorySlot.SIZE);
         if (Mouse.isDragging) {
-            if (mouseHover || didStartDrag) {
+            if ((mouseHover || didStartDrag) && (Game.inGameState.inventory.getItemBeingDragged() == this || Game.inGameState.inventory.getItemBeingDragged() == null)) {
                 renderX = Mouse.x - (InventorySlot.SIZE / 2);
                 renderY = Mouse.y - (InventorySlot.SIZE / 2);
                 didStartDrag = true;
+                isBeingDragged = true;
             }
-            isBeingDragged = true;
         } else if (isBeingDragged) {
             Game.inGameState.inventory.onItemDragEnd(this);
             isBeingDragged = false;
@@ -53,13 +53,16 @@ public class InventoryItem {
     }
 
     public void render(Graphics graphics) {
+        graphics.setColor(Color.BLACK);
+        graphics.fillOval(renderX, renderY, InventorySlot.SIZE, InventorySlot.SIZE);
+    }
+
+    public void drawToolTip(Graphics graphics) {
         if (!setFontMetrics) {
             tooltipWidth = graphics.getFontMetrics().stringWidth(name);
             setFontMetrics = true;
         }
-        graphics.setColor(Color.BLACK);
-        graphics.fillOval(renderX, renderY, InventorySlot.SIZE, InventorySlot.SIZE);
-        if (mouseHover || isBeingDragged) {
+        if ((mouseHover && Game.inGameState.inventory.getItemBeingDragged() == null) || isBeingDragged) {
             graphics.setColor(tooltipBackgroundColor);
             graphics.fillRect((renderX + InventorySlot.SIZE / 2) - (tooltipWidth / 2), renderY - 18, tooltipWidth, 16);
             graphics.setColor(Color.WHITE);

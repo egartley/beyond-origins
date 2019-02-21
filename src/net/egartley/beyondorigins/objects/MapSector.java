@@ -221,13 +221,13 @@ public abstract class MapSector {
             for (int c = 0; c < row.size(); c++) {
                 MapTile tile = row.get(c);
                 graphics.drawImage(tile.bufferedImage, deltaX, deltaY, null);
-                if (Game.debug) {
+                /* if (Game.debug) {
                     graphics.setColor(Color.BLACK);
                     graphics.drawRect(deltaX, deltaY, TILE_SIZE, TILE_SIZE);
                     graphics.setFont(new Font(graphics.getFont().getFontName(), Font.PLAIN, 8));
                     graphics.setColor(Color.WHITE);
                     graphics.drawString(r + ", " + c, deltaX + 2, deltaY + 8);
-                }
+                } */
                 deltaX += TILE_SIZE;
             }
             deltaX = 0;
