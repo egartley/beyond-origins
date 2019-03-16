@@ -43,15 +43,6 @@ public abstract class AnimatedEntity extends Entity {
     public abstract void setAnimations();
 
     /**
-     * Calls {@link Entity#tick()} and then {@link Animation#tick()} for each animation in {@link #animations}
-     */
-    @Override
-    public void tick() {
-        super.tick();
-        animations.forEach(Animation::tick);
-    }
-
-    /**
      * Calls {@link Animation#render(Graphics, int, int)} for {@link #animation} and then {@link #drawDebug(Graphics)}
      */
     @Override

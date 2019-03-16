@@ -84,17 +84,20 @@ public class Game extends Canvas implements Runnable {
 
     public static void main(String[] args) {
         startTime = System.currentTimeMillis();
+
         Game game = new Game();
+
         frame = new JFrame("Beyond Origins");
         frame.setSize(windowDimension.width, windowDimension.height);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        // enforce window size (for now)
         frame.setResizable(false);
         frame.add(game);
-        // center the frame's window in the user's screen
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        game.start();
+
+        running = true;
+        mainThread = new Thread(game, "Game-Main");
+        mainThread.start();
     }
 
     private void initializeEntities() {
@@ -135,16 +138,6 @@ public class Game extends Canvas implements Runnable {
     private void loadMaps() {
         MapTile.init();
         AllSectors.define();
-    }
-
-    private synchronized void start() {
-        if (running) {
-            return;
-        }
-        running = true;
-        mainThread = new Thread(this);
-        mainThread.setName("Game-Main");
-        mainThread.start();
     }
 
     private synchronized void stop() {

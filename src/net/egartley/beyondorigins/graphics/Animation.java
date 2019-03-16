@@ -2,6 +2,7 @@ package net.egartley.beyondorigins.graphics;
 
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.objects.AnimatedEntity;
+import net.egartley.beyondorigins.threads.AnimationClock;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -21,31 +22,17 @@ public class Animation {
     private int frameIndex;
     private int startIndex;
     /**
-     * Number of calls to {@link #tick()} until {@link #threshold} is reached
+     * Milliseconds between frames
      */
-    private byte delay = 0;
-    /**
-     * Whether or not the "stop" frame has been set (the frame displayed when the animation is stopped)
-     */
-    private boolean setStopFrame;
-    /**
-     * Number of calls to {@link #tick()} before switching to the next frame (which should be called 60 times per
-     * second)
-     *
-     * @see #nextFrame()
-     */
-    private byte threshold = 10;
-    /**
-     * Set to true when the animation is no longer changing frames, false otherwise
-     *
-     * @see #stop()
-     * @see #pause()
-     */
-    public boolean isStopped;
+    public int frameDelay;
     /**
      * The {@link Sprite} to animate
      */
     public Sprite sprite;
+    /**
+     * The "clock" that controls what frame is being displayed
+     */
+    public AnimationClock clock;
     /**
      * The frame that is currently being used when rendering
      */
@@ -61,36 +48,24 @@ public class Animation {
      * @param s Sprite to animate
      */
     public Animation(Sprite s) {
-        sprite = s;
-        frameIndex = 0;
-        startIndex = 0;
-        startFrame = sprite.frames.get(startIndex);
-        frame = startFrame;
+        this(s, 500);
     }
 
     /**
      * Creates a new animation
      *
      * @param s         Sprite to animate
-     * @param threshold The animation's {@link #threshold}
+     * @param frameDelay The delay, in milliseconds, between frames
      */
-    public Animation(Sprite s, byte threshold) {
-        this(s);
-        this.threshold = threshold;
-    }
-
-    /**
-     * Creates a new animation
-     *
-     * @param s          Sprite to animate
-     * @param threshold  The animation's {@link #threshold}
-     * @param startIndex The index to begin at within {@link Sprite#frames}
-     */
-    public Animation(Sprite s, byte threshold, int startIndex) {
-        this(s, threshold);
-        this.startIndex = startIndex;
+    public Animation(Sprite s, int frameDelay) {
+        sprite = s;
+        frameIndex = 0;
+        startIndex = 0;
         startFrame = sprite.frames.get(startIndex);
         frame = startFrame;
+        this.frameDelay = frameDelay;
+
+        clock = new AnimationClock(this);
     }
 
     /**
@@ -110,7 +85,7 @@ public class Animation {
         return getFrame();
     }
 
-    public void setFrame(int index) {
+    public synchronized void setFrame(int index) {
         if (index >= sprite.frames.size()) {
             Debug.warning("Tried to set the frame of an animation to an index that is out-of-bounds");
             return;
@@ -119,38 +94,26 @@ public class Animation {
         frame = getFrame();
     }
 
-    /**
-     * Resume the animation. Does nothing if already running
-     * <p>
-     * Sets {@link #isStopped} to <code>false</code>
-     */
-    public void resume() {
-        isStopped = false;
+    public void increment() {
+        frame = nextFrame();
     }
 
-    /**
-     * Pauses the animation, by setting {@link #isStopped} to <code>true</code> (does nothing if already paused)
-     */
-    public void pause() {
-        isStopped = true;
+    public void start() {
+        stopThread();
+        clock = new AnimationClock(this);
+        clock.start();
     }
 
-    /**
-     * Stops the animation, and resets the current frame to the starting frame (does nothing if already stopped)
-     */
     public void stop() {
-        pause();
-        setStopFrame = false;
+        stopThread();
+        frame = startFrame;
     }
 
-    /**
-     * Restarts the animation, by setting {@link #frameIndex} to {@link #startIndex}, {@link #delay} to <code>0</code>,
-     * and {@link #isStopped} to <code>false</code>
-     */
-    public void restart() {
-        frameIndex = startIndex;
-        delay = 0;
-        isStopped = false;
+    private void stopThread() {
+        if (clock != null) {
+            // kill it
+            clock.isRunning = false;
+        }
     }
 
     /**
@@ -158,29 +121,6 @@ public class Animation {
      */
     public void render(Graphics graphics, int x, int y) {
         graphics.drawImage(frame, x, y, null);
-    }
-
-    /**
-     * Progresses the animation in accordance with {@link #threshold}, assuming 60 calls per second
-     */
-    public void tick() {
-        if (!isStopped) {
-            // animation isn't stopped, so progress it
-            if (delay < threshold) {
-                // we haven't reached the threshold yet, so increment delay until it's reached
-                delay++;
-            } else {
-                // reached the threshold, reset delay
-                delay = 0;
-                // progress to next frame
-                frame = nextFrame();
-            }
-        } else if (!setStopFrame) {
-            // set current frame to the "start" frame
-            frame = startFrame;
-            // prevent from being set again until the animation finishes again
-            setStopFrame = true;
-        }
     }
 
 }

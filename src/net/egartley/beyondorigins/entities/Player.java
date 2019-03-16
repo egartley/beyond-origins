@@ -23,7 +23,7 @@ public class Player extends AnimatedEntity implements Character {
 
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
-    private final byte ANIMATION_THRESHOLD = 7;
+    private final int ANIMATION_THRESHOLD = 135;
 
     public EntityBoundary boundary;
     EntityBoundary headBoundary;
@@ -162,9 +162,9 @@ public class Player extends AnimatedEntity implements Character {
     }
 
     private void move(boolean up, boolean down, boolean left, boolean right) {
-        if (animation.isStopped) {
+        if (!animation.clock.isRunning) {
             // animation was stopped, so restart it because we're moving
-            animation.restart();
+            animation.start();
             animation.setFrame(1);
         }
 

@@ -21,7 +21,7 @@ public class Dummy extends AnimatedEntity implements Character {
 
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
-    private final byte ANIMATION_THRESHOLD = 9;
+    private final int ANIMATION_THRESHOLD = 150;
 
     private short walktime = 0;
     private byte dir = RIGHT;
@@ -130,9 +130,9 @@ public class Dummy extends AnimatedEntity implements Character {
 
     @Override
     protected void onMove(byte direction) {
-        if (animation.isStopped) {
+        if (!animation.clock.isRunning) {
             // animation was stopped, so restart it because we're moving
-            animation.resume();
+            animation.start();
         }
 
         if (direction == RIGHT)

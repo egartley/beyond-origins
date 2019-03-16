@@ -42,12 +42,16 @@ public class EntityExpression extends AnimatedEntity {
     }
 
     public static void init() {
-        template_confusion = new Animation(new SpriteSheet(ImageStore.get(ImageStore.EXPRESSION_CONFUSION), 18, 18, 1, 4).sprites.get(0), (byte) 25);
+        template_confusion = new Animation(new SpriteSheet(ImageStore.get(ImageStore.EXPRESSION_CONFUSION), 18, 18, 1, 4).sprites.get(0), 417);
     }
 
     public void tick() {
         if (!isVisible) {
             return;
+        }
+        if (!animation.clock.isRunning) {
+            // animation was stopped, so restart it because we're moving
+            animation.start();
         }
         x = Calculate.getCenter((int) target.x, target.sprite.width) - (sprite.width / 2.0);
         y = target.y - 24;
