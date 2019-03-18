@@ -1,5 +1,5 @@
 package net.egartley.beyondorigins.interfaces;
 
-public interface Animatable {
+public interface Character {
 
 }

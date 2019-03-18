@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins.definitions.dialogue;
 
 import net.egartley.beyondorigins.ingame.CharacterDialogue;
-import net.egartley.beyondorigins.objects.Character;
+import net.egartley.beyondorigins.interfaces.Character;
 
 public class DummyDialogue extends CharacterDialogue {
 

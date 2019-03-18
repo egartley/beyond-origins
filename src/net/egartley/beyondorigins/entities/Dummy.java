@@ -63,7 +63,7 @@ public class Dummy extends AnimatedEntity implements Collidable {
             if (!e.isTraversable && e.isSectorSpecific) {
                 EntityEntityCollision baseCollision = new EntityEntityCollision(boundaries.get(0), e.defaultBoundary) {
                     public void onCollide(EntityEntityCollisionEvent event) {
-                        onCollisionWithNonTraversableEntity(event);
+                        Util.onCollisionWithNonTraversableEntity(event, Entities.DUMMY);
                     }
 
                     public void onCollisionEnd(EntityEntityCollisionEvent event) {
@@ -104,7 +104,7 @@ public class Dummy extends AnimatedEntity implements Collidable {
         isMovingLeftwards = false;
         isMovingRightwards = false;
         super.tick();
-        collisions.forEach(EntityEntityCollision::tick);
+        Collidable.tick();
 
         walktime++;
         if (walktime >= 90) {

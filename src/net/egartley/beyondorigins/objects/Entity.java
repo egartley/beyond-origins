@@ -375,38 +375,6 @@ public abstract class Entity {
     }
 
     /**
-     * Disallows movement opposite of the side of the collision. For
-     * example, if the player collided with a tree on its top side,
-     * downward movement would no longer be allowed until that collision
-     * is no longer active
-     */
-    protected void onCollisionWithNonTraversableEntity(EntityEntityCollisionEvent event) {
-        lastCollisionEvent = event;
-        switch (event.collidedSide) {
-            case EntityEntityCollisionEvent.RIGHT_SIDE:
-                // collided on the right, so disable leftwards movement
-                isAllowedToMoveLeftwards = false;
-                break;
-            case EntityEntityCollisionEvent.LEFT_SIDE:
-                // collided on the left, so disable rightwards movement
-                isAllowedToMoveRightwards = false;
-                break;
-            case EntityEntityCollisionEvent.TOP_SIDE:
-                // collided at the top, so disable downwards movement
-                isAllowedToMoveDownwards = false;
-                break;
-            case EntityEntityCollisionEvent.BOTTOM_SIDE:
-                // collided at the bottom, so disable upwards movement
-                isAllowedToMoveUpwards = false;
-                break;
-            default:
-                break;
-        }
-    }
-
-
-
-    /**
      * Returns whether or not the entity is to the "right" of the other
      * entity
      */

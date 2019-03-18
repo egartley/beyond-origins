@@ -1,6 +1,6 @@
 package net.egartley.beyondorigins.ingame;
 
-import net.egartley.beyondorigins.objects.Character;
+import net.egartley.beyondorigins.interfaces.Character;
 
 import java.util.ArrayList;
 

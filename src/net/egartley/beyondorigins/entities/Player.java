@@ -5,6 +5,7 @@ import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.graphics.Animation;
 import net.egartley.beyondorigins.graphics.Sprite;
 import net.egartley.beyondorigins.input.Keyboard;
+import net.egartley.beyondorigins.interfaces.Character;
 import net.egartley.beyondorigins.interfaces.Collidable;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
@@ -12,7 +13,6 @@ import net.egartley.beyondorigins.logic.interaction.BoundaryOffset;
 import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.objects.AnimatedEntity;
-import net.egartley.beyondorigins.objects.Character;
 import net.egartley.beyondorigins.objects.Entity;
 import net.egartley.beyondorigins.objects.MapSector;
 
@@ -65,7 +65,7 @@ public class Player extends AnimatedEntity implements Character, Collidable {
             if (!e.isTraversable && e.isSectorSpecific) {
                 EntityEntityCollision baseCollision = new EntityEntityCollision(headBoundary, e.defaultBoundary) {
                     public void onCollide(EntityEntityCollisionEvent event) {
-                        onCollisionWithNonTraversableEntity(event);
+                        Util.onCollisionWithNonTraversableEntity(event, Entities.PLAYER);
                     }
 
                     public void onCollisionEnd(EntityEntityCollisionEvent event) {
@@ -161,7 +161,7 @@ public class Player extends AnimatedEntity implements Character, Collidable {
         }
 
         super.tick();
-        collisions.forEach(EntityEntityCollision::tick);
+        Collidable.tick();
     }
 
     public void render(Graphics graphics) {

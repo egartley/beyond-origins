@@ -125,6 +125,36 @@ public class Util {
     }
 
     /**
+     * Disallows movement opposite of the side of the collision. For
+     * example, if the player collided with a tree on its top side,
+     * downward movement would no longer be allowed until that collision
+     * is no longer active
+     */
+    public static void onCollisionWithNonTraversableEntity(EntityEntityCollisionEvent event, Entity e) {
+        e.lastCollisionEvent = event;
+        switch (event.collidedSide) {
+            case EntityEntityCollisionEvent.RIGHT_SIDE:
+                // collided on the right, so disable leftwards movement
+                e.isAllowedToMoveLeftwards = false;
+                break;
+            case EntityEntityCollisionEvent.LEFT_SIDE:
+                // collided on the left, so disable rightwards movement
+                e.isAllowedToMoveRightwards = false;
+                break;
+            case EntityEntityCollisionEvent.TOP_SIDE:
+                // collided at the top, so disable downwards movement
+                e.isAllowedToMoveDownwards = false;
+                break;
+            case EntityEntityCollisionEvent.BOTTOM_SIDE:
+                // collided at the bottom, so disable upwards movement
+                e.isAllowedToMoveUpwards = false;
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
      * Returns whether or not the specified point is "within bounds," or overlapping, the specified area
      */
     public static boolean isWithinBounds(int pointX, int pointY, int x, int y, int width, int height) {
