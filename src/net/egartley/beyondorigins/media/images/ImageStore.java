@@ -23,6 +23,9 @@ public class ImageStore {
     public final static byte DIALOGUE_PANEL = 7;
     public final static byte INVENTORY = 8;
 
+    /**
+     * Returns the specified image
+     */
     public static BufferedImage get(byte image) {
         String path = "resources/images/";
         String mapTilePath = path + "map-tiles/";
@@ -52,6 +55,9 @@ public class ImageStore {
         }
     }
 
+    /**
+     * Returns an image from the specified path
+     */
     public static BufferedImage get(String path) {
         try {
             return ImageIO.read(new File(path));

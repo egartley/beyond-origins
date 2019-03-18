@@ -1,5 +1,6 @@
 package net.egartley.beyondorigins;
 
+import net.egartley.beyondorigins.interfaces.Collidable;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
@@ -14,8 +15,9 @@ public class Util {
 
     // https://stackoverflow.com/a/13605411
     private static BufferedImage toBufferedImage(Image img) {
-        if (img instanceof BufferedImage)
+        if (img instanceof BufferedImage) {
             return (BufferedImage) img;
+        }
         BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
         Graphics2D bGr = bimage.createGraphics();
         bGr.drawImage(img, 0, 0, null);
@@ -25,11 +27,6 @@ public class Util {
 
     /**
      * Returns a re-sized image of the original, at the given width and height
-     *
-     * @param image  The original image to resize (will not be altered)
-     * @param width  New width to resize to
-     * @param height New height to resize to
-     * @return {@link #resize(BufferedImage, int, int, int) resize(image, width, height, Image.SCALE_DEFAULT)}
      */
     static BufferedImage resize(BufferedImage image, int width, int height) {
         return resize(image, width, height, Image.SCALE_DEFAULT);
@@ -37,12 +34,6 @@ public class Util {
 
     /**
      * Returns a re-sized image of the original, at the given width and height
-     *
-     * @param image  The original image to resize (will not be altered)
-     * @param width  New width to resize to
-     * @param height New height to resize to
-     * @param hints  Scaling algorithm to use (see {@link Image})
-     * @return {@link #toBufferedImage(Image) toBufferedImage(image.getScaledInstance(width, height, hints))}
      */
     static BufferedImage resize(BufferedImage image, int width, int height, int hints) {
         return toBufferedImage(image.getScaledInstance(width, height, hints));
@@ -50,9 +41,6 @@ public class Util {
 
     /**
      * Returns a random integer between the supplied maximum and minimum values
-     *
-     * @param maximum The maximum value
-     * @param minimum The minimum value
      */
     private static int randomInt(int maximum, int minimum) {
         return ThreadLocalRandom.current().nextInt(minimum, maximum);
@@ -60,25 +48,17 @@ public class Util {
 
     /**
      * Returns a random integer between the supplied maximum and minimum values
-     *
-     * @param maximum   The maximum value
-     * @param minimum   The minimum value
-     * @param inclusive Whether or not to include the maximum as a possible value
-     * @return {@link #randomInt(int, int) randomInt(maximum + 1, minimum)}
      */
     public static int randomInt(int maximum, int minimum, boolean inclusive) {
-        if (inclusive)
+        if (inclusive) {
             return randomInt(maximum + 1, minimum);
-        else
+        } else {
             return randomInt(maximum, minimum);
+        }
     }
 
     /**
      * Returns generated entity-to-entity collisions based on the given event, entity and boundary
-     *
-     * @param baseEvent    The {@link EntityEntityCollision} in which to base all of the returned ones on
-     * @param entity       The {@link Entity} in which to generate collisions around each of its boundaries
-     * @param baseBoundary The other entity's {@link EntityBoundary}
      */
     public static ArrayList<EntityEntityCollision> getAllBoundaryCollisions(EntityEntityCollision baseEvent, Entity
             entity, EntityBoundary baseBoundary) {
@@ -88,7 +68,6 @@ public class Util {
                 public void onCollide(EntityEntityCollisionEvent event) {
                     baseEvent.onCollide(event);
                 }
-
                 public void onCollisionEnd(EntityEntityCollisionEvent event) {
                     baseEvent.onCollisionEnd(event);
                 }
@@ -101,7 +80,7 @@ public class Util {
 
     public static void fixCrossSectorCollisions(ArrayList<Entity> entities) {
         for (Entity e : entities) {
-            for (EntityEntityCollision c : e.collisions) {
+            for (EntityEntityCollision c : ((Collidable) e).collisions) {
                 if (c.isCollided) {
                     for (EntityBoundary eb : c.boundaries) {
                         if (!eb.parent.isSectorSpecific) {
@@ -115,8 +94,41 @@ public class Util {
         }
     }
 
-    public static boolean isWithinBounds(int cx, int cy, int x, int y, int width, int height) {
-        return cx >= x && cx <= x + width && cy >= y && cy <= y + height;
+    /**
+     * Annuls, or "cancels," the specified entity-entity collision event on the specified entity
+     */
+    public static void annulCollisionEvent(EntityEntityCollisionEvent event, Entity e) {
+        // check for other movement restrictions
+        for (EntityEntityCollision c : ((Collidable) e).concurrentCollisions) {
+            if (c.lastEvent.collidedSide == event.collidedSide && c.lastEvent.invoker != event.invoker) {
+                // there is another collision that has the same movement
+                // restriction, so don't annul it
+                return;
+            }
+        }
+        switch (event.collidedSide) {
+            case EntityEntityCollisionEvent.TOP_SIDE:
+                e.isAllowedToMoveDownwards = true;
+                break;
+            case EntityEntityCollisionEvent.BOTTOM_SIDE:
+                e.isAllowedToMoveUpwards = true;
+                break;
+            case EntityEntityCollisionEvent.LEFT_SIDE:
+                e.isAllowedToMoveRightwards = true;
+                break;
+            case EntityEntityCollisionEvent.RIGHT_SIDE:
+                e.isAllowedToMoveLeftwards = true;
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Returns whether or not the specified point is "within bounds," or overlapping, the specified area
+     */
+    public static boolean isWithinBounds(int pointX, int pointY, int x, int y, int width, int height) {
+        return pointX >= x && pointX <= x + width && pointY >= y && pointY <= y + height;
     }
 
 }

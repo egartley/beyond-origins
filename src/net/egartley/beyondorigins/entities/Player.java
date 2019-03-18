@@ -5,6 +5,7 @@ import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.graphics.Animation;
 import net.egartley.beyondorigins.graphics.Sprite;
 import net.egartley.beyondorigins.input.Keyboard;
+import net.egartley.beyondorigins.interfaces.Collidable;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.logic.interaction.BoundaryOffset;
@@ -19,7 +20,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-public class Player extends AnimatedEntity implements Character {
+public class Player extends AnimatedEntity implements Character, Collidable {
 
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
@@ -78,7 +79,7 @@ public class Player extends AnimatedEntity implements Character {
                         if (!Entities.PLAYER.isCollided || noMovementRestrictions) {
                             allowAllMovement();
                         } else {
-                            annulCollisionEvent(event);
+                            Util.annulCollisionEvent(event, Entities.PLAYER);
                         }
                     }
                 };
@@ -139,6 +140,11 @@ public class Player extends AnimatedEntity implements Character {
     }
 
     @Override
+    public void setCollisions() {
+
+    }
+
+    @Override
     public void tick() {
         // get keyboard input (typical WASD)
         boolean up = Keyboard.isKeyPressed(KeyEvent.VK_W);
@@ -155,6 +161,7 @@ public class Player extends AnimatedEntity implements Character {
         }
 
         super.tick();
+        collisions.forEach(EntityEntityCollision::tick);
     }
 
     public void render(Graphics graphics) {
@@ -193,11 +200,6 @@ public class Player extends AnimatedEntity implements Character {
             }
             switchAnimation(RIGHT_ANIMATION);
         }
-    }
-
-    @Override
-    protected void setCollisions() {
-        // see onSectorEnter and onSectorLeave
     }
 
 }

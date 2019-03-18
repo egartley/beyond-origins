@@ -36,16 +36,6 @@ public abstract class Entity {
      */
     protected ArrayList<Sprite> sprites;
     /**
-     * The entity's collisions
-     */
-    public ArrayList<EntityEntityCollision> collisions;
-    /**
-     * The entity's collisions, but only those that are currently collided
-     *
-     * @see EntityEntityCollision#isCollided
-     */
-    public ArrayList<EntityEntityCollision> concurrentCollisions;
-    /**
      * Collection of the entity's boundaries
      */
     public ArrayList<EntityBoundary> boundaries;
@@ -135,19 +125,19 @@ public abstract class Entity {
     /**
      * Whether or not the entity is allowed to move upwards
      */
-    protected boolean isAllowedToMoveUpwards = true;
+    public boolean isAllowedToMoveUpwards = true;
     /**
      * Whether or not the entity is allowed to move downwards
      */
-    protected boolean isAllowedToMoveDownwards = true;
+    public boolean isAllowedToMoveDownwards = true;
     /**
      * Whether or not the entity is allowed to move leftwards
      */
-    protected boolean isAllowedToMoveLeftwards = true;
+    public boolean isAllowedToMoveLeftwards = true;
     /**
      * Whether or not the entity is allowed to move rightwards
      */
-    protected boolean isAllowedToMoveRightwards = true;
+    public boolean isAllowedToMoveRightwards = true;
     /**
      * Whether or not the entity has two different "layers" that are
      * rendered before and after the player
@@ -201,8 +191,6 @@ public abstract class Entity {
         this.id = id;
         speed = 1.0;
         boundaries = new ArrayList<>();
-        collisions = new ArrayList<>();
-        concurrentCollisions = new ArrayList<>();
         EntityStore.register(this);
     }
 
@@ -288,14 +276,12 @@ public abstract class Entity {
     }
 
     /**
-     * Calls {@link EntityBoundary#tick()} and {@link EntityEntityCollision#tick()}
+     * Calls {@link EntityBoundary#tick()}
      *
      * @see #boundaries
-     * @see #collisions
      */
     public void tick() {
         boundaries.forEach(EntityBoundary::tick);
-        collisions.forEach(EntityEntityCollision::tick);
     }
 
     /**
@@ -418,36 +404,7 @@ public abstract class Entity {
         }
     }
 
-    /**
-     * Cancels any movement restrictions imposed by the provided {@link net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent EntityEntityCollisionEvent}
-     */
-    protected void annulCollisionEvent(EntityEntityCollisionEvent event) {
-        // check for other movement restrictions
-        for (EntityEntityCollision c : concurrentCollisions) {
-            if (c.lastEvent.collidedSide == event.collidedSide && c.lastEvent.invoker != event.invoker) {
-                // there is another collision that has the same movement
-                // restriction, so don't annul it
-                return;
-            }
-        }
 
-        switch (event.collidedSide) {
-            case EntityEntityCollisionEvent.TOP_SIDE:
-                isAllowedToMoveDownwards = true;
-                break;
-            case EntityEntityCollisionEvent.BOTTOM_SIDE:
-                isAllowedToMoveUpwards = true;
-                break;
-            case EntityEntityCollisionEvent.LEFT_SIDE:
-                isAllowedToMoveRightwards = true;
-                break;
-            case EntityEntityCollisionEvent.RIGHT_SIDE:
-                isAllowedToMoveLeftwards = true;
-                break;
-            default:
-                break;
-        }
-    }
 
     /**
      * Returns whether or not the entity is to the "right" of the other
@@ -485,13 +442,6 @@ public abstract class Entity {
      * @see #boundaries
      */
     protected abstract void setBoundaries();
-
-    /**
-     * Sets the entity's collisions
-     *
-     * @see #collisions
-     */
-    protected abstract void setCollisions();
 
     /**
      * Sets the current sprite

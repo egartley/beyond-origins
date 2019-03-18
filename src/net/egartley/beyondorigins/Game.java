@@ -7,7 +7,6 @@ import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.Player;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.gamestates.MainMenuState;
-import net.egartley.beyondorigins.graphics.EntityExpression;
 import net.egartley.beyondorigins.graphics.SpriteSheet;
 import net.egartley.beyondorigins.input.Keyboard;
 import net.egartley.beyondorigins.input.Mouse;
@@ -101,11 +100,6 @@ public class Game extends Canvas implements Runnable {
     }
 
     private void initializeEntities() {
-
-        // ************ EXPRESSIONS BEGIN *****
-        EntityExpression.init();
-        // ************ EXPRESSIONS END *******
-
         // this up-scales images to a factor of 2 (each pixel in the source image will be rendered as 2x2 pixel)
         byte scale = 2;
 

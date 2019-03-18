@@ -5,16 +5,16 @@ import net.egartley.beyondorigins.graphics.Animation;
 public class AnimationClock implements Runnable {
 
     public boolean isRunning;
+    public Thread thread;
 
     int frameDelay;
     Animation animation;
-    Thread thread;
 
     public AnimationClock(Animation animation) {
         this.animation = animation;
         this.frameDelay = animation.frameDelay;
-
         thread = new Thread(this, "AnimationClock-" + animation.hashCode());
+        ThreadBroker.register(thread);
     }
 
     public void start() {
@@ -30,9 +30,9 @@ public class AnimationClock implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            // System.out.println(thread.getName() + " switching frame");
             animation.increment();
         }
+        ThreadBroker.deregister(thread);
     }
 
 }

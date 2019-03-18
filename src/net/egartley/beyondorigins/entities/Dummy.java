@@ -1,23 +1,24 @@
 package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Debug;
+import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.definitions.dialogue.DummyDialogue;
 import net.egartley.beyondorigins.graphics.Animation;
 import net.egartley.beyondorigins.graphics.EntityExpression;
 import net.egartley.beyondorigins.graphics.Sprite;
+import net.egartley.beyondorigins.interfaces.Collidable;
 import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.objects.AnimatedEntity;
-import net.egartley.beyondorigins.objects.Character;
 import net.egartley.beyondorigins.objects.Entity;
 import net.egartley.beyondorigins.objects.MapSector;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Dummy extends AnimatedEntity implements Character {
+public class Dummy extends AnimatedEntity implements Collidable {
 
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
@@ -69,7 +70,7 @@ public class Dummy extends AnimatedEntity implements Character {
                         if (!Entities.DUMMY.isCollided) {
                             allowAllMovement();
                         } else {
-                            annulCollisionEvent(event);
+                            Util.annulCollisionEvent(event, Entities.DUMMY);
                         }
                     }
                 };
@@ -103,6 +104,7 @@ public class Dummy extends AnimatedEntity implements Character {
         isMovingLeftwards = false;
         isMovingRightwards = false;
         super.tick();
+        collisions.forEach(EntityEntityCollision::tick);
 
         walktime++;
         if (walktime >= 90) {
@@ -156,7 +158,7 @@ public class Dummy extends AnimatedEntity implements Character {
     }
 
     @Override
-    protected void setCollisions() {
+    public void setCollisions() {
         collisions.clear();
         collisions.add(new EntityEntityCollision(defaultBoundary, Entities.PLAYER.defaultBoundary) {
             public void onCollide(EntityEntityCollisionEvent event) {

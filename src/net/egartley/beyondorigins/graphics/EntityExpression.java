@@ -22,7 +22,7 @@ public class EntityExpression extends AnimatedEntity {
     public short type;
 
     /**
-     *
+     * The entity that the expression is rendered above
      */
     public Entity target;
 
@@ -30,19 +30,18 @@ public class EntityExpression extends AnimatedEntity {
         super("Expression");
         this.type = type;
         this.target = target;
-        switch (type) {
-            case CONFUSION:
-                animations.add(template_confusion);
-                break;
-            default:
-                break;
-        }
+        animations.add(getTemplateAnimation(type));
         animation = animations.get(0);
         sprite = animation.sprite;
     }
 
-    public static void init() {
-        template_confusion = new Animation(new SpriteSheet(ImageStore.get(ImageStore.EXPRESSION_CONFUSION), 18, 18, 1, 4).sprites.get(0), 417);
+    private Animation getTemplateAnimation(short type) {
+        switch(type) {
+            case CONFUSION:
+                return new Animation(new SpriteSheet(ImageStore.get(ImageStore.EXPRESSION_CONFUSION), 18, 18, 1, 4).sprites.get(0), 417);
+            default:
+                return null;
+        }
     }
 
     public void tick() {
@@ -50,7 +49,6 @@ public class EntityExpression extends AnimatedEntity {
             return;
         }
         if (!animation.clock.isRunning) {
-            // animation was stopped, so restart it because we're moving
             animation.start();
         }
         x = Calculate.getCenter((int) target.x, target.sprite.width) - (sprite.width / 2.0);
@@ -75,8 +73,4 @@ public class EntityExpression extends AnimatedEntity {
 
     }
 
-    @Override
-    protected void setCollisions() {
-
-    }
 }

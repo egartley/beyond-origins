@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.graphics.Sprite;
+import net.egartley.beyondorigins.interfaces.Collidable;
 import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.objects.StaticEntity;
@@ -8,7 +9,7 @@ import net.egartley.beyondorigins.objects.StaticEntity;
 /**
  * Rock that the player cannot walk over, but can walk behind
  */
-public class DefaultRock extends StaticEntity {
+public class DefaultRock extends StaticEntity implements Collidable {
 
     public DefaultRock(Sprite sprite, double x, double y) {
         super("Rock", sprite);
@@ -39,7 +40,7 @@ public class DefaultRock extends StaticEntity {
     }
 
     @Override
-    protected void setCollisions() {
+    public void setCollisions() {
         /*EntityEntityCollision withPlayer = new EntityEntityCollision(Entities.PLAYER.headBoundary, boundaries.get(0)) {
             public void onCollide(EntityEntityCollisionEvent event) {
                 onPlayerCollision(event);
