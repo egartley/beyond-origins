@@ -1,0 +1,74 @@
+package net.egartley.gamelib.graphics;
+
+import net.egartley.beyondorigins.media.images.ImageStore;
+import net.egartley.gamelib.logic.math.Calculate;
+import net.egartley.gamelib.objects.AnimatedEntity;
+import net.egartley.gamelib.objects.Entity;
+
+import java.awt.*;
+
+public class EntityExpression extends AnimatedEntity {
+
+    public static final short INTEREST = 0, DISGUST = 1, HAPPINESS = 2, ANGER = 3, SADDNESS = 4, CONFUSION = 5, THINKING = 6, SURPRISE = 7;
+    public static final short ANIMATIONSPEED_NORMAL = 0, ANIMATIONSPEED_FAST = 1, ANIMATIONSPEED_SLOW = 3;
+
+    /**
+     * Whether or not the expression is currently being shown
+     */
+    public boolean isVisible = true;
+
+    public short type;
+
+    /**
+     * The entity that the expression is rendered above
+     */
+    public Entity target;
+
+    public EntityExpression(short type, Entity target) {
+        super("Expression");
+        this.type = type;
+        this.target = target;
+        animations.add(getTemplateAnimation(type));
+        animation = animations.get(0);
+        sprite = animation.sprite;
+    }
+
+    private Animation getTemplateAnimation(short type) {
+        switch(type) {
+            case CONFUSION:
+                return new Animation(new SpriteSheet(ImageStore.get(ImageStore.EXPRESSION_CONFUSION), 18, 18, 1, 4).sprites.get(0), 417);
+            default:
+                return null;
+        }
+    }
+
+    public void tick() {
+        if (!isVisible) {
+            return;
+        }
+        if (!animation.clock.isRunning) {
+            animation.start();
+        }
+        x = Calculate.getCenter((int) target.x, target.sprite.width) - (sprite.width / 2.0);
+        y = target.y - 24;
+        super.tick();
+    }
+
+    public void render(Graphics graphics) {
+        if (!isVisible) {
+            return;
+        }
+        super.render(graphics);
+    }
+
+    @Override
+    public void setAnimations() {
+
+    }
+
+    @Override
+    protected void setBoundaries() {
+
+    }
+
+}

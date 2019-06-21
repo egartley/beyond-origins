@@ -1,10 +1,10 @@
 package net.egartley.beyondorigins;
 
-import net.egartley.beyondorigins.interfaces.Collidable;
-import net.egartley.beyondorigins.logic.collision.EntityEntityCollision;
-import net.egartley.beyondorigins.logic.events.EntityEntityCollisionEvent;
-import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
-import net.egartley.beyondorigins.objects.Entity;
+import net.egartley.gamelib.interfaces.Collidable;
+import net.egartley.gamelib.logic.collision.EntityEntityCollision;
+import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
+import net.egartley.gamelib.logic.interaction.EntityBoundary;
+import net.egartley.gamelib.objects.Entity;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -14,15 +14,15 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Util {
 
     // https://stackoverflow.com/a/13605411
-    private static BufferedImage toBufferedImage(Image img) {
-        if (img instanceof BufferedImage) {
-            return (BufferedImage) img;
+    private static BufferedImage toBufferedImage(Image image) {
+        if (image instanceof BufferedImage) {
+            return (BufferedImage) image;
         }
-        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D bGr = bimage.createGraphics();
-        bGr.drawImage(img, 0, 0, null);
+        BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D bGr = bufferedImage.createGraphics();
+        bGr.drawImage(image, 0, 0, null);
         bGr.dispose();
-        return bimage;
+        return bufferedImage;
     }
 
     /**
@@ -95,7 +95,7 @@ public class Util {
     }
 
     /**
-     * Annuls, or "cancels," the specified entity-entity collision event on the specified entity
+     * Annuls, or "cancels," the movement restrictions specified by entity-entity collision event on the entity
      */
     public static void annulCollisionEvent(EntityEntityCollisionEvent event, Entity e) {
         // check for other movement restrictions

@@ -2,8 +2,8 @@ package net.egartley.beyondorigins;
 
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.EntityStore;
-import net.egartley.beyondorigins.input.Mouse;
 import net.egartley.beyondorigins.maps.debug.DebugMap;
+import net.egartley.gamelib.input.Mouse;
 
 import java.awt.*;
 

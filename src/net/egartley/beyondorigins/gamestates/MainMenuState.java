@@ -1,9 +1,8 @@
 package net.egartley.beyondorigins.gamestates;
 
-import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.objects.GameState;
 import net.egartley.beyondorigins.ui.MenuButton;
+import net.egartley.gamelib.objects.GameState;
 
 import java.awt.*;
 import java.util.ArrayList;

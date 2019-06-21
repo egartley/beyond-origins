@@ -3,11 +3,11 @@ package net.egartley.beyondorigins.maps.debug.sectors;
 import net.egartley.beyondorigins.entities.DefaultRock;
 import net.egartley.beyondorigins.entities.DefaultTree;
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.graphics.Sprite;
-import net.egartley.beyondorigins.objects.Entity;
-import net.egartley.beyondorigins.objects.Map;
-import net.egartley.beyondorigins.objects.MapSector;
-import net.egartley.beyondorigins.objects.MapSectorDefinition;
+import net.egartley.gamelib.graphics.Sprite;
+import net.egartley.gamelib.objects.Entity;
+import net.egartley.gamelib.objects.Map;
+import net.egartley.gamelib.objects.MapSector;
+import net.egartley.gamelib.objects.MapSectorDefinition;
 
 import java.awt.*;
 

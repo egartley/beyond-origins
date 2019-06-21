@@ -2,9 +2,9 @@ package net.egartley.beyondorigins.definitions.maps.debug;
 
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.maps.TileBuilder;
-import net.egartley.beyondorigins.objects.MapSector;
-import net.egartley.beyondorigins.objects.MapSectorDefinition;
-import net.egartley.beyondorigins.objects.MapTile;
+import net.egartley.gamelib.objects.MapSector;
+import net.egartley.gamelib.objects.MapSectorDefinition;
+import net.egartley.gamelib.objects.MapTile;
 
 import java.util.ArrayList;
 

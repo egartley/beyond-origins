@@ -1,6 +1,6 @@
 package net.egartley.beyondorigins.maps;
 
-import net.egartley.beyondorigins.objects.MapTile;
+import net.egartley.gamelib.objects.MapTile;
 
 import java.util.ArrayList;
 

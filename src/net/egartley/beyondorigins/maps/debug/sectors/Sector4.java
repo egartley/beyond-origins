@@ -1,9 +1,9 @@
 package net.egartley.beyondorigins.maps.debug.sectors;
 
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.objects.Map;
-import net.egartley.beyondorigins.objects.MapSector;
-import net.egartley.beyondorigins.objects.MapSectorDefinition;
+import net.egartley.gamelib.objects.Map;
+import net.egartley.gamelib.objects.MapSector;
+import net.egartley.gamelib.objects.MapSectorDefinition;
 
 import java.awt.*;
 

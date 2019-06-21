@@ -2,8 +2,8 @@ package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.graphics.Sprite;
-import net.egartley.beyondorigins.input.Mouse;
+import net.egartley.gamelib.graphics.Sprite;
+import net.egartley.gamelib.input.Mouse;
 
 import java.awt.*;
 

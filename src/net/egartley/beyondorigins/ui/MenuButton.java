@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins.ui;
 
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.input.Mouse;
+import net.egartley.gamelib.input.Mouse;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;

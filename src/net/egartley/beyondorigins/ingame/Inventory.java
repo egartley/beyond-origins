@@ -1,8 +1,8 @@
 package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.graphics.Sprite;
-import net.egartley.beyondorigins.objects.StaticEntity;
+import net.egartley.gamelib.graphics.Sprite;
+import net.egartley.gamelib.objects.StaticEntity;
 
 import java.awt.*;
 import java.util.ArrayList;

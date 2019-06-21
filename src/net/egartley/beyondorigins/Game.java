@@ -7,12 +7,12 @@ import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.Player;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.gamestates.MainMenuState;
-import net.egartley.beyondorigins.graphics.SpriteSheet;
-import net.egartley.beyondorigins.input.Keyboard;
-import net.egartley.beyondorigins.input.Mouse;
 import net.egartley.beyondorigins.media.images.ImageStore;
-import net.egartley.beyondorigins.objects.GameState;
-import net.egartley.beyondorigins.objects.MapTile;
+import net.egartley.gamelib.graphics.SpriteSheet;
+import net.egartley.gamelib.input.Keyboard;
+import net.egartley.gamelib.input.Mouse;
+import net.egartley.gamelib.objects.GameState;
+import net.egartley.gamelib.objects.MapTile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -173,10 +173,8 @@ public class Game extends Canvas implements Runnable {
                 tick();
                 render();
                 delta -= 1.0D;
-                // frames += 1;
                 if (System.currentTimeMillis() - timer > 1000L) {
                     timer += 1000L;
-                    // frames = 0;
                 }
             }
         }

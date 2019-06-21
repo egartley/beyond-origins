@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Debug;
-import net.egartley.beyondorigins.objects.Entity;
+import net.egartley.gamelib.objects.Entity;
 
 import java.util.ArrayList;
 

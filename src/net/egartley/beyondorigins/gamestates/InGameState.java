@@ -6,8 +6,8 @@ import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.ingame.DialoguePanel;
 import net.egartley.beyondorigins.ingame.Inventory;
 import net.egartley.beyondorigins.maps.debug.DebugMap;
-import net.egartley.beyondorigins.objects.GameState;
-import net.egartley.beyondorigins.objects.Map;
+import net.egartley.gamelib.objects.GameState;
+import net.egartley.gamelib.objects.Map;
 
 import java.awt.*;
 

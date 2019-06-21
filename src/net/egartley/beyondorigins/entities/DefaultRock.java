@@ -1,10 +1,10 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.beyondorigins.graphics.Sprite;
-import net.egartley.beyondorigins.interfaces.Collidable;
-import net.egartley.beyondorigins.logic.interaction.BoundaryPadding;
-import net.egartley.beyondorigins.logic.interaction.EntityBoundary;
-import net.egartley.beyondorigins.objects.StaticEntity;
+import net.egartley.gamelib.graphics.Sprite;
+import net.egartley.gamelib.interfaces.Collidable;
+import net.egartley.gamelib.logic.interaction.BoundaryPadding;
+import net.egartley.gamelib.logic.interaction.EntityBoundary;
+import net.egartley.gamelib.objects.StaticEntity;
 
 /**
  * Rock that the player cannot walk over, but can walk behind
