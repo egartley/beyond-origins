@@ -19,6 +19,9 @@ public class ImageStore {
     public final static byte ROCK_DEFAULT = 5;
 
     public final static byte EXPRESSION_CONFUSION = 6;
+    public final static byte EXPRESSION_CONCERN = 99;
+    public final static byte EXPRESSION_ANGER = 98;
+    public final static byte EXPRESSION_HEART = 97;
 
     public final static byte DIALOGUE_PANEL = 7;
     public final static byte INVENTORY = 8;
@@ -46,6 +49,12 @@ public class ImageStore {
                 return get(entityPath + "rock-default.png");
             case EXPRESSION_CONFUSION:
                 return get(expressionPath + "confusion.png");
+            case EXPRESSION_CONCERN:
+                return get(expressionPath + "concern.png");
+            case EXPRESSION_ANGER:
+                return get(expressionPath + "anger.png");
+            case EXPRESSION_HEART:
+                return get(expressionPath + "heart.png");
             case DIALOGUE_PANEL:
                 return get(entityPath + "dialogue-panel.png");
             case INVENTORY:

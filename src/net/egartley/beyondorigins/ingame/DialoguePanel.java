@@ -26,7 +26,7 @@ public class DialoguePanel extends StaticEntity {
     public DialoguePanel(Sprite sprite) {
         super("DialogPanel", sprite);
         x = (Game.WINDOW_WIDTH / 2.0) - (sprite.width / 2.0);
-        y = Game.WINDOW_HEIGHT - sprite.height - 4;
+        y = Game.WINDOW_HEIGHT - sprite.height - 8;
     }
 
     public void setDialogue(CharacterDialogue dialogue) {

@@ -9,22 +9,22 @@ import java.awt.*;
 
 public class EntityExpression extends AnimatedEntity {
 
-    public static final short INTEREST = 0, DISGUST = 1, HAPPINESS = 2, ANGER = 3, SADDNESS = 4, CONFUSION = 5, THINKING = 6, SURPRISE = 7;
-    public static final short ANIMATIONSPEED_NORMAL = 0, ANIMATIONSPEED_FAST = 1, ANIMATIONSPEED_SLOW = 3;
+    public static final byte INTEREST = 0, DISGUST = 1, HAPPINESS = 2, ANGER = 3, SADDNESS = 4, CONFUSION = 5, THINKING = 6, SURPRISE = 7, CONCERN = 8, HEART = 9;
+    // public static final short ANIMATIONSPEED_NORMAL = 0, ANIMATIONSPEED_FAST = 1, ANIMATIONSPEED_SLOW = 3;
 
     /**
      * Whether or not the expression is currently being shown
      */
     public boolean isVisible = true;
 
-    public short type;
+    public byte type;
 
     /**
      * The entity that the expression is rendered above
      */
     public Entity target;
 
-    public EntityExpression(short type, Entity target) {
+    public EntityExpression(byte type, Entity target) {
         super("Expression");
         this.type = type;
         this.target = target;
@@ -33,10 +33,16 @@ public class EntityExpression extends AnimatedEntity {
         sprite = animation.sprite;
     }
 
-    private Animation getTemplateAnimation(short type) {
-        switch(type) {
+    private Animation getTemplateAnimation(byte type) {
+        switch (type) {
             case CONFUSION:
                 return new Animation(new SpriteSheet(ImageStore.get(ImageStore.EXPRESSION_CONFUSION), 18, 18, 1, 4).sprites.get(0), 417);
+            case CONCERN:
+                return new Animation(new SpriteSheet(ImageStore.get(ImageStore.EXPRESSION_CONCERN), 18, 18, 1, 4).sprites.get(0), 417);
+            case ANGER:
+                return new Animation(new SpriteSheet(ImageStore.get(ImageStore.EXPRESSION_ANGER), 18, 18, 1, 2).sprites.get(0), 417);
+            case HEART:
+                return new Animation(new SpriteSheet(ImageStore.get(ImageStore.EXPRESSION_HEART), 18, 18, 1, 2).sprites.get(0), 417);
             default:
                 return null;
         }

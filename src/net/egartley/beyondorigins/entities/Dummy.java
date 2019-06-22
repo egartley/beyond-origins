@@ -43,7 +43,7 @@ public class Dummy extends AnimatedEntity implements Collidable {
         isDualRendered = false;
         speed = 1.3;
 
-        exp = new EntityExpression(EntityExpression.CONFUSION, this);
+        exp = new EntityExpression(EntityExpression.ANGER, this);
     }
 
     private void switchAnimation(byte i) {
