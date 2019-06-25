@@ -6,7 +6,6 @@ import net.egartley.gamelib.threads.AnimationClock;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 
 /**
  * Represents a collection of images, used for animating sprites
@@ -43,28 +42,39 @@ public class Animation {
     private BufferedImage startFrame;
 
     /**
-     * Creates a new animation
+     * Creates a new animation, with a default frame delay of 500 and start index of 0
      *
-     * @param s Sprite to animate
+     * @param sprite Sprite to animate
      */
-    public Animation(Sprite s) {
-        this(s, 500);
+    public Animation(Sprite sprite) {
+        this(sprite, 500, 0);
+    }
+
+    /**
+     * Creates a new animation, with a default start index of 0
+     *
+     * @param sprite     Sprite to animate
+     * @param frameDelay The delay, in milliseconds, between frames
+     */
+    public Animation(Sprite sprite, int frameDelay) {
+        this(sprite, frameDelay, 0);
     }
 
     /**
      * Creates a new animation
      *
-     * @param s         Sprite to animate
+     * @param sprite     Sprite to animate
      * @param frameDelay The delay, in milliseconds, between frames
+     * @param startIndex What frame index to begin at
      */
-    public Animation(Sprite s, int frameDelay) {
-        sprite = s;
+    public Animation(Sprite sprite, int frameDelay, int startIndex) {
+        this.sprite = sprite;
+        this.frameDelay = frameDelay;
+        this.startIndex = startIndex;
         frameIndex = 0;
-        startIndex = 0;
         startFrame = sprite.frames.get(startIndex);
         frame = startFrame;
-        this.frameDelay = frameDelay;
-
+        // this does NOT start the clock!
         clock = new AnimationClock(this);
     }
 
@@ -78,7 +88,7 @@ public class Animation {
     private BufferedImage nextFrame() {
         // check if we need to go back to the start of the animation or just go to the next one
         if (frameIndex + 1 >= sprite.frames.size())
-            frameIndex = 0;
+            frameIndex = startIndex;
         else
             frameIndex++;
 
@@ -98,26 +108,50 @@ public class Animation {
         frame = nextFrame();
     }
 
+    /**
+     * Starts the animation by starting {@link #clock}
+     */
     public void start() {
         stopThread();
         clock = new AnimationClock(this);
         clock.start();
     }
 
+    /**
+     * Stops the animation by killing {@link #clock}, and then sets {@link #frame} to {@link #startFrame}
+     */
     public void stop() {
-        stopThread();
-        frame = startFrame;
+        stop(true);
     }
 
-    private void stopThread() {
-        if (clock != null) {
-            // kill it
-            clock.isRunning = false;
+    /**
+     * Stops the animation by killing {@link #clock}
+     *
+     * @param resetFrame Whether or not to set {@link #frame} to {@link #startFrame}
+     */
+    public void stop(boolean resetFrame) {
+        stopThread();
+        if (resetFrame) {
+            frame = startFrame;
         }
     }
 
     /**
-     * Renders {@link Animation#frame frame} with {@link Graphics#drawImage(Image, int, int, ImageObserver)}
+     * Kills the clock's thread
+     */
+    private void stopThread() {
+        if (clock != null) {
+            clock.isRunning = false;
+            try {
+                clock.thread.join();
+            } catch (InterruptedException e) {
+                Debug.error(e);
+            }
+        }
+    }
+
+    /**
+     * Renders {@link Animation#frame frame} at the specified position
      */
     public void render(Graphics graphics, int x, int y) {
         graphics.drawImage(frame, x, y, null);

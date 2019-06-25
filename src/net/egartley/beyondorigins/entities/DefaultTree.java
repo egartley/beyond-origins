@@ -2,14 +2,16 @@ package net.egartley.beyondorigins.entities;
 
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.interfaces.Collidable;
+import net.egartley.gamelib.interfaces.Interactable;
 import net.egartley.gamelib.logic.interaction.BoundaryPadding;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
+import net.egartley.gamelib.logic.interaction.EntityEntityInteraction;
 import net.egartley.gamelib.objects.StaticEntity;
 
 /**
  * Basic tree that the player can walk under, but not over
  */
-public class DefaultTree extends StaticEntity implements Collidable {
+public class DefaultTree extends StaticEntity implements Collidable, Interactable {
 
     public DefaultTree(Sprite sprite, double x, double y) {
         super("Tree", sprite);
@@ -36,30 +38,20 @@ public class DefaultTree extends StaticEntity implements Collidable {
 
     @Override
     public void setCollisions() {
-        /*collisions = new ArrayList<>();
-        EntityEntityCollision withPlayer = new EntityEntityCollision(Entities.PLAYER.headBoundary, boundary) {
-            public void onCollide(EntityEntityCollisionEvent event) {
-                onPlayerCollision(event);
-            }
+    }
 
-            public void onCollisionEnd(EntityEntityCollisionEvent event) {
-                if (!Entities.PLAYER.isCollided)
-                    Entities.PLAYER.allowAllMovement();
-                else
-                    Entities.PLAYER.annulCollisionEvent(event);
-            }
-        };
-        collisions.add(withPlayer);
+    @Override
+    public void setInteractions() {
 
-        for (EntityEntityCollision collision : Util.getAllBoundaryCollisions(withPlayer, Entities.PLAYER, boundary)) {
-            if (collision.boundaries[0] != Entities.PLAYER.boundary)
-                collisions.add(collision);
-        }*/
+    }
+
+    @Override
+    public void hookInteraction(EntityEntityInteraction interaction) {
+
     }
 
     @Override
     public void tick() {
-        // collisions.forEach(EntityEntityCollision::tick);
     }
-
+    
 }
