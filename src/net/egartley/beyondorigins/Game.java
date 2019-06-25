@@ -1,5 +1,6 @@
 package net.egartley.beyondorigins;
 
+import net.egartley.beyondorigins.controllers.KeyboardController;
 import net.egartley.beyondorigins.definitions.dialogue.DummyDialogue;
 import net.egartley.beyondorigins.definitions.maps.AllSectors;
 import net.egartley.beyondorigins.entities.Dummy;
@@ -9,6 +10,7 @@ import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.gamestates.MainMenuState;
 import net.egartley.beyondorigins.media.images.ImageStore;
 import net.egartley.gamelib.graphics.SpriteSheet;
+import net.egartley.gamelib.input.KeyTyped;
 import net.egartley.gamelib.input.Keyboard;
 import net.egartley.gamelib.input.Mouse;
 import net.egartley.gamelib.objects.GameState;
@@ -16,6 +18,7 @@ import net.egartley.gamelib.objects.MapTile;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
@@ -75,10 +78,18 @@ public class Game extends Canvas implements Runnable {
         }
         Debug.out("Game states were initialized");
 
+        Debug.out("Initializing input stuff...");
         this.addKeyListener(new Keyboard());
         Mouse m = new Mouse();
         this.addMouseListener(m);
         this.addMouseMotionListener(m);
+        KeyboardController.addKeyTyped(new KeyTyped(KeyEvent.VK_F3) {
+            @Override
+            public void onType() {
+                debug = !debug;
+            }
+        });
+        Debug.out("Input stuff was initialized");
     }
 
     public static void main(String[] args) {

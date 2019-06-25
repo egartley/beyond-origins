@@ -2,14 +2,17 @@ package net.egartley.beyondorigins.gamestates;
 
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.controllers.DialogueController;
+import net.egartley.beyondorigins.controllers.KeyboardController;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.ingame.DialoguePanel;
 import net.egartley.beyondorigins.ingame.Inventory;
 import net.egartley.beyondorigins.maps.debug.DebugMap;
+import net.egartley.gamelib.input.KeyTyped;
 import net.egartley.gamelib.objects.GameState;
 import net.egartley.gamelib.objects.Map;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class InGameState extends GameState {
 
@@ -29,6 +32,20 @@ public class InGameState extends GameState {
 
         // load dialogue panel
         Entities.DIALOGUE_PANEL = new DialoguePanel(Entities.getTemplate(Entities.TEMPLATE_DIALOGUE));
+
+        // add key typeds
+        KeyboardController.addKeyTyped(new KeyTyped(KeyEvent.VK_E) {
+            @Override
+            public void onType() {
+                isInventoryVisible = !isInventoryVisible;
+            }
+        });
+        KeyboardController.addKeyTyped(new KeyTyped(KeyEvent.VK_SPACE) {
+            @Override
+            public void onType() {
+                Entities.DIALOGUE_PANEL.advance();
+            }
+        });
     }
 
     @Override

@@ -1,7 +1,6 @@
 package net.egartley.gamelib.input;
 
-import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.controllers.KeyboardController;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -9,7 +8,7 @@ import java.util.ArrayList;
 
 public class Keyboard implements KeyListener {
 
-    private static ArrayList<Integer> pressedKeyCodes = new ArrayList<Integer>();
+    private static ArrayList<Integer> pressedKeyCodes = new ArrayList<>();
 
     /**
      * @param keycode
@@ -31,23 +30,12 @@ public class Keyboard implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        int i = pressedKeyCodes.indexOf(e.getKeyCode());
+        int kc = e.getKeyCode();
+        int i = pressedKeyCodes.indexOf(kc);
         if (i != -1) {
             pressedKeyCodes.remove(i);
         }
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_F3:
-                Game.debug = !Game.debug;
-                break;
-            case KeyEvent.VK_SPACE:
-                Entities.DIALOGUE_PANEL.advance();
-                break;
-            case KeyEvent.VK_E:
-                Game.inGameState.isInventoryVisible = !Game.inGameState.isInventoryVisible;
-                break;
-            default:
-                break;
-        }
+        KeyboardController.onKeyTyped(kc);
     }
 
     @Override
