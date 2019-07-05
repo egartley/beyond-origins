@@ -38,8 +38,8 @@ public class Game extends Canvas implements Runnable {
     private BufferStrategy bufferStrategy;
 
     // CONSTANTS
-    public static final int WINDOW_WIDTH = windowDimension.width - 7;
-    public static final int WINDOW_HEIGHT = windowDimension.height - 30;
+    public static final int WINDOW_WIDTH = windowDimension.width - 17;
+    public static final int WINDOW_HEIGHT = windowDimension.height - 40;
 
     // THREADS
     private static Thread mainThread;
