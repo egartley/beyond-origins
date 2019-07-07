@@ -1,9 +1,8 @@
 package net.egartley.gamelib.objects;
 
+import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.media.images.ImageStore;
 
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 /**
@@ -31,6 +30,14 @@ public class MapTile {
         height = image.getHeight();
     }
 
+    public void rotate() {
+        bufferedImage = Util.rotateImage(bufferedImage);
+    }
+
+    public void rotate(double radians) {
+        bufferedImage = Util.rotateImage(bufferedImage, radians);
+    }
+
     public static void init() {
         grass = new MapTile(ImageStore.get(ImageStore.TILE_GRASS));
         sand = new MapTile(ImageStore.get(ImageStore.TILE_SAND));
@@ -51,25 +58,6 @@ public class MapTile {
             default:
                 return null;
         }
-    }
-
-    /**
-     * Rotates {@link #bufferedImage} by the specified angle (clockwise, in radians)
-     */
-    public void rotate(double radians) {
-        AffineTransform t = new AffineTransform();
-        BufferedImage rotated = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        t.rotate(radians, bufferedImage.getWidth() / 2.0, bufferedImage.getHeight() / 2.0);
-        rotated = new AffineTransformOp(t, AffineTransformOp.TYPE_NEAREST_NEIGHBOR).filter(bufferedImage, rotated);
-        bufferedImage = rotated;
-    }
-
-    /**
-     * Rotates {@link #bufferedImage} by 90 degrees clockwise
-     */
-    public void rotate() {
-        // rotate by 90 degrees if no angle is specified
-        rotate(Math.PI / 2);
     }
 
 }

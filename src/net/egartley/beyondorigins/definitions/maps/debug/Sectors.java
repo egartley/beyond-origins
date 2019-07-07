@@ -22,17 +22,17 @@ public class Sectors {
                 }
             }
         }
-        sector1.tiles.get(0).set(27, MapTile.get(MapTile.GRASS_PATH_1));
-        sector1.tiles.get(1).set(27, MapTile.get(MapTile.GRASS_PATH_1));
-        sector1.tiles.get(2).set(27, MapTile.get(MapTile.GRASS_PATH_1));
-        sector1.tiles.get(3).set(27, MapTile.get(MapTile.GRASS_PATH_2));
+        sector1.tiles.get(0).set(26, MapTile.get(MapTile.GRASS_PATH_1));
+        sector1.tiles.get(1).set(26, MapTile.get(MapTile.GRASS_PATH_1));
+        sector1.tiles.get(2).set(26, MapTile.get(MapTile.GRASS_PATH_1));
+        sector1.tiles.get(3).set(26, MapTile.get(MapTile.GRASS_PATH_2));
+        sector1.tiles.get(3).set(27, MapTile.get(MapTile.GRASS_PATH_1));
         sector1.tiles.get(3).set(28, MapTile.get(MapTile.GRASS_PATH_1));
         sector1.tiles.get(3).set(29, MapTile.get(MapTile.GRASS_PATH_1));
-        sector1.tiles.get(3).set(30, MapTile.get(MapTile.GRASS_PATH_1));
-        sector1.getTile(3, 27).rotate(1.5D * Math.PI);
+        sector1.getTile(3, 26).rotate(1.5D * Math.PI);
+        sector1.getTile(3, 27).rotate();
         sector1.getTile(3, 28).rotate();
         sector1.getTile(3, 29).rotate();
-        sector1.getTile(3, 30).rotate();
         // ----------- SECTOR 1 -----------
 
         // ----------- SECTOR 2 -----------
@@ -44,16 +44,16 @@ public class Sectors {
                 }
             }
         }
-        sector2.tiles.get(14).set(27, MapTile.get(MapTile.GRASS_PATH_1));
-        sector2.tiles.get(15).set(27, MapTile.get(MapTile.GRASS_PATH_1));
-        sector2.tiles.get(16).set(27, MapTile.get(MapTile.GRASS_PATH_1));
-        sector2.tiles.get(13).set(27, MapTile.get(MapTile.GRASS_PATH_2));
+        sector2.tiles.get(14).set(26, MapTile.get(MapTile.GRASS_PATH_1));
+        sector2.tiles.get(15).set(26, MapTile.get(MapTile.GRASS_PATH_1));
+        sector2.tiles.get(16).set(26, MapTile.get(MapTile.GRASS_PATH_1));
+        sector2.tiles.get(13).set(26, MapTile.get(MapTile.GRASS_PATH_2));
+        sector2.tiles.get(13).set(27, MapTile.get(MapTile.GRASS_PATH_1));
         sector2.tiles.get(13).set(28, MapTile.get(MapTile.GRASS_PATH_1));
         sector2.tiles.get(13).set(29, MapTile.get(MapTile.GRASS_PATH_1));
-        sector2.tiles.get(13).set(30, MapTile.get(MapTile.GRASS_PATH_1));
+        sector2.getTile(13, 27).rotate();
         sector2.getTile(13, 28).rotate();
         sector2.getTile(13, 29).rotate();
-        sector2.getTile(13, 30).rotate();
         // ----------- SECTOR 2 -----------
 
         // ----------- SECTOR 3 -----------

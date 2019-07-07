@@ -35,8 +35,6 @@ public class Sprite {
     public Sprite(BufferedImage row, int width, int height, int frames) {
         this.width = width;
         this.height = height;
-
-        this.frames.clear();
         if (frames == 1) {
             this.frames.add(row.getSubimage(0, 0, width, height));
             return;

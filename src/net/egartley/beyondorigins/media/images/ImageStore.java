@@ -65,14 +65,13 @@ public class ImageStore {
     }
 
     /**
-     * Returns an image from the specified path
+     * Returns an image at the specified path
      */
     public static BufferedImage get(String path) {
         try {
             return ImageIO.read(new File(path));
         } catch (IOException e) {
-            Debug.error("There was an error while trying to load an image");
-            Debug.error(e.getMessage());
+            Debug.error("There was an error while trying to load the image \"" + path + "\"");
             e.printStackTrace();
         }
         return null;

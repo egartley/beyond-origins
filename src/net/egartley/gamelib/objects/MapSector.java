@@ -38,7 +38,7 @@ public abstract class MapSector {
     public static final byte RIGHT = 1;
     public static final byte BOTTOM = 2;
     public static final byte LEFT = 3;
-    public static final short TILE_ROWS = 31;
+    public static final short TILE_ROWS = 30;
     public static final short TILE_COLUMNS = 17;
 
     private int deltaX;
@@ -221,13 +221,13 @@ public abstract class MapSector {
             for (int c = 0; c < row.size(); c++) {
                 MapTile tile = row.get(c);
                 graphics.drawImage(tile.bufferedImage, deltaX, deltaY, null);
-                /* if (Game.debug) {
-                    graphics.setColor(Color.BLACK);
+                if (Game.debug) {
+                    /* graphics.setColor(Color.BLACK);
                     graphics.drawRect(deltaX, deltaY, TILE_SIZE, TILE_SIZE);
                     graphics.setFont(new Font(graphics.getFont().getFontName(), Font.PLAIN, 8));
                     graphics.setColor(Color.WHITE);
-                    graphics.drawString(r + ", " + c, deltaX + 2, deltaY + 8);
-                } */
+                    graphics.drawString(r + ", " + c, deltaX + 2, deltaY + 8); */
+                }
                 deltaX += TILE_SIZE;
             }
             deltaX = 0;

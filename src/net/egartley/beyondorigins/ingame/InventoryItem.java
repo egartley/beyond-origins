@@ -2,29 +2,29 @@ package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
-import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.input.Mouse;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class InventoryItem {
 
-    private Color tooltipBackgroundColor = new Color(0, 0, 0, 128);
+    private static Font tooltipFont = new Font("Arial", Font.PLAIN, 11);
 
     public int renderX, renderY, tooltipWidth;
     public boolean isBeingDragged, didStartDrag, mouseHover, setFontMetrics;
     public String name;
-    public Sprite sprite;
+    public BufferedImage image;
     public InventorySlot slot;
 
-    public InventoryItem(String name, InventorySlot slot, Sprite sprite) {
-        this(name, slot, sprite, false);
+    public InventoryItem(String name, InventorySlot slot, BufferedImage image) {
+        this(name, slot, image, false);
     }
 
-    public InventoryItem(String name, InventorySlot slot, Sprite sprite, boolean setToSlot) {
+    public InventoryItem(String name, InventorySlot slot, BufferedImage image, boolean setToSlot) {
         this.name = name;
         this.slot = slot;
-        this.sprite = sprite;
+        this.image = image;
         renderX = slot.baseItemX;
         renderY = slot.baseItemY;
         if (setToSlot) {
@@ -33,7 +33,6 @@ public class InventoryItem {
     }
 
     public void tick() {
-        // TODO: change to sprite width and height
         mouseHover = Util.isWithinBounds(Mouse.x, Mouse.y, renderX, renderY, InventorySlot.SIZE, InventorySlot.SIZE);
         if (Mouse.isDragging) {
             if ((mouseHover || didStartDrag) && (Game.inGameState.inventory.getItemBeingDragged() == this || Game.inGameState.inventory.getItemBeingDragged() == null)) {
@@ -53,21 +52,36 @@ public class InventoryItem {
     }
 
     public void render(Graphics graphics) {
-        graphics.setColor(Color.BLACK);
-        graphics.fillOval(renderX, renderY, InventorySlot.SIZE, InventorySlot.SIZE);
+        graphics.drawImage(image, renderX, renderY, null);
     }
 
-    public void drawToolTip(Graphics graphics) {
+    void drawToolTip(Graphics graphics) {
         if (!setFontMetrics) {
-            tooltipWidth = graphics.getFontMetrics().stringWidth(name);
+            tooltipWidth = graphics.getFontMetrics(tooltipFont).stringWidth(name);
             setFontMetrics = true;
         }
         if ((mouseHover && Game.inGameState.inventory.getItemBeingDragged() == null) || isBeingDragged) {
-            graphics.setColor(tooltipBackgroundColor);
+            graphics.setColor(Color.BLACK);
             graphics.fillRect((renderX + InventorySlot.SIZE / 2) - (tooltipWidth / 2), renderY - 18, tooltipWidth, 16);
             graphics.setColor(Color.WHITE);
+            graphics.setFont(tooltipFont);
             graphics.drawString(name, (renderX + InventorySlot.SIZE / 2) - (tooltipWidth / 2), renderY - 6);
         }
+    }
+
+    void move(InventorySlot moveTo) {
+        slot.removeItem();
+        slot = moveTo;
+        moveTo.putItem(this);
+    }
+
+    void swap(InventoryItem swapWith) {
+        InventorySlot slot1 = this.slot;
+        InventoryItem item1 = this;
+        InventorySlot slot2 = swapWith.slot;
+        InventoryItem item2 = swapWith;
+        slot1.putItem(item2);
+        slot2.putItem(item1);
     }
 
 }

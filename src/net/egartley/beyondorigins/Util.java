@@ -7,6 +7,8 @@ import net.egartley.gamelib.logic.interaction.EntityBoundary;
 import net.egartley.gamelib.objects.Entity;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -37,6 +39,24 @@ public class Util {
      */
     static BufferedImage resize(BufferedImage image, int width, int height, int hints) {
         return toBufferedImage(image.getScaledInstance(width, height, hints));
+    }
+
+    /**
+     * Rotates the image by the specified angle (clockwise, in radians)
+     */
+    public static BufferedImage rotateImage(BufferedImage image, double radians) {
+        AffineTransform t = new AffineTransform();
+        BufferedImage rotated = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        t.rotate(radians, image.getWidth() / 2.0, image.getHeight() / 2.0);
+        rotated = new AffineTransformOp(t, AffineTransformOp.TYPE_NEAREST_NEIGHBOR).filter(image, rotated);
+        return rotated;
+    }
+
+    /**
+     * Rotates the image by 90 degrees
+     */
+    public static BufferedImage rotateImage(BufferedImage image) {
+        return rotateImage(image, Math.PI / 2);
     }
 
     /**
