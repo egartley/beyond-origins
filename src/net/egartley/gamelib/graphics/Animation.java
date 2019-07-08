@@ -91,7 +91,6 @@ public class Animation {
             frameIndex = startIndex;
         else
             frameIndex++;
-
         return getFrame();
     }
 

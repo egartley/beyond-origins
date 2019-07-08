@@ -169,7 +169,7 @@ public class Player extends AnimatedEntity implements Character, Collidable {
     }
 
     private void move(boolean up, boolean down, boolean left, boolean right) {
-        if (!animation.clock.isRunning) {
+        if (!animation.clock.isRunning && (up || down || left || right)) {
             // animation was stopped, so restart it because we're moving
             animation.start();
             animation.setFrame(1);

@@ -32,7 +32,7 @@ public class Game extends Canvas implements Runnable {
     private static final long serialVersionUID = 8213282993283826186L;
     private static long startTime;
     private static JFrame frame;
-    private static Dimension windowDimension = new Dimension(976, 584);
+    private static Dimension windowDimension = new Dimension(976, 583);
     private static boolean running = false;
     private Graphics graphics;
     private BufferStrategy bufferStrategy;

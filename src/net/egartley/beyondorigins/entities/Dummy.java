@@ -53,6 +53,7 @@ public class Dummy extends AnimatedEntity implements Collidable {
         }
         if (!animation.equals(animations.get(i))) {
             // this prevents the same animation being set again
+            animation.stop(false);
             animation = animations.get(i);
         }
     }
@@ -118,8 +119,9 @@ public class Dummy extends AnimatedEntity implements Collidable {
             move(dir);
         }
 
-        if (!isMovingRightwards && !isMovingLeftwards && !isMovingUpwards && !isMovingDownwards)
+        if (!isMovingRightwards && !isMovingLeftwards && !isMovingUpwards && !isMovingDownwards) {
             animation.stop();
+        }
 
         exp.tick();
     }
@@ -137,9 +139,9 @@ public class Dummy extends AnimatedEntity implements Collidable {
             animation.start();
         }
 
-        if (direction == RIGHT)
+        if (direction == RIGHT && !animations.get(RIGHT_ANIMATION).clock.isRunning)
             switchAnimation(RIGHT_ANIMATION);
-        else if (direction == LEFT)
+        else if (direction == LEFT && !animations.get(LEFT_ANIMATION).clock.isRunning)
             switchAnimation(LEFT_ANIMATION);
     }
 

@@ -204,7 +204,7 @@ public abstract class MapSector {
     }
 
     /**
-     * Updates the player's position in accordance with the sector it just came from
+     * Updates the player's position in accordance with the sector they just came from
      */
     protected void updatePlayerPosition(MapSector from) {
         playerEnteredFrom(neighbors.indexOf(from));
@@ -218,17 +218,16 @@ public abstract class MapSector {
         deltaY = 0;
         for (int r = 0; r < definition.tiles.size(); r++) {
             ArrayList<MapTile> row = definition.tiles.get(r);
-            for (int c = 0; c < row.size(); c++) {
-                MapTile tile = row.get(c);
+            for (MapTile tile : row) {
                 graphics.drawImage(tile.bufferedImage, deltaX, deltaY, null);
-                if (Game.debug) {
-                    /* graphics.setColor(Color.BLACK);
+                deltaX += TILE_SIZE;
+                /*if (Game.debug) {
+                    graphics.setColor(Color.BLACK);
                     graphics.drawRect(deltaX, deltaY, TILE_SIZE, TILE_SIZE);
                     graphics.setFont(new Font(graphics.getFont().getFontName(), Font.PLAIN, 8));
                     graphics.setColor(Color.WHITE);
-                    graphics.drawString(r + ", " + c, deltaX + 2, deltaY + 8); */
-                }
-                deltaX += TILE_SIZE;
+                    graphics.drawString(r + ", " + c, deltaX + 2, deltaY + 8);
+                }*/
             }
             deltaX = 0;
             deltaY += TILE_SIZE;

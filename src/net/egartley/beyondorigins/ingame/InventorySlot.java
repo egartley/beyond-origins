@@ -1,6 +1,5 @@
 package net.egartley.beyondorigins.ingame;
 
-import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.media.images.ImageStore;
@@ -36,31 +35,32 @@ public class InventorySlot {
         image = ImageStore.get("resources/images/ui/inventory-slot.png");
     }
 
-    void putItem(InventoryItem item) {
+    InventoryItem putItem(InventoryItem item) {
+        InventoryItem existing = this.item;
         this.item = item;
         if (item != null) {
+            // set the item's slot to this
             item.slot = this;
         }
         isEmpty = item == null;
-        Debug.out("(" + row + ", " + column + ") isEmpty = " + isEmpty);
+        return existing;
     }
 
-    private InventoryItem replaceItem(InventoryItem toReplaceWith) {
-        InventoryItem old = item;
-        putItem(toReplaceWith);
-        return old;
-    }
-
+    /**
+     * Removes/deletes the slot's current item
+     *
+     * @return The item that was removed/deleted
+     */
     InventoryItem removeItem() {
-        return replaceItem(null);
+        return putItem(null);
     }
 
     public void render(Graphics graphics) {
         graphics.drawImage(image, x, y, null);
-        if (Game.debug) {
-            /*graphics.setColor(Color.WHITE);
-            graphics.drawString(String.valueOf((row * Inventory.ROWS) + column), x + 3, y + 12); */
-        }
+        /*if (Game.debug) {
+            graphics.setColor(Color.WHITE);
+            graphics.drawString(String.valueOf((row * Inventory.ROWS) + column), x + 3, y + 12);
+        }*/
     }
 
     @Override
