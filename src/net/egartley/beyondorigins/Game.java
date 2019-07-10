@@ -19,14 +19,13 @@ import net.egartley.gamelib.objects.MapTile;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 /**
  * @author Evan Gartley (https://github.com/egartley)
  * @version https://egartley.net/projects/beyond-origins/?via=javadocgameclass
  */
-public class Game extends Canvas implements Runnable {
+public class Game extends JPanel implements Runnable {
 
     // SELF
     private static final long serialVersionUID = 8213282993283826186L;
@@ -34,8 +33,8 @@ public class Game extends Canvas implements Runnable {
     private static JFrame frame;
     private static Dimension windowDimension = new Dimension(976, 583);
     private static boolean running = false;
-    private Graphics graphics;
-    private BufferStrategy bufferStrategy;
+    private int fps;
+    private long lastFpsTime;
 
     // CONSTANTS
     public static final int WINDOW_WIDTH = windowDimension.width - 17;
@@ -93,15 +92,19 @@ public class Game extends Canvas implements Runnable {
     public static void main(String[] args) {
         startTime = System.currentTimeMillis();
 
-        Game game = new Game();
-
         frame = new JFrame("Beyond Origins");
         frame.setSize(windowDimension.width, windowDimension.height);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(false);
-        frame.add(game);
         frame.setLocationRelativeTo(null);
+
+        // Credit: https://stackoverflow.com/a/11671311
+        Game game = new Game();
+        game.setDoubleBuffered(true);
+        frame.getContentPane().add(game);
+
         frame.setVisible(true);
+        game.requestFocus();
 
         running = true;
         mainThread = new Thread(game, "Game-Main");
@@ -163,44 +166,53 @@ public class Game extends Canvas implements Runnable {
     public void run() {
         // load images, save data, etc.
         init();
-        // double buffering (so that animations, changes in x/y will show correctly)
-        createBufferStrategy(2);
-        bufferStrategy = getBufferStrategy();
-        graphics = bufferStrategy.getDrawGraphics();
-        // enable anti-aliasing for strings
-        Graphics2D g2d = (Graphics2D) graphics;
-        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        // limit to 60 fps
-        // Credit: since-deleted YouTube channel with Java tutorials uploaded in late 2012
-        long lastTime = System.nanoTime();
-        long timer = System.currentTimeMillis();
-        double ns = 16666666.666666666;
-        double delta = 0.0D;
-        requestFocus();
-        Debug.out("Startup: " + ((System.currentTimeMillis() - startTime) / 1000.0) + " seconds");
+
+        // Credit: http://www.java-gaming.org/index.php?topic=24220.0
+        // Additional credit: http://www.cokeandcode.com/info/showsrc/showsrc.php?src=../spaceinvaders102/org/newdawn/spaceinvaders/Game.java
+        long lastLoopTime = System.nanoTime();
+        final int TARGET_FPS = 60;
+        final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
         while (running) {
             long now = System.nanoTime();
-            delta += (now - lastTime) / ns;
-            lastTime = now;
-            if (delta >= 1.0D) {
-                tick();
-                render();
-                delta -= 1.0D;
-                if (System.currentTimeMillis() - timer > 1000L) {
-                    timer += 1000L;
-                }
+            long updateLength = now - lastLoopTime;
+            lastLoopTime = now;
+            double delta = updateLength / ((double) OPTIMAL_TIME);
+            lastFpsTime += updateLength;
+            fps++;
+            if (lastFpsTime >= 1000000000) {
+                lastFpsTime = 0;
+                fps = 0;
+            }
+
+            tick(delta);
+            repaint();
+
+            try {
+                Thread.sleep(Math.abs((lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
+
         stop();
     }
 
-    private synchronized void tick() {
+    private synchronized void tick(double delta) {
+        // ignore interpolation for now
         currentGameState.tick();
     }
 
-    private synchronized void render() {
+    private synchronized void render(Graphics graphics) {
+        if (currentGameState == null) {
+            return;
+        }
         currentGameState.render(graphics);
-        bufferStrategy.show();
+    }
+
+    @Override
+    public void paint(Graphics graphics) {
+        ((Graphics2D) graphics).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        render(graphics);
     }
 
 }
