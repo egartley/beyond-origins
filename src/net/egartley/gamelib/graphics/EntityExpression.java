@@ -55,7 +55,7 @@ public class EntityExpression extends AnimatedEntity {
         if (!animation.clock.isRunning) {
             animation.start();
         }
-        x = Calculate.getCenter((int) target.x, target.sprite.width) - (sprite.width / 2.0);
+        x = Calculate.getCenter((int) target.x + (target.sprite.width / 2), sprite.width);
         y = target.y - 24;
         super.tick();
     }

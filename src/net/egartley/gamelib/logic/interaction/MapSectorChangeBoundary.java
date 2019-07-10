@@ -27,9 +27,4 @@ public class MapSectorChangeBoundary extends Boundary {
         this.to = to;
     }
 
-    @Override
-    public void tick() {
-
-    }
-
 }

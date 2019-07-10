@@ -24,7 +24,7 @@ public class Player extends AnimatedEntity implements Character, Collidable {
 
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
-    private final int ANIMATION_THRESHOLD = 135;
+    private final int ANIMATION_THRESHOLD = 165;
 
     public EntityBoundary boundary;
     EntityBoundary headBoundary;
@@ -43,7 +43,7 @@ public class Player extends AnimatedEntity implements Character, Collidable {
         isDualRendered = false;
         speed = 1.1;
         if (Game.debug) {
-            speed = 2.0;
+            speed = 1.8;
         }
     }
 
@@ -166,6 +166,9 @@ public class Player extends AnimatedEntity implements Character, Collidable {
 
     public void render(Graphics graphics) {
         super.render(graphics);
+        if (Game.debug) {
+            drawDebug(graphics);
+        }
     }
 
     private void move(boolean up, boolean down, boolean left, boolean right) {

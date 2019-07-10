@@ -18,7 +18,7 @@ public class MenuButton {
     public boolean setFontMetrics;
     private int x, y, width, height, stringX, stringY, stringWidth;
 
-    public static Font font = new Font("Consolas", Font.PLAIN, 18);
+    public static Font font = new Font("Georgia", Font.BOLD, 24);
 
     /**
      * String that is displayed on the button
@@ -27,12 +27,11 @@ public class MenuButton {
     private Color disabledColor = Color.DARK_GRAY;
     private Color enabledColor = Color.RED.darker();
     private Color hoverColor = enabledColor.brighter();
-    private Color textColor = Color.WHITE;
+    private Color textColor = new Color(0x0092ff);
     /**
      * The color that is currently being used
      */
     private Color currentColor;
-    private FontMetrics fontMetrics;
 
     public MenuButton(String text, boolean isEnabledByDefault, int x, int y, int width, int height) {
         this.text = text;
@@ -44,12 +43,9 @@ public class MenuButton {
     }
 
     public void setFontMetrics(FontMetrics fontMetrics) {
-        this.fontMetrics = fontMetrics;
-
         stringWidth = fontMetrics.stringWidth(text);
         stringX = (x + (width / 2)) - (stringWidth / 2);
-        stringY = y + (height / 2) + (fontMetrics.getFont().getSize() / 4);
-
+        stringY = y + (height / 2) + (font.getSize() / 4);
         setFontMetrics = true;
     }
 
@@ -57,8 +53,9 @@ public class MenuButton {
      * Should be called whenever the user clicks/releases the mouse
      */
     public void checkClick(MouseEvent e) {
-        if (isClickInBounds(e.getX(), e.getY()) && isEnabled)
+        if (isClickInBounds(e.getX(), e.getY()) && isEnabled) {
             onClick();
+        }
     }
 
     /**
@@ -69,14 +66,17 @@ public class MenuButton {
     }
 
     public void render(Graphics graphics) {
-        graphics.fillRect(x, y + height, width, 3);
+        if (!setFontMetrics) {
+            setFontMetrics(graphics.getFontMetrics(font));
+        }
+
         // background
         if (isEnabled) {
             graphics.setColor(currentColor);
         } else {
             graphics.setColor(disabledColor);
         }
-        graphics.fillRect(x, y, width, height);
+        // graphics.fillRect(x, y, width, height);
 
         // text
         graphics.setFont(font);
@@ -86,7 +86,7 @@ public class MenuButton {
 
     public void tick() {
         // emulate hover effect
-        if (isClickInBounds(Mouse.x, Mouse.y)) {
+        if (isClickInBounds(Mouse.x, Mouse.y) && isEnabled) {
             currentColor = hoverColor;
         } else {
             currentColor = enabledColor;

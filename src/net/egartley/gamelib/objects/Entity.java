@@ -15,8 +15,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
- * An object or character that can rendered with a {@link Sprite} at a
- * specified location
+ * Anything that is rendered with a {@link Sprite} at a specified location
  *
  * @see AnimatedEntity
  * @see StaticEntity
@@ -27,9 +26,6 @@ public abstract class Entity {
     public static final byte DOWN = 2;
     public static final byte LEFT = 3;
     public static final byte RIGHT = 4;
-
-    public static final byte FOLLOW_PASSIVE = 0;
-    public static final byte FOLLOW_AGGRESSIVE = 1;
 
     /**
      * The entity's sprites
@@ -195,8 +191,7 @@ public abstract class Entity {
     }
 
     /**
-     * Renders the entity, using {@link #sprite}, at ({@link #x}, {@link
-     * #y})
+     * Renders the entity, using {@link #sprite}, at ({@link #x}, {@link #y})
      */
     public void render(Graphics graphics) {
         graphics.drawImage(sprite.toBufferedImage(0), (int) x, (int) y, null);
@@ -204,33 +199,28 @@ public abstract class Entity {
     }
 
     /**
-     * Draws the first "layer" if {@link #isDualRendered} is true (below
-     * the player)
+     * Draws the first "layer", assuming {@link #isDualRendered} is true (below the player)
      */
     public void drawFirstLayer(Graphics graphics) {
         graphics.drawImage(firstLayer, (int) x, (int) y + secondLayer.getHeight(), null);
     }
 
     /**
-     * Draws the second "layer" if {@link #isDualRendered} is true (above
-     * the player)
+     * Draws the second "layer", assuming {@link #isDualRendered} is true (above the player)
      */
     public void drawSecondLayer(Graphics graphics) {
         graphics.drawImage(secondLayer, (int) x, (int) y, null);
-        drawDebug(graphics);
+        if (Game.debug) {
+            drawDebug(graphics);
+        }
     }
 
     /**
-     * Renders debug information, such as the entity's boundaries and "name
-     * tag"
-     *
-     * @see Game#debug
+     * Renders debug information, such as the entity's boundaries and "name tag"
      */
-    void drawDebug(Graphics graphics) {
-        if (Game.debug) {
-            drawBoundaries(graphics);
-            drawNameTag(graphics);
-        }
+    public void drawDebug(Graphics graphics) {
+        drawBoundaries(graphics);
+        drawNameTag(graphics);
     }
 
     /**
@@ -240,8 +230,7 @@ public abstract class Entity {
         if (!setFontMetrics) {
             if (name == null || name.equals(""))
                 name = toString();
-            nameTagWidth =
-                    graphics.getFontMetrics(nameTagFont).stringWidth(name) + 8; // 4px padding both sides
+            nameTagWidth = graphics.getFontMetrics(nameTagFont).stringWidth(name) + 8;
             entityWidth = sprite.width;
             setFontMetrics = true;
         }
@@ -268,15 +257,15 @@ public abstract class Entity {
      * it is sector-specific
      */
     public void kill() {
-        if (isSectorSpecific)
+        if (isSectorSpecific) {
             EntityStore.remove(this);
-        else
-            Debug.warning("Tried to kill \"" + this + "\", but it is not" +
-                    " sector-specific");
+        } else {
+            Debug.warning("Tried to kill \"" + this + "\", but it is not sector-specific");
+        }
     }
 
     /**
-     * Calls {@link EntityBoundary#tick()}
+     * For now, just calls {@link EntityBoundary#tick()}
      *
      * @see #boundaries
      */
@@ -343,6 +332,11 @@ public abstract class Entity {
 
     /**
      * Allows the entity to move in all directions
+     *
+     * @see #isAllowedToMoveUpwards
+     * @see #isAllowedToMoveDownwards
+     * @see #isAllowedToMoveLeftwards
+     * @see #isAllowedToMoveRightwards
      */
     protected void allowAllMovement() {
         isAllowedToMoveUpwards = true;
@@ -362,7 +356,6 @@ public abstract class Entity {
      * @see #move(byte)
      */
     protected void onMove(byte direction) {
-
     }
 
     /**

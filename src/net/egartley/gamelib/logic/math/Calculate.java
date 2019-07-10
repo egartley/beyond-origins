@@ -13,30 +13,10 @@ public class Calculate {
      * @param b
      *         Width or height
      *
-     * @return a + (b / 2)
+     * @return a - (b / 2)
      */
     public static int getCenter(int a, int b) {
-        return a + (b / 2);
-    }
-
-    /**
-     * Returns the difference between the two integers
-     */
-    public static int getDifference(int a, int b) {
-        if (a > b)
-            return a - b;
-        else
-            return b - a;
-    }
-
-    /**
-     * Returns the difference between the two doubles
-     */
-    public static double getDifference(double a, double b) {
-        if (a > b)
-            return a - b;
-        else
-            return b - a;
+        return a - (b / 2);
     }
 
     /**

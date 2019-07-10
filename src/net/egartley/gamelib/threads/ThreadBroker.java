@@ -1,8 +1,9 @@
 package net.egartley.gamelib.threads;
 
+import net.egartley.beyondorigins.Debug;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class ThreadBroker {
 
@@ -16,24 +17,18 @@ public class ThreadBroker {
         threads.remove(thread);
     }
 
-    public static void killAll() {
-        loopKill(threads);
-    }
-
-    public static void kill(Thread... toKill) {
-        loopKill(Arrays.asList(toKill));
-    }
-
-    private static void loopKill(List<Thread> threads) {
-        for (Thread t : threads) {
-            deregister(t);
-        }
+    public static void kill(Thread toKill) {
+        deregister(toKill);
         try {
-            for (Thread t : threads) {
-                t.join();
-            }
+            toKill.join();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Debug.error(e);
+        }
+    }
+
+    public static void killAll() {
+        for (Object t : Arrays.copyOf(threads.toArray(), threads.size())) {
+            kill((Thread) t);
         }
     }
 

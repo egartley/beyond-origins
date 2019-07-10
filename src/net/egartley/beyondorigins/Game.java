@@ -68,16 +68,6 @@ public class Game extends Canvas implements Runnable {
         loadMaps();
         Debug.out("Maps were loaded");
 
-        Debug.out("Initializing game states...");
-        inGameState = new InGameState();
-        mainMenuState = new MainMenuState();
-        if (debug) {
-            currentGameState = inGameState;
-        } else {
-            currentGameState = mainMenuState;
-        }
-        Debug.out("Game states were initialized");
-
         Debug.out("Initializing input stuff...");
         this.addKeyListener(new Keyboard());
         Mouse m = new Mouse();
@@ -90,6 +80,14 @@ public class Game extends Canvas implements Runnable {
             }
         });
         Debug.out("Input stuff was initialized");
+
+        Debug.out("Initializing game states...");
+        inGameState = new InGameState();
+        mainMenuState = new MainMenuState();
+
+        currentGameState = mainMenuState;
+
+        Debug.out("Game states were initialized");
     }
 
     public static void main(String[] args) {
@@ -143,6 +141,10 @@ public class Game extends Canvas implements Runnable {
     private void loadMaps() {
         MapTile.init();
         AllSectors.define();
+    }
+
+    public static synchronized void quit() {
+        System.exit(0);
     }
 
     private synchronized void stop() {

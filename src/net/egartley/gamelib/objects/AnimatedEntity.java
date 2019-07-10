@@ -48,6 +48,5 @@ public abstract class AnimatedEntity extends Entity {
     @Override
     public void render(Graphics graphics) {
         animation.render(graphics, (int) x, (int) y);
-        drawDebug(graphics);
     }
 }

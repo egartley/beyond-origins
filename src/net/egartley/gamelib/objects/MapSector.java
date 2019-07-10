@@ -117,8 +117,10 @@ public abstract class MapSector {
      */
     public void render(Graphics graphics) {
         drawTiles(graphics);
-        for (MapSectorChangeBoundary boundary : changeBoundaries) {
-            boundary.draw(graphics);
+        if (Game.debug) {
+            for (MapSectorChangeBoundary boundary : changeBoundaries) {
+                boundary.draw(graphics);
+            }
         }
     }
 

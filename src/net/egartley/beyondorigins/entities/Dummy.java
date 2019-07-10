@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Debug;
+import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.definitions.dialogue.DummyDialogue;
 import net.egartley.gamelib.graphics.Animation;
@@ -41,7 +42,7 @@ public class Dummy extends AnimatedEntity implements Collidable {
 
         isSectorSpecific = false;
         isDualRendered = false;
-        speed = 1.3;
+        speed = 1.1;
 
         exp = new EntityExpression(EntityExpression.ANGER, this);
     }
@@ -108,7 +109,7 @@ public class Dummy extends AnimatedEntity implements Collidable {
         Collidable.tick();
 
         walktime++;
-        if (walktime >= 90) {
+        if (walktime >= 120) {
             walktime = 0;
             if (dir == RIGHT) {
                 dir = LEFT;
@@ -130,6 +131,9 @@ public class Dummy extends AnimatedEntity implements Collidable {
     public void render(Graphics graphics) {
         exp.render(graphics);
         super.render(graphics);
+        if (Game.debug) {
+            drawDebug(graphics);
+        }
     }
 
     @Override

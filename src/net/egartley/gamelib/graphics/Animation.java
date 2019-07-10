@@ -129,9 +129,11 @@ public class Animation {
      * @param resetFrame Whether or not to set {@link #frame} to {@link #startFrame}
      */
     public void stop(boolean resetFrame) {
-        stopThread();
-        if (resetFrame) {
-            frame = startFrame;
+        if (clock.isRunning) {
+            stopThread();
+            if (resetFrame) {
+                frame = startFrame;
+            }
         }
     }
 

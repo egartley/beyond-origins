@@ -36,7 +36,6 @@ public abstract class StaticEntity extends Entity {
     @Override
     public void render(Graphics graphics) {
         graphics.drawImage(image, (int) x, (int) y, null);
-        drawDebug(graphics);
     }
 
     @Override

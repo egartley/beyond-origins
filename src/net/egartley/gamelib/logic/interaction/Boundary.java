@@ -1,7 +1,5 @@
 package net.egartley.gamelib.logic.interaction;
 
-import net.egartley.beyondorigins.Game;
-
 import java.awt.*;
 
 /**
@@ -62,16 +60,13 @@ public abstract class Boundary {
     public Color drawColor;
 
     /**
-     * Renders the boundary (only if {@link net.egartley.beyondorigins.Game#debug Game.debug} is <code>true</code>)
+     * Renders the boundary
      *
-     * @param graphics
-     *         Graphics object to use
+     * @param graphics Graphics object to use
      */
     public void draw(Graphics graphics) {
-        if (Game.debug) {
-            graphics.setColor(drawColor);
-            graphics.drawRect(x, y, width, height);
-        }
+        graphics.setColor(drawColor);
+        graphics.drawRect(x, y, width, height);
     }
 
     /**
