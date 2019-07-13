@@ -27,6 +27,10 @@ public abstract class GameState {
      */
     public int identificationNumber;
 
+    public abstract void onStart();
+
+    public abstract void onEnd();
+
     public abstract void render(Graphics graphics);
 
     public abstract void tick();

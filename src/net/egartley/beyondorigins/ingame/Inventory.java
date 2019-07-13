@@ -13,8 +13,8 @@ public class Inventory extends StaticEntity {
 
     public static final int ROWS = 5, COLUMNS = 4;
 
-    public ArrayList<InventorySlot> slots;
-    public ArrayList<InventoryItem> items;
+    public static ArrayList<InventorySlot> slots;
+    public static ArrayList<InventoryItem> items;
 
     private Color backgroundColor = new Color(0, 0, 0, 152);
 
@@ -36,53 +36,7 @@ public class Inventory extends StaticEntity {
         items.add(new InventoryItem("Wojak", slots.get(1), ImageStore.get("resources/images/items/wojak.png"), true));
     }
 
-    void onItemDragEnd(InventoryItem dropItem) {
-
-        // TODO: change r2 width and height to item's sprite width and height
-
-        ArrayList<Rectangle> intersectionRectangles = new ArrayList<>();
-        ArrayList<InventorySlot> intersectedSlots = new ArrayList<>();
-        InventorySlot originalSlot = dropItem.slot;
-
-        for (InventorySlot slot : slots) {
-            Rectangle r1 = new Rectangle(slot.x, slot.y, InventorySlot.SIZE, InventorySlot.SIZE);
-            Rectangle r2 = new Rectangle(dropItem.renderX, dropItem.renderY, InventorySlot.SIZE, InventorySlot.SIZE);
-            if (r1.intersects(r2)) {
-                intersectionRectangles.add(r1.intersection(r2));
-                intersectedSlots.add(slot);
-                if (intersectionRectangles.size() == 4) {
-                    // item can only be within bounds of up to four slots
-                    break;
-                }
-            }
-        }
-
-        if (!intersectionRectangles.isEmpty()) {
-            // at least one slot
-            int i = 0, n = 0;
-            Rectangle closest = intersectionRectangles.get(0);
-            // find the slot the item is closet to
-            for (Rectangle r : intersectionRectangles) {
-                if ((r.width * r.height) > (closest.width * closest.height)) {
-                    closest = r;
-                    i = n;
-                }
-                n++;
-            }
-            // move the item to the slot it is closest to
-            InventorySlot closestSlot = intersectedSlots.get(i);
-            if (closestSlot.isEmpty) {
-                // simply move the item
-                dropItem.move(closestSlot);
-            } else {
-                // swap with the item in the closest slot
-                dropItem.swap(closestSlot.item);
-            }
-        }
-        // else, there were no intersections with any slots, so it will move back
-    }
-
-    public InventoryItem getItemBeingDragged() {
+    static InventoryItem getItemBeingDragged() {
         for (InventoryItem i : items)
             if (i.isBeingDragged)
                 return i;

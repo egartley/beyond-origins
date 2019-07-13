@@ -28,10 +28,12 @@ public class MenuButton {
     private Color enabledColor = Color.RED.darker();
     private Color hoverColor = enabledColor.brighter();
     private Color textColor = new Color(0x0092ff);
+    private Color hoverTextColor = new Color(0x00448f);
     /**
      * The color that is currently being used
      */
     private Color currentColor;
+    private Color currentTextColor;
 
     public MenuButton(String text, boolean isEnabledByDefault, int x, int y, int width, int height) {
         this.text = text;
@@ -80,7 +82,7 @@ public class MenuButton {
 
         // text
         graphics.setFont(font);
-        graphics.setColor(textColor);
+        graphics.setColor(currentTextColor);
         graphics.drawString(text, stringX, stringY);
     }
 
@@ -88,8 +90,10 @@ public class MenuButton {
         // emulate hover effect
         if (isClickInBounds(Mouse.x, Mouse.y) && isEnabled) {
             currentColor = hoverColor;
+            currentTextColor = hoverTextColor;
         } else {
             currentColor = enabledColor;
+            currentTextColor = textColor;
         }
     }
 

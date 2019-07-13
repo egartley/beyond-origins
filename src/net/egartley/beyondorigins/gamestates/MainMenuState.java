@@ -1,15 +1,19 @@
 package net.egartley.beyondorigins.gamestates;
 
 import net.egartley.beyondorigins.Game;
+import net.egartley.beyondorigins.controllers.MouseController;
 import net.egartley.beyondorigins.ui.MenuButton;
+import net.egartley.gamelib.input.MouseClicked;
 import net.egartley.gamelib.logic.math.Calculate;
 import net.egartley.gamelib.objects.GameState;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class MainMenuState extends GameState {
 
+    private MouseClicked buttonClick;
     public ArrayList<MenuButton> buttons = new ArrayList<>();
 
     public MainMenuState() {
@@ -17,7 +21,7 @@ public class MainMenuState extends GameState {
         buttons.add(new MenuButton("Play", true, (Game.WINDOW_WIDTH / 2) - 50, (Game.WINDOW_HEIGHT / 2) - 16, 100, 32) {
             @Override
             public void onClick() {
-                Game.currentGameState = Game.inGameState;
+                Game.setState(GameState.IN_GAME);
             }
         });
         buttons.add(new MenuButton("Quit", true, (Game.WINDOW_WIDTH / 2) - 50, (Game.WINDOW_HEIGHT / 2) - 16 + 52, 100, 32) {
@@ -26,6 +30,22 @@ public class MainMenuState extends GameState {
                 Game.quit();
             }
         });
+        buttonClick = new MouseClicked() {
+            @Override
+            public void onClick(MouseEvent e) {
+                buttons.forEach(b -> b.checkClick(e));
+            }
+        };
+    }
+
+    @Override
+    public void onStart() {
+        MouseController.addMouseClicked(buttonClick);
+    }
+
+    @Override
+    public void onEnd() {
+        MouseController.removeMouseClicked(buttonClick);
     }
 
     @Override

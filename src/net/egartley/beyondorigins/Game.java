@@ -37,7 +37,13 @@ public class Game extends JPanel implements Runnable {
     private long lastFpsTime;
 
     // CONSTANTS
+    /**
+     * The "actual" width of the window
+     */
     public static final int WINDOW_WIDTH = windowDimension.width - 17;
+    /**
+     * The "actual" height of the window
+     */
     public static final int WINDOW_HEIGHT = windowDimension.height - 40;
 
     // THREADS
@@ -50,9 +56,32 @@ public class Game extends JPanel implements Runnable {
     public static boolean debug = true;
 
     // GAME STATES
-    public static GameState currentGameState;
-    public static InGameState inGameState;
-    public static MainMenuState mainMenuState;
+    private static InGameState inGameState;
+    private static MainMenuState mainMenuState;
+
+    public static GameState currentState;
+
+    public static void main(String[] args) {
+        startTime = System.currentTimeMillis();
+
+        frame = new JFrame("Beyond Origins");
+        frame.setSize(windowDimension.width, windowDimension.height);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
+
+        // Credit: https://stackoverflow.com/a/11671311
+        Game game = new Game();
+        game.setDoubleBuffered(true);
+        frame.getContentPane().add(game);
+
+        frame.setVisible(true);
+        game.requestFocus();
+
+        running = true;
+        mainThread = new Thread(game, "Game-Main");
+        mainThread.start();
+    }
 
     private void init() {
         Debug.out("Initializing graphics and entities...");
@@ -83,32 +112,8 @@ public class Game extends JPanel implements Runnable {
         Debug.out("Initializing game states...");
         inGameState = new InGameState();
         mainMenuState = new MainMenuState();
-
-        currentGameState = mainMenuState;
-
+        setState(mainMenuState);
         Debug.out("Game states were initialized");
-    }
-
-    public static void main(String[] args) {
-        startTime = System.currentTimeMillis();
-
-        frame = new JFrame("Beyond Origins");
-        frame.setSize(windowDimension.width, windowDimension.height);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        frame.setLocationRelativeTo(null);
-
-        // Credit: https://stackoverflow.com/a/11671311
-        Game game = new Game();
-        game.setDoubleBuffered(true);
-        frame.getContentPane().add(game);
-
-        frame.setVisible(true);
-        game.requestFocus();
-
-        running = true;
-        mainThread = new Thread(game, "Game-Main");
-        mainThread.start();
     }
 
     private void initializeEntities() {
@@ -146,6 +151,46 @@ public class Game extends JPanel implements Runnable {
         AllSectors.define();
     }
 
+    public static boolean stateIs(int id) {
+        switch (id) {
+            case GameState.IN_GAME:
+                return inGameState.equals(currentState);
+            case GameState.MAIN_MENU:
+                return mainMenuState.equals(currentState);
+            default:
+                Debug.out("Tried to get an unknown game state (id of " + id + ")");
+                return false;
+        }
+    }
+
+    public static GameState getState(int id) {
+        switch (id) {
+            case GameState.IN_GAME:
+                return inGameState;
+            case GameState.MAIN_MENU:
+                return mainMenuState;
+            default:
+                Debug.out("Tried to get an unknown game state (id of " + id + ")");
+                return currentState;
+        }
+    }
+
+    public static void setState(int id) {
+        setState(getState(id));
+    }
+
+    public static void setState(GameState changeTo) {
+        if (changeTo.equals(currentState)) {
+            Debug.warning("Tried to change the game state to the state it's already in");
+            return;
+        }
+        if (currentState != null) {
+            currentState.onEnd();
+        }
+        currentState = changeTo;
+        currentState.onStart();
+    }
+
     public static synchronized void quit() {
         System.exit(0);
     }
@@ -166,6 +211,7 @@ public class Game extends JPanel implements Runnable {
     public void run() {
         // load images, save data, etc.
         init();
+        Debug.out("Startup: " + ((System.currentTimeMillis() - startTime) / 1000.0) + " seconds");
 
         // Credit: http://www.java-gaming.org/index.php?topic=24220.0
         // Additional credit: http://www.cokeandcode.com/info/showsrc/showsrc.php?src=../spaceinvaders102/org/newdawn/spaceinvaders/Game.java
@@ -199,14 +245,14 @@ public class Game extends JPanel implements Runnable {
 
     private synchronized void tick(double delta) {
         // ignore interpolation for now
-        currentGameState.tick();
+        currentState.tick();
     }
 
     private synchronized void render(Graphics graphics) {
-        if (currentGameState == null) {
+        if (currentState == null) {
             return;
         }
-        currentGameState.render(graphics);
+        currentState.render(graphics);
     }
 
     @Override

@@ -8,7 +8,6 @@ import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
-import net.egartley.gamelib.logic.math.Calculate;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -234,7 +233,7 @@ public abstract class Entity {
             entityWidth = sprite.width;
             setFontMetrics = true;
         }
-        nameX = Calculate.getCenter((int) x, entityWidth) - nameTagWidth / 2;
+        nameX = (int) ((x + (entityWidth / 2)) - nameTagWidth / 2);
         nameY = (int) y - 18;
 
         graphics.setColor(nameTagBackgroundColor);

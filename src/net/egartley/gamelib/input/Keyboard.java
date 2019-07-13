@@ -23,7 +23,7 @@ public class Keyboard implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int keycode = e.getKeyCode();
-        if (!isKeyPressed(keycode)) {
+        if (!pressedKeyCodes.contains(keycode)) {
             pressedKeyCodes.add(keycode);
         }
     }

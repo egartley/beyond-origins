@@ -1,7 +1,6 @@
 package net.egartley.gamelib.input;
 
-import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.ui.MenuButton;
+import net.egartley.beyondorigins.controllers.MouseController;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -14,7 +13,7 @@ public class Mouse implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // TODO: some kind of global "on click" thing
+
     }
 
     @Override
@@ -24,11 +23,7 @@ public class Mouse implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (Game.currentGameState.equals(Game.mainMenuState)) {
-            for (MenuButton b : Game.mainMenuState.buttons) {
-                b.checkClick(e);
-            }
-        }
+        MouseController.onMouseClick(e);
         isDragging = false;
     }
 

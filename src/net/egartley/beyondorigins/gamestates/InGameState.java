@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins.gamestates;
 
 import net.egartley.beyondorigins.Debug;
+import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.controllers.KeyboardController;
 import net.egartley.beyondorigins.entities.Entities;
@@ -46,6 +47,20 @@ public class InGameState extends GameState {
                 Entities.DIALOGUE_PANEL.advance();
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        KeyboardController.addKeyTyped(new KeyTyped(KeyEvent.VK_ESCAPE) {
+            @Override
+            public void onType() {
+                Game.setState(Game.getState(GameState.MAIN_MENU));
+            }
+        });
+    }
+
+    @Override
+    public void onEnd() {
     }
 
     @Override
