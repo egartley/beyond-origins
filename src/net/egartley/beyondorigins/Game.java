@@ -84,13 +84,14 @@ public class Game extends JPanel implements Runnable {
     }
 
     private void init() {
+        Debug.out("Defining dialogue...");
+        DummyDialogue.initialize();
+        Debug.out("Dialogue was defined");
+
         Debug.out("Initializing graphics and entities...");
         initializeEntities();
         Debug.out("Graphics and entities were initialized");
 
-        Debug.out("Defining dialogue...");
-        DummyDialogue.initialize();
-        Debug.out("Dialogue was defined");
 
         Debug.out("Loading maps...");
         loadMaps();

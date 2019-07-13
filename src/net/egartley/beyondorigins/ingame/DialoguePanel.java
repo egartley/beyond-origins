@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Game;
+import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.logic.math.Calculate;
@@ -20,6 +21,7 @@ public class DialoguePanel extends StaticEntity {
     private static boolean setFontMetrics;
     private static Font lineFont = new Font("Bookman Old Style", Font.BOLD, 14);
     private static Font characterNameFont = new Font("Arial", Font.PLAIN, 12);
+    public CharacterDialogue currentDialogue;
 
     public String[] allLines;
     public String[] displayedLines;
@@ -32,7 +34,8 @@ public class DialoguePanel extends StaticEntity {
     }
 
     public void setDialogue(CharacterDialogue dialogue) {
-        allLines = dialogue.lines;
+        currentDialogue = dialogue;
+        allLines = currentDialogue.lines;
         if (allLines.length <= maxLines) {
             // max number or less lines, will always display all of them
             displayedLines = allLines;
@@ -46,6 +49,7 @@ public class DialoguePanel extends StaticEntity {
 
     public void advance() {
         if (queuedLines == null || queuedLines.length == 0) {
+            DialogueController.onFinished(currentDialogue);
             isShowing = false;
         } else if (isShowing) {
             nextLine();
@@ -74,10 +78,6 @@ public class DialoguePanel extends StaticEntity {
         }
         // render background (the "panel" (image))
         super.render(graphics);
-        // debug if applicable
-        if (Game.debug) {
-            drawDebug(graphics);
-        }
         // render character thing
         Sprite s = Entities.DUMMY.sprite;
         graphics.drawImage(s.toBufferedImage(), 288 - s.width / 2, 401, null);

@@ -3,12 +3,14 @@ package net.egartley.beyondorigins.entities;
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
+import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.definitions.dialogue.DummyDialogue;
 import net.egartley.gamelib.graphics.Animation;
 import net.egartley.gamelib.graphics.EntityExpression;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.interfaces.Collidable;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
+import net.egartley.gamelib.logic.events.DialogueFinishedEvent;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 import net.egartley.gamelib.logic.interaction.BoundaryPadding;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
@@ -25,6 +27,7 @@ public class Dummy extends AnimatedEntity implements Collidable {
     private final byte RIGHT_ANIMATION = 1;
     private final int ANIMATION_THRESHOLD = 150;
 
+    private boolean isAngry;
     private short walktime = 0;
     private byte dir = RIGHT;
 
@@ -45,6 +48,13 @@ public class Dummy extends AnimatedEntity implements Collidable {
         speed = 1.1;
 
         exp = new EntityExpression(EntityExpression.ANGER, this);
+
+        DialogueController.addFinished(new DialogueFinishedEvent(DummyDialogue.CAUGHT_UP_WITH_PLAYER) {
+            @Override
+            public void onFinish() {
+                isAngry = false;
+            }
+        });
     }
 
     private void switchAnimation(byte i) {
@@ -124,12 +134,16 @@ public class Dummy extends AnimatedEntity implements Collidable {
             animation.stop();
         }
 
-        exp.tick();
+        if (isAngry) {
+            exp.tick();
+        }
     }
 
     @Override
     public void render(Graphics graphics) {
-        exp.render(graphics);
+        if (isAngry) {
+            exp.render(graphics);
+        }
         super.render(graphics);
         if (Game.debug) {
             drawDebug(graphics);
@@ -168,10 +182,13 @@ public class Dummy extends AnimatedEntity implements Collidable {
         collisions.clear();
         collisions.add(new EntityEntityCollision(defaultBoundary, Entities.PLAYER.defaultBoundary) {
             public void onCollide(EntityEntityCollisionEvent event) {
-                if (Entities.DIALOGUE_PANEL.isShowing)
+                if (Entities.DIALOGUE_PANEL.isShowing) {
                     return;
+                }
                 Entities.DIALOGUE_PANEL.setDialogue(DummyDialogue.CAUGHT_UP_WITH_PLAYER);
                 Entities.DIALOGUE_PANEL.isShowing = true;
+
+                isAngry = true;
             }
 
             public void onCollisionEnd(EntityEntityCollisionEvent event) {

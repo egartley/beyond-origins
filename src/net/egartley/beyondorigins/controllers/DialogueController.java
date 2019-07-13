@@ -1,17 +1,30 @@
 package net.egartley.beyondorigins.controllers;
 
-import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.ingame.CharacterDialogue;
+import net.egartley.gamelib.logic.events.DialogueFinishedEvent;
 
-import java.awt.*;
+import java.util.ArrayList;
 
 public class DialogueController {
 
-    public static void render(Graphics graphics) {
-        Entities.DIALOGUE_PANEL.render(graphics);
+    private static ArrayList<DialogueFinishedEvent> events = new ArrayList<>();
+
+    public static void onFinished(CharacterDialogue dialogue) {
+        for (DialogueFinishedEvent event : events) {
+            if (event.dialogue.equals(dialogue)) {
+                event.onFinish();
+            }
+        }
     }
 
-    public static void tick() {
-        Entities.DIALOGUE_PANEL.tick();
+    public static void addFinished(DialogueFinishedEvent event) {
+        if (!events.contains(event)) {
+            events.add(event);
+        }
+    }
+
+    public static void removeFinished(DialogueFinishedEvent event) {
+        events.remove(event);
     }
 
 }
