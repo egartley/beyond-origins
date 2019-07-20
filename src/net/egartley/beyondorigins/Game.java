@@ -1,7 +1,6 @@
 package net.egartley.beyondorigins;
 
 import net.egartley.beyondorigins.controllers.KeyboardController;
-import net.egartley.beyondorigins.definitions.dialogue.DummyDialogue;
 import net.egartley.beyondorigins.definitions.maps.AllSectors;
 import net.egartley.beyondorigins.entities.Dummy;
 import net.egartley.beyondorigins.entities.Entities;
@@ -84,17 +83,13 @@ public class Game extends JPanel implements Runnable {
     }
 
     private void init() {
-        Debug.out("Defining dialogue...");
-        DummyDialogue.initialize();
-        Debug.out("Dialogue was defined");
-
-        Debug.out("Initializing graphics and entities...");
+        Debug.out("Initializing entities...");
         initializeEntities();
-        Debug.out("Graphics and entities were initialized");
-
+        Debug.out("Entities were initialized");
 
         Debug.out("Loading maps...");
-        loadMaps();
+        MapTile.init();
+        AllSectors.define();
         Debug.out("Maps were loaded");
 
         Debug.out("Initializing input stuff...");
@@ -119,40 +114,28 @@ public class Game extends JPanel implements Runnable {
 
     private void initializeEntities() {
         // this up-scales images to a factor of 2 (each pixel in the source image will be rendered as 2x2 pixel)
-        byte scale = 2;
+        // byte scale = 2;
 
         // *********** PLAYER BEGIN ***********
         BufferedImage image = ImageStore.get(ImageStore.PLAYER);
-        if (image != null) {
-            image = Util.resize(image, image.getWidth(), image.getHeight());
-        } else {
+        if (image == null) {
             Debug.error("The default player image (\"player-default.png\") doesn't exist, or there was a problem while loading it!");
-            return;
+        } else {
+            Entities.PLAYER = new Player(new SpriteSheet(image, 30, 46, 2, 4).sprites);
         }
-        Entities.PLAYER = new Player(new SpriteSheet(image, 30, 46, 2, 4).sprites);
         // ************ PLAYER END ************
 
         // ************ DUMMY BEGIN ***********
         image = ImageStore.get(ImageStore.DUMMY);
-        if (image != null) {
-            image = Util.resize(image, image.getWidth() * scale, image.getHeight() * scale);
-        } else {
+        if (image == null) {
             Debug.error("The dummy image (\"dummy.png\") doesn't exist, or there was a problem while loading it!");
-            return;
+        } else {
+            Entities.DUMMY = new Dummy(new SpriteSheet(image, 30, 46, 2, 4).sprites);
         }
-        Entities.DUMMY = new Dummy(new SpriteSheet(image, 15 * scale, 23 * scale, 2, 4).sprites);
         // ************ DUMMY END *************
     }
 
-    /**
-     * Loads all maps and their sectors' tile definitions
-     */
-    private void loadMaps() {
-        MapTile.init();
-        AllSectors.define();
-    }
-
-    public static boolean stateIs(int id) {
+    public static boolean isState(int id) {
         switch (id) {
             case GameState.IN_GAME:
                 return inGameState.equals(currentState);
@@ -214,8 +197,9 @@ public class Game extends JPanel implements Runnable {
         init();
         Debug.out("Startup: " + ((System.currentTimeMillis() - startTime) / 1000.0) + " seconds");
 
-        // Credit: http://www.java-gaming.org/index.php?topic=24220.0
-        // Additional credit: http://www.cokeandcode.com/info/showsrc/showsrc.php?src=../spaceinvaders102/org/newdawn/spaceinvaders/Game.java
+        // Credit:
+        // http://www.java-gaming.org/index.php?topic=24220.0
+        // http://www.cokeandcode.com/info/showsrc/showsrc.php?src=../spaceinvaders102/org/newdawn/spaceinvaders/Game.java
         long lastLoopTime = System.nanoTime();
         final int TARGET_FPS = 60;
         final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
@@ -223,7 +207,7 @@ public class Game extends JPanel implements Runnable {
             long now = System.nanoTime();
             long updateLength = now - lastLoopTime;
             lastLoopTime = now;
-            double delta = updateLength / ((double) OPTIMAL_TIME);
+            double delta = updateLength / (double) OPTIMAL_TIME;
             lastFpsTime += updateLength;
             fps++;
             if (lastFpsTime >= 1000000000) {

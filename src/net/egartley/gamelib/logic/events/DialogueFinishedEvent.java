@@ -1,6 +1,6 @@
 package net.egartley.gamelib.logic.events;
 
-import net.egartley.beyondorigins.ingame.CharacterDialogue;
+import net.egartley.gamelib.objects.CharacterDialogue;
 
 public class DialogueFinishedEvent {
 

@@ -29,7 +29,7 @@ public class DefaultRock extends StaticEntity implements Collidable {
 
     @Override
     public void tick() {
-        // collisions.forEach(EntityEntityCollision::tick);
+
     }
 
     @Override
@@ -41,28 +41,7 @@ public class DefaultRock extends StaticEntity implements Collidable {
 
     @Override
     public void setCollisions() {
-        /*EntityEntityCollision withPlayer = new EntityEntityCollision(Entities.PLAYER.headBoundary, boundaries.get(0)) {
-            public void onCollide(EntityEntityCollisionEvent event) {
-                onPlayerCollision(event);
-            }
 
-            public void onCollisionEnd(EntityEntityCollisionEvent event) {
-                if (!Entities.PLAYER.isCollided) {
-                    Entities.PLAYER.allowAllMovement();
-                } else {
-                    Entities.PLAYER.annulCollisionEvent(event);
-                }
-            }
-        };
-        collisions.add(withPlayer);
-
-        for (EntityEntityCollision collision : Util.getAllBoundaryCollisions(withPlayer, Entities.PLAYER, boundaries
-                .get(0))) {
-            if (collision.boundaries[0] != Entities.PLAYER.boundary && collision.boundaries[0] != Entities.PLAYER
-                    .headBoundary) {
-                collisions.add(collision);
-            }
-        }*/
     }
 
 }

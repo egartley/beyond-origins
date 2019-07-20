@@ -5,6 +5,7 @@ import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.logic.math.Calculate;
+import net.egartley.gamelib.objects.CharacterDialogue;
 import net.egartley.gamelib.objects.StaticEntity;
 
 import java.awt.*;
@@ -54,6 +55,10 @@ public class DialoguePanel extends StaticEntity {
         } else if (isShowing) {
             nextLine();
         }
+    }
+
+    public void show() {
+        isShowing = true;
     }
 
     private void nextLine() {

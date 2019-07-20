@@ -1,19 +1,27 @@
-package net.egartley.beyondorigins.ingame;
+package net.egartley.gamelib.objects;
 
+import net.egartley.beyondorigins.Debug;
 import net.egartley.gamelib.interfaces.Character;
 
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
-public abstract class CharacterDialogue {
+public class CharacterDialogue {
 
     private static final short MAX_LINE_LENGTH = 54;
 
     public Character character;
     public String[] lines;
 
-    public CharacterDialogue(Character character, String dialogue) {
+    public CharacterDialogue(Character character, String path) {
         this.character = character;
-        lines = toLines(dialogue);
+        try {
+            lines = toLines(Files.readString(FileSystems.getDefault().getPath("resources", "dialogue", path)));
+        } catch (IOException e) {
+            Debug.error(e);
+        }
     }
 
     /**

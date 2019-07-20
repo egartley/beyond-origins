@@ -44,9 +44,6 @@ public class Sector1 extends MapSector {
         Sprite s = Entities.getTemplate(Entities.TEMPLATE_TREE);
         entities.add(new DefaultTree(s, 100, 200));
         entities.add(new DefaultTree(s, 36, 200));
-
-        // re-use same sprite variable, no use in creating a new one if there is already
-        // one in memory
         s = Entities.getTemplate(Entities.TEMPLATE_ROCK);
         int off = 0;
         for (byte i = 0; i < 14; i++) {
@@ -56,6 +53,16 @@ public class Sector1 extends MapSector {
         entities.add(new DefaultRock(s, 270, 310));
         entities.add(new DefaultRock(s, 150, 370));
         entities.add(new DefaultRock(s, 460, 350));*/
+
+        /* Sector1 me = this;
+        testClick = new MouseClicked() {
+            @Override
+            public void onClick(MouseEvent e) {
+                entities.add(new DefaultRock(Entities.getTemplate(Entities.TEMPLATE_ROCK), Mouse.x, Mouse.y));
+                Entities.PLAYER.onSectorLeave(me);
+                Entities.PLAYER.onSectorEnter(me);
+            }
+        }; */
     }
 
     @Override

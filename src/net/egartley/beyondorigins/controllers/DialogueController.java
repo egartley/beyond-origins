@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins.controllers;
 
-import net.egartley.beyondorigins.ingame.CharacterDialogue;
 import net.egartley.gamelib.logic.events.DialogueFinishedEvent;
+import net.egartley.gamelib.objects.CharacterDialogue;
 
 import java.util.ArrayList;
 
