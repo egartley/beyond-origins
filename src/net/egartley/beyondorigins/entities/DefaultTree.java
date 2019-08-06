@@ -13,10 +13,9 @@ import net.egartley.gamelib.objects.StaticEntity;
  */
 public class DefaultTree extends StaticEntity implements Collidable, Interactable {
 
-    public DefaultTree(Sprite sprite, double x, double y) {
+    public DefaultTree(Sprite sprite, int x, int y) {
         super("Tree", sprite);
-        this.x = x;
-        this.y = y;
+        setPosition(x, y);
         setBoundaries();
         setCollisions();
 

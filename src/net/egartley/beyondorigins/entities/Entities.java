@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins.entities;
 
+import net.egartley.beyondorigins.data.ImageStore;
 import net.egartley.beyondorigins.ingame.DialoguePanel;
-import net.egartley.beyondorigins.media.images.ImageStore;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.graphics.SpriteSheet;
 

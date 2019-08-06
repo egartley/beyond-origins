@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins;
 
+import net.egartley.beyondorigins.data.EntityStore;
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.entities.EntityStore;
 import net.egartley.beyondorigins.maps.debug.DebugMap;
 import net.egartley.gamelib.input.Mouse;
 
@@ -112,14 +112,15 @@ public class Debug {
         if (Game.debug) {
             row = 0;
             graphics.setFont(font);
-            drawLine("x = " + (int) Entities.PLAYER.x + ", y = " + (int) Entities.PLAYER.y, graphics);
-            drawLine("isCollided = " + Entities.PLAYER.isCollided, graphics);
+            drawLine("Position: " + Entities.PLAYER.x() + ", " + Entities.PLAYER.y(), graphics);
+            // drawLine("Delta: " + Entities.PLAYER.deltaX + ", " + Entities.PLAYER.deltaY, graphics);
             drawLine("Location: " + DebugMap.currentSector, graphics);
+            drawLine("Mouse: " + Mouse.x + ", " + Mouse.y, graphics);
             drawLine("EntityStore: " + EntityStore.amount, graphics);
             if (Entities.PLAYER.lastCollision != null) {
                 drawLine("Last collision: " + Entities.PLAYER.lastCollision, graphics);
             }
-            drawLine("Mouse: " + Mouse.x + ", " + Mouse.y, graphics);
+            drawLine("isCollided = " + Entities.PLAYER.isCollided, graphics);
         }
     }
 

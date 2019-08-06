@@ -1,7 +1,7 @@
 package net.egartley.gamelib.objects;
 
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.media.images.ImageStore;
+import net.egartley.beyondorigins.data.ImageStore;
 
 import java.awt.image.BufferedImage;
 

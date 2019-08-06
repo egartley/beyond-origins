@@ -82,7 +82,7 @@ public class EntityBoundary extends Boundary {
     }
 
     public void setColor() {
-        if (parent.isStatic) {
+        if (!parent.isAnimated) {
             drawColor = Color.BLACK;
         } else {
             drawColor = Color.ORANGE; // man bad!
@@ -91,8 +91,8 @@ public class EntityBoundary extends Boundary {
 
     @Override
     public void tick() {
-        x = (int) parent.x - horizontalOffset;
-        y = (int) parent.y - verticalOffset;
+        x = parent.x() - horizontalOffset;
+        y = parent.y() - verticalOffset;
         super.tick();
     }
 

@@ -4,9 +4,10 @@ import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.controllers.DialogueController;
+import net.egartley.beyondorigins.data.ImageStore;
 import net.egartley.gamelib.graphics.Animation;
 import net.egartley.gamelib.graphics.EntityExpression;
-import net.egartley.gamelib.graphics.Sprite;
+import net.egartley.gamelib.graphics.SpriteSheet;
 import net.egartley.gamelib.interfaces.Character;
 import net.egartley.gamelib.interfaces.Collidable;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
@@ -35,12 +36,12 @@ public class Dummy extends AnimatedEntity implements Collidable, Character {
 
     EntityExpression exp;
 
-    public Dummy(ArrayList<Sprite> sprites) {
+    public Dummy() {
         super("Dummy");
-        this.sprites = sprites;
+        SpriteSheet ss = new SpriteSheet(ImageStore.get(ImageStore.DUMMY), 30, 44, 2, 4);
+        this.sprites = ss.sprites;
         sprite = sprites.get(0);
-        x = 470.0;
-        y = 132.0;
+        setPosition(470, 132);
         setAnimations();
         setBoundaries();
         setCollisions();

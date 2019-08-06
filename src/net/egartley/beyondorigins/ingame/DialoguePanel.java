@@ -2,13 +2,17 @@ package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.DialogueController;
+import net.egartley.beyondorigins.data.ImageStore;
 import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.logic.math.Calculate;
 import net.egartley.gamelib.objects.CharacterDialogue;
+import net.egartley.gamelib.objects.GameState;
 import net.egartley.gamelib.objects.StaticEntity;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
 public class DialoguePanel extends StaticEntity {
@@ -22,6 +26,7 @@ public class DialoguePanel extends StaticEntity {
     private static boolean setFontMetrics;
     private static Font lineFont = new Font("Bookman Old Style", Font.BOLD, 14);
     private static Font characterNameFont = new Font("Arial", Font.PLAIN, 12);
+    private BufferedImage moreLinesImage;
     public CharacterDialogue currentDialogue;
 
     public String[] allLines;
@@ -30,8 +35,8 @@ public class DialoguePanel extends StaticEntity {
 
     public DialoguePanel(Sprite sprite) {
         super("DialogPanel", sprite);
-        x = Calculate.getCenter(Game.WINDOW_WIDTH / 2, sprite.width);
-        y = Game.WINDOW_HEIGHT - sprite.height - 8;
+        setPosition(Calculate.getCenter(Game.WINDOW_WIDTH / 2, sprite.width), Game.WINDOW_HEIGHT - sprite.height - 8);
+        moreLinesImage = ImageStore.get(ImageStore.MORE_LINES);
     }
 
     public void setDialogue(CharacterDialogue dialogue) {
@@ -51,7 +56,7 @@ public class DialoguePanel extends StaticEntity {
     public void advance() {
         if (queuedLines == null || queuedLines.length == 0) {
             DialogueController.onFinished(currentDialogue);
-            isShowing = false;
+            hide();
         } else if (isShowing) {
             nextLine();
         }
@@ -59,6 +64,12 @@ public class DialoguePanel extends StaticEntity {
 
     public void show() {
         isShowing = true;
+        ((InGameState) Game.getState(GameState.IN_GAME)).isDialogueVisible = true;
+    }
+
+    public void hide() {
+        isShowing = false;
+        ((InGameState) Game.getState(GameState.IN_GAME)).isDialogueVisible = false;
     }
 
     private void nextLine() {
@@ -69,7 +80,6 @@ public class DialoguePanel extends StaticEntity {
 
     @Override
     public void tick() {
-
     }
 
     @Override
@@ -85,22 +95,26 @@ public class DialoguePanel extends StaticEntity {
         super.render(graphics);
         // render character thing
         Sprite s = Entities.DUMMY.sprite;
-        graphics.drawImage(s.toBufferedImage(), 288 - s.width / 2, 401, null);
+        graphics.drawImage(s.toBufferedImage(), 247 + 26 - (s.width / 2), 414 /* + 26 - (s.height / 2) */, null);
         graphics.setColor(Color.WHITE);
         graphics.setFont(characterNameFont);
-        graphics.drawString("Dummy", 288 - characterNameStringWidth / 2, 468);
+        graphics.drawString("Dummy", 272 - characterNameStringWidth / 2, 476);
         // render text
         graphics.setFont(lineFont);
         for (String line : displayedLines) {
             renderLine(line, graphics);
         }
         lineIndex = 0;
+        // render more lines thing
+        if (queuedLines.length > 0) {
+            graphics.drawImage(moreLinesImage, 700, 500, null);
+        }
     }
 
     private void renderLine(String text, Graphics graphics) {
         // max width 380, or max str length 55
         lineIndex++;
-        graphics.drawString(text, (int) x + 96, (int) y + 22 + (18 * lineIndex));
+        graphics.drawString(text, x() + 96, y() + 16 + (18 * lineIndex));
     }
 
     @Override

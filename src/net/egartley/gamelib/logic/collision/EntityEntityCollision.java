@@ -156,13 +156,13 @@ public class EntityEntityCollision {
 
     private void determineBoundaryColor(EntityBoundary e) {
         if (!e.isCollided) {
-            if (e.parent.isStatic) {
+            if (!e.parent.isAnimated) {
                 e.drawColor = Color.BLACK;
             } else {
                 e.drawColor = Color.ORANGE;
             }
         } else {
-            if (e.parent.isStatic) {
+            if (!e.parent.isAnimated) {
                 e.drawColor = Color.YELLOW;
             } else {
                 e.drawColor = Color.RED;

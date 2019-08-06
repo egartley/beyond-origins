@@ -189,16 +189,16 @@ public abstract class MapSector {
     private void playerEnteredFrom(int direction) {
         switch (direction) {
             case TOP:
-                Entities.PLAYER.y = PLAYER_ENTRANCE_OFFSET;
+                Entities.PLAYER.y(PLAYER_ENTRANCE_OFFSET);
                 break;
             case LEFT:
-                Entities.PLAYER.x = PLAYER_ENTRANCE_OFFSET;
+                Entities.PLAYER.x(PLAYER_ENTRANCE_OFFSET);
                 break;
             case BOTTOM:
-                Entities.PLAYER.y = Game.WINDOW_HEIGHT - PLAYER_ENTRANCE_OFFSET - Entities.PLAYER.sprite.height;
+                Entities.PLAYER.y(Game.WINDOW_HEIGHT - PLAYER_ENTRANCE_OFFSET - Entities.PLAYER.sprite.height);
                 break;
             case RIGHT:
-                Entities.PLAYER.x = Game.WINDOW_WIDTH - PLAYER_ENTRANCE_OFFSET - Entities.PLAYER.sprite.width;
+                Entities.PLAYER.x(Game.WINDOW_WIDTH - PLAYER_ENTRANCE_OFFSET - Entities.PLAYER.sprite.width);
                 break;
             default:
                 break;

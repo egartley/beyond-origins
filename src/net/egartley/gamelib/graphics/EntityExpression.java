@@ -1,6 +1,6 @@
 package net.egartley.gamelib.graphics;
 
-import net.egartley.beyondorigins.media.images.ImageStore;
+import net.egartley.beyondorigins.data.ImageStore;
 import net.egartley.gamelib.logic.math.Calculate;
 import net.egartley.gamelib.objects.AnimatedEntity;
 import net.egartley.gamelib.objects.Entity;
@@ -55,8 +55,7 @@ public class EntityExpression extends AnimatedEntity {
         if (!animation.clock.isRunning) {
             animation.start();
         }
-        x = Calculate.getCenter((int) target.x + (target.sprite.width / 2), sprite.width);
-        y = target.y - 24;
+        setPosition(Calculate.getCenter(target.x() + (target.sprite.width / 2), sprite.width), target.y() - 24);
         super.tick();
     }
 

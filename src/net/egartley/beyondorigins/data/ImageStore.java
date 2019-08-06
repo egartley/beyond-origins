@@ -1,4 +1,4 @@
-package net.egartley.beyondorigins.media.images;
+package net.egartley.beyondorigins.data;
 
 import net.egartley.beyondorigins.Debug;
 
@@ -25,6 +25,7 @@ public class ImageStore {
 
     public final static byte DIALOGUE_PANEL = 7;
     public final static byte INVENTORY = 8;
+    public final static byte MORE_LINES = 9;
 
     /**
      * Returns the specified image
@@ -59,6 +60,8 @@ public class ImageStore {
                 return get(entityPath + "dialogue-panel.png");
             case INVENTORY:
                 return get(entityPath + "inventory.png");
+            case MORE_LINES:
+                return get(path + "ui/more-lines.png");
             default:
                 return null;
         }

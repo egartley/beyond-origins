@@ -1,8 +1,8 @@
 package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Game;
+import net.egartley.beyondorigins.data.ImageStore;
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.media.images.ImageStore;
 import net.egartley.gamelib.graphics.Sprite;
 
 import java.awt.*;

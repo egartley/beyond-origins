@@ -7,8 +7,6 @@ import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.Player;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.gamestates.MainMenuState;
-import net.egartley.beyondorigins.media.images.ImageStore;
-import net.egartley.gamelib.graphics.SpriteSheet;
 import net.egartley.gamelib.input.KeyTyped;
 import net.egartley.gamelib.input.Keyboard;
 import net.egartley.gamelib.input.Mouse;
@@ -18,7 +16,6 @@ import net.egartley.gamelib.objects.MapTile;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 
 /**
  * @author Evan Gartley (https://github.com/egartley)
@@ -113,26 +110,8 @@ public class Game extends JPanel implements Runnable {
     }
 
     private void initializeEntities() {
-        // this up-scales images to a factor of 2 (each pixel in the source image will be rendered as 2x2 pixel)
-        // byte scale = 2;
-
-        // *********** PLAYER BEGIN ***********
-        BufferedImage image = ImageStore.get(ImageStore.PLAYER);
-        if (image == null) {
-            Debug.error("The default player image (\"player-default.png\") doesn't exist, or there was a problem while loading it!");
-        } else {
-            Entities.PLAYER = new Player(new SpriteSheet(image, 30, 46, 2, 4).sprites);
-        }
-        // ************ PLAYER END ************
-
-        // ************ DUMMY BEGIN ***********
-        image = ImageStore.get(ImageStore.DUMMY);
-        if (image == null) {
-            Debug.error("The dummy image (\"dummy.png\") doesn't exist, or there was a problem while loading it!");
-        } else {
-            Entities.DUMMY = new Dummy(new SpriteSheet(image, 30, 46, 2, 4).sprites);
-        }
-        // ************ DUMMY END *************
+        Entities.PLAYER = new Player();
+        Entities.DUMMY = new Dummy();
     }
 
     public static boolean isState(int id) {
@@ -195,7 +174,7 @@ public class Game extends JPanel implements Runnable {
     public void run() {
         // load images, save data, etc.
         init();
-        Debug.out("Startup: " + ((System.currentTimeMillis() - startTime) / 1000.0) + " seconds");
+        Debug.out("init() took " + ((System.currentTimeMillis() - startTime) / 1000.0) + " seconds");
 
         // Credit:
         // http://www.java-gaming.org/index.php?topic=24220.0
@@ -207,7 +186,6 @@ public class Game extends JPanel implements Runnable {
             long now = System.nanoTime();
             long updateLength = now - lastLoopTime;
             lastLoopTime = now;
-            double delta = updateLength / (double) OPTIMAL_TIME;
             lastFpsTime += updateLength;
             fps++;
             if (lastFpsTime >= 1000000000) {
@@ -215,7 +193,7 @@ public class Game extends JPanel implements Runnable {
                 fps = 0;
             }
 
-            tick(delta);
+            tick(updateLength / (double) OPTIMAL_TIME);
             repaint();
 
             try {

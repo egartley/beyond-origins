@@ -2,8 +2,9 @@ package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
+import net.egartley.beyondorigins.data.ImageStore;
 import net.egartley.gamelib.graphics.Animation;
-import net.egartley.gamelib.graphics.Sprite;
+import net.egartley.gamelib.graphics.SpriteSheet;
 import net.egartley.gamelib.input.Keyboard;
 import net.egartley.gamelib.interfaces.Character;
 import net.egartley.gamelib.interfaces.Collidable;
@@ -31,9 +32,10 @@ public class Player extends AnimatedEntity implements Character, Collidable {
     EntityBoundary bodyBoundary;
     EntityBoundary feetBoundary;
 
-    public Player(ArrayList<Sprite> sprites) {
+    public Player() {
         super("Player");
-        this.sprites = sprites;
+        SpriteSheet ss = new SpriteSheet(ImageStore.get(ImageStore.PLAYER), 30, 46, 2, 4);
+        this.sprites = ss.sprites;
         sprite = sprites.get(0);
         setAnimations();
         setBoundaries();

@@ -68,8 +68,8 @@ public class Sector1 extends MapSector {
     @Override
     public void onPlayerEnter(MapSector from) {
         if (from == null) {
-            Entities.PLAYER.x = 700;
-            Entities.PLAYER.y = 140;
+            Entities.PLAYER.x(700);
+            Entities.PLAYER.y(140);
         } else {
             updatePlayerPosition(from);
         }

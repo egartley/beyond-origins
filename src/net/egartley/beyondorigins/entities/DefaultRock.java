@@ -11,10 +11,9 @@ import net.egartley.gamelib.objects.StaticEntity;
  */
 public class DefaultRock extends StaticEntity implements Collidable {
 
-    public DefaultRock(Sprite sprite, double x, double y) {
+    public DefaultRock(Sprite sprite, int x, int y) {
         super("Rock", sprite);
-        this.x = x;
-        this.y = y;
+        setPosition(x, y);
         setBoundaries();
         setCollisions();
 

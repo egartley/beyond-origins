@@ -12,15 +12,13 @@ import java.awt.*;
 public abstract class StaticEntity extends Entity {
 
     /**
-     * Creates a new static entity, while setting {@link Entity#isAnimated} to <code>false</code> and {@link
-     * Entity#isStatic} to <code>true</code>
+     * Creates a new static entity, while setting {@link Entity#isAnimated} to <code>false</code>
      *
      * @see Entity#Entity(String) Entity(String)
      */
     public StaticEntity(String id) {
         super(id);
         isAnimated = false;
-        isStatic = true;
     }
 
     /**
@@ -35,12 +33,13 @@ public abstract class StaticEntity extends Entity {
 
     @Override
     public void render(Graphics graphics) {
-        graphics.drawImage(image, (int) x, (int) y, null);
+        graphics.drawImage(image, x(), y(), null);
     }
 
-    @Override
+    // commented out because redundant
+    /*@Override
     public void tick() {
         super.tick();
-    }
+    }*/
 
 }

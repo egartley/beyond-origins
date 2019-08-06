@@ -24,15 +24,13 @@ public abstract class AnimatedEntity extends Entity {
     protected ArrayList<Animation> animations = new ArrayList<>();
 
     /**
-     * Creates a new animated entity, while setting {@link Entity#isAnimated} to <code>true</code> and {@link
-     * Entity#isStatic} to <code>false</code>
+     * Creates a new animated entity, while setting {@link Entity#isAnimated} to <code>true</code>
      *
      * @see Entity#Entity(String) Entity(String)
      */
     public AnimatedEntity(String id) {
         super(id);
         isAnimated = true;
-        isStatic = false;
     }
 
     /**
@@ -47,6 +45,6 @@ public abstract class AnimatedEntity extends Entity {
      */
     @Override
     public void render(Graphics graphics) {
-        animation.render(graphics, (int) x, (int) y);
+        animation.render(graphics, x(), y());
     }
 }

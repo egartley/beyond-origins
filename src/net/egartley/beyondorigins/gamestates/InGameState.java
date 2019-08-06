@@ -21,6 +21,7 @@ public class InGameState extends GameState {
     public Inventory inventory;
 
     public boolean isInventoryVisible;
+    public boolean isDialogueVisible;
 
     public InGameState() {
         identificationNumber = GameState.IN_GAME;
@@ -72,19 +73,20 @@ public class InGameState extends GameState {
     @Override
     public void render(Graphics graphics) {
         currentMap.render(graphics);
-        Entities.DIALOGUE_PANEL.render(graphics);
-        if (isInventoryVisible) {
+        if (isDialogueVisible) {
+            Entities.DIALOGUE_PANEL.render(graphics);
+        } else if (isInventoryVisible) {
             inventory.render(graphics);
         }
-
         Debug.render(graphics);
     }
 
     @Override
     public void tick() {
         currentMap.tick();
-        Entities.DIALOGUE_PANEL.tick();
-        if (isInventoryVisible) {
+        if (isDialogueVisible) {
+            Entities.DIALOGUE_PANEL.tick();
+        } else if (isInventoryVisible) {
             inventory.tick();
         }
     }

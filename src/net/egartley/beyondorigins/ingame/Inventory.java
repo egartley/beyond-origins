@@ -1,8 +1,6 @@
 package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.media.images.ImageStore;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.objects.StaticEntity;
 
@@ -22,8 +20,7 @@ public class Inventory extends StaticEntity {
         super("Inventory", sprite);
         slots = new ArrayList<>();
         items = new ArrayList<>();
-        x = (Game.WINDOW_WIDTH / 2) - (sprite.width / 2);
-        y = (Game.WINDOW_HEIGHT / 2) - (sprite.height / 2);
+        setPosition((Game.WINDOW_WIDTH / 2) - (sprite.width / 2), (Game.WINDOW_HEIGHT / 2) - (sprite.height / 2));
 
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMNS; c++) {
@@ -32,8 +29,9 @@ public class Inventory extends StaticEntity {
         }
 
         // temp
-        items.add(new InventoryItem("Feels Bad Man", slots.get(0), Util.rotateImage(ImageStore.get("resources/images/items/wojak.png"), Math.PI), true));
-        items.add(new InventoryItem("Wojak", slots.get(1), ImageStore.get("resources/images/items/wojak.png"), true));
+        items.add(new InventoryItem(Item.TEST_ITEM, slots.get(0), true));
+        items.add(new InventoryItem(Item.TEST_ITEM, slots.get(1), true));
+        items.add(new InventoryItem(Item.TEST_ITEM, slots.get(2), true));
     }
 
     static InventoryItem getItemBeingDragged() {
@@ -52,7 +50,7 @@ public class Inventory extends StaticEntity {
         graphics.setColor(backgroundColor);
         graphics.fillRect(0, 0, Game.WINDOW_WIDTH + 1, Game.WINDOW_HEIGHT + 1);
 
-        graphics.drawImage(sprite.toBufferedImage(), (int) x, (int) y, null);
+        graphics.drawImage(sprite.toBufferedImage(), x(), y(), null);
 
         for (InventorySlot s : slots)
             s.render(graphics);

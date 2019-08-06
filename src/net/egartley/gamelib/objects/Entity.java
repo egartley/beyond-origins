@@ -3,8 +3,10 @@ package net.egartley.gamelib.objects;
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.entities.EntityStore;
+import net.egartley.beyondorigins.data.EntityStore;
 import net.egartley.gamelib.graphics.Sprite;
+import net.egartley.gamelib.interfaces.Renderable;
+import net.egartley.gamelib.interfaces.Tickable;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
@@ -19,7 +21,7 @@ import java.util.ArrayList;
  * @see AnimatedEntity
  * @see StaticEntity
  */
-public abstract class Entity {
+public abstract class Entity extends Renderable implements Tickable {
 
     public static final byte UP = 1;
     public static final byte DOWN = 2;
@@ -67,14 +69,8 @@ public abstract class Entity {
      * The boundary to use if not specified
      */
     public EntityBoundary defaultBoundary = null;
-    /**
-     * The entity's x-axis coordinate
-     */
-    public double x;
-    /**
-     * The entity's y-axis coordinate
-     */
-    public double y;
+    public double deltaX;
+    public double deltaY;
     /**
      * The entity's speed (magnitude of its location change when moving)
      */
@@ -87,11 +83,7 @@ public abstract class Entity {
     /**
      * Whether or not the entity is animated
      */
-    boolean isAnimated;
-    /**
-     * Whether or not the entity is static (no animation)
-     */
-    public boolean isStatic;
+    public boolean isAnimated;
     /**
      * Whether or not other entities, mainly the player, can walk over it
      * or not
@@ -190,10 +182,10 @@ public abstract class Entity {
     }
 
     /**
-     * Renders the entity, using {@link #sprite}, at ({@link #x}, {@link #y})
+     * Renders the entity, using {@link #sprite}, at ({@link #x()}, {@link #y()})
      */
     public void render(Graphics graphics) {
-        graphics.drawImage(sprite.toBufferedImage(0), (int) x, (int) y, null);
+        graphics.drawImage(sprite.toBufferedImage(0), x(), y(), null);
         drawDebug(graphics);
     }
 
@@ -201,14 +193,14 @@ public abstract class Entity {
      * Draws the first "layer", assuming {@link #isDualRendered} is true (below the player)
      */
     public void drawFirstLayer(Graphics graphics) {
-        graphics.drawImage(firstLayer, (int) x, (int) y + secondLayer.getHeight(), null);
+        graphics.drawImage(firstLayer, x(), y() + secondLayer.getHeight(), null);
     }
 
     /**
      * Draws the second "layer", assuming {@link #isDualRendered} is true (above the player)
      */
     public void drawSecondLayer(Graphics graphics) {
-        graphics.drawImage(secondLayer, (int) x, (int) y, null);
+        graphics.drawImage(secondLayer, x(), y(), null);
         if (Game.debug) {
             drawDebug(graphics);
         }
@@ -233,8 +225,8 @@ public abstract class Entity {
             entityWidth = sprite.width;
             setFontMetrics = true;
         }
-        nameX = (int) ((x + (entityWidth / 2)) - nameTagWidth / 2);
-        nameY = (int) y - 18;
+        nameX = (x() + (entityWidth / 2)) - nameTagWidth / 2;
+        nameY = y() - 18;
 
         graphics.setColor(nameTagBackgroundColor);
         graphics.setFont(nameTagFont);
@@ -272,6 +264,35 @@ public abstract class Entity {
         boundaries.forEach(EntityBoundary::tick);
     }
 
+    public void setPosition(int x, int y) {
+        super.setPosition(x, y);
+        deltaX = x;
+        deltaY = y;
+    }
+
+    public void x(int x) {
+        x(x, true);
+    }
+
+    public void y(int y) {
+        y(y, true);
+    }
+
+    public void x(int x, boolean setDelta) {
+        super.x(x);
+        if (setDelta) {
+            deltaX = x;
+        }
+    }
+
+    public void y(int y, boolean setDelta) {
+        super.y(y);
+        if (setDelta) {
+            deltaY = y;
+        }
+    }
+
+
     /**
      * Updates the entity's location by {@link #speed}, unless the
      * specified boundary is outside of the game's window
@@ -297,7 +318,8 @@ public abstract class Entity {
                     break; // top of window
                 }
                 isMovingUpwards = true;
-                y -= speed;
+                deltaY -= speed;
+                y(y() - (int) Math.abs(deltaY - y()), false);
                 onMove(UP);
                 break;
             case DOWN:
@@ -305,7 +327,8 @@ public abstract class Entity {
                     break; // bottom of window
                 }
                 isMovingDownwards = true;
-                y += speed;
+                deltaY += speed;
+                y(y() + (int) Math.abs(deltaY - y()), false);
                 onMove(DOWN);
                 break;
             case LEFT:
@@ -313,7 +336,8 @@ public abstract class Entity {
                     break; // left side of window
                 }
                 isMovingLeftwards = true;
-                x -= speed;
+                deltaX -= speed;
+                x(x() - (int) Math.abs(deltaX - x()), false);
                 onMove(LEFT);
                 break;
             case RIGHT:
@@ -321,7 +345,8 @@ public abstract class Entity {
                     break; // right side of window
                 }
                 isMovingRightwards = true;
-                x += speed;
+                deltaX += speed;
+                x(x() + (int) Math.abs(deltaX - x()), false);
                 onMove(RIGHT);
                 break;
             default:
@@ -358,7 +383,7 @@ public abstract class Entity {
     }
 
     /**
-     * Changes the entity's location ({@link #x} and {@link #y}) at a rate
+     * Changes the entity's location ({@link #x()} and {@link #y()}) at a rate
      * of {@link #speed} per call. Since there is no boundary parameter,
      * the entity's {@link #defaultBoundary} will be used
      */
@@ -371,7 +396,7 @@ public abstract class Entity {
      * entity
      */
     private boolean isRightOf(Entity e) {
-        return x > e.x;
+        return x() > e.x();
     }
 
     /**
@@ -386,7 +411,7 @@ public abstract class Entity {
      * Returns whether or not the entity is "above" the other entity
      */
     private boolean isAbove(Entity e) {
-        return y < e.y;
+        return y() < e.y();
     }
 
     /**

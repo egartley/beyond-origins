@@ -2,42 +2,41 @@ package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Util;
 import net.egartley.gamelib.input.Mouse;
+import net.egartley.gamelib.interfaces.Renderable;
+import net.egartley.gamelib.interfaces.Tickable;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class InventoryItem {
+public class InventoryItem extends Renderable implements Tickable {
 
     private static Font tooltipFont = new Font("Arial", Font.PLAIN, 11);
 
-    public int renderX, renderY, tooltipWidth;
+    private int tooltipWidth;
+
     public boolean isBeingDragged, didStartDrag, mouseHover, setFontMetrics;
-    public String name;
-    public BufferedImage image;
+
+    public Item item;
     public InventorySlot slot;
 
-    public InventoryItem(String name, InventorySlot slot, BufferedImage image) {
-        this(name, slot, image, false);
+    public InventoryItem(Item item, InventorySlot slot) {
+        this(item, slot, false);
     }
 
-    public InventoryItem(String name, InventorySlot slot, BufferedImage image, boolean setToSlot) {
-        this.name = name;
+    public InventoryItem(Item item, InventorySlot slot, boolean setToSlot) {
+        this.item = item;
         this.slot = slot;
-        this.image = image;
-        renderX = slot.baseItemX;
-        renderY = slot.baseItemY;
+        setPosition(slot.baseItemX, slot.baseItemY);
         if (setToSlot) {
             slot.putItem(this);
         }
     }
 
     public void tick() {
-        mouseHover = Util.isWithinBounds(Mouse.x, Mouse.y, renderX, renderY, InventorySlot.SIZE, InventorySlot.SIZE);
+        mouseHover = Util.isWithinBounds(Mouse.x, Mouse.y, x(), y(), InventorySlot.SIZE, InventorySlot.SIZE);
         if (Mouse.isDragging) {
             if ((mouseHover || didStartDrag) && (Inventory.getItemBeingDragged() == this || Inventory.getItemBeingDragged() == null)) {
-                renderX = Mouse.x - (InventorySlot.SIZE / 2);
-                renderY = Mouse.y - (InventorySlot.SIZE / 2);
+                setPosition(Mouse.x - (InventorySlot.SIZE / 2), Mouse.y - (InventorySlot.SIZE / 2));
                 didStartDrag = true;
                 isBeingDragged = true;
             }
@@ -45,27 +44,26 @@ public class InventoryItem {
             onDragEnd();
             isBeingDragged = false;
         } else {
-            renderX = slot.baseItemX;
-            renderY = slot.baseItemY;
+            setPosition(slot.baseItemX, slot.baseItemY);
             didStartDrag = false;
         }
     }
 
     public void render(Graphics graphics) {
-        graphics.drawImage(image, renderX, renderY, null);
+        graphics.drawImage(item.image, x(), y(), null);
     }
 
     void drawToolTip(Graphics graphics) {
         if (!setFontMetrics) {
-            tooltipWidth = graphics.getFontMetrics(tooltipFont).stringWidth(name);
+            tooltipWidth = graphics.getFontMetrics(tooltipFont).stringWidth(item.name);
             setFontMetrics = true;
         }
         if ((mouseHover && Inventory.getItemBeingDragged() == null) || isBeingDragged) {
             graphics.setColor(Color.BLACK);
-            graphics.fillRect((renderX + InventorySlot.SIZE / 2) - (tooltipWidth / 2), renderY - 18, tooltipWidth, 16);
+            graphics.fillRect((x() + InventorySlot.SIZE / 2) - (tooltipWidth / 2), y() - 18, tooltipWidth, 16);
             graphics.setColor(Color.WHITE);
             graphics.setFont(tooltipFont);
-            graphics.drawString(name, (renderX + InventorySlot.SIZE / 2) - (tooltipWidth / 2), renderY - 6);
+            graphics.drawString(item.name, (x() + InventorySlot.SIZE / 2) - (tooltipWidth / 2), y() - 6);
         }
     }
 
@@ -75,7 +73,7 @@ public class InventoryItem {
 
         for (InventorySlot slot : Inventory.slots) {
             Rectangle r1 = new Rectangle(slot.x, slot.y, InventorySlot.SIZE, InventorySlot.SIZE);
-            Rectangle r2 = new Rectangle(this.renderX, this.renderY, InventorySlot.SIZE, InventorySlot.SIZE);
+            Rectangle r2 = new Rectangle(x(), y(), InventorySlot.SIZE, InventorySlot.SIZE);
             if (r1.intersects(r2)) {
                 intersectionRectangles.add(r1.intersection(r2));
                 intersectedSlots.add(slot);
