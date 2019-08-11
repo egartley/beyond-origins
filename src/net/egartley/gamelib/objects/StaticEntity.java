@@ -36,10 +36,4 @@ public abstract class StaticEntity extends Entity {
         graphics.drawImage(image, x(), y(), null);
     }
 
-    // commented out because redundant
-    /*@Override
-    public void tick() {
-        super.tick();
-    }*/
-
 }

@@ -2,7 +2,6 @@ package net.egartley.beyondorigins;
 
 import net.egartley.beyondorigins.data.EntityStore;
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.maps.debug.DebugMap;
 import net.egartley.gamelib.input.Mouse;
 
 import java.awt.*;
@@ -114,7 +113,7 @@ public class Debug {
             graphics.setFont(font);
             drawLine("Position: " + Entities.PLAYER.x() + ", " + Entities.PLAYER.y(), graphics);
             // drawLine("Delta: " + Entities.PLAYER.deltaX + ", " + Entities.PLAYER.deltaY, graphics);
-            drawLine("Location: " + DebugMap.currentSector, graphics);
+            drawLine("Location: " + Game.in().getCurrentMap().sector, graphics);
             drawLine("Mouse: " + Mouse.x + ", " + Mouse.y, graphics);
             drawLine("EntityStore: " + EntityStore.amount, graphics);
             if (Entities.PLAYER.lastCollision != null) {

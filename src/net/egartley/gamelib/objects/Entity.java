@@ -4,8 +4,8 @@ import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.data.EntityStore;
+import net.egartley.gamelib.abstracts.Renderable;
 import net.egartley.gamelib.graphics.Sprite;
-import net.egartley.gamelib.interfaces.Renderable;
 import net.egartley.gamelib.interfaces.Tickable;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
@@ -31,7 +31,7 @@ public abstract class Entity extends Renderable implements Tickable {
     /**
      * The entity's sprites
      */
-    protected ArrayList<Sprite> sprites;
+    protected ArrayList<Sprite> sprites = new ArrayList<>();
     /**
      * Collection of the entity's boundaries
      */
@@ -132,7 +132,7 @@ public abstract class Entity extends Renderable implements Tickable {
      * @see #drawFirstLayer(Graphics)
      * @see #drawSecondLayer(Graphics)
      */
-    protected boolean isDualRendered;
+    public boolean isDualRendered;
     /**
      * Whether or not the entity is currently registered in the entity
      * store
@@ -260,6 +260,7 @@ public abstract class Entity extends Renderable implements Tickable {
      *
      * @see #boundaries
      */
+    @Override
     public void tick() {
         boundaries.forEach(EntityBoundary::tick);
     }

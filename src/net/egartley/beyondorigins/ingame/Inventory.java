@@ -11,15 +11,13 @@ public class Inventory extends StaticEntity {
 
     public static final int ROWS = 5, COLUMNS = 4;
 
-    public static ArrayList<InventorySlot> slots;
-    public static ArrayList<InventoryItem> items;
+    public static InventoryItem itemBeingDragged;
+    public static ArrayList<InventorySlot> slots = new ArrayList<>();
 
     private Color backgroundColor = new Color(0, 0, 0, 152);
 
     public Inventory(Sprite sprite) {
         super("Inventory", sprite);
-        slots = new ArrayList<>();
-        items = new ArrayList<>();
         setPosition((Game.WINDOW_WIDTH / 2) - (sprite.width / 2), (Game.WINDOW_HEIGHT / 2) - (sprite.height / 2));
 
         for (int r = 0; r < ROWS; r++) {
@@ -27,18 +25,20 @@ public class Inventory extends StaticEntity {
                 slots.add(new InventorySlot(r, c));
             }
         }
-
-        // temp
-        items.add(new InventoryItem(Item.TEST_ITEM, slots.get(0), true));
-        items.add(new InventoryItem(Item.TEST_ITEM, slots.get(1), true));
-        items.add(new InventoryItem(Item.TEST_ITEM, slots.get(2), true));
     }
 
-    static InventoryItem getItemBeingDragged() {
-        for (InventoryItem i : items)
-            if (i.isBeingDragged)
-                return i;
-        return null;
+    /**
+     * Puts the item in the next available slot
+     *
+     * @param item The item to put in the inventory
+     */
+    public static void put(Item item) {
+        for (InventorySlot slot : slots) {
+            if (slot.isEmpty) {
+                slot.putItem(new InventoryItem(item, slot, false));
+                break;
+            }
+        }
     }
 
     private int getSlotIndexFromRowColumn(int row, int column) {
@@ -52,19 +52,22 @@ public class Inventory extends StaticEntity {
 
         graphics.drawImage(sprite.toBufferedImage(), x(), y(), null);
 
-        for (InventorySlot s : slots)
-            s.render(graphics);
-
-        for (InventoryItem i : items)
-            i.render(graphics);
-        for (InventoryItem i : items)
-            i.drawToolTip(graphics);
+        slots.forEach(slot -> slot.render(graphics));
+        for (InventorySlot slot : slots) {
+            if (slot.item != null) {
+                slot.item.render(graphics);
+            }
+        }
+        for (InventorySlot slot : slots) {
+            if (slot.item != null && slot.item.isShowingTooltip) {
+                slot.item.drawToolTip(graphics);
+            }
+        }
     }
 
     @Override
     public void tick() {
-        for (InventoryItem i : items)
-            i.tick();
+        slots.forEach(InventorySlot::tick);
     }
 
     @Override

@@ -4,6 +4,7 @@ import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.gamelib.interfaces.Tickable;
 import net.egartley.gamelib.logic.collision.MapSectorChangeCollision;
 import net.egartley.gamelib.logic.interaction.MapSectorChangeBoundary;
 
@@ -15,7 +16,7 @@ import java.util.ArrayList;
  *
  * @see Map
  */
-public abstract class MapSector {
+public abstract class MapSector implements Tickable {
 
     /**
      * Maximum number of neighbors one sector can have
@@ -55,7 +56,7 @@ public abstract class MapSector {
     /**
      * Boundaries, or areas, of all of the possible sector changes
      */
-    private ArrayList<MapSectorChangeBoundary> changeBoundaries;
+    protected ArrayList<MapSectorChangeBoundary> changeBoundaries;
     /**
      * All of the collisions for the sector changes
      */
@@ -70,6 +71,8 @@ public abstract class MapSector {
      * The sector's definition, such as its tiles and other properties
      */
     protected MapSectorDefinition definition;
+
+    public boolean didInitialize;
 
     /**
      * Creates a new sector with the given definition
@@ -117,21 +120,33 @@ public abstract class MapSector {
      */
     public void render(Graphics graphics) {
         drawTiles(graphics);
-        if (Game.debug) {
-            for (MapSectorChangeBoundary boundary : changeBoundaries) {
-                boundary.draw(graphics);
+        for (Entity e : entities) {
+            if (e.isDualRendered) {
+                e.drawFirstLayer(graphics);
             }
+        }
+        Entities.PLAYER.render(graphics);
+        for (Entity e : entities) {
+            if (e.isDualRendered) {
+                e.drawSecondLayer(graphics);
+            } else {
+                e.render(graphics);
+            }
+        }
+
+        if (Game.debug) {
+            changeBoundaries.forEach(boundary -> boundary.draw(graphics));
         }
     }
 
     /**
      * Minimum requirement for each tick, must be called first in any implementation
      */
+    @Override
     public void tick() {
         Entities.PLAYER.tick();
-        for (MapSectorChangeCollision collision : changeCollisions) {
-            collision.tick();
-        }
+        changeCollisions.forEach(MapSectorChangeCollision::tick);
+        entities.forEach(Entity::tick);
     }
 
     /**
@@ -215,21 +230,14 @@ public abstract class MapSector {
     /**
      * Renders all of the sector's tiles, defined by {@link #definition}
      */
-    private void drawTiles(Graphics graphics) {
+    protected void drawTiles(Graphics graphics) {
         deltaX = 0;
         deltaY = 0;
         for (int r = 0; r < definition.tiles.size(); r++) {
             ArrayList<MapTile> row = definition.tiles.get(r);
             for (MapTile tile : row) {
-                graphics.drawImage(tile.bufferedImage, deltaX, deltaY, null);
+                graphics.drawImage(tile.image, deltaX, deltaY, null);
                 deltaX += TILE_SIZE;
-                /*if (Game.debug) {
-                    graphics.setColor(Color.BLACK);
-                    graphics.drawRect(deltaX, deltaY, TILE_SIZE, TILE_SIZE);
-                    graphics.setFont(new Font(graphics.getFont().getFontName(), Font.PLAIN, 8));
-                    graphics.setColor(Color.WHITE);
-                    graphics.drawString(r + ", " + c, deltaX + 2, deltaY + 8);
-                }*/
             }
             deltaX = 0;
             deltaY += TILE_SIZE;
@@ -237,7 +245,7 @@ public abstract class MapSector {
     }
 
     /**
-     * @return <code>parent.toString()</code> + ", sector " + <code>(parent.sectors.indexOf(this) + 1)</code>
+     * @return parent, sector index
      * @see #parent
      */
     public String toString() {

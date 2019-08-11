@@ -11,7 +11,6 @@ import net.egartley.gamelib.input.KeyTyped;
 import net.egartley.gamelib.input.Keyboard;
 import net.egartley.gamelib.input.Mouse;
 import net.egartley.gamelib.objects.GameState;
-import net.egartley.gamelib.objects.MapTile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -58,7 +57,7 @@ public class Game extends JPanel implements Runnable {
     public static GameState currentState;
 
     public static void main(String[] args) {
-        startTime = System.currentTimeMillis();
+        startTime = System.nanoTime();
 
         frame = new JFrame("Beyond Origins");
         frame.setSize(windowDimension.width, windowDimension.height);
@@ -85,7 +84,6 @@ public class Game extends JPanel implements Runnable {
         Debug.out("Entities were initialized");
 
         Debug.out("Loading maps...");
-        MapTile.init();
         AllSectors.define();
         Debug.out("Maps were loaded");
 
@@ -138,6 +136,10 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
+    public static InGameState in() {
+        return (InGameState) getState(GameState.IN_GAME);
+    }
+
     public static void setState(int id) {
         setState(getState(id));
     }
@@ -174,7 +176,7 @@ public class Game extends JPanel implements Runnable {
     public void run() {
         // load images, save data, etc.
         init();
-        Debug.out("init() took " + ((System.currentTimeMillis() - startTime) / 1000.0) + " seconds");
+        Debug.out("init() took " + ((System.nanoTime() - startTime) / 1000000000.0) + " seconds");
 
         // Credit:
         // http://www.java-gaming.org/index.php?topic=24220.0

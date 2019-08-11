@@ -1,46 +1,35 @@
 package net.egartley.beyondorigins.maps;
 
+import net.egartley.beyondorigins.Util;
+import net.egartley.gamelib.objects.MapSector;
 import net.egartley.gamelib.objects.MapTile;
 
 import java.util.ArrayList;
 
 public class TileBuilder {
 
-    /**
-     * Returns an array list of array lists of all the same map tiles with the specified ID
-     */
-    public static ArrayList<ArrayList<MapTile>> buildArrayList(byte tileID, int rows, int columns) {
-        byte[][] array = new byte[rows][columns];
-        for (int r = 0; r < rows; r++) {
-            byte[] col = new byte[columns];
-            for (int c = 0; c < columns; c++) {
-                col[c] = tileID;
+    public static ArrayList<ArrayList<MapTile>> build(MapTile tile) {
+        ArrayList<ArrayList<MapTile>> array = new ArrayList<>();
+        for (int r = 0; r < MapSector.TILE_COLUMNS; r++) {
+            array.add(new ArrayList<>());
+            for (int c = 0; c < MapSector.TILE_ROWS; c++) {
+                array.get(r).add(tile);
             }
-            array[r] = col;
         }
-        return buildArrayList(array);
+        return array;
     }
 
-    /**
-     * Returns an array list of array lists corresponding to the given 2D array of tile ID's
-     */
-    private static ArrayList<ArrayList<MapTile>> buildArrayList(byte[][] b) {
+    public static ArrayList<ArrayList<MapTile>> buildRandom(MapTile tile) {
         ArrayList<ArrayList<MapTile>> array = new ArrayList<>();
-        for (byte[] r : b) {
-            ArrayList<MapTile> row = new ArrayList<>();
-            for (byte c : r) {
-                switch (c) {
-                    case MapTile.GRASS:
-                        row.add(MapTile.get(MapTile.GRASS));
-                        break;
-                    case MapTile.SAND:
-                        row.add(MapTile.get(MapTile.SAND));
-                        break;
-                    default:
-                        break;
+        for (int r = 0; r < MapSector.TILE_COLUMNS; r++) {
+            array.add(new ArrayList<>());
+            for (int c = 0; c < MapSector.TILE_ROWS; c++) {
+                if (Util.fiftyFifty()) {
+                    array.get(r).add(tile);
+                } else {
+                    array.get(r).add(tile.rotate());
                 }
             }
-            array.add(row);
         }
         return array;
     }

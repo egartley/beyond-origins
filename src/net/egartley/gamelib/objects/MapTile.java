@@ -10,54 +10,34 @@ import java.awt.image.BufferedImage;
  */
 public class MapTile {
 
-    public static final byte GRASS = 0, SAND = 1, GRASS_PATH_1 = 2, GRASS_PATH_2 = 3;
+    public static MapTile GRASS = new MapTile(ImageStore.get("resources/images/map-tiles/grass-default.png"));
+    public static MapTile SAND = new MapTile(ImageStore.get("resources/images/map-tiles/sand-default.png"));
+    public static MapTile GRASS_PATH_1 = new MapTile(ImageStore.get("resources/images/map-tiles/grass-path-1.png"));
+    public static MapTile GRASS_PATH_2 = new MapTile(ImageStore.get("resources/images/map-tiles/grass-path-2.png"));
 
-    private static MapTile grass, sand, grassPath1, grassPath2;
 
     /**
      * This tile as a {@link BufferedImage}
      */
-    BufferedImage bufferedImage;
+    BufferedImage image;
     public int width, height;
     public boolean isTraversable;
 
     /**
      * Creates a new map tile
      */
-    public MapTile(BufferedImage image) {
-        bufferedImage = image;
+    MapTile(BufferedImage image) {
+        this.image = image;
         width = image.getWidth();
         height = image.getHeight();
     }
 
-    public void rotate() {
-        bufferedImage = Util.rotateImage(bufferedImage);
+    public MapTile rotate() {
+        return new MapTile(Util.rotateImage(image));
     }
 
-    public void rotate(double radians) {
-        bufferedImage = Util.rotateImage(bufferedImage, radians);
-    }
-
-    public static void init() {
-        grass = new MapTile(ImageStore.get(ImageStore.TILE_GRASS));
-        sand = new MapTile(ImageStore.get(ImageStore.TILE_SAND));
-        grassPath1 = new MapTile(ImageStore.get("resources/images/map-tiles/grass-path-1.png"));
-        grassPath2 = new MapTile(ImageStore.get("resources/images/map-tiles/grass-path-2.png"));
-    }
-
-    public static MapTile get(byte tileID) {
-        switch (tileID) {
-            case GRASS:
-                return new MapTile(grass.bufferedImage);
-            case SAND:
-                return new MapTile(sand.bufferedImage);
-            case GRASS_PATH_1:
-                return new MapTile(grassPath1.bufferedImage);
-            case GRASS_PATH_2:
-                return new MapTile(grassPath2.bufferedImage);
-            default:
-                return null;
-        }
+    public MapTile rotate(double radians) {
+        return new MapTile(Util.rotateImage(image, radians));
     }
 
 }

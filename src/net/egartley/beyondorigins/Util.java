@@ -62,7 +62,13 @@ public class Util {
     /**
      * Returns a random integer between the supplied maximum and minimum values
      */
-    private static int randomInt(int maximum, int minimum) {
+    public static int randomInt(int maximum, int minimum) {
+        if (maximum < minimum) {
+            // if max/min were mixed up, switch them
+            int actualmin = maximum;
+            maximum = minimum;
+            minimum = actualmin;
+        }
         return ThreadLocalRandom.current().nextInt(minimum, maximum);
     }
 
@@ -75,6 +81,24 @@ public class Util {
         } else {
             return randomInt(maximum, minimum);
         }
+    }
+
+    /**
+     * Returns <code>true</code> the given percent of the time.
+     * <br><br>Example: <code>percentChance(0.1)</code> would return <code>true</code> 10% of the time
+     *
+     * @param percent The percent as a decimal (<= 1)
+     */
+    public static boolean percentChance(double percent) {
+        // assert percent <= 1.0D;
+        return randomInt(100, 1, true) < percent * 100;
+    }
+
+    /**
+     * Returns false 50% of the time, and true 50% of the time
+     */
+    public static boolean fiftyFifty() {
+        return percentChance(0.5D);
     }
 
     /**
@@ -100,6 +124,9 @@ public class Util {
 
     public static void fixCrossSectorCollisions(ArrayList<Entity> entities) {
         for (Entity e : entities) {
+            if (!(e instanceof Collidable)) {
+                continue;
+            }
             for (EntityEntityCollision c : ((Collidable) e).collisions) {
                 if (c.isCollided) {
                     for (EntityBoundary eb : c.boundaries) {

@@ -3,18 +3,20 @@ package net.egartley.beyondorigins.ingame;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.data.ImageStore;
 import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.gamelib.abstracts.Renderable;
 import net.egartley.gamelib.graphics.Sprite;
+import net.egartley.gamelib.interfaces.Tickable;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class InventorySlot {
+public class InventorySlot extends Renderable implements Tickable {
 
     public static final int MARGIN = 3, SIZE = 36;
 
-    private BufferedImage image;
+    public static BufferedImage image = ImageStore.get("resources/images/ui/inventory-slot.png");
 
-    public int row, column, x, y, baseItemX, baseItemY;
+    public int row, column, baseItemX, baseItemY;
     public boolean isEmpty = true;
     public InventoryItem item;
 
@@ -27,12 +29,10 @@ public class InventorySlot {
         this.column = column;
         putItem(item);
         Sprite temp = Entities.getTemplate(Entities.TEMPLATE_INVENTORY);
-        x = (column * (SIZE + MARGIN)) + ((Game.WINDOW_WIDTH / 2) - (temp.width / 2)) + 24;
-        y = (row * (SIZE + MARGIN)) + ((Game.WINDOW_HEIGHT / 2) - ((Inventory.ROWS * (SIZE + MARGIN)) / 2));
-        baseItemX = x + 2;
-        baseItemY = y + 2;
-
-        image = ImageStore.get("resources/images/ui/inventory-slot.png");
+        x((column * (SIZE + MARGIN)) + ((Game.WINDOW_WIDTH / 2) - (temp.width / 2)) + 24);
+        y((row * (SIZE + MARGIN)) + ((Game.WINDOW_HEIGHT / 2) - ((Inventory.ROWS * (SIZE + MARGIN)) / 2)));
+        baseItemX = x() + 2;
+        baseItemY = y() + 2;
     }
 
     InventoryItem putItem(InventoryItem item) {
@@ -55,12 +55,16 @@ public class InventorySlot {
         return putItem(null);
     }
 
+    @Override
+    public void tick() {
+        if (item != null) {
+            item.tick();
+        }
+    }
+
+    @Override
     public void render(Graphics graphics) {
-        graphics.drawImage(image, x, y, null);
-        /*if (Game.debug) {
-            graphics.setColor(Color.WHITE);
-            graphics.drawString(String.valueOf((row * Inventory.ROWS) + column), x + 3, y + 12);
-        }*/
+        graphics.drawImage(image, x(), y(), null);
     }
 
     @Override

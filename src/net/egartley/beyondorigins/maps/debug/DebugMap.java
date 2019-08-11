@@ -28,6 +28,7 @@ public class DebugMap extends Map {
         // go to the first sector by default
         changeSector(sec1, null);
 
+        // stitch together all of the sectors
         sec1.setNeighborAt(sec2, MapSector.TOP);
         sec2.setNeighborAt(sec3, MapSector.RIGHT);
         sec3.setNeighborAt(sec4, MapSector.BOTTOM);
@@ -36,12 +37,12 @@ public class DebugMap extends Map {
 
     @Override
     public void tick() {
-        currentSector.tick();
+        sector.tick();
     }
 
     @Override
     public void render(Graphics graphics) {
-        currentSector.render(graphics);
+        sector.render(graphics);
     }
 
     @Override

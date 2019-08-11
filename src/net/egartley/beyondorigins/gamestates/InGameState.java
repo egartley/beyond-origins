@@ -39,7 +39,9 @@ public class InGameState extends GameState {
         toggleInventory = new KeyTyped(KeyEvent.VK_E) {
             @Override
             public void onType() {
-                isInventoryVisible = !isInventoryVisible;
+                if (!isDialogueVisible) {
+                    isInventoryVisible = !isInventoryVisible;
+                }
             }
         };
         advanceDialogue = new KeyTyped(KeyEvent.VK_SPACE) {
@@ -54,6 +56,10 @@ public class InGameState extends GameState {
                 Game.setState(Game.getState(GameState.MAIN_MENU));
             }
         };
+    }
+
+    public Map getCurrentMap() {
+        return currentMap;
     }
 
     @Override

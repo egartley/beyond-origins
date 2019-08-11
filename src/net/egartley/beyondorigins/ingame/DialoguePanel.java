@@ -4,11 +4,9 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.data.ImageStore;
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.logic.math.Calculate;
 import net.egartley.gamelib.objects.CharacterDialogue;
-import net.egartley.gamelib.objects.GameState;
 import net.egartley.gamelib.objects.StaticEntity;
 
 import java.awt.*;
@@ -64,12 +62,12 @@ public class DialoguePanel extends StaticEntity {
 
     public void show() {
         isShowing = true;
-        ((InGameState) Game.getState(GameState.IN_GAME)).isDialogueVisible = true;
+        Game.in().isDialogueVisible = true;
     }
 
     public void hide() {
         isShowing = false;
-        ((InGameState) Game.getState(GameState.IN_GAME)).isDialogueVisible = false;
+        Game.in().isDialogueVisible = false;
     }
 
     private void nextLine() {
@@ -106,7 +104,7 @@ public class DialoguePanel extends StaticEntity {
         }
         lineIndex = 0;
         // render more lines thing
-        if (queuedLines.length > 0) {
+        if (queuedLines != null && queuedLines.length > 0) {
             graphics.drawImage(moreLinesImage, 700, 500, null);
         }
     }

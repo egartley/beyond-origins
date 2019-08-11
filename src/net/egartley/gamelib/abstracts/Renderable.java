@@ -1,4 +1,4 @@
-package net.egartley.gamelib.interfaces;
+package net.egartley.gamelib.abstracts;
 
 import java.awt.*;
 

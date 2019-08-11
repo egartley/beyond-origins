@@ -32,6 +32,14 @@ public class Sprite {
      */
     public int height;
 
+    public Sprite(BufferedImage image) {
+        this(image, 1);
+    }
+
+    public Sprite(BufferedImage row, int frames) {
+        this(row, row.getWidth() / frames, row.getHeight(), frames);
+    }
+
     public Sprite(BufferedImage row, int width, int height, int frames) {
         this.width = width;
         this.height = height;

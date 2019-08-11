@@ -5,6 +5,8 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.ingame.Inventory;
+import net.egartley.beyondorigins.ingame.Item;
 import net.egartley.gamelib.graphics.Animation;
 import net.egartley.gamelib.graphics.EntityExpression;
 import net.egartley.gamelib.graphics.SpriteSheet;
@@ -50,7 +52,7 @@ public class Dummy extends AnimatedEntity implements Collidable, Character {
         isDualRendered = false;
         speed = 1.1;
 
-        exp = new EntityExpression(EntityExpression.ANGER, this);
+        exp = new EntityExpression(EntityExpression.HEART, this);
 
         dialogue_playerCollision = new CharacterDialogue(Entities.DUMMY, "dummy/player-collision.def");
 
@@ -193,6 +195,10 @@ public class Dummy extends AnimatedEntity implements Collidable, Character {
                 Entities.DIALOGUE_PANEL.setDialogue(dialogue_playerCollision);
                 Entities.DIALOGUE_PANEL.show();
                 isAngry = true;
+
+                Inventory.put(Item.TEST_ITEM);
+                Inventory.put(Item.TEST_ITEM);
+                Inventory.put(Item.TEST_ITEM);
             }
 
             public void onCollisionEnd(EntityEntityCollisionEvent event) {

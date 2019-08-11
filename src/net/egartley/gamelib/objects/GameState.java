@@ -1,12 +1,14 @@
 package net.egartley.gamelib.objects;
 
+import net.egartley.gamelib.interfaces.Tickable;
+
 import java.awt.*;
 import java.util.ArrayList;
 
 /**
  * One of the game's "states" that has unique render and tick methods
  */
-public abstract class GameState {
+public abstract class GameState implements Tickable {
 
     /**
      * The ID number used while actually playing the game
@@ -32,7 +34,5 @@ public abstract class GameState {
     public abstract void onEnd();
 
     public abstract void render(Graphics graphics);
-
-    public abstract void tick();
 
 }

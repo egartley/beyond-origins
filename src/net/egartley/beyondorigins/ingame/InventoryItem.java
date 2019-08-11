@@ -1,8 +1,10 @@
 package net.egartley.beyondorigins.ingame;
 
+import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
+import net.egartley.beyondorigins.entities.DroppedItem;
+import net.egartley.gamelib.abstracts.Renderable;
 import net.egartley.gamelib.input.Mouse;
-import net.egartley.gamelib.interfaces.Renderable;
 import net.egartley.gamelib.interfaces.Tickable;
 
 import java.awt.*;
@@ -14,7 +16,7 @@ public class InventoryItem extends Renderable implements Tickable {
 
     private int tooltipWidth;
 
-    public boolean isBeingDragged, didStartDrag, mouseHover, setFontMetrics;
+    public boolean isBeingDragged, didStartDrag, mouseHover, setFontMetrics, isShowingTooltip;
 
     public Item item;
     public InventorySlot slot;
@@ -34,14 +36,17 @@ public class InventoryItem extends Renderable implements Tickable {
 
     public void tick() {
         mouseHover = Util.isWithinBounds(Mouse.x, Mouse.y, x(), y(), InventorySlot.SIZE, InventorySlot.SIZE);
+        isShowingTooltip = mouseHover || isBeingDragged;
         if (Mouse.isDragging) {
-            if ((mouseHover || didStartDrag) && (Inventory.getItemBeingDragged() == this || Inventory.getItemBeingDragged() == null)) {
+            if ((mouseHover || didStartDrag) && (Inventory.itemBeingDragged == this || Inventory.itemBeingDragged == null)) {
+                Inventory.itemBeingDragged = this;
                 setPosition(Mouse.x - (InventorySlot.SIZE / 2), Mouse.y - (InventorySlot.SIZE / 2));
                 didStartDrag = true;
                 isBeingDragged = true;
             }
         } else if (isBeingDragged) {
             onDragEnd();
+            Inventory.itemBeingDragged = null;
             isBeingDragged = false;
         } else {
             setPosition(slot.baseItemX, slot.baseItemY);
@@ -49,22 +54,22 @@ public class InventoryItem extends Renderable implements Tickable {
         }
     }
 
+    @Override
     public void render(Graphics graphics) {
         graphics.drawImage(item.image, x(), y(), null);
-    }
 
-    void drawToolTip(Graphics graphics) {
         if (!setFontMetrics) {
             tooltipWidth = graphics.getFontMetrics(tooltipFont).stringWidth(item.name);
             setFontMetrics = true;
         }
-        if ((mouseHover && Inventory.getItemBeingDragged() == null) || isBeingDragged) {
-            graphics.setColor(Color.BLACK);
-            graphics.fillRect((x() + InventorySlot.SIZE / 2) - (tooltipWidth / 2), y() - 18, tooltipWidth, 16);
-            graphics.setColor(Color.WHITE);
-            graphics.setFont(tooltipFont);
-            graphics.drawString(item.name, (x() + InventorySlot.SIZE / 2) - (tooltipWidth / 2), y() - 6);
-        }
+    }
+
+    public void drawToolTip(Graphics graphics) {
+        graphics.setColor(Color.BLACK);
+        graphics.fillRect(Mouse.x, Mouse.y - 16, tooltipWidth, 16);
+        graphics.setColor(Color.WHITE);
+        graphics.setFont(tooltipFont);
+        graphics.drawString(item.name, Mouse.x, Mouse.y - 6);
     }
 
     private void onDragEnd() {
@@ -72,7 +77,7 @@ public class InventoryItem extends Renderable implements Tickable {
         ArrayList<InventorySlot> intersectedSlots = new ArrayList<>();
 
         for (InventorySlot slot : Inventory.slots) {
-            Rectangle r1 = new Rectangle(slot.x, slot.y, InventorySlot.SIZE, InventorySlot.SIZE);
+            Rectangle r1 = new Rectangle(slot.x(), slot.y(), InventorySlot.SIZE, InventorySlot.SIZE);
             Rectangle r2 = new Rectangle(x(), y(), InventorySlot.SIZE, InventorySlot.SIZE);
             if (r1.intersects(r2)) {
                 intersectionRectangles.add(r1.intersection(r2));
@@ -105,23 +110,34 @@ public class InventoryItem extends Renderable implements Tickable {
                 // swap with the item in the closest slot
                 this.swap(closestSlot.item);
             }
+        } else {
+            drop();
         }
-        // else, there were no intersections with any slots, so it will move back
     }
 
-    void move(InventorySlot moveTo) {
+    /**
+     * Moves this item to the specified slot
+     *
+     * @param moveTo The slot to move this item to
+     */
+    private void move(InventorySlot moveTo) {
         slot.removeItem();
         slot = moveTo;
         moveTo.putItem(this);
     }
 
-    void swap(InventoryItem swapWith) {
+    private void swap(InventoryItem swapWith) {
         InventorySlot slot1 = this.slot;
         InventoryItem item1 = this;
         InventorySlot slot2 = swapWith.slot;
         InventoryItem item2 = swapWith;
         slot1.putItem(item2);
         slot2.putItem(item1);
+    }
+
+    private void drop() {
+        Game.in().getCurrentMap().sector.entities.add(new DroppedItem(item, Mouse.x, Mouse.y));
+        slot.removeItem();
     }
 
 }

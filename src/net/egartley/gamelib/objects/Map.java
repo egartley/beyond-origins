@@ -1,5 +1,6 @@
 package net.egartley.gamelib.objects;
 
+import net.egartley.gamelib.interfaces.Tickable;
 import net.egartley.gamelib.logic.events.MapSectorChangeEvent;
 
 import java.awt.*;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Collection of "sectors" that make up a map, which is like a level or world
  */
-public abstract class Map {
+public abstract class Map implements Tickable {
 
     /**
      * Human-readable identifier
@@ -21,7 +22,7 @@ public abstract class Map {
     /**
      * The sector where the player is currently
      */
-    public static MapSector currentSector;
+    public MapSector sector;
 
     /**
      * Creates a new map, and initializes {@link #sectors}
@@ -33,8 +34,6 @@ public abstract class Map {
         sectors = new ArrayList<>();
         this.id = id;
     }
-
-    public abstract void tick();
 
     public abstract void render(Graphics graphics);
 
@@ -57,14 +56,14 @@ public abstract class Map {
      */
     public void changeSector(MapSector to, MapSector from) {
         onSectorChange(new MapSectorChangeEvent(from, to));
-        if (currentSector != null) {
-            currentSector.onPlayerLeave_internal();
-            currentSector.onPlayerLeave(to);
+        if (sector != null) {
+            sector.onPlayerLeave_internal();
+            sector.onPlayerLeave(to);
         }
-        MapSector previous = currentSector;
-        currentSector = to;
-        currentSector.onPlayerEnter_internal();
-        currentSector.onPlayerEnter(previous);
+        MapSector previous = sector;
+        sector = to;
+        sector.onPlayerEnter_internal();
+        sector.onPlayerEnter(previous);
     }
 
     public String toString() {

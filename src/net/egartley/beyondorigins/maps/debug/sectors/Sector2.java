@@ -1,27 +1,13 @@
 package net.egartley.beyondorigins.maps.debug.sectors;
 
-import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.gamelib.objects.Map;
 import net.egartley.gamelib.objects.MapSector;
 import net.egartley.gamelib.objects.MapSectorDefinition;
-
-import java.awt.*;
 
 public class Sector2 extends MapSector {
 
     public Sector2(Map parent, MapSectorDefinition def) {
         super(parent, def);
-    }
-
-    @Override
-    public void render(Graphics graphics) {
-        super.render(graphics);
-        Entities.PLAYER.render(graphics);
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
     }
 
     @Override
