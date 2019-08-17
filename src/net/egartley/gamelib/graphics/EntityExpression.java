@@ -25,12 +25,14 @@ public class EntityExpression extends AnimatedEntity {
     public Entity target;
 
     public EntityExpression(byte type, Entity target) {
-        super("Expression");
+        super("Expression", new SpriteSheet(ImageStore.get(ImageStore.EXPRESSION_CONFUSION), 18, 18, 1, 1).sprites.get(0));
         this.type = type;
         this.target = target;
         animations.add(getTemplateAnimation(type));
         animation = animations.get(0);
         sprite = animation.sprite;
+        setBoundaries();
+        image = sprite.toBufferedImage();
     }
 
     private Animation getTemplateAnimation(byte type) {

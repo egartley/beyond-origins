@@ -10,6 +10,7 @@ import net.egartley.gamelib.logic.interaction.MapSectorChangeBoundary;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Specific part, or area, of a map
@@ -67,6 +68,8 @@ public abstract class MapSector implements Tickable {
      * @see Entity#isSectorSpecific
      */
     public ArrayList<Entity> entities;
+    private Entity[] queuedForRemoval;
+    private Entity[] queuedForAddition;
     /**
      * The sector's definition, such as its tiles and other properties
      */
@@ -144,9 +147,36 @@ public abstract class MapSector implements Tickable {
      */
     @Override
     public void tick() {
+        if (queuedForAddition != null && queuedForAddition.length > 0) {
+            Collections.addAll(entities, queuedForAddition);
+            queuedForAddition = null;
+        }
+        if (queuedForRemoval != null && queuedForRemoval.length > 0) {
+            for (Entity entity : queuedForRemoval) {
+                entities.remove(entity);
+            }
+            queuedForRemoval = null;
+        }
+
         Entities.PLAYER.tick();
         changeCollisions.forEach(MapSectorChangeCollision::tick);
         entities.forEach(Entity::tick);
+    }
+
+    public void removeEntity(Entity e) {
+        removeEntities(new Entity[]{e});
+    }
+
+    public void removeEntities(Entity[] e) {
+        queuedForRemoval = e;
+    }
+
+    public void addEntity(Entity e) {
+        addEntities(new Entity[]{e});
+    }
+
+    public void addEntities(Entity[] e) {
+        queuedForAddition = e;
     }
 
     /**

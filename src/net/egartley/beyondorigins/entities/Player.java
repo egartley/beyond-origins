@@ -33,13 +33,7 @@ public class Player extends AnimatedEntity implements Character, Collidable {
     EntityBoundary feetBoundary;
 
     public Player() {
-        super("Player");
-        SpriteSheet ss = new SpriteSheet(ImageStore.get(ImageStore.PLAYER), 30, 46, 2, 4);
-        this.sprites = ss.sprites;
-        sprite = sprites.get(0);
-        setAnimations();
-        setBoundaries();
-        setCollisions();
+        super("Player", new SpriteSheet(ImageStore.get(ImageStore.PLAYER), 30, 46, 2, 4));
 
         isSectorSpecific = false;
         isDualRendered = false;

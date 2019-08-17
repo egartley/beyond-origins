@@ -1,5 +1,8 @@
 package net.egartley.beyondorigins;
 
+import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.gamelib.graphics.Animation;
+import net.egartley.gamelib.graphics.SpriteSheet;
 import net.egartley.gamelib.interfaces.Collidable;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
@@ -59,6 +62,14 @@ public class Util {
         return rotateImage(image, Math.PI / 2);
     }
 
+    public static Animation getTemplateAnimation(byte imageStore, int width, int height, int rows, int frames, int frameDelay) {
+        return getTemplateAnimation(imageStore, width, height, rows, frames, frameDelay, 0);
+    }
+
+    public static Animation getTemplateAnimation(byte imageStore, int width, int height, int rows, int frames, int frameDelay, int rowOffset) {
+        return new Animation(new SpriteSheet(ImageStore.get(imageStore), width, height, rows, frames).sprites.get(rowOffset), frameDelay);
+    }
+
     /**
      * Returns a random integer between the supplied maximum and minimum values
      */
@@ -112,6 +123,7 @@ public class Util {
                 public void onCollide(EntityEntityCollisionEvent event) {
                     baseEvent.onCollide(event);
                 }
+
                 public void onCollisionEnd(EntityEntityCollisionEvent event) {
                     baseEvent.onCollisionEnd(event);
                 }

@@ -1,6 +1,7 @@
 package net.egartley.gamelib.logic.interaction;
 
 import net.egartley.gamelib.graphics.Sprite;
+import net.egartley.gamelib.objects.AnimatedEntity;
 import net.egartley.gamelib.objects.Entity;
 
 import java.awt.*;
@@ -82,7 +83,7 @@ public class EntityBoundary extends Boundary {
     }
 
     public void setColor() {
-        if (!parent.isAnimated) {
+        if (!(parent instanceof AnimatedEntity)) {
             drawColor = Color.BLACK;
         } else {
             drawColor = Color.ORANGE; // man bad!

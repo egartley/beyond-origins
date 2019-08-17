@@ -6,6 +6,8 @@ import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.data.EntityStore;
 import net.egartley.gamelib.abstracts.Renderable;
 import net.egartley.gamelib.graphics.Sprite;
+import net.egartley.gamelib.interfaces.Collidable;
+import net.egartley.gamelib.interfaces.Interactable;
 import net.egartley.gamelib.interfaces.Tickable;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
@@ -35,7 +37,7 @@ public abstract class Entity extends Renderable implements Tickable {
     /**
      * Collection of the entity's boundaries
      */
-    public ArrayList<EntityBoundary> boundaries;
+    public ArrayList<EntityBoundary> boundaries = new ArrayList<>();
     /**
      * The sprite to use while rendering
      */
@@ -173,11 +175,20 @@ public abstract class Entity extends Renderable implements Tickable {
      * Creates a new entity with a randomly generated UUID, an initial
      * speed of <code>1.0</code>, then adds it to the entity store
      */
-    Entity(String id) {
+    Entity(String id, Sprite sprite) {
         generateUUID();
         this.id = id;
+        this.sprite = sprite;
+        sprites.add(sprite);
+        image = sprite.toBufferedImage();
         speed = 1.0;
-        boundaries = new ArrayList<>();
+        setBoundaries();
+        if (this instanceof Collidable) {
+            ((Collidable) this).setCollisions();
+        }
+        if (this instanceof Interactable) {
+            ((Interactable) this).setInteractions();
+        }
         EntityStore.register(this);
     }
 
@@ -185,7 +196,7 @@ public abstract class Entity extends Renderable implements Tickable {
      * Renders the entity, using {@link #sprite}, at ({@link #x()}, {@link #y()})
      */
     public void render(Graphics graphics) {
-        graphics.drawImage(sprite.toBufferedImage(0), x(), y(), null);
+        graphics.drawImage(image, x(), y(), null);
         drawDebug(graphics);
     }
 

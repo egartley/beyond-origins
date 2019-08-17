@@ -9,6 +9,9 @@ public interface Interactable {
     ArrayList<EntityEntityInteraction> interactions = new ArrayList<>();
 
     void setInteractions();
-    void hookInteraction(EntityEntityInteraction interaction);
+
+    static void tick() {
+        interactions.forEach(EntityEntityInteraction::tick);
+    }
 
 }

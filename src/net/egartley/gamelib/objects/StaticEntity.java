@@ -14,21 +14,12 @@ public abstract class StaticEntity extends Entity {
     /**
      * Creates a new static entity, while setting {@link Entity#isAnimated} to <code>false</code>
      *
-     * @see Entity#Entity(String) Entity(String)
-     */
-    public StaticEntity(String id) {
-        super(id);
-        isAnimated = false;
-    }
-
-    /**
-     * Calls {@link #StaticEntity(String)}, sets {@link #sprite}, then sets {@link #image} to
-     * {@link Sprite#toBufferedImage()}
+     * @see Entity#Entity(String, Sprite) Entity(String, Sprite)
      */
     public StaticEntity(String id, Sprite sprite) {
-        this(id);
-        this.sprite = sprite;
-        image = sprite.toBufferedImage();
+        super(id, sprite);
+        isAnimated = false;
+        setBoundaries();
     }
 
     @Override

@@ -2,22 +2,18 @@ package net.egartley.beyondorigins.entities;
 
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.interfaces.Collidable;
-import net.egartley.gamelib.interfaces.Interactable;
 import net.egartley.gamelib.logic.interaction.BoundaryPadding;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
-import net.egartley.gamelib.logic.interaction.EntityEntityInteraction;
 import net.egartley.gamelib.objects.StaticEntity;
 
 /**
  * Basic tree that the player can walk under, but not over
  */
-public class DefaultTree extends StaticEntity implements Collidable, Interactable {
+public class DefaultTree extends StaticEntity implements Collidable {
 
     public DefaultTree(Sprite sprite, int x, int y) {
         super("Tree", sprite);
         setPosition(x, y);
-        setBoundaries();
-        setCollisions();
 
         isSectorSpecific = true;
         isDualRendered = true;
@@ -30,27 +26,13 @@ public class DefaultTree extends StaticEntity implements Collidable, Interactabl
 
     @Override
     protected void setBoundaries() {
-        defaultBoundary = new EntityBoundary(this, image.getWidth(), image.getHeight(),
-                new BoundaryPadding(-24, -24, -24, -24));
+        defaultBoundary = new EntityBoundary(this, image.getWidth(), image.getHeight(), new BoundaryPadding(-24, -24, -24, -24));
         boundaries.add(defaultBoundary);
     }
 
     @Override
     public void setCollisions() {
-    }
-
-    @Override
-    public void setInteractions() {
 
     }
 
-    @Override
-    public void hookInteraction(EntityEntityInteraction interaction) {
-
-    }
-
-    @Override
-    public void tick() {
-    }
-    
 }

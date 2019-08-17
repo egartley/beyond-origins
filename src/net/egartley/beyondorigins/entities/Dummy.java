@@ -39,14 +39,8 @@ public class Dummy extends AnimatedEntity implements Collidable, Character {
     EntityExpression exp;
 
     public Dummy() {
-        super("Dummy");
-        SpriteSheet ss = new SpriteSheet(ImageStore.get(ImageStore.DUMMY), 30, 44, 2, 4);
-        this.sprites = ss.sprites;
-        sprite = sprites.get(0);
+        super("Dummy", new SpriteSheet(ImageStore.get(ImageStore.DUMMY), 30, 44, 2, 4));
         setPosition(470, 132);
-        setAnimations();
-        setBoundaries();
-        setCollisions();
 
         isSectorSpecific = false;
         isDualRendered = false;

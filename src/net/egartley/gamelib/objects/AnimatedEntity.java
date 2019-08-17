@@ -1,6 +1,8 @@
 package net.egartley.gamelib.objects;
 
 import net.egartley.gamelib.graphics.Animation;
+import net.egartley.gamelib.graphics.Sprite;
+import net.egartley.gamelib.graphics.SpriteSheet;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -26,11 +28,19 @@ public abstract class AnimatedEntity extends Entity {
     /**
      * Creates a new animated entity, while setting {@link Entity#isAnimated} to <code>true</code>
      *
-     * @see Entity#Entity(String) Entity(String)
+     * @see Entity#Entity(String, Sprite) Entity(String, Sprite)
      */
-    public AnimatedEntity(String id) {
-        super(id);
+    public AnimatedEntity(String id, Sprite sprite) {
+        super(id, sprite);
         isAnimated = true;
+        setAnimations();
+    }
+
+    public AnimatedEntity(String id, SpriteSheet sheet) {
+        super(id, sheet.sprites.get(0));
+        isAnimated = true;
+        sprites = sheet.sprites;
+        setAnimations();
     }
 
     /**

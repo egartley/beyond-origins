@@ -126,6 +126,11 @@ public class InventoryItem extends Renderable implements Tickable {
         moveTo.putItem(this);
     }
 
+    /**
+     * Swaps places (slots) with the specified item
+     *
+     * @param swapWith The item to swap places with
+     */
     private void swap(InventoryItem swapWith) {
         InventorySlot slot1 = this.slot;
         InventoryItem item1 = this;
@@ -135,9 +140,16 @@ public class InventoryItem extends Renderable implements Tickable {
         slot2.putItem(item1);
     }
 
-    private void drop() {
-        Game.in().getCurrentMap().sector.entities.add(new DroppedItem(item, Mouse.x, Mouse.y));
+    /**
+     * Removes this item from the inventory
+     */
+    private void selfDestruct() {
         slot.removeItem();
+    }
+
+    private void drop() {
+        Game.in().getCurrentMap().sector.addEntity(new DroppedItem(item, Mouse.x - InventorySlot.SIZE / 2, Mouse.y - InventorySlot.SIZE / 2));
+        selfDestruct();
     }
 
 }

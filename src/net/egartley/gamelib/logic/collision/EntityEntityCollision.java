@@ -54,7 +54,7 @@ public class EntityEntityCollision {
      * @param boundary1 First entity's boundary
      * @param boundary2 Second entity's boundary
      */
-    protected EntityEntityCollision(EntityBoundary boundary1, EntityBoundary boundary2) {
+    public EntityEntityCollision(EntityBoundary boundary1, EntityBoundary boundary2) {
         boundaries = new EntityBoundary[]{
                 boundary1,
                 boundary2
@@ -193,6 +193,10 @@ public class EntityEntityCollision {
         // determine boundary.isCollided
         for (EntityBoundary boundary : boundaries) {
             // for both boundaries
+            if (((Collidable) boundary.parent).concurrentCollisions.size() == 0) {
+                boundary.isCollided = false;
+                continue;
+            }
             for (EntityEntityCollision c : ((Collidable) boundary.parent).concurrentCollisions) {
                 // for each concurrent collision in the boundary's entity
                 if (c.isCollided) {

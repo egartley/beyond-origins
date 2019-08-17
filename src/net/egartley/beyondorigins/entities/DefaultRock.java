@@ -14,8 +14,6 @@ public class DefaultRock extends StaticEntity implements Collidable {
     public DefaultRock(Sprite sprite, int x, int y) {
         super("Rock", sprite);
         setPosition(x, y);
-        setBoundaries();
-        setCollisions();
 
         isSectorSpecific = true;
         isDualRendered = true;
@@ -24,11 +22,6 @@ public class DefaultRock extends StaticEntity implements Collidable {
         firstLayer = image.getSubimage(0, image.getHeight() / 2, image.getWidth(), image.getHeight() / 2);
         // bottom half
         secondLayer = image.getSubimage(0, 0, image.getWidth(), image.getHeight() / 2);
-    }
-
-    @Override
-    public void tick() {
-
     }
 
     @Override
