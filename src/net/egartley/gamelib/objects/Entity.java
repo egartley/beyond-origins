@@ -6,7 +6,6 @@ import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.data.EntityStore;
 import net.egartley.gamelib.abstracts.Renderable;
 import net.egartley.gamelib.graphics.Sprite;
-import net.egartley.gamelib.interfaces.Collidable;
 import net.egartley.gamelib.interfaces.Interactable;
 import net.egartley.gamelib.interfaces.Tickable;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
@@ -38,6 +37,14 @@ public abstract class Entity extends Renderable implements Tickable {
      * Collection of the entity's boundaries
      */
     public ArrayList<EntityBoundary> boundaries = new ArrayList<>();
+    /**
+     * Collection of the entity's collisions
+     */
+    public ArrayList<EntityEntityCollision> collisions = new ArrayList<>();
+    /**
+     * Collection of the entity's concurrent collisions
+     */
+    public ArrayList<EntityEntityCollision> concurrentCollisions = new ArrayList<>();
     /**
      * The sprite to use while rendering
      */
@@ -183,9 +190,7 @@ public abstract class Entity extends Renderable implements Tickable {
         image = sprite.toBufferedImage();
         speed = 1.0;
         setBoundaries();
-        if (this instanceof Collidable) {
-            ((Collidable) this).setCollisions();
-        }
+        setCollisions();
         if (this instanceof Interactable) {
             ((Interactable) this).setInteractions();
         }
@@ -274,6 +279,7 @@ public abstract class Entity extends Renderable implements Tickable {
     @Override
     public void tick() {
         boundaries.forEach(EntityBoundary::tick);
+        collisions.forEach(EntityEntityCollision::tick);
     }
 
     public void setPosition(int x, int y) {
@@ -439,6 +445,13 @@ public abstract class Entity extends Renderable implements Tickable {
      * @see #boundaries
      */
     protected abstract void setBoundaries();
+
+    /**
+     * Sets the entity's collisions
+     *
+     * @see #boundaries
+     */
+    protected abstract void setCollisions();
 
     /**
      * Sets the current sprite

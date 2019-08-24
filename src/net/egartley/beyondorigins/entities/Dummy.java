@@ -11,7 +11,6 @@ import net.egartley.gamelib.graphics.Animation;
 import net.egartley.gamelib.graphics.EntityExpression;
 import net.egartley.gamelib.graphics.SpriteSheet;
 import net.egartley.gamelib.interfaces.Character;
-import net.egartley.gamelib.interfaces.Collidable;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
 import net.egartley.gamelib.logic.events.DialogueFinishedEvent;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
@@ -25,7 +24,7 @@ import net.egartley.gamelib.objects.MapSector;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Dummy extends AnimatedEntity implements Collidable, Character {
+public class Dummy extends AnimatedEntity implements Character {
 
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
@@ -117,7 +116,6 @@ public class Dummy extends AnimatedEntity implements Collidable, Character {
         isMovingLeftwards = false;
         isMovingRightwards = false;
         super.tick();
-        Collidable.tick();
 
         walktime++;
         if (walktime >= 120) {

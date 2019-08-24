@@ -75,4 +75,9 @@ public class Inventory extends StaticEntity {
 
     }
 
+    @Override
+    protected void setCollisions() {
+
+    }
+
 }

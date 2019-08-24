@@ -4,14 +4,13 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.ingame.Inventory;
 import net.egartley.beyondorigins.ingame.Item;
 import net.egartley.gamelib.graphics.Sprite;
-import net.egartley.gamelib.interfaces.Collidable;
-import net.egartley.gamelib.interfaces.Interactable;
+import net.egartley.gamelib.logic.collision.EntityEntityCollision;
+import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 import net.egartley.gamelib.logic.interaction.BoundaryPadding;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
-import net.egartley.gamelib.logic.interaction.EntityEntityInteraction;
 import net.egartley.gamelib.objects.StaticEntity;
 
-public class DroppedItem extends StaticEntity implements Collidable, Interactable {
+public class DroppedItem extends StaticEntity {
 
     public Item item;
 
@@ -30,7 +29,6 @@ public class DroppedItem extends StaticEntity implements Collidable, Interactabl
     @Override
     public void tick() {
         super.tick();
-        Interactable.tick();
     }
 
     @Override
@@ -41,18 +39,13 @@ public class DroppedItem extends StaticEntity implements Collidable, Interactabl
 
     @Override
     public void setCollisions() {
-
-    }
-
-    @Override
-    public void setInteractions() {
-        DroppedItem droppedItem = this;
-        interactions.add(new EntityEntityInteraction(droppedItem, Entities.PLAYER) {
-            @Override
-            public void onInteraction() {
+        DroppedItem me = this;
+        collisions.add(new EntityEntityCollision(defaultBoundary, Entities.PLAYER.boundary) {
+            public void onCollide(EntityEntityCollisionEvent event) {
                 Inventory.put(item);
-                Game.in().getCurrentMap().sector.removeEntity(droppedItem);
-                droppedItem.kill();
+                Game.in().getCurrentMap().sector.removeEntity(me);
+                me.kill();
+                end();
             }
         });
     }

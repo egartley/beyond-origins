@@ -78,4 +78,9 @@ public class EntityExpression extends AnimatedEntity {
 
     }
 
+    @Override
+    protected void setCollisions() {
+
+    }
+
 }

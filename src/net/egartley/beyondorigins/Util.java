@@ -3,7 +3,6 @@ package net.egartley.beyondorigins;
 import net.egartley.beyondorigins.data.ImageStore;
 import net.egartley.gamelib.graphics.Animation;
 import net.egartley.gamelib.graphics.SpriteSheet;
-import net.egartley.gamelib.interfaces.Collidable;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
@@ -136,10 +135,7 @@ public class Util {
 
     public static void fixCrossSectorCollisions(ArrayList<Entity> entities) {
         for (Entity e : entities) {
-            if (!(e instanceof Collidable)) {
-                continue;
-            }
-            for (EntityEntityCollision c : ((Collidable) e).collisions) {
+            for (EntityEntityCollision c : e.collisions) {
                 if (c.isCollided) {
                     for (EntityBoundary eb : c.boundaries) {
                         if (!eb.parent.isSectorSpecific) {
@@ -158,7 +154,7 @@ public class Util {
      */
     public static void annulCollisionEvent(EntityEntityCollisionEvent event, Entity e) {
         // check for other movement restrictions
-        for (EntityEntityCollision c : ((Collidable) e).concurrentCollisions) {
+        for (EntityEntityCollision c : e.concurrentCollisions) {
             if (c.lastEvent.collidedSide == event.collidedSide && c.lastEvent.invoker != event.invoker) {
                 // there is another collision that has the same movement
                 // restriction, so don't annul it

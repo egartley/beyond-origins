@@ -1,7 +1,6 @@
 package net.egartley.beyondorigins.entities;
 
 import net.egartley.gamelib.graphics.Sprite;
-import net.egartley.gamelib.interfaces.Collidable;
 import net.egartley.gamelib.logic.interaction.BoundaryPadding;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
 import net.egartley.gamelib.objects.StaticEntity;
@@ -9,7 +8,7 @@ import net.egartley.gamelib.objects.StaticEntity;
 /**
  * Basic tree that the player can walk under, but not over
  */
-public class DefaultTree extends StaticEntity implements Collidable {
+public class DefaultTree extends StaticEntity {
 
     public DefaultTree(Sprite sprite, int x, int y) {
         super("Tree", sprite);

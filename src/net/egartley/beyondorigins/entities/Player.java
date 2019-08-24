@@ -7,7 +7,6 @@ import net.egartley.gamelib.graphics.Animation;
 import net.egartley.gamelib.graphics.SpriteSheet;
 import net.egartley.gamelib.input.Keyboard;
 import net.egartley.gamelib.interfaces.Character;
-import net.egartley.gamelib.interfaces.Collidable;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 import net.egartley.gamelib.logic.interaction.BoundaryOffset;
@@ -21,7 +20,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-public class Player extends AnimatedEntity implements Character, Collidable {
+public class Player extends AnimatedEntity implements Character {
 
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
@@ -157,7 +156,6 @@ public class Player extends AnimatedEntity implements Character, Collidable {
         }
 
         super.tick();
-        Collidable.tick();
     }
 
     public void render(Graphics graphics) {

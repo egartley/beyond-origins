@@ -120,4 +120,9 @@ public class DialoguePanel extends StaticEntity {
 
     }
 
+    @Override
+    protected void setCollisions() {
+
+    }
+
 }

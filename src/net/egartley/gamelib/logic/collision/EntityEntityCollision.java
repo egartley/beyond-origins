@@ -1,6 +1,5 @@
 package net.egartley.gamelib.logic.collision;
 
-import net.egartley.gamelib.interfaces.Collidable;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
 import net.egartley.gamelib.objects.Entity;
@@ -177,7 +176,7 @@ public class EntityEntityCollision {
         for (Entity e : entities) {
             // both entities are collided
             e.lastCollision = this;
-            ((Collidable) e).concurrentCollisions.add(this);
+            e.concurrentCollisions.add(this);
             e.isCollided = true;
         }
         for (EntityBoundary b : boundaries) {
@@ -193,11 +192,11 @@ public class EntityEntityCollision {
         // determine boundary.isCollided
         for (EntityBoundary boundary : boundaries) {
             // for both boundaries
-            if (((Collidable) boundary.parent).concurrentCollisions.size() == 0) {
+            if (boundary.parent.concurrentCollisions.size() == 0) {
                 boundary.isCollided = false;
                 continue;
             }
-            for (EntityEntityCollision c : ((Collidable) boundary.parent).concurrentCollisions) {
+            for (EntityEntityCollision c : boundary.parent.concurrentCollisions) {
                 // for each concurrent collision in the boundary's entity
                 if (c.isCollided) {
                     // ^ don't check for "c != this" because this will have isCollided as always false
@@ -214,7 +213,7 @@ public class EntityEntityCollision {
 
         // determine entity.isCollided
         for (Entity entity : entities) {
-            ((Collidable) entity).concurrentCollisions.remove(this);
+            entity.concurrentCollisions.remove(this);
             for (EntityBoundary boundary : entity.boundaries) {
                 if (boundary.isCollided) {
                     // at least one boundary is collided, therefore the entity should be considered collided
