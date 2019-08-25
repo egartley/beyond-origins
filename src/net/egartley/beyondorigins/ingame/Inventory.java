@@ -11,8 +11,8 @@ public class Inventory extends StaticEntity {
 
     public static final int ROWS = 5, COLUMNS = 4;
 
-    public static InventoryItem itemBeingDragged;
-    public static ArrayList<InventorySlot> slots = new ArrayList<>();
+    public InventoryItem itemBeingDragged;
+    public ArrayList<InventorySlot> slots = new ArrayList<>();
 
     private Color backgroundColor = new Color(0, 0, 0, 152);
 
@@ -32,13 +32,37 @@ public class Inventory extends StaticEntity {
      *
      * @param item The item to put in the inventory
      */
-    public static void put(Item item) {
-        for (InventorySlot slot : slots) {
-            if (slot.isEmpty) {
-                slot.putItem(new InventoryItem(item, slot, false));
-                break;
+    public boolean put(Item item) {
+        return put(item, 1);
+    }
+
+    /**
+     * Puts the item in the next available slot
+     *
+     * @param item The item to put in the inventory
+     */
+    public boolean put(Item item, int amount) {
+        if (isFull()) {
+            return false;
+        }
+        for (int i = 0; i < amount; i++) {
+            for (InventorySlot slot : slots) {
+                if (slot.isEmpty) {
+                    slot.putItem(new InventoryItem(this, item, slot, false));
+                    break;
+                }
             }
         }
+        return true;
+    }
+
+    public boolean isFull() {
+        for (InventorySlot slot : slots) {
+            if (slot.isEmpty) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private int getSlotIndexFromRowColumn(int row, int column) {

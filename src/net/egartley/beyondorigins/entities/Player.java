@@ -18,6 +18,7 @@ import net.egartley.gamelib.objects.MapSector;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Player extends AnimatedEntity implements Character {
@@ -146,6 +147,7 @@ public class Player extends AnimatedEntity implements Character {
         boolean left = Keyboard.isKeyPressed(KeyEvent.VK_A);
         boolean down = Keyboard.isKeyPressed(KeyEvent.VK_S);
         boolean right = Keyboard.isKeyPressed(KeyEvent.VK_D);
+        // Debug.out(up + " " + left + " " + down + " " + right);
 
         // actually move the player, with animations and all
         move(up, down, left, right);
@@ -199,4 +201,13 @@ public class Player extends AnimatedEntity implements Character {
         }
     }
 
+    @Override
+    public String getName() {
+        return "Player";
+    }
+
+    @Override
+    public BufferedImage getDialoguePanelImage() {
+        return sprite.toBufferedImage(0);
+    }
 }

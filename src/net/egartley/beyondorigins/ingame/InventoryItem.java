@@ -18,14 +18,17 @@ public class InventoryItem extends Renderable implements Tickable {
 
     public boolean isBeingDragged, didStartDrag, mouseHover, setFontMetrics, isShowingTooltip;
 
+    private Inventory inventory;
+
     public Item item;
     public InventorySlot slot;
 
-    public InventoryItem(Item item, InventorySlot slot) {
-        this(item, slot, false);
+    public InventoryItem(Inventory inventory, Item item, InventorySlot slot) {
+        this(inventory, item, slot, false);
     }
 
-    public InventoryItem(Item item, InventorySlot slot, boolean setToSlot) {
+    public InventoryItem(Inventory inventory, Item item, InventorySlot slot, boolean setToSlot) {
+        this.inventory = inventory;
         this.item = item;
         this.slot = slot;
         setPosition(slot.baseItemX, slot.baseItemY);
@@ -38,15 +41,15 @@ public class InventoryItem extends Renderable implements Tickable {
         mouseHover = Util.isWithinBounds(Mouse.x, Mouse.y, x(), y(), InventorySlot.SIZE, InventorySlot.SIZE);
         isShowingTooltip = mouseHover || isBeingDragged;
         if (Mouse.isDragging) {
-            if ((mouseHover || didStartDrag) && (Inventory.itemBeingDragged == this || Inventory.itemBeingDragged == null)) {
-                Inventory.itemBeingDragged = this;
+            if ((mouseHover || didStartDrag) && (inventory.itemBeingDragged == this || inventory.itemBeingDragged == null)) {
+                inventory.itemBeingDragged = this;
                 setPosition(Mouse.x - (InventorySlot.SIZE / 2), Mouse.y - (InventorySlot.SIZE / 2));
                 didStartDrag = true;
                 isBeingDragged = true;
             }
         } else if (isBeingDragged) {
             onDragEnd();
-            Inventory.itemBeingDragged = null;
+            inventory.itemBeingDragged = null;
             isBeingDragged = false;
         } else {
             setPosition(slot.baseItemX, slot.baseItemY);
@@ -76,7 +79,7 @@ public class InventoryItem extends Renderable implements Tickable {
         ArrayList<Rectangle> intersectionRectangles = new ArrayList<>();
         ArrayList<InventorySlot> intersectedSlots = new ArrayList<>();
 
-        for (InventorySlot slot : Inventory.slots) {
+        for (InventorySlot slot : inventory.slots) {
             Rectangle r1 = new Rectangle(slot.x(), slot.y(), InventorySlot.SIZE, InventorySlot.SIZE);
             Rectangle r2 = new Rectangle(x(), y(), InventorySlot.SIZE, InventorySlot.SIZE);
             if (r1.intersects(r2)) {

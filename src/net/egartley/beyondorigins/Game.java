@@ -7,6 +7,7 @@ import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.Player;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.gamestates.MainMenuState;
+import net.egartley.beyondorigins.ingame.DialoguePanel;
 import net.egartley.gamelib.input.KeyTyped;
 import net.egartley.gamelib.input.Keyboard;
 import net.egartley.gamelib.input.Mouse;
@@ -14,6 +15,7 @@ import net.egartley.gamelib.objects.GameState;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 /**
@@ -30,6 +32,7 @@ public class Game extends JPanel implements Runnable {
     private static boolean running = false;
     private int fps;
     private long lastFpsTime;
+    public static Game self;
 
     // CONSTANTS
     /**
@@ -66,15 +69,15 @@ public class Game extends JPanel implements Runnable {
         frame.setLocationRelativeTo(null);
 
         // Credit: https://stackoverflow.com/a/11671311
-        Game game = new Game();
-        game.setDoubleBuffered(true);
-        frame.getContentPane().add(game);
+        self = new Game();
+        self.setDoubleBuffered(true);
+        frame.getContentPane().add(self);
 
         frame.setVisible(true);
-        game.requestFocus();
+        self.requestFocusInWindow();
 
         running = true;
-        mainThread = new Thread(game, "Game-Main");
+        mainThread = new Thread(self, "Game-Main");
         mainThread.start();
     }
 
@@ -108,6 +111,7 @@ public class Game extends JPanel implements Runnable {
     }
 
     private void initializeEntities() {
+        Entities.DIALOGUE_PANEL = new DialoguePanel(Entities.getTemplate(Entities.TEMPLATE_DIALOGUE));
         Entities.PLAYER = new Player();
         Entities.DUMMY = new Dummy();
     }
@@ -154,6 +158,25 @@ public class Game extends JPanel implements Runnable {
         }
         currentState = changeTo;
         currentState.onStart();
+    }
+
+    public static void addKeyBinding(int keyCode, AbstractAction action) {
+        // Credit: https://stackoverflow.com/a/52919766
+        int modifier = 0;
+        switch (keyCode) {
+            case KeyEvent.VK_CONTROL:
+                modifier = InputEvent.CTRL_DOWN_MASK;
+                break;
+            case KeyEvent.VK_SHIFT:
+                modifier = InputEvent.SHIFT_DOWN_MASK;
+                break;
+            case KeyEvent.VK_ALT:
+                modifier = InputEvent.ALT_DOWN_MASK;
+                break;
+
+        }
+        self.getInputMap().put(KeyStroke.getKeyStroke(keyCode, modifier), keyCode);
+        self.getActionMap().put(keyCode, action);
     }
 
     public static synchronized void quit() {

@@ -1,4 +1,4 @@
-package net.egartley.gamelib.objects;
+package net.egartley.gamelib.logic.dialogue;
 
 import net.egartley.beyondorigins.Debug;
 import net.egartley.gamelib.interfaces.Character;

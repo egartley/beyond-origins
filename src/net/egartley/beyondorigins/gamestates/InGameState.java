@@ -4,7 +4,6 @@ import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.KeyboardController;
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.ingame.DialoguePanel;
 import net.egartley.beyondorigins.ingame.Inventory;
 import net.egartley.beyondorigins.maps.debug.DebugMap;
 import net.egartley.gamelib.input.KeyTyped;
@@ -31,9 +30,6 @@ public class InGameState extends GameState {
 
         // load inventory
         inventory = new Inventory(Entities.getTemplate(Entities.TEMPLATE_INVENTORY));
-
-        // initialize dialogue panel
-        Entities.DIALOGUE_PANEL = new DialoguePanel(Entities.getTemplate(Entities.TEMPLATE_DIALOGUE));
 
         // initialize key typeds
         toggleInventory = new KeyTyped(KeyEvent.VK_E) {

@@ -3,33 +3,60 @@ package net.egartley.beyondorigins.ingame;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.data.ImageStore;
-import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.gamelib.graphics.Sprite;
+import net.egartley.gamelib.logic.dialogue.DialogueExchange;
 import net.egartley.gamelib.logic.math.Calculate;
-import net.egartley.gamelib.objects.CharacterDialogue;
 import net.egartley.gamelib.objects.StaticEntity;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 
 public class DialoguePanel extends StaticEntity {
 
+    /**
+     * The maximum number of lines that can be displayed at once
+     */
+    public static final short MAX_LINES = 6;
+
+    /**
+     * Whether or not the dialogue panel is showing (visible)
+     */
     public boolean isShowing;
 
+    /**
+     * The width of the character's name when rendered
+     *
+     * @see #setFontMetrics
+     */
     private int characterNameStringWidth = 0;
+    /**
+     * An index, used as a multipler for the y-coordinate of each line of text
+     */
     private short lineIndex = -1;
-    private short maxLines = 6;
 
-    private static boolean setFontMetrics;
+    /**
+     * Whether or not font metrics have been set
+     *
+     * @see #characterNameStringWidth
+     */
+    public boolean setFontMetrics;
+    /**
+     * The font used when rendering the actual dialogue
+     */
     private static Font lineFont = new Font("Bookman Old Style", Font.BOLD, 14);
+    /**
+     * The font used when rendering the character's name
+     */
     private static Font characterNameFont = new Font("Arial", Font.PLAIN, 12);
+    /**
+     * The image displayed when there are more lines available
+     */
     private BufferedImage moreLinesImage;
-    public CharacterDialogue currentDialogue;
 
-    public String[] allLines;
-    public String[] displayedLines;
-    public String[] queuedLines;
+    /**
+     * The dialogue that is currently being used
+     */
+    public DialogueExchange exchange;
 
     public DialoguePanel(Sprite sprite) {
         super("DialogPanel", sprite);
@@ -37,29 +64,19 @@ public class DialoguePanel extends StaticEntity {
         moreLinesImage = ImageStore.get(ImageStore.MORE_LINES);
     }
 
-    public void setDialogue(CharacterDialogue dialogue) {
-        currentDialogue = dialogue;
-        allLines = currentDialogue.lines;
-        if (allLines.length <= maxLines) {
-            // max number or less lines, will always display all of them
-            displayedLines = allLines;
-            queuedLines = null;
-        } else {
-            // (max number + 1) or more lines, queue up remaining
-            displayedLines = Arrays.copyOfRange(allLines, 0, 6);
-            queuedLines = Arrays.copyOfRange(allLines, 6, allLines.length);
-        }
-    }
-
     public void advance() {
-        if (queuedLines == null || queuedLines.length == 0) {
-            DialogueController.onFinished(currentDialogue);
+        if (exchange.isFinished) {
+            DialogueController.onFinished(exchange);
+            exchange.reset();
             hide();
         } else if (isShowing) {
-            nextLine();
+            exchange.advance();
         }
     }
 
+    /**
+     * Makes the dialogue panel visible
+     */
     public void show() {
         isShowing = true;
         Game.in().isDialogueVisible = true;
@@ -68,16 +85,12 @@ public class DialoguePanel extends StaticEntity {
     public void hide() {
         isShowing = false;
         Game.in().isDialogueVisible = false;
-    }
-
-    private void nextLine() {
-        System.arraycopy(displayedLines, 1, displayedLines, 0, maxLines - 1);
-        displayedLines[maxLines - 1] = queuedLines[0];
-        queuedLines = Arrays.copyOfRange(queuedLines, 1, queuedLines.length);
+        setFontMetrics = false;
     }
 
     @Override
     public void tick() {
+
     }
 
     @Override
@@ -86,25 +99,25 @@ public class DialoguePanel extends StaticEntity {
             return;
         }
         if (!setFontMetrics) {
-            characterNameStringWidth = graphics.getFontMetrics(characterNameFont).stringWidth("Dummy");
+            characterNameStringWidth = graphics.getFontMetrics(characterNameFont).stringWidth(exchange.dialogue.character.getName());
             setFontMetrics = true;
         }
-        // render background (the "panel" (image))
+        // render background (panel)
         super.render(graphics);
-        // render character thing
-        Sprite s = Entities.DUMMY.sprite;
-        graphics.drawImage(s.toBufferedImage(), 247 + 26 - (s.width / 2), 414 /* + 26 - (s.height / 2) */, null);
+        // render character image and name
+        BufferedImage characterImage = exchange.dialogue.character.getDialoguePanelImage();
+        graphics.drawImage(characterImage, 247 + 26 - (characterImage.getWidth() / 2), 414, null);
         graphics.setColor(Color.WHITE);
         graphics.setFont(characterNameFont);
-        graphics.drawString("Dummy", 272 - characterNameStringWidth / 2, 476);
+        graphics.drawString(exchange.dialogue.character.getName(), 272 - characterNameStringWidth / 2, 476);
         // render text
         graphics.setFont(lineFont);
-        for (String line : displayedLines) {
+        for (String line : exchange.displayedLines) {
             renderLine(line, graphics);
         }
         lineIndex = 0;
         // render more lines thing
-        if (queuedLines != null && queuedLines.length > 0) {
+        if (exchange.queuedLines != null && exchange.queuedLines.length > 0) {
             graphics.drawImage(moreLinesImage, 700, 500, null);
         }
     }

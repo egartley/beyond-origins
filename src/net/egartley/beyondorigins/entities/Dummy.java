@@ -5,23 +5,24 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.data.ImageStore;
-import net.egartley.beyondorigins.ingame.Inventory;
 import net.egartley.beyondorigins.ingame.Item;
 import net.egartley.gamelib.graphics.Animation;
 import net.egartley.gamelib.graphics.EntityExpression;
 import net.egartley.gamelib.graphics.SpriteSheet;
 import net.egartley.gamelib.interfaces.Character;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
-import net.egartley.gamelib.logic.events.DialogueFinishedEvent;
+import net.egartley.gamelib.logic.dialogue.CharacterDialogue;
+import net.egartley.gamelib.logic.dialogue.DialogueExchange;
+import net.egartley.gamelib.logic.events.DialogueExchangeFinishedEvent;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 import net.egartley.gamelib.logic.interaction.BoundaryPadding;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
 import net.egartley.gamelib.objects.AnimatedEntity;
-import net.egartley.gamelib.objects.CharacterDialogue;
 import net.egartley.gamelib.objects.Entity;
 import net.egartley.gamelib.objects.MapSector;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Dummy extends AnimatedEntity implements Character {
@@ -33,7 +34,7 @@ public class Dummy extends AnimatedEntity implements Character {
     private boolean isAngry;
     private short walktime = 0;
     private byte dir = RIGHT;
-    private CharacterDialogue dialogue_playerCollision;
+    private DialogueExchange dialogue_playerCollision;
 
     EntityExpression exp;
 
@@ -47,9 +48,9 @@ public class Dummy extends AnimatedEntity implements Character {
 
         exp = new EntityExpression(EntityExpression.HEART, this);
 
-        dialogue_playerCollision = new CharacterDialogue(Entities.DUMMY, "dummy/player-collision.def");
+        dialogue_playerCollision = new DialogueExchange(new CharacterDialogue(this, "dummy/player-collision.def"), new CharacterDialogue(this, "dummy/player-collision-2.def"));
 
-        DialogueController.addFinished(new DialogueFinishedEvent(dialogue_playerCollision) {
+        DialogueController.addFinished(new DialogueExchangeFinishedEvent(dialogue_playerCollision) {
             @Override
             public void onFinish() {
                 isAngry = false;
@@ -184,18 +185,26 @@ public class Dummy extends AnimatedEntity implements Character {
                 if (Entities.DIALOGUE_PANEL.isShowing) {
                     return;
                 }
-                Entities.DIALOGUE_PANEL.setDialogue(dialogue_playerCollision);
+                Entities.DIALOGUE_PANEL.exchange = dialogue_playerCollision;
                 Entities.DIALOGUE_PANEL.show();
                 isAngry = true;
 
-                Inventory.put(Item.TEST_ITEM);
-                Inventory.put(Item.TEST_ITEM);
-                Inventory.put(Item.TEST_ITEM);
+                Game.in().inventory.put(Item.TEST_ITEM, 3);
             }
 
             public void onCollisionEnd(EntityEntityCollisionEvent event) {
+
             }
         });
     }
 
+    @Override
+    public String getName() {
+        return "Dummy";
+    }
+
+    @Override
+    public BufferedImage getDialoguePanelImage() {
+        return sprite.toBufferedImage(0);
+    }
 }

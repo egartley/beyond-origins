@@ -2,7 +2,6 @@ package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.ingame.Inventory;
 import net.egartley.beyondorigins.ingame.Item;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
@@ -43,7 +42,7 @@ public class DroppedItem extends StaticEntity {
         DroppedItem me = this;
         collisions.add(new EntityEntityCollision(defaultBoundary, Entities.PLAYER.boundary) {
             public void onCollide(EntityEntityCollisionEvent event) {
-                Inventory.put(item);
+                Game.in().inventory.put(item);
                 Game.in().getCurrentMap().sector.removeEntity(me);
                 me.kill();
                 end();

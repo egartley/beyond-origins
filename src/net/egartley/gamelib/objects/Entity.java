@@ -162,10 +162,6 @@ public abstract class Entity extends Renderable implements Tickable {
      * Human-readable identifier for the entity
      */
     private String id;
-    /**
-     * The entity's generic, non-specific name, such as "Rock" or "Tree"
-     */
-    private String name;
 
     // the font and color are static because they're always the same
     private static Font nameTagFont = new Font("Arial", Font.PLAIN, 11);
@@ -241,9 +237,7 @@ public abstract class Entity extends Renderable implements Tickable {
      */
     private void drawNameTag(Graphics graphics) {
         if (!setFontMetrics) {
-            if (name == null || name.equals(""))
-                name = toString();
-            nameTagWidth = graphics.getFontMetrics(nameTagFont).stringWidth(name) + 8;
+            nameTagWidth = graphics.getFontMetrics(nameTagFont).stringWidth(toString()) + 8;
             entityWidth = sprite.width;
             setFontMetrics = true;
         }
@@ -255,7 +249,7 @@ public abstract class Entity extends Renderable implements Tickable {
 
         graphics.fillRect(nameX, nameY, nameTagWidth, 18);
         graphics.setColor(Color.WHITE);
-        graphics.drawString(name, nameX + 5, nameY + 13);
+        graphics.drawString(toString(), nameX + 5, nameY + 13);
     }
 
     /**
