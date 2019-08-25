@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Game;
+import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.ingame.Inventory;
 import net.egartley.beyondorigins.ingame.Item;
 import net.egartley.gamelib.graphics.Sprite;
@@ -15,7 +16,7 @@ public class DroppedItem extends StaticEntity {
     public Item item;
 
     public DroppedItem(Item item, int x, int y) {
-        super("dropped_" + item.name, new Sprite(item.image));
+        super("dropped_" + item.name, new Sprite(Util.resize(item.image, item.image.getWidth() / 2, item.image.getHeight() / 2)));
         isSectorSpecific = true;
         isDualRendered = false;
         isTraversable = true;

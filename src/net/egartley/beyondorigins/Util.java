@@ -32,8 +32,8 @@ public class Util {
     /**
      * Returns a re-sized image of the original, at the given width and height
      */
-    static BufferedImage resize(BufferedImage image, int width, int height) {
-        return resize(image, width, height, Image.SCALE_DEFAULT);
+    public static BufferedImage resize(BufferedImage image, int width, int height) {
+        return resize(image, width, height, Image.SCALE_SMOOTH);
     }
 
     /**

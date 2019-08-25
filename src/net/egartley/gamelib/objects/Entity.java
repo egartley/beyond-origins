@@ -78,7 +78,13 @@ public abstract class Entity extends Renderable implements Tickable {
      * The boundary to use if not specified
      */
     public EntityBoundary defaultBoundary = null;
+    /**
+     * Less-than-one change in the x-coordinate, used for non-integer speeds
+     */
     public double deltaX;
+    /**
+     * Less-than-one change in the y-coordinate, used for non-integer speeds
+     */
     public double deltaY;
     /**
      * The entity's speed (magnitude of its location change when moving)
@@ -398,6 +404,7 @@ public abstract class Entity extends Renderable implements Tickable {
      * @see #move(byte)
      */
     protected void onMove(byte direction) {
+
     }
 
     /**

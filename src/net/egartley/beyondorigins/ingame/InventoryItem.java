@@ -111,7 +111,11 @@ public class InventoryItem extends Renderable implements Tickable {
                 this.swap(closestSlot.item);
             }
         } else {
-            drop();
+            // did not end over any slots
+            Inventory i = Game.in().inventory;
+            if (!Util.isWithinBounds(x(), y(), i.x(), i.y(), i.sprite.width, i.sprite.height)) {
+                drop();
+            }
         }
     }
 
@@ -148,7 +152,7 @@ public class InventoryItem extends Renderable implements Tickable {
     }
 
     private void drop() {
-        Game.in().getCurrentMap().sector.addEntity(new DroppedItem(item, Mouse.x - InventorySlot.SIZE / 2, Mouse.y - InventorySlot.SIZE / 2));
+        Game.in().getCurrentMap().sector.addEntity(new DroppedItem(item, Mouse.x - 8, Mouse.y - 8));
         selfDestruct();
     }
 

@@ -40,14 +40,20 @@ public abstract class MapSector implements Tickable {
     public static final byte RIGHT = 1;
     public static final byte BOTTOM = 2;
     public static final byte LEFT = 3;
+    /**
+     * Number of rows of tiles in any sector
+     */
     public static final short TILE_ROWS = 30;
+    /**
+     * Number of columns of tiles in any sector
+     */
     public static final short TILE_COLUMNS = 17;
 
     private int deltaX;
     private int deltaY;
 
     /**
-     * The sector's map
+     * The map this sector is a part of
      */
     protected Map parent;
     /**
@@ -63,12 +69,18 @@ public abstract class MapSector implements Tickable {
      */
     private ArrayList<MapSectorChangeCollision> changeCollisions;
     /**
-     * Entities that only exist within the sector
+     * Entities that only "exist" within the sector
      *
      * @see Entity#isSectorSpecific
      */
     public ArrayList<Entity> entities;
+    /**
+     * Entities that are queued for removal from {@link #entities}
+     */
     private Entity[] queuedForRemoval;
+    /**
+     * Entities that are queued for addition to {@link #entities}
+     */
     private Entity[] queuedForAddition;
     /**
      * The sector's definition, such as its tiles and other properties

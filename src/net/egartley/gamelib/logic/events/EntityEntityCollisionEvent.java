@@ -40,6 +40,7 @@ public class EntityEntityCollisionEvent {
     }
 
     private void calculateCollidedSide(int tolerance, EntityBoundary player, EntityBoundary rock) {
+        // Debug.out("Calculating collided side for " + player.parent + " and " + rock.parent + ", " + tolerance);
         if (Calculate.isEntityWithinToleranceOf(player, rock, Entity.LEFT, tolerance)) {
             collidedSide = LEFT_SIDE;
         } else if (Calculate.isEntityWithinToleranceOf(player, rock, Entity.RIGHT, tolerance)) {
@@ -50,6 +51,7 @@ public class EntityEntityCollisionEvent {
         } else if (Calculate.isEntityWithinToleranceOf(player, rock, Entity.DOWN, tolerance)) {
             collidedSide = BOTTOM_SIDE;
         }
+        // Debug.out("Calculated");
     }
 
 }

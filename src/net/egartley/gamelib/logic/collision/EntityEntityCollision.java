@@ -173,6 +173,7 @@ public class EntityEntityCollision {
      * Called right before {@link #onCollide(EntityEntityCollisionEvent)}
      */
     private void onCollide_internal() {
+        // Debug.out("onCollide_internal start");
         for (Entity e : entities) {
             // both entities are collided
             e.lastCollision = this;
@@ -183,12 +184,14 @@ public class EntityEntityCollision {
             // both boundaries are collided
             b.isCollided = true;
         }
+        // Debug.out("onCollide_internal end");
     }
 
     /**
      * Called right before {@link #onCollisionEnd(EntityEntityCollisionEvent)}
      */
     private void onCollisionEnd_internal() {
+        // Debug.out("onCollisionEnd_internal start");
         // determine boundary.isCollided
         for (EntityBoundary boundary : boundaries) {
             // for both boundaries
@@ -224,6 +227,7 @@ public class EntityEntityCollision {
                 entity.isCollided = false;
             }
         }
+        // Debug.out("onCollisionEnd_internal end");
     }
 
     @Override
