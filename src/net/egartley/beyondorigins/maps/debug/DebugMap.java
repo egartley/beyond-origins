@@ -25,9 +25,6 @@ public class DebugMap extends Map {
         MapSector sec3 = sectors.get(2);
         MapSector sec4 = sectors.get(3);
 
-        // go to the first sector by default
-        changeSector(sec1, null);
-
         // stitch together all of the sectors
         sec1.setNeighborAt(sec2, MapSector.TOP);
         sec2.setNeighborAt(sec3, MapSector.RIGHT);

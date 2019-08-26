@@ -32,9 +32,10 @@ public class ImageStore {
      */
     public static BufferedImage get(byte image) {
         String path = "resources/images/";
-        String mapTilePath = path + "map-tiles/";
         String entityPath = path + "entities/";
         String expressionPath = entityPath + "expressions/";
+        String mapTilePath = path + "map-tiles/";
+        String uiPath = path + "ui/";
         switch (image) {
             case PLAYER:
                 return get(entityPath + "player-default.png");
@@ -57,11 +58,11 @@ public class ImageStore {
             case EXPRESSION_HEART:
                 return get(expressionPath + "heart.png");
             case DIALOGUE_PANEL:
-                return get(entityPath + "dialogue-panel.png");
+                return get(uiPath + "dialogue-panel.png");
             case INVENTORY:
                 return get(entityPath + "inventory.png");
             case MORE_LINES:
-                return get(path + "ui/more-lines.png");
+                return get(uiPath + "more-lines.png");
             default:
                 return null;
         }
@@ -71,13 +72,18 @@ public class ImageStore {
      * Returns an image at the specified path
      */
     public static BufferedImage get(String path) {
+        BufferedImage r = null;
         try {
-            return ImageIO.read(new File(path));
+            r = ImageIO.read(new File(path));
         } catch (IOException e) {
-            Debug.error("There was an error while trying to load the image \"" + path + "\"");
-            e.printStackTrace();
+            Debug.warning("There was an error while trying to read or find the image \"" + path + "\", using the \"unknown image\" file instead");
+            try {
+                r = ImageIO.read(new File("resources/images/unknown.png"));
+            } catch (IOException e2) {
+                Debug.error("Could not read or find the \"unknown image\" file (" + e2.getMessage() + ")");
+            }
         }
-        return null;
+        return r;
     }
 
 }

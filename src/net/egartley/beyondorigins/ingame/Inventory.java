@@ -28,18 +28,23 @@ public class Inventory extends StaticEntity {
     }
 
     /**
-     * Puts the item in the next available slot
+     * Puts the item in the next available slot, does nothing if full
      *
      * @param item The item to put in the inventory
+     *
+     * @return Whether or not the item was successfully put into the inventory
      */
     public boolean put(Item item) {
         return put(item, 1);
     }
 
     /**
-     * Puts the item in the next available slot
+     * Puts the item in the next available slot, does nothing if full
      *
      * @param item The item to put in the inventory
+     * @param amount How many of that item to put
+     *
+     * @return Whether or not the item was successfully put into the inventory
      */
     public boolean put(Item item, int amount) {
         if (isFull()) {
@@ -47,8 +52,8 @@ public class Inventory extends StaticEntity {
         }
         for (int i = 0; i < amount; i++) {
             for (InventorySlot slot : slots) {
-                if (slot.isEmpty) {
-                    slot.putItem(new InventoryItem(this, item, slot, false));
+                if (slot.isEmpty()) {
+                    slot.set(new InventoryItem(this, item, slot, false));
                     break;
                 }
             }
@@ -58,7 +63,7 @@ public class Inventory extends StaticEntity {
 
     public boolean isFull() {
         for (InventorySlot slot : slots) {
-            if (slot.isEmpty) {
+            if (slot.isEmpty()) {
                 return false;
             }
         }
@@ -78,9 +83,13 @@ public class Inventory extends StaticEntity {
 
         slots.forEach(slot -> slot.render(graphics));
         for (InventorySlot slot : slots) {
-            if (slot.item != null) {
+            if (slot.item != null && !slot.item.isBeingDragged) {
                 slot.item.render(graphics);
             }
+        }
+        // make sure the item being dragged is rendered "above" all the other items, regardless of slot position
+        if (itemBeingDragged != null) {
+            itemBeingDragged.render(graphics);
         }
         for (InventorySlot slot : slots) {
             if (slot.item != null && slot.item.isShowingTooltip) {

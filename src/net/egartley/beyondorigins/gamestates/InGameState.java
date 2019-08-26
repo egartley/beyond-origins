@@ -4,6 +4,7 @@ import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.KeyboardController;
 import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.ingame.DialoguePanel;
 import net.egartley.beyondorigins.ingame.Inventory;
 import net.egartley.beyondorigins.maps.debug.DebugMap;
 import net.egartley.gamelib.input.KeyTyped;
@@ -17,7 +18,9 @@ public class InGameState extends GameState {
 
     private Map currentMap;
     private KeyTyped toggleInventory, advanceDialogue, backToMainMenu;
+
     public Inventory inventory;
+    public DialoguePanel dialoguePanel;
 
     public boolean isInventoryVisible;
     public boolean isDialogueVisible;
@@ -29,7 +32,10 @@ public class InGameState extends GameState {
         currentMap = new DebugMap("Debug Map");
 
         // load inventory
-        inventory = new Inventory(Entities.getTemplate(Entities.TEMPLATE_INVENTORY));
+        inventory = new Inventory(Entities.getSpriteTemplate(Entities.TEMPLATE_INVENTORY));
+
+        // load dialogue panel
+        dialoguePanel = new DialoguePanel();
 
         // initialize key typeds
         toggleInventory = new KeyTyped(KeyEvent.VK_E) {
@@ -43,7 +49,7 @@ public class InGameState extends GameState {
         advanceDialogue = new KeyTyped(KeyEvent.VK_SPACE) {
             @Override
             public void onType() {
-                Entities.DIALOGUE_PANEL.advance();
+                dialoguePanel.advance();
             }
         };
         backToMainMenu = new KeyTyped(KeyEvent.VK_ESCAPE) {
@@ -63,6 +69,8 @@ public class InGameState extends GameState {
         KeyboardController.addKeyTyped(toggleInventory);
         KeyboardController.addKeyTyped(advanceDialogue);
         KeyboardController.addKeyTyped(backToMainMenu);
+
+        currentMap.changeSector(currentMap.sectors.get(0), null);
     }
 
     @Override
@@ -76,7 +84,7 @@ public class InGameState extends GameState {
     public void render(Graphics graphics) {
         currentMap.render(graphics);
         if (isDialogueVisible) {
-            Entities.DIALOGUE_PANEL.render(graphics);
+            dialoguePanel.render(graphics);
         } else if (isInventoryVisible) {
             inventory.render(graphics);
         }
@@ -87,7 +95,7 @@ public class InGameState extends GameState {
     public void tick() {
         currentMap.tick();
         if (isDialogueVisible) {
-            Entities.DIALOGUE_PANEL.tick();
+            dialoguePanel.tick();
         } else if (isInventoryVisible) {
             inventory.tick();
         }

@@ -15,7 +15,7 @@ public class DroppedItem extends StaticEntity {
     public Item item;
 
     public DroppedItem(Item item, int x, int y) {
-        super("dropped_" + item.name, new Sprite(Util.resize(item.image, item.image.getWidth() / 2, item.image.getHeight() / 2)));
+        super(item.id + "_dropped", new Sprite(Util.resize(item.image, item.image.getWidth() / 2, item.image.getHeight() / 2)));
         isSectorSpecific = true;
         isDualRendered = false;
         isTraversable = true;
@@ -24,6 +24,16 @@ public class DroppedItem extends StaticEntity {
         setPosition(x, y);
 
         this.item = item;
+    }
+
+    private boolean pickup() {
+        if (!Game.in().inventory.isFull()) {
+            Game.in().inventory.put(item);
+            Game.in().getCurrentMap().sector.removeEntity(this);
+            kill();
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -39,13 +49,11 @@ public class DroppedItem extends StaticEntity {
 
     @Override
     public void setCollisions() {
-        DroppedItem me = this;
         collisions.add(new EntityEntityCollision(defaultBoundary, Entities.PLAYER.boundary) {
             public void onCollide(EntityEntityCollisionEvent event) {
-                Game.in().inventory.put(item);
-                Game.in().getCurrentMap().sector.removeEntity(me);
-                me.kill();
-                end();
+                if (pickup()) {
+                    end();
+                }
             }
         });
     }

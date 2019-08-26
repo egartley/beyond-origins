@@ -12,7 +12,8 @@ import java.util.ArrayList;
 
 public class InventoryItem extends Renderable implements Tickable {
 
-    private static Font tooltipFont = new Font("Arial", Font.PLAIN, 11);
+    private static Font tooltipFont = new Font("Arial", Font.BOLD, 14);
+    private static Color tooltipBorderColor = new Color(65, 11, 67);
 
     private int tooltipWidth;
 
@@ -33,13 +34,13 @@ public class InventoryItem extends Renderable implements Tickable {
         this.slot = slot;
         setPosition(slot.baseItemX, slot.baseItemY);
         if (setToSlot) {
-            slot.putItem(this);
+            slot.set(this);
         }
     }
 
     public void tick() {
         mouseHover = Util.isWithinBounds(Mouse.x, Mouse.y, x(), y(), InventorySlot.SIZE, InventorySlot.SIZE);
-        isShowingTooltip = mouseHover || isBeingDragged;
+        isShowingTooltip = isBeingDragged || (mouseHover && inventory.itemBeingDragged == null);
         if (Mouse.isDragging) {
             if ((mouseHover || didStartDrag) && (inventory.itemBeingDragged == this || inventory.itemBeingDragged == null)) {
                 inventory.itemBeingDragged = this;
@@ -68,11 +69,14 @@ public class InventoryItem extends Renderable implements Tickable {
     }
 
     public void drawToolTip(Graphics graphics) {
+        ((Graphics2D) graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        graphics.setColor(tooltipBorderColor);
+        graphics.fillRoundRect(Mouse.x - 2, Mouse.y - 28, tooltipWidth + 14, 26, 8, 8);
         graphics.setColor(Color.BLACK);
-        graphics.fillRect(Mouse.x, Mouse.y - 16, tooltipWidth, 16);
+        graphics.fillRect(Mouse.x + 1, Mouse.y - 25, tooltipWidth + 8, 20);
         graphics.setColor(Color.WHITE);
         graphics.setFont(tooltipFont);
-        graphics.drawString(item.name, Mouse.x, Mouse.y - 6);
+        graphics.drawString(item.name, Mouse.x + 5, Mouse.y - 10);
     }
 
     private void onDragEnd() {
@@ -106,7 +110,7 @@ public class InventoryItem extends Renderable implements Tickable {
             }
             // move the item to the slot it is closest to
             InventorySlot closestSlot = intersectedSlots.get(i);
-            if (closestSlot.isEmpty) {
+            if (closestSlot.isEmpty()) {
                 // simply move the item
                 this.move(closestSlot);
             } else {
@@ -130,7 +134,7 @@ public class InventoryItem extends Renderable implements Tickable {
     private void move(InventorySlot moveTo) {
         slot.removeItem();
         slot = moveTo;
-        moveTo.putItem(this);
+        moveTo.set(this);
     }
 
     /**
@@ -143,8 +147,8 @@ public class InventoryItem extends Renderable implements Tickable {
         InventoryItem item1 = this;
         InventorySlot slot2 = swapWith.slot;
         InventoryItem item2 = swapWith;
-        slot1.putItem(item2);
-        slot2.putItem(item1);
+        slot1.set(item2);
+        slot2.set(item1);
     }
 
     /**

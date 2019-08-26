@@ -200,7 +200,7 @@ public abstract class Entity extends Renderable implements Tickable {
     }
 
     /**
-     * Renders the entity, using {@link #sprite}, at ({@link #x()}, {@link #y()})
+     * Renders the entity, using {@link #image}, at ({@link #x()}, {@link #y()})
      */
     public void render(Graphics graphics) {
         graphics.drawImage(image, x(), y(), null);

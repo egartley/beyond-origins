@@ -33,7 +33,7 @@ public class Player extends AnimatedEntity implements Character {
     EntityBoundary feetBoundary;
 
     public Player() {
-        super("Player", new SpriteSheet(ImageStore.get(ImageStore.PLAYER), 30, 46, 2, 4));
+        super("Player", new SpriteSheet(ImageStore.get(ImageStore.PLAYER), 30, 44, 2, 4));
 
         isSectorSpecific = false;
         isDualRendered = false;

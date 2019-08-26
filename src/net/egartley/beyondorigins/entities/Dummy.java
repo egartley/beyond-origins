@@ -48,7 +48,7 @@ public class Dummy extends AnimatedEntity implements Character {
 
         exp = new EntityExpression(EntityExpression.HEART, this);
 
-        dialogue_playerCollision = new DialogueExchange(new CharacterDialogue(this, "dummy/player-collision.def"), new CharacterDialogue(this, "dummy/player-collision-2.def"));
+        dialogue_playerCollision = new DialogueExchange(new CharacterDialogue(this, "dummy/player-collision.def"), new CharacterDialogue(Entities.PLAYER, "player/dummy-collision.def"));
 
         DialogueController.addFinished(new DialogueExchangeFinishedEvent(dialogue_playerCollision) {
             @Override
@@ -182,14 +182,24 @@ public class Dummy extends AnimatedEntity implements Character {
         collisions.clear();
         collisions.add(new EntityEntityCollision(defaultBoundary, Entities.PLAYER.defaultBoundary) {
             public void onCollide(EntityEntityCollisionEvent event) {
-                if (Entities.DIALOGUE_PANEL.isShowing) {
+                if (Game.in().dialoguePanel.isShowing) {
                     return;
                 }
-                Entities.DIALOGUE_PANEL.exchange = dialogue_playerCollision;
-                Entities.DIALOGUE_PANEL.show();
+                Game.in().dialoguePanel.exchange = dialogue_playerCollision;
+                Game.in().dialoguePanel.show();
                 isAngry = true;
 
-                Game.in().inventory.put(Item.TEST_ITEM, 3);
+                Game.in().inventory.put(Item.WOJAK);
+                Game.in().inventory.put(Item.HONKLER);
+                Game.in().inventory.put(Item.BOOMER);
+                Game.in().inventory.put(Item.ZOOMER);
+                Game.in().inventory.put(Item.BIG_CHUNGUS);
+                Game.in().inventory.put(Item.THE_ZUCC);
+                Game.in().inventory.put(Item.BITCONNECT);
+                Game.in().inventory.put(Item.AINT_CLICKIN_THAT);
+                Game.in().inventory.put(Item.CURRENT_YEAR);
+                Game.in().inventory.put(Item.TUCKER);
+                Game.in().inventory.put(Item.HMM);
             }
 
             public void onCollisionEnd(EntityEntityCollisionEvent event) {

@@ -1,7 +1,7 @@
 package net.egartley.gamelib.logic.dialogue;
 
+import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.DialogueController;
-import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.ingame.DialoguePanel;
 
 import java.util.ArrayList;
@@ -51,14 +51,13 @@ public class DialogueExchange {
             return;
         }
         setDialogue(dialogues.get(index));
-        // make sure width for new character name is calculated
-        Entities.DIALOGUE_PANEL.setFontMetrics = false;
     }
 
     public void advance() {
         if (currentDialogueFinished()) {
             DialogueController.onFinished(dialogue);
             nextDialogue();
+            Game.in().dialoguePanel.setFontMetrics = false;
         } else {
             nextLine();
             isFinished = currentDialogueFinished() && index + 1 == dialogues.size();
@@ -72,7 +71,7 @@ public class DialogueExchange {
     }
 
     public boolean currentDialogueFinished() {
-        return queuedLines != null && queuedLines.length == 0;
+        return queuedLines == null || queuedLines.length == 0;
     }
 
 }

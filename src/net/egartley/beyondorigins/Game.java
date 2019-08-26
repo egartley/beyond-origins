@@ -7,7 +7,6 @@ import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.Player;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.gamestates.MainMenuState;
-import net.egartley.beyondorigins.ingame.DialoguePanel;
 import net.egartley.gamelib.input.KeyTyped;
 import net.egartley.gamelib.input.Keyboard;
 import net.egartley.gamelib.input.Mouse;
@@ -82,14 +81,6 @@ public class Game extends JPanel implements Runnable {
     }
 
     private void init() {
-        Debug.out("Initializing entities...");
-        initializeEntities();
-        Debug.out("Entities were initialized");
-
-        Debug.out("Loading maps...");
-        AllSectors.define();
-        Debug.out("Maps were loaded");
-
         Debug.out("Initializing input stuff...");
         this.addKeyListener(new Keyboard());
         Mouse m = new Mouse();
@@ -103,15 +94,26 @@ public class Game extends JPanel implements Runnable {
         });
         Debug.out("Input stuff was initialized");
 
+        Debug.out("Loading maps...");
+        AllSectors.define();
+        Debug.out("Maps were loaded");
+
+        Debug.out("Initializing entities...");
+        initializeEntities();
+        Debug.out("Entities were initialized");
+
         Debug.out("Initializing game states...");
         inGameState = new InGameState();
         mainMenuState = new MainMenuState();
-        setState(mainMenuState);
+        if (debug) {
+            setState(inGameState);
+        } else {
+            setState(mainMenuState);
+        }
         Debug.out("Game states were initialized");
     }
 
     private void initializeEntities() {
-        Entities.DIALOGUE_PANEL = new DialoguePanel(Entities.getTemplate(Entities.TEMPLATE_DIALOGUE));
         Entities.PLAYER = new Player();
         Entities.DUMMY = new Dummy();
     }
@@ -245,7 +247,7 @@ public class Game extends JPanel implements Runnable {
 
     @Override
     public void paint(Graphics graphics) {
-        ((Graphics2D) graphics).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        ((Graphics2D) graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         render(graphics);
     }
 

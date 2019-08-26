@@ -3,15 +3,15 @@ package net.egartley.beyondorigins.ingame;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.data.ImageStore;
-import net.egartley.gamelib.graphics.Sprite;
+import net.egartley.gamelib.abstracts.Renderable;
+import net.egartley.gamelib.interfaces.Tickable;
 import net.egartley.gamelib.logic.dialogue.DialogueExchange;
 import net.egartley.gamelib.logic.math.Calculate;
-import net.egartley.gamelib.objects.StaticEntity;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class DialoguePanel extends StaticEntity {
+public class DialoguePanel extends Renderable implements Tickable {
 
     /**
      * The maximum number of lines that can be displayed at once
@@ -49,6 +49,10 @@ public class DialoguePanel extends StaticEntity {
      */
     private static Font characterNameFont = new Font("Arial", Font.PLAIN, 12);
     /**
+     * The image for the dialogue panel (the "background")
+     */
+    private BufferedImage panelImage;
+    /**
      * The image displayed when there are more lines available
      */
     private BufferedImage moreLinesImage;
@@ -58,10 +62,10 @@ public class DialoguePanel extends StaticEntity {
      */
     public DialogueExchange exchange;
 
-    public DialoguePanel(Sprite sprite) {
-        super("DialogPanel", sprite);
-        setPosition(Calculate.getCenter(Game.WINDOW_WIDTH / 2, sprite.width), Game.WINDOW_HEIGHT - sprite.height - 8);
+    public DialoguePanel() {
+        panelImage = ImageStore.get(ImageStore.DIALOGUE_PANEL);
         moreLinesImage = ImageStore.get(ImageStore.MORE_LINES);
+        setPosition(Calculate.getCenter(Game.WINDOW_WIDTH / 2, panelImage.getWidth()), Game.WINDOW_HEIGHT - panelImage.getHeight() - 8);
     }
 
     public void advance() {
@@ -82,6 +86,9 @@ public class DialoguePanel extends StaticEntity {
         Game.in().isDialogueVisible = true;
     }
 
+    /**
+     * Makes the dialogue panel no longer visible, and sets {@link #setFontMetrics} to <code>false</code>
+     */
     public void hide() {
         isShowing = false;
         Game.in().isDialogueVisible = false;
@@ -103,7 +110,7 @@ public class DialoguePanel extends StaticEntity {
             setFontMetrics = true;
         }
         // render background (panel)
-        super.render(graphics);
+        graphics.drawImage(panelImage, x(), y(), null);
         // render character image and name
         BufferedImage characterImage = exchange.dialogue.character.getDialoguePanelImage();
         graphics.drawImage(characterImage, 247 + 26 - (characterImage.getWidth() / 2), 414, null);
@@ -126,16 +133,6 @@ public class DialoguePanel extends StaticEntity {
         // max width 380, or max str length 55
         lineIndex++;
         graphics.drawString(text, x() + 96, y() + 16 + (18 * lineIndex));
-    }
-
-    @Override
-    protected void setBoundaries() {
-
-    }
-
-    @Override
-    protected void setCollisions() {
-
     }
 
 }

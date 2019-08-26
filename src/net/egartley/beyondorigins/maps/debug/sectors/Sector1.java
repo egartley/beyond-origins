@@ -28,8 +28,8 @@ public class Sector1 extends MapSector {
                 e.render(graphics);
             }
         }
-        Entities.PLAYER.render(graphics);
         Entities.DUMMY.render(graphics);
+        Entities.PLAYER.render(graphics);
         for (Entity e : entities) {
             if (e.isDualRendered) {
                 e.drawSecondLayer(graphics);
@@ -52,10 +52,10 @@ public class Sector1 extends MapSector {
     public void initialize() {
         if (!didInitialize) {
             // sector-specific entities
-            Sprite s = Entities.getTemplate(Entities.TEMPLATE_TREE);
+            Sprite s = Entities.getSpriteTemplate(Entities.TEMPLATE_TREE);
             entities.add(new DefaultTree(s, 100, 200));
             entities.add(new DefaultTree(s, 36, 200));
-            s = Entities.getTemplate(Entities.TEMPLATE_ROCK);
+            s = Entities.getSpriteTemplate(Entities.TEMPLATE_ROCK);
             int off = 0;
             for (byte i = 0; i < 14; i++) {
                 entities.add(new DefaultRock(s, (s.width * 2) * off++ + 48, 400));
