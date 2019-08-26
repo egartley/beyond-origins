@@ -1,6 +1,6 @@
 package net.egartley.gamelib.logic.interaction;
 
-import net.egartley.gamelib.objects.MapSector;
+import net.egartley.gamelib.abstracts.MapSector;
 
 import java.awt.*;
 

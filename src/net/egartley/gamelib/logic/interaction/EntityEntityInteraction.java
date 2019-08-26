@@ -1,7 +1,7 @@
 package net.egartley.gamelib.logic.interaction;
 
+import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
-import net.egartley.gamelib.objects.Entity;
 
 /**
  * For now, just a collision between two entities

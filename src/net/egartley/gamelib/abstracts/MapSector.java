@@ -1,12 +1,14 @@
-package net.egartley.gamelib.objects;
+package net.egartley.gamelib.abstracts;
 
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.gamelib.graphics.MapTile;
 import net.egartley.gamelib.interfaces.Tickable;
 import net.egartley.gamelib.logic.collision.MapSectorChangeCollision;
 import net.egartley.gamelib.logic.interaction.MapSectorChangeBoundary;
+import net.egartley.gamelib.objects.MapSectorDefinition;
 
 import java.awt.*;
 import java.util.ArrayList;

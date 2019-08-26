@@ -1,17 +1,15 @@
-package net.egartley.beyondorigins.ingame;
+package net.egartley.beyondorigins.ui;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.data.ImageStore;
-import net.egartley.gamelib.abstracts.Renderable;
-import net.egartley.gamelib.interfaces.Tickable;
 import net.egartley.gamelib.logic.dialogue.DialogueExchange;
 import net.egartley.gamelib.logic.math.Calculate;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class DialoguePanel extends Renderable implements Tickable {
+public class DialoguePanel extends UIElement {
 
     /**
      * The maximum number of lines that can be displayed at once
@@ -49,10 +47,6 @@ public class DialoguePanel extends Renderable implements Tickable {
      */
     private static Font characterNameFont = new Font("Arial", Font.PLAIN, 12);
     /**
-     * The image for the dialogue panel (the "background")
-     */
-    private BufferedImage panelImage;
-    /**
      * The image displayed when there are more lines available
      */
     private BufferedImage moreLinesImage;
@@ -63,9 +57,9 @@ public class DialoguePanel extends Renderable implements Tickable {
     public DialogueExchange exchange;
 
     public DialoguePanel() {
-        panelImage = ImageStore.get(ImageStore.DIALOGUE_PANEL);
+        super(ImageStore.get(ImageStore.DIALOGUE_PANEL), true);
         moreLinesImage = ImageStore.get(ImageStore.MORE_LINES);
-        setPosition(Calculate.getCenter(Game.WINDOW_WIDTH / 2, panelImage.getWidth()), Game.WINDOW_HEIGHT - panelImage.getHeight() - 8);
+        setPosition(Calculate.getCenter(Game.WINDOW_WIDTH / 2, image.getWidth()), Game.WINDOW_HEIGHT - image.getHeight() - 8);
     }
 
     public void advance() {
@@ -110,7 +104,7 @@ public class DialoguePanel extends Renderable implements Tickable {
             setFontMetrics = true;
         }
         // render background (panel)
-        graphics.drawImage(panelImage, x(), y(), null);
+        graphics.drawImage(image, x(), y(), null);
         // render character image and name
         BufferedImage characterImage = exchange.dialogue.character.getDialoguePanelImage();
         graphics.drawImage(characterImage, 247 + 26 - (characterImage.getWidth() / 2), 414, null);

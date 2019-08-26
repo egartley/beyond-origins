@@ -1,9 +1,9 @@
 package net.egartley.gamelib.graphics;
 
 import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.gamelib.abstracts.AnimatedEntity;
+import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.logic.math.Calculate;
-import net.egartley.gamelib.objects.AnimatedEntity;
-import net.egartley.gamelib.objects.Entity;
 
 import java.awt.*;
 

@@ -24,8 +24,9 @@ public class ImageStore {
     public final static byte EXPRESSION_HEART = 97;
 
     public final static byte DIALOGUE_PANEL = 7;
-    public final static byte INVENTORY = 8;
+    public final static byte INVENTORY_PANEL = 8;
     public final static byte MORE_LINES = 9;
+    public final static byte INVENTORY_SLOT = 10;
 
     /**
      * Returns the specified image
@@ -59,10 +60,12 @@ public class ImageStore {
                 return get(expressionPath + "heart.png");
             case DIALOGUE_PANEL:
                 return get(uiPath + "dialogue-panel.png");
-            case INVENTORY:
-                return get(entityPath + "inventory.png");
+            case INVENTORY_PANEL:
+                return get(uiPath + "inventory-panel.png");
             case MORE_LINES:
                 return get(uiPath + "more-lines.png");
+            case INVENTORY_SLOT:
+                return get(uiPath + "inventory-slot.png");
             default:
                 return null;
         }

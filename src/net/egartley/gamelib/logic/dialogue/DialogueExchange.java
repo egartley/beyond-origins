@@ -2,7 +2,7 @@ package net.egartley.gamelib.logic.dialogue;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.DialogueController;
-import net.egartley.beyondorigins.ingame.DialoguePanel;
+import net.egartley.beyondorigins.ui.DialoguePanel;
 
 import java.util.ArrayList;
 import java.util.Arrays;

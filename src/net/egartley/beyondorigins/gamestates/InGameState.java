@@ -3,13 +3,12 @@ package net.egartley.beyondorigins.gamestates;
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.KeyboardController;
-import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.ingame.DialoguePanel;
 import net.egartley.beyondorigins.ingame.Inventory;
 import net.egartley.beyondorigins.maps.debug.DebugMap;
+import net.egartley.beyondorigins.ui.DialoguePanel;
+import net.egartley.gamelib.abstracts.GameState;
+import net.egartley.gamelib.abstracts.Map;
 import net.egartley.gamelib.input.KeyTyped;
-import net.egartley.gamelib.objects.GameState;
-import net.egartley.gamelib.objects.Map;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -32,7 +31,7 @@ public class InGameState extends GameState {
         currentMap = new DebugMap("Debug Map");
 
         // load inventory
-        inventory = new Inventory(Entities.getSpriteTemplate(Entities.TEMPLATE_INVENTORY));
+        inventory = new Inventory();
 
         // load dialogue panel
         dialoguePanel = new DialoguePanel();

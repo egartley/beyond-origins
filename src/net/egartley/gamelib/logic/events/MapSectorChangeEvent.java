@@ -1,6 +1,6 @@
 package net.egartley.gamelib.logic.events;
 
-import net.egartley.gamelib.objects.MapSector;
+import net.egartley.gamelib.abstracts.MapSector;
 
 /**
  * A custom "event" that can be used for gathering information about a sector change

@@ -1,4 +1,4 @@
-package net.egartley.gamelib.objects;
+package net.egartley.gamelib.abstracts;
 
 import net.egartley.gamelib.interfaces.Tickable;
 import net.egartley.gamelib.logic.events.MapSectorChangeEvent;

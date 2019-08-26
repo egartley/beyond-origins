@@ -1,4 +1,4 @@
-package net.egartley.gamelib.objects;
+package net.egartley.gamelib.graphics;
 
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.data.ImageStore;
@@ -19,7 +19,7 @@ public class MapTile {
     /**
      * This tile as a {@link BufferedImage}
      */
-    BufferedImage image;
+    public BufferedImage image;
     public int width, height;
     public boolean isTraversable;
 

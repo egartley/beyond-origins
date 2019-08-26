@@ -1,8 +1,8 @@
 package net.egartley.beyondorigins.definitions.maps.debug;
 
 import net.egartley.beyondorigins.maps.TileBuilder;
+import net.egartley.gamelib.graphics.MapTile;
 import net.egartley.gamelib.objects.MapSectorDefinition;
-import net.egartley.gamelib.objects.MapTile;
 
 public class Sectors {
 

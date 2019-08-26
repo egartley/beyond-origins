@@ -1,8 +1,8 @@
 package net.egartley.gamelib.logic.interaction;
 
+import net.egartley.gamelib.abstracts.AnimatedEntity;
+import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.graphics.Sprite;
-import net.egartley.gamelib.objects.AnimatedEntity;
-import net.egartley.gamelib.objects.Entity;
 
 import java.awt.*;
 

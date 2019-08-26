@@ -4,10 +4,10 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.entities.DefaultRock;
 import net.egartley.beyondorigins.entities.DefaultTree;
 import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.gamelib.abstracts.Entity;
+import net.egartley.gamelib.abstracts.Map;
+import net.egartley.gamelib.abstracts.MapSector;
 import net.egartley.gamelib.graphics.Sprite;
-import net.egartley.gamelib.objects.Entity;
-import net.egartley.gamelib.objects.Map;
-import net.egartley.gamelib.objects.MapSector;
 import net.egartley.gamelib.objects.MapSectorDefinition;
 
 import java.awt.*;

@@ -3,6 +3,7 @@ package net.egartley.beyondorigins.ingame;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.entities.DroppedItem;
+import net.egartley.beyondorigins.ui.InventoryPanel;
 import net.egartley.gamelib.abstracts.Renderable;
 import net.egartley.gamelib.input.Mouse;
 import net.egartley.gamelib.interfaces.Tickable;
@@ -119,8 +120,8 @@ public class InventoryItem extends Renderable implements Tickable {
             }
         } else {
             // did not end over any slots
-            Inventory i = Game.in().inventory;
-            if (!Util.isWithinBounds(x(), y(), i.x(), i.y(), i.sprite.width, i.sprite.height)) {
+            InventoryPanel i = Game.in().inventory.panel;
+            if (!Util.isWithinBounds(x(), y(), i.x(), i.y(), i.width, i.height)) {
                 drop();
             }
         }

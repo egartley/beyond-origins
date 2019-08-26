@@ -1,5 +1,8 @@
 package net.egartley.gamelib.objects;
 
+import net.egartley.gamelib.abstracts.MapSector;
+import net.egartley.gamelib.graphics.MapTile;
+
 import java.util.ArrayList;
 
 /**
@@ -28,9 +31,11 @@ public class MapSectorDefinition {
     }
 
     public MapTile getTile(int row, int column) {
-        if (tiles.get(row) != null)
-            if (tiles.get(row).get(column) != null)
+        if (tiles.get(row) != null) {
+            if (tiles.get(row).get(column) != null) {
                 return tiles.get(row).get(column);
+            }
+        }
         return null;
     }
 

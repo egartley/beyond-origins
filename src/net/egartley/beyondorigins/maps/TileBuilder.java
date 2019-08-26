@@ -1,8 +1,8 @@
 package net.egartley.beyondorigins.maps;
 
 import net.egartley.beyondorigins.Util;
-import net.egartley.gamelib.objects.MapSector;
-import net.egartley.gamelib.objects.MapTile;
+import net.egartley.gamelib.abstracts.MapSector;
+import net.egartley.gamelib.graphics.MapTile;
 
 import java.util.ArrayList;
 

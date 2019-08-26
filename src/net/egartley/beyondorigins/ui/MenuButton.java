@@ -1,22 +1,18 @@
 package net.egartley.beyondorigins.ui;
 
-import net.egartley.beyondorigins.Util;
 import net.egartley.gamelib.input.Mouse;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
-public class MenuButton {
+public class MenuButton extends UIElement {
 
-    /**
-     * Whether or not this button is able to be clicked
-     */
-    public boolean isEnabled;
     /**
      * Whether or not font metrics (string width and location) have been calculated. This is meant to avoid calculating the same thing every tick
      */
     public boolean setFontMetrics;
-    private int x, y, width, height, stringX, stringY, stringWidth;
+    private int stringX;
+    private int stringY;
 
     public static Font font = new Font("Georgia", Font.BOLD, 24);
 
@@ -30,24 +26,23 @@ public class MenuButton {
     private Color textColor = new Color(0x0092ff);
     private Color hoverTextColor = new Color(0x00448f);
     /**
-     * The color that is currently being used
+     * The color that is currently being used for the button
      */
     private Color currentColor;
+    /**
+     * The color that is currently being used for the text
+     */
     private Color currentTextColor;
 
     public MenuButton(String text, boolean isEnabledByDefault, int x, int y, int width, int height) {
+        super(width, height, isEnabledByDefault);
         this.text = text;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        isEnabled = isEnabledByDefault;
+        setPosition(x, y);
     }
 
     public void setFontMetrics(FontMetrics fontMetrics) {
-        stringWidth = fontMetrics.stringWidth(text);
-        stringX = (x + (width / 2)) - (stringWidth / 2);
-        stringY = y + (height / 2) + (font.getSize() / 4);
+        stringX = (x() + (width / 2)) - (fontMetrics.stringWidth(text) / 2);
+        stringY = y() + (height / 2) + (font.getSize() / 4);
         setFontMetrics = true;
     }
 
@@ -67,6 +62,7 @@ public class MenuButton {
 
     }
 
+    @Override
     public void render(Graphics graphics) {
         if (!setFontMetrics) {
             setFontMetrics(graphics.getFontMetrics(font));
@@ -86,6 +82,7 @@ public class MenuButton {
         graphics.drawString(text, stringX, stringY);
     }
 
+    @Override
     public void tick() {
         // emulate hover effect
         if (isClickInBounds(Mouse.x, Mouse.y) && isEnabled) {
@@ -95,10 +92,6 @@ public class MenuButton {
             currentColor = enabledColor;
             currentTextColor = textColor;
         }
-    }
-
-    private boolean isClickInBounds(int cx, int cy) {
-        return Util.isWithinBounds(cx, cy, x, y, width, height);
     }
 
 }

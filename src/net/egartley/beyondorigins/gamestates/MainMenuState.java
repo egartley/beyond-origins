@@ -3,9 +3,9 @@ package net.egartley.beyondorigins.gamestates;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.MouseController;
 import net.egartley.beyondorigins.ui.MenuButton;
+import net.egartley.gamelib.abstracts.GameState;
 import net.egartley.gamelib.input.MouseClicked;
 import net.egartley.gamelib.logic.math.Calculate;
-import net.egartley.gamelib.objects.GameState;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;

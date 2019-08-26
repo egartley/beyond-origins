@@ -1,7 +1,7 @@
 package net.egartley.gamelib.logic.math;
 
+import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
-import net.egartley.gamelib.objects.Entity;
 
 public class Calculate {
 

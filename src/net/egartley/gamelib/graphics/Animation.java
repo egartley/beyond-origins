@@ -1,7 +1,7 @@
 package net.egartley.gamelib.graphics;
 
 import net.egartley.beyondorigins.Debug;
-import net.egartley.gamelib.objects.AnimatedEntity;
+import net.egartley.gamelib.abstracts.AnimatedEntity;
 import net.egartley.gamelib.threads.AnimationClock;
 
 import java.awt.*;

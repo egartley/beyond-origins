@@ -1,24 +1,24 @@
 package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Game;
-import net.egartley.gamelib.graphics.Sprite;
-import net.egartley.gamelib.objects.StaticEntity;
+import net.egartley.beyondorigins.ui.InventoryPanel;
+import net.egartley.gamelib.interfaces.Tickable;
 
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Inventory extends StaticEntity {
+public class Inventory implements Tickable {
 
     public static final int ROWS = 5, COLUMNS = 4;
 
     public InventoryItem itemBeingDragged;
+    public InventoryPanel panel;
     public ArrayList<InventorySlot> slots = new ArrayList<>();
 
     private Color backgroundColor = new Color(0, 0, 0, 152);
 
-    public Inventory(Sprite sprite) {
-        super("Inventory", sprite);
-        setPosition((Game.WINDOW_WIDTH / 2) - (sprite.width / 2), (Game.WINDOW_HEIGHT / 2) - (sprite.height / 2));
+    public Inventory() {
+        panel = new InventoryPanel();
 
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMNS; c++) {
@@ -61,25 +61,16 @@ public class Inventory extends StaticEntity {
         return true;
     }
 
-    public boolean isFull() {
-        for (InventorySlot slot : slots) {
-            if (slot.isEmpty()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private int getSlotIndexFromRowColumn(int row, int column) {
-        return row * ROWS + column;
-    }
-
     @Override
+    public void tick() {
+        slots.forEach(InventorySlot::tick);
+    }
+
     public void render(Graphics graphics) {
         graphics.setColor(backgroundColor);
         graphics.fillRect(0, 0, Game.WINDOW_WIDTH + 1, Game.WINDOW_HEIGHT + 1);
 
-        graphics.drawImage(sprite.toBufferedImage(), x(), y(), null);
+        panel.render(graphics);
 
         slots.forEach(slot -> slot.render(graphics));
         for (InventorySlot slot : slots) {
@@ -98,19 +89,17 @@ public class Inventory extends StaticEntity {
         }
     }
 
-    @Override
-    public void tick() {
-        slots.forEach(InventorySlot::tick);
+    public boolean isFull() {
+        for (InventorySlot slot : slots) {
+            if (slot.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    @Override
-    protected void setBoundaries() {
-
-    }
-
-    @Override
-    protected void setCollisions() {
-
+    private int getSlotIndexFromRowColumn(int row, int column) {
+        return row * ROWS + column;
     }
 
 }

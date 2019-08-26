@@ -1,4 +1,4 @@
-package net.egartley.gamelib.objects;
+package net.egartley.gamelib.abstracts;
 
 import net.egartley.gamelib.graphics.Animation;
 import net.egartley.gamelib.graphics.Sprite;
@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * An {@link net.egartley.gamelib.objects.Entity Entity} with animations
+ * An {@link Entity Entity} with animations
  *
  * @see Animation
  */

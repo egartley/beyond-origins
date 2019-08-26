@@ -1,10 +1,9 @@
-package net.egartley.gamelib.objects;
+package net.egartley.gamelib.abstracts;
 
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.data.EntityStore;
-import net.egartley.gamelib.abstracts.Renderable;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.interfaces.Interactable;
 import net.egartley.gamelib.interfaces.Tickable;

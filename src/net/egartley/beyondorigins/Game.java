@@ -7,10 +7,10 @@ import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.Player;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.gamestates.MainMenuState;
+import net.egartley.gamelib.abstracts.GameState;
 import net.egartley.gamelib.input.KeyTyped;
 import net.egartley.gamelib.input.Keyboard;
 import net.egartley.gamelib.input.Mouse;
-import net.egartley.gamelib.objects.GameState;
 
 import javax.swing.*;
 import java.awt.*;

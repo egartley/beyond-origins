@@ -2,14 +2,9 @@ package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.data.ImageStore;
-import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.gamelib.abstracts.Renderable;
-import net.egartley.gamelib.interfaces.Tickable;
+import net.egartley.beyondorigins.ui.UIElement;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-
-public class InventorySlot extends Renderable implements Tickable {
+public class InventorySlot extends UIElement {
 
     public static final int MARGIN = 3, SIZE = 36;
 
@@ -18,17 +13,17 @@ public class InventorySlot extends Renderable implements Tickable {
     public int row;
     public int column;
     public InventoryItem item;
-    public static BufferedImage image = ImageStore.get("resources/images/ui/inventory-slot.png");
 
     public InventorySlot(int row, int column) {
         this(null, row, column);
     }
 
     public InventorySlot(InventoryItem item, int row, int column) {
+        super(ImageStore.get("resources/images/ui/inventory-slot.png"));
         this.row = row;
         this.column = column;
         set(item);
-        x((column * (SIZE + MARGIN)) + ((Game.WINDOW_WIDTH / 2) - (Entities.getSpriteTemplate(Entities.TEMPLATE_INVENTORY).width / 2)) + 24);
+        x((column * (SIZE + MARGIN)) + ((Game.WINDOW_WIDTH / 2) - (ImageStore.get(ImageStore.INVENTORY_PANEL).getWidth() / 2)) + 24);
         y((row * (SIZE + MARGIN)) + ((Game.WINDOW_HEIGHT / 2) - ((Inventory.ROWS * (SIZE + MARGIN)) / 2)));
         baseItemX = x() + 2;
         baseItemY = y() + 2;
@@ -59,10 +54,6 @@ public class InventorySlot extends Renderable implements Tickable {
         return set(null);
     }
 
-    public boolean isEmpty() {
-        return item == null;
-    }
-
     @Override
     public void tick() {
         if (!isEmpty()) {
@@ -70,9 +61,8 @@ public class InventorySlot extends Renderable implements Tickable {
         }
     }
 
-    @Override
-    public void render(Graphics graphics) {
-        graphics.drawImage(image, x(), y(), null);
+    public boolean isEmpty() {
+        return item == null;
     }
 
     @Override

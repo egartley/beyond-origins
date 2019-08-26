@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins.maps.debug.sectors;
 
-import net.egartley.gamelib.objects.Map;
-import net.egartley.gamelib.objects.MapSector;
+import net.egartley.gamelib.abstracts.Map;
+import net.egartley.gamelib.abstracts.MapSector;
 import net.egartley.gamelib.objects.MapSectorDefinition;
 
 public class Sector3 extends MapSector {

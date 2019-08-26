@@ -1,9 +1,9 @@
 package net.egartley.gamelib.graphics;
 
 import net.egartley.beyondorigins.Debug;
-import net.egartley.gamelib.objects.AnimatedEntity;
-import net.egartley.gamelib.objects.Entity;
-import net.egartley.gamelib.objects.StaticEntity;
+import net.egartley.gamelib.abstracts.AnimatedEntity;
+import net.egartley.gamelib.abstracts.Entity;
+import net.egartley.gamelib.abstracts.StaticEntity;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;

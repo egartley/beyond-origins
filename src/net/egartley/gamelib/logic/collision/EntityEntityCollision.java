@@ -1,8 +1,8 @@
 package net.egartley.gamelib.logic.collision;
 
+import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
-import net.egartley.gamelib.objects.Entity;
 
 import java.awt.*;
 import java.util.ArrayList;

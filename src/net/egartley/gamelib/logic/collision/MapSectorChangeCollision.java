@@ -1,10 +1,10 @@
 package net.egartley.gamelib.logic.collision;
 
+import net.egartley.gamelib.abstracts.Map;
+import net.egartley.gamelib.abstracts.MapSector;
 import net.egartley.gamelib.logic.interaction.Boundary;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
 import net.egartley.gamelib.logic.interaction.MapSectorChangeBoundary;
-import net.egartley.gamelib.objects.Map;
-import net.egartley.gamelib.objects.MapSector;
 
 import java.awt.*;
 

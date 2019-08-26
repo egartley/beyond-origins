@@ -1,9 +1,9 @@
 package net.egartley.beyondorigins.entities;
 
+import net.egartley.gamelib.abstracts.StaticEntity;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.logic.interaction.BoundaryPadding;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
-import net.egartley.gamelib.objects.StaticEntity;
 
 /**
  * Basic tree that the player can walk under, but not over

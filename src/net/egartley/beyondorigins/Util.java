@@ -1,12 +1,12 @@
 package net.egartley.beyondorigins;
 
 import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.graphics.Animation;
 import net.egartley.gamelib.graphics.SpriteSheet;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
-import net.egartley.gamelib.objects.Entity;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;

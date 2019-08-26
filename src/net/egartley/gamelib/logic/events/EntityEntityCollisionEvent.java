@@ -1,10 +1,10 @@
 package net.egartley.gamelib.logic.events;
 
 import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
 import net.egartley.gamelib.logic.math.Calculate;
-import net.egartley.gamelib.objects.Entity;
 
 /**
  * A "event" that can be used for accessing information about an {@link EntityEntityCollision}

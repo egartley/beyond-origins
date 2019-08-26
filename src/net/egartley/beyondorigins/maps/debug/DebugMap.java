@@ -5,9 +5,9 @@ import net.egartley.beyondorigins.maps.debug.sectors.Sector1;
 import net.egartley.beyondorigins.maps.debug.sectors.Sector2;
 import net.egartley.beyondorigins.maps.debug.sectors.Sector3;
 import net.egartley.beyondorigins.maps.debug.sectors.Sector4;
+import net.egartley.gamelib.abstracts.Map;
+import net.egartley.gamelib.abstracts.MapSector;
 import net.egartley.gamelib.logic.events.MapSectorChangeEvent;
-import net.egartley.gamelib.objects.Map;
-import net.egartley.gamelib.objects.MapSector;
 
 import java.awt.*;
 
