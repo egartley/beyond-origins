@@ -105,7 +105,7 @@ public class Util {
     }
 
     /**
-     * Returns false 50% of the time, and true 50% of the time
+     * Returns <code>false</code> 50% of the time, and <code>true</code> 50% of the time
      */
     public static boolean fiftyFifty() {
         return percentChance(0.5D);

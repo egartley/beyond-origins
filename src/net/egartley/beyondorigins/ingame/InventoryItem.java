@@ -160,7 +160,7 @@ public class InventoryItem extends Renderable implements Tickable {
     }
 
     private void drop() {
-        Game.in().getCurrentMap().sector.addEntity(new DroppedItem(item, Mouse.x - 8, Mouse.y - 8));
+        Game.in().map.sector.addEntity(new DroppedItem(item, Mouse.x - 8, Mouse.y - 8));
         selfDestruct();
     }
 

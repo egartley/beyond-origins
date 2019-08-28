@@ -29,7 +29,7 @@ public class DroppedItem extends StaticEntity {
     private boolean pickup() {
         if (!Game.in().inventory.isFull()) {
             Game.in().inventory.put(item);
-            Game.in().getCurrentMap().sector.removeEntity(this);
+            Game.in().map.sector.removeEntity(this);
             kill();
             return true;
         }

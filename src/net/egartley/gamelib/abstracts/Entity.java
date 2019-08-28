@@ -160,7 +160,7 @@ public abstract class Entity extends Renderable implements Tickable {
     /**
      * Human-readable identifier for the entity
      */
-    private String id;
+    public String id;
 
     // the font and color are static because they're always the same
     private static Font nameTagFont = new Font("Arial", Font.PLAIN, 11);

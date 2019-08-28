@@ -1,5 +1,6 @@
 package net.egartley.gamelib.logic.math;
 
+import net.egartley.beyondorigins.Game;
 import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
 
@@ -17,6 +18,14 @@ public class Calculate {
      */
     public static int getCenter(int a, int b) {
         return a - (b / 2);
+    }
+
+    public static int getCenteredX(int width) {
+        return getCenter(Game.WINDOW_WIDTH / 2, width);
+    }
+
+    public static int getCenteredY(int height) {
+        return getCenter(Game.WINDOW_HEIGHT / 2, height);
     }
 
     /**

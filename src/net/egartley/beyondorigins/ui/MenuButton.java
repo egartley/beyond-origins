@@ -1,6 +1,8 @@
 package net.egartley.beyondorigins.ui;
 
+import net.egartley.beyondorigins.controllers.MouseController;
 import net.egartley.gamelib.input.Mouse;
+import net.egartley.gamelib.input.MouseClicked;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -13,6 +15,8 @@ public class MenuButton extends UIElement {
     public boolean setFontMetrics;
     private int stringX;
     private int stringY;
+
+    public MouseClicked clicked;
 
     public static Font font = new Font("Georgia", Font.BOLD, 24);
 
@@ -38,6 +42,21 @@ public class MenuButton extends UIElement {
         super(width, height, isEnabledByDefault);
         this.text = text;
         setPosition(x, y);
+
+        clicked = new MouseClicked() {
+            @Override
+            public void onClick(MouseEvent e) {
+                checkClick(e);
+            }
+        };
+    }
+
+    public void registerClicked() {
+        MouseController.addMouseClicked(clicked);
+    }
+
+    public void deregisterClicked() {
+        MouseController.removeMouseClicked(clicked);
     }
 
     public void setFontMetrics(FontMetrics fontMetrics) {

@@ -4,6 +4,7 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.entities.DefaultRock;
 import net.egartley.beyondorigins.entities.DefaultTree;
 import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.ingame.buildings.House1;
 import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.abstracts.Map;
 import net.egartley.gamelib.abstracts.MapSector;
@@ -13,6 +14,8 @@ import net.egartley.gamelib.objects.MapSectorDefinition;
 import java.awt.*;
 
 public class Sector1 extends MapSector {
+
+    public House1 house;
 
     public Sector1(Map parent, MapSectorDefinition def) {
         super(parent, def);
@@ -60,6 +63,12 @@ public class Sector1 extends MapSector {
             for (byte i = 0; i < 14; i++) {
                 entities.add(new DefaultRock(s, (s.width * 2) * off++ + 48, 400));
             }
+
+            // buildings
+            house = new House1();
+            house.setPosition(280, 200);
+            entities.add(house);
+
             didInitialize = true;
         }
     }

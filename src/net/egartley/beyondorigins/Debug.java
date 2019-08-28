@@ -112,8 +112,7 @@ public class Debug {
             row = 0;
             graphics.setFont(font);
             drawLine("Position: " + Entities.PLAYER.x() + ", " + Entities.PLAYER.y(), graphics);
-            // drawLine("Delta: " + Entities.PLAYER.deltaX + ", " + Entities.PLAYER.deltaY, graphics);
-            drawLine("Location: " + Game.in().getCurrentMap().sector, graphics);
+            drawLine("Location: " + Game.in().map.sector, graphics);
             drawLine("Mouse: " + Mouse.x + ", " + Mouse.y, graphics);
             drawLine("EntityStore: " + EntityStore.amount, graphics);
             if (Entities.PLAYER.lastCollision != null) {

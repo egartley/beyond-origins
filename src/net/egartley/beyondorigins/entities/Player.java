@@ -109,6 +109,14 @@ public class Player extends AnimatedEntity implements Character {
         removeCollisions.clear();
     }
 
+    public void enteredBuilding() {
+        onSectorLeave(Game.in().map.sector);
+    }
+
+    public void leftBuilding() {
+        onSectorEnter(Game.in().map.sector);
+    }
+
     @Override
     public void setAnimations() {
         animations.clear();

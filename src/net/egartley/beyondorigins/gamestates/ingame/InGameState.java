@@ -1,8 +1,10 @@
-package net.egartley.beyondorigins.gamestates;
+package net.egartley.beyondorigins.gamestates.ingame;
 
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.KeyboardController;
+import net.egartley.beyondorigins.gamestates.ingame.substates.InBuildingState;
+import net.egartley.beyondorigins.ingame.Building;
 import net.egartley.beyondorigins.ingame.Inventory;
 import net.egartley.beyondorigins.maps.debug.DebugMap;
 import net.egartley.beyondorigins.ui.DialoguePanel;
@@ -15,9 +17,9 @@ import java.awt.event.KeyEvent;
 
 public class InGameState extends GameState {
 
-    private Map currentMap;
     private KeyTyped toggleInventory, advanceDialogue, backToMainMenu;
 
+    public Map map;
     public Inventory inventory;
     public DialoguePanel dialoguePanel;
 
@@ -25,10 +27,12 @@ public class InGameState extends GameState {
     public boolean isDialogueVisible;
 
     public InGameState() {
-        identificationNumber = GameState.IN_GAME;
+        id = GameState.IN_GAME;
+
+        subStates.add(new InBuildingState());
 
         // load map
-        currentMap = new DebugMap("Debug Map");
+        map = new DebugMap("Debug Map");
 
         // load inventory
         inventory = new Inventory();
@@ -59,8 +63,27 @@ public class InGameState extends GameState {
         };
     }
 
-    public Map getCurrentMap() {
-        return currentMap;
+    private void tick_this() {
+        map.tick();
+        if (isDialogueVisible) {
+            dialoguePanel.tick();
+        } else if (isInventoryVisible) {
+            inventory.tick();
+        }
+    }
+
+    private void render_this(Graphics graphics) {
+        map.render(graphics);
+        if (isDialogueVisible) {
+            dialoguePanel.render(graphics);
+        } else if (isInventoryVisible) {
+            inventory.render(graphics);
+        }
+        Debug.render(graphics);
+    }
+
+    public void setBuilding(Building building) {
+        ((InBuildingState) subStates.get(0)).building = building;
     }
 
     @Override
@@ -69,7 +92,7 @@ public class InGameState extends GameState {
         KeyboardController.addKeyTyped(advanceDialogue);
         KeyboardController.addKeyTyped(backToMainMenu);
 
-        currentMap.changeSector(currentMap.sectors.get(0), null);
+        map.changeSector(map.sectors.get(0), null);
     }
 
     @Override
@@ -81,23 +104,30 @@ public class InGameState extends GameState {
 
     @Override
     public void render(Graphics graphics) {
-        currentMap.render(graphics);
-        if (isDialogueVisible) {
-            dialoguePanel.render(graphics);
-        } else if (isInventoryVisible) {
-            inventory.render(graphics);
+        if (currentSubState != null) {
+            currentSubState.render(graphics);
+        } else {
+            render_this(graphics);
         }
-        Debug.render(graphics);
     }
 
     @Override
     public void tick() {
-        currentMap.tick();
-        if (isDialogueVisible) {
-            dialoguePanel.tick();
-        } else if (isInventoryVisible) {
-            inventory.tick();
+        if (currentSubState != null) {
+            currentSubState.tick();
+        } else {
+            tick_this();
         }
+    }
+
+    @Override
+    public boolean hasSubStates() {
+        return true;
+    }
+
+    @Override
+    public boolean isSubState() {
+        return false;
     }
 
 }

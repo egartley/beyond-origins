@@ -1,23 +1,19 @@
 package net.egartley.beyondorigins.gamestates;
 
 import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.controllers.MouseController;
 import net.egartley.beyondorigins.ui.MenuButton;
 import net.egartley.gamelib.abstracts.GameState;
-import net.egartley.gamelib.input.MouseClicked;
 import net.egartley.gamelib.logic.math.Calculate;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class MainMenuState extends GameState {
 
-    private MouseClicked buttonClick;
     public ArrayList<MenuButton> buttons = new ArrayList<>();
 
     public MainMenuState() {
-        identificationNumber = GameState.MAIN_MENU;
+        id = GameState.MAIN_MENU;
         buttons.add(new MenuButton("Play", true, (Game.WINDOW_WIDTH / 2) - 50, (Game.WINDOW_HEIGHT / 2) - 16, 100, 32) {
             @Override
             public void onClick() {
@@ -30,22 +26,16 @@ public class MainMenuState extends GameState {
                 Game.quit();
             }
         });
-        buttonClick = new MouseClicked() {
-            @Override
-            public void onClick(MouseEvent e) {
-                buttons.forEach(b -> b.checkClick(e));
-            }
-        };
     }
 
     @Override
     public void onStart() {
-        MouseController.addMouseClicked(buttonClick);
+        buttons.forEach(MenuButton::registerClicked);
     }
 
     @Override
     public void onEnd() {
-        MouseController.removeMouseClicked(buttonClick);
+        buttons.forEach(MenuButton::deregisterClicked);
     }
 
     @Override
@@ -69,4 +59,15 @@ public class MainMenuState extends GameState {
             b.tick();
         }
     }
+
+    @Override
+    public boolean hasSubStates() {
+        return false;
+    }
+
+    @Override
+    public boolean isSubState() {
+        return false;
+    }
+
 }
