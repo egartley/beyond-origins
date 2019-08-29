@@ -188,22 +188,22 @@ public class Player extends AnimatedEntity implements Character {
         isMovingRightwards = false;
         if (up) {
             if (isAllowedToMoveUpwards) {
-                move(UP);
+                move(DIRECTION_UP);
             }
         } else if (down) {
             if (isAllowedToMoveDownwards) {
-                move(DOWN);
+                move(DIRECTION_DOWN);
             }
         }
 
         if (left) {
             if (isAllowedToMoveLeftwards) {
-                move(LEFT);
+                move(DIRECTION_LEFT);
             }
             switchAnimation(LEFT_ANIMATION);
         } else if (right) {
             if (isAllowedToMoveRightwards) {
-                move(RIGHT);
+                move(DIRECTION_RIGHT);
             }
             switchAnimation(RIGHT_ANIMATION);
         }

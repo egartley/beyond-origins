@@ -41,14 +41,14 @@ public class EntityEntityCollisionEvent {
 
     private void calculateCollidedSide(int tolerance, EntityBoundary player, EntityBoundary rock) {
         // Debug.out("Calculating collided side for " + player.parent + " and " + rock.parent + ", " + tolerance);
-        if (Calculate.isEntityWithinToleranceOf(player, rock, Entity.LEFT, tolerance)) {
+        if (Calculate.isEntityWithinToleranceOf(player, rock, Entity.DIRECTION_LEFT, tolerance)) {
             collidedSide = LEFT_SIDE;
-        } else if (Calculate.isEntityWithinToleranceOf(player, rock, Entity.RIGHT, tolerance)) {
+        } else if (Calculate.isEntityWithinToleranceOf(player, rock, Entity.DIRECTION_RIGHT, tolerance)) {
             collidedSide = RIGHT_SIDE;
         }
-        if (Calculate.isEntityWithinToleranceOf(player, rock, Entity.UP, tolerance)) {
+        if (Calculate.isEntityWithinToleranceOf(player, rock, Entity.DIRECTION_UP, tolerance)) {
             collidedSide = TOP_SIDE;
-        } else if (Calculate.isEntityWithinToleranceOf(player, rock, Entity.DOWN, tolerance)) {
+        } else if (Calculate.isEntityWithinToleranceOf(player, rock, Entity.DIRECTION_DOWN, tolerance)) {
             collidedSide = BOTTOM_SIDE;
         }
         // Debug.out("Calculated");

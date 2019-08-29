@@ -79,7 +79,6 @@ public class InGameState extends GameState {
         } else if (isInventoryVisible) {
             inventory.render(graphics);
         }
-        Debug.render(graphics);
     }
 
     public void setBuilding(Building building) {
@@ -109,6 +108,7 @@ public class InGameState extends GameState {
         } else {
             render_this(graphics);
         }
+        Debug.render(graphics);
     }
 
     @Override

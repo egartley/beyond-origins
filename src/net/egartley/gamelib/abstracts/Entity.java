@@ -23,10 +23,10 @@ import java.util.ArrayList;
  */
 public abstract class Entity extends Renderable implements Tickable {
 
-    public static final byte UP = 1;
-    public static final byte DOWN = 2;
-    public static final byte LEFT = 3;
-    public static final byte RIGHT = 4;
+    public static final byte DIRECTION_UP = 1;
+    public static final byte DIRECTION_DOWN = 2;
+    public static final byte DIRECTION_LEFT = 3;
+    public static final byte DIRECTION_RIGHT = 4;
 
     /**
      * The entity's sprites
@@ -179,6 +179,10 @@ public abstract class Entity extends Renderable implements Tickable {
      */
     private boolean setFontMetrics;
 
+    Entity(String id) {
+        this(id, null);
+    }
+
     /**
      * Creates a new entity with a randomly generated UUID, an initial
      * speed of <code>1.0</code>, then adds it to the entity store
@@ -186,9 +190,11 @@ public abstract class Entity extends Renderable implements Tickable {
     Entity(String id, Sprite sprite) {
         generateUUID();
         this.id = id;
-        this.sprite = sprite;
-        sprites.add(sprite);
-        image = sprite.toBufferedImage();
+        if (sprite != null) {
+            this.sprite = sprite;
+            sprites.add(sprite);
+            image = sprite.toBufferedImage();
+        }
         speed = 1.0;
         setBoundaries();
         setCollisions();
@@ -319,52 +325,52 @@ public abstract class Entity extends Renderable implements Tickable {
         isMovingDownwards = false;
         isMovingLeftwards = false;
         isMovingRightwards = false;
-        if (direction == UP && !isAllowedToMoveUpwards)
+        if (direction == DIRECTION_UP && !isAllowedToMoveUpwards)
             return;
-        if (direction == DOWN && !isAllowedToMoveDownwards)
+        if (direction == DIRECTION_DOWN && !isAllowedToMoveDownwards)
             return;
-        if (direction == LEFT && !isAllowedToMoveLeftwards)
+        if (direction == DIRECTION_LEFT && !isAllowedToMoveLeftwards)
             return;
-        if (direction == RIGHT && !isAllowedToMoveRightwards)
+        if (direction == DIRECTION_RIGHT && !isAllowedToMoveRightwards)
             return;
         if (direction == -1)
             return;
         switch (direction) {
-            case UP:
+            case DIRECTION_UP:
                 if (boundary.top <= 0) {
                     break; // top of window
                 }
                 isMovingUpwards = true;
                 deltaY -= speed;
                 y(y() - (int) Math.abs(deltaY - y()), false);
-                onMove(UP);
+                onMove(DIRECTION_UP);
                 break;
-            case DOWN:
+            case DIRECTION_DOWN:
                 if (boundary.bottom >= Game.WINDOW_HEIGHT) {
                     break; // bottom of window
                 }
                 isMovingDownwards = true;
                 deltaY += speed;
                 y(y() + (int) Math.abs(deltaY - y()), false);
-                onMove(DOWN);
+                onMove(DIRECTION_DOWN);
                 break;
-            case LEFT:
+            case DIRECTION_LEFT:
                 if (boundary.left <= 0) {
                     break; // left side of window
                 }
                 isMovingLeftwards = true;
                 deltaX -= speed;
                 x(x() - (int) Math.abs(deltaX - x()), false);
-                onMove(LEFT);
+                onMove(DIRECTION_LEFT);
                 break;
-            case RIGHT:
+            case DIRECTION_RIGHT:
                 if (boundary.right >= Game.WINDOW_WIDTH) {
                     break; // right side of window
                 }
                 isMovingRightwards = true;
                 deltaX += speed;
                 x(x() + (int) Math.abs(deltaX - x()), false);
-                onMove(RIGHT);
+                onMove(DIRECTION_RIGHT);
                 break;
             default:
                 break;
@@ -390,10 +396,10 @@ public abstract class Entity extends Renderable implements Tickable {
      * Called whenever the entity moves
      *
      * @param direction Which direction the entity moved in
-     * @see #UP
-     * @see #DOWN
-     * @see #LEFT
-     * @see #RIGHT
+     * @see #DIRECTION_UP
+     * @see #DIRECTION_DOWN
+     * @see #DIRECTION_LEFT
+     * @see #DIRECTION_RIGHT
      * @see #move(byte)
      */
     protected void onMove(byte direction) {

@@ -9,6 +9,10 @@ import net.egartley.gamelib.graphics.Sprite;
  */
 public abstract class StaticEntity extends Entity {
 
+    public StaticEntity(String id) {
+        this(id, null);
+    }
+
     /**
      * Creates a new static entity, while setting {@link Entity#isAnimated} to <code>false</code>
      *

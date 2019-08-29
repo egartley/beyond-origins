@@ -35,13 +35,13 @@ public class Calculate {
     public static boolean isEntityWithinToleranceOf(EntityBoundary e1, EntityBoundary e2, byte direction,
                                                     int tolerance) {
         switch (direction) {
-            case Entity.UP:
+            case Entity.DIRECTION_UP:
                 return e2.top - tolerance <= e1.bottom && e1.top < e2.top && e1.bottom - e2.top <= tolerance;
-            case Entity.DOWN:
+            case Entity.DIRECTION_DOWN:
                 return e2.bottom + tolerance >= e1.top && e1.bottom > e2.bottom && e2.bottom - e1.top <= tolerance;
-            case Entity.LEFT:
+            case Entity.DIRECTION_LEFT:
                 return e2.left <= e1.right + tolerance && e1.left < e2.left && e1.right - e2.left <= tolerance;
-            case Entity.RIGHT:
+            case Entity.DIRECTION_RIGHT:
                 return e2.right + tolerance >= e1.left && e1.left > e2.left && e2.right - e1.left <= tolerance;
             default:
                 return false;

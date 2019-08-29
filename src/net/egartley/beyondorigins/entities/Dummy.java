@@ -33,7 +33,7 @@ public class Dummy extends AnimatedEntity implements Character {
 
     private boolean isAngry;
     private short walktime = 0;
-    private byte dir = RIGHT;
+    private byte dir = DIRECTION_RIGHT;
     private DialogueExchange dialogue_playerCollision;
 
     EntityExpression exp;
@@ -121,10 +121,10 @@ public class Dummy extends AnimatedEntity implements Character {
         walktime++;
         if (walktime >= 120) {
             walktime = 0;
-            if (dir == RIGHT) {
-                dir = LEFT;
+            if (dir == DIRECTION_RIGHT) {
+                dir = DIRECTION_LEFT;
             } else {
-                dir = RIGHT;
+                dir = DIRECTION_RIGHT;
             }
         } else {
             move(dir);
@@ -157,9 +157,9 @@ public class Dummy extends AnimatedEntity implements Character {
             animation.start();
         }
 
-        if (direction == RIGHT && !animations.get(RIGHT_ANIMATION).clock.isRunning)
+        if (direction == DIRECTION_RIGHT && !animations.get(RIGHT_ANIMATION).clock.isRunning)
             switchAnimation(RIGHT_ANIMATION);
-        else if (direction == LEFT && !animations.get(LEFT_ANIMATION).clock.isRunning)
+        else if (direction == DIRECTION_LEFT && !animations.get(LEFT_ANIMATION).clock.isRunning)
             switchAnimation(LEFT_ANIMATION);
     }
 

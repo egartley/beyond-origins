@@ -31,10 +31,15 @@ public class InBuildingState extends GameState {
         graphics.fillRect(0, 0, Game.WINDOW_WIDTH + 1, Game.WINDOW_HEIGHT + 1);
         building.currentFloor.render(graphics);
         Entities.PLAYER.render(graphics);
+
+        if (Game.debug) {
+
+        }
     }
 
     @Override
     public void tick() {
+        building.currentFloor.checkPlayerLimits();
         building.currentFloor.tick();
         Entities.PLAYER.tick();
     }
