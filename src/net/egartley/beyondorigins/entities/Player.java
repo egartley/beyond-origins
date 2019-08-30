@@ -3,6 +3,7 @@ package net.egartley.beyondorigins.entities;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.ingame.Building;
 import net.egartley.gamelib.abstracts.AnimatedEntity;
 import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.abstracts.MapSector;
@@ -26,6 +27,8 @@ public class Player extends AnimatedEntity implements Character {
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
     private final int ANIMATION_THRESHOLD = 165;
+
+    private boolean isMovementInvalidated;
 
     public EntityBoundary boundary;
     EntityBoundary headBoundary;
@@ -55,7 +58,7 @@ public class Player extends AnimatedEntity implements Character {
         }
     }
 
-    public void onSectorEnter(MapSector sector) {
+    public void generateSectorSpecificCollisions(MapSector sector) {
         // generate collisions with sector entities that aren't traversable
         for (Entity e : sector.entities) {
             if (!e.isTraversable && e.isSectorSpecific) {
@@ -91,17 +94,21 @@ public class Player extends AnimatedEntity implements Character {
         }
     }
 
-    public void onSectorLeave(MapSector sector) {
+    public void removeSectorSpecificCollisions(MapSector sector) {
         // remove the generated collisions
 
         // prevents concurrent modification
         ArrayList<EntityEntityCollision> removeCollisions = new ArrayList<>();
 
-        for (Entity e : sector.entities)
-            if (!e.isTraversable && e.isSectorSpecific)
-                for (EntityEntityCollision c : collisions)
-                    if (c.entities[0].equals(e) || c.entities[1].equals(e))
+        for (Entity e : sector.entities) {
+            if (!e.isTraversable && e.isSectorSpecific) {
+                for (EntityEntityCollision c : collisions) {
+                    if (c.entities[0].equals(e) || c.entities[1].equals(e)) {
                         removeCollisions.add(c);
+                    }
+                }
+            }
+        }
 
         for (EntityEntityCollision c : removeCollisions)
             collisions.remove(c);
@@ -109,12 +116,19 @@ public class Player extends AnimatedEntity implements Character {
         removeCollisions.clear();
     }
 
-    public void enteredBuilding() {
-        onSectorLeave(Game.in().map.sector);
+    public void invalidateAllMovement() {
+        isMovementInvalidated = true;
     }
 
-    public void leftBuilding() {
-        onSectorEnter(Game.in().map.sector);
+    public void enteredBuilding() {
+        removeSectorSpecificCollisions(Game.in().map.sector);
+        invalidateAllMovement();
+    }
+
+    public void leftBuilding(Building building) {
+        generateSectorSpecificCollisions(Game.in().map.sector);
+        setPosition(building.playerLeaveX, building.playerLeaveY);
+        invalidateAllMovement();
     }
 
     @Override
@@ -150,19 +164,29 @@ public class Player extends AnimatedEntity implements Character {
 
     @Override
     public void tick() {
-        // get keyboard input (typical WASD)
-        boolean up = Keyboard.isKeyPressed(KeyEvent.VK_W);
-        boolean left = Keyboard.isKeyPressed(KeyEvent.VK_A);
-        boolean down = Keyboard.isKeyPressed(KeyEvent.VK_S);
-        boolean right = Keyboard.isKeyPressed(KeyEvent.VK_D);
-        // Debug.out(up + " " + left + " " + down + " " + right);
+        // get keyboard input (typical WASD for now, make configurable in future)
+        boolean up = Keyboard.isKeyPressed(KeyEvent.VK_W) && !isMovementInvalidated;
+        boolean left = Keyboard.isKeyPressed(KeyEvent.VK_A) && !isMovementInvalidated;
+        boolean down = Keyboard.isKeyPressed(KeyEvent.VK_S) && !isMovementInvalidated;
+        boolean right = Keyboard.isKeyPressed(KeyEvent.VK_D) && !isMovementInvalidated;
 
-        // actually move the player, with animations and all
         move(up, down, left, right);
 
         if (!left && !right && !down && !up) {
-            // not moving, so stop the animation if not already
+            // not moving, so stop the animation if it's not already stopped
             animation.stop();
+        }
+
+        // this makes it so that the user has to re-press any keys already being pressed in order to move the player again
+        if (isMovementInvalidated) {
+            int[] codes = new int[]{KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D};
+            for (int keyCode : codes) {
+                // invalidate only the keys that are currently pressed down
+                if (Keyboard.isKeyPressed(keyCode)) {
+                    Keyboard.invalidateKey(keyCode);
+                }
+            }
+            isMovementInvalidated = false;
         }
 
         super.tick();

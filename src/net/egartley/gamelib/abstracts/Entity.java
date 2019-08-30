@@ -277,9 +277,10 @@ public abstract class Entity extends Renderable implements Tickable {
     }
 
     /**
-     * For now, just calls {@link EntityBoundary#tick()}
+     * Ticks boundaries and collisions
      *
      * @see #boundaries
+     * @see #collisions
      */
     @Override
     public void tick() {
@@ -287,6 +288,14 @@ public abstract class Entity extends Renderable implements Tickable {
         collisions.forEach(EntityEntityCollision::tick);
     }
 
+    /**
+     * Sets the entity's x and y coordinates, as well as updating the coordinate deltas
+     *
+     * @param x The new x-coordinate
+     * @param y The new y-coordinate
+     * @see #deltaX
+     * @see #deltaY
+     */
     public void setPosition(int x, int y) {
         super.setPosition(x, y);
         deltaX = x;

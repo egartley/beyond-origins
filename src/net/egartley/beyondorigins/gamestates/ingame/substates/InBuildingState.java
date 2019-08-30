@@ -22,7 +22,6 @@ public class InBuildingState extends GameState {
 
     @Override
     public void onEnd() {
-        building.onPlayerLeave();
     }
 
     @Override
@@ -31,10 +30,6 @@ public class InBuildingState extends GameState {
         graphics.fillRect(0, 0, Game.WINDOW_WIDTH + 1, Game.WINDOW_HEIGHT + 1);
         building.currentFloor.render(graphics);
         Entities.PLAYER.render(graphics);
-
-        if (Game.debug) {
-
-        }
     }
 
     @Override

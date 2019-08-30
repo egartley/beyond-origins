@@ -2,6 +2,7 @@ package net.egartley.beyondorigins;
 
 import net.egartley.beyondorigins.data.EntityStore;
 import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.gamelib.input.Keyboard;
 import net.egartley.gamelib.input.Mouse;
 
 import java.awt.*;
@@ -52,7 +53,7 @@ public class Debug {
      *         The object to print out
      */
     public static void out(Object object) {
-        System.out.println(object);
+        System.out.println("[" + Thread.currentThread().getName() + " " + System.currentTimeMillis() + "] " + object);
     }
 
     /**
@@ -94,12 +95,12 @@ public class Debug {
             // don't do this every tick, only once
             setFontMetrics = true;
         }
-        graphics.setColor(backgroundColor);
         // background
+        graphics.setColor(backgroundColor);
         graphics.fillRect(lx - TEXT_PADDING, ly + (row * rowOffset) - font.getSize(), fontMetrics.stringWidth(s) +
                 (TEXT_PADDING * 2), font.getSize() + TEXT_PADDING);
-        graphics.setColor(Color.WHITE);
         // draw line text
+        graphics.setColor(Color.WHITE);
         graphics.drawString(s, lx, ly + (row * rowOffset));
         row++;
     }
@@ -114,6 +115,7 @@ public class Debug {
             drawLine("Position: " + Entities.PLAYER.x() + ", " + Entities.PLAYER.y(), graphics);
             drawLine("Location: " + Game.in().map.sector, graphics);
             drawLine("Mouse: " + Mouse.x + ", " + Mouse.y, graphics);
+            drawLine("Keyboard: " + Keyboard.pressed(), graphics);
             drawLine("EntityStore: " + EntityStore.amount, graphics);
             if (Entities.PLAYER.lastCollision != null) {
                 drawLine("Last collision: " + Entities.PLAYER.lastCollision, graphics);

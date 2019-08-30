@@ -65,7 +65,7 @@ public class Sector1 extends MapSector {
             }
 
             // buildings
-            house = new House1();
+            house = new House1(700, 140);
             house.setPosition(280, 200);
             entities.add(house);
 
@@ -76,20 +76,19 @@ public class Sector1 extends MapSector {
     @Override
     public void onPlayerEnter(MapSector from) {
         if (from == null) {
-            Entities.PLAYER.x(700);
-            Entities.PLAYER.y(140);
+            Entities.PLAYER.setPosition(700, 140);
         } else {
             updatePlayerPosition(from);
         }
         initialize();
         Entities.DUMMY.onSectorEnter(this);
-        Entities.PLAYER.onSectorEnter(this);
+        Entities.PLAYER.generateSectorSpecificCollisions(this);
     }
 
     @Override
     public void onPlayerLeave(MapSector to) {
         Entities.DUMMY.onSectorLeave(this);
-        Entities.PLAYER.onSectorLeave(this);
+        Entities.PLAYER.removeSectorSpecificCollisions(this);
     }
 
 }

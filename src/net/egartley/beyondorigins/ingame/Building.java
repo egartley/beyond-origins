@@ -15,18 +15,19 @@ import java.util.ArrayList;
 
 public class Building extends StaticEntity {
 
+    public int playerLeaveX, playerLeaveY;
     public EntityBoundary entryBoundary;
     public BuildingFloor entryFloor;
     public BuildingFloor currentFloor;
     public EntityEntityCollision playerCollision;
-    public ArrayList<BuildingFloor> floors;
+    public ArrayList<BuildingFloor> floors = new ArrayList<>();
 
-    public Building(String id) {
+    public Building(String id, int playerLeaveX, int playerLeaveY) {
         super(id, new SpriteSheet(ImageStore.get("resources/images/buildings/" + id + ".png"), 1, 1).sprites.get(0));
         isSectorSpecific = true;
         isTraversable = true;
-
-        this.floors = new ArrayList<>();
+        this.playerLeaveX = playerLeaveX;
+        this.playerLeaveY = playerLeaveY;
     }
 
     public void addFloor(BuildingFloor floor) {
@@ -37,18 +38,12 @@ public class Building extends StaticEntity {
         }
     }
 
-    public void addChanger() {
-    }
-
     public void changeFloor(BuildingFloor floor) {
         currentFloor.onPlayerLeave();
         currentFloor = floor;
         currentFloor.onPlayerEnter();
-    }
 
-    public void changeFloor(int number) {
-        // TODO: check number
-        changeFloor(floors.get(number));
+        Entities.PLAYER.invalidateAllMovement();
     }
 
     public void onPlayerEnter() {
@@ -58,17 +53,17 @@ public class Building extends StaticEntity {
 
     public void onPlayerLeave() {
         currentFloor.onPlayerLeave();
-        Entities.PLAYER.leftBuilding();
+        Entities.PLAYER.leftBuilding(this);
 
         Game.in().setSubState(null);
     }
 
     public void leave() {
+        onPlayerLeave();
     }
 
     public void upstairs() {
-        Debug.out("going up");
-        BuildingFloor up = null;
+        BuildingFloor up;
         try {
             up = floors.get(floors.indexOf(currentFloor) + 1);
         } catch (IndexOutOfBoundsException e) {
@@ -79,7 +74,7 @@ public class Building extends StaticEntity {
     }
 
     public void downstairs() {
-        BuildingFloor down = null;
+        BuildingFloor down;
         try {
             down = floors.get(floors.indexOf(currentFloor) - 1);
         } catch (IndexOutOfBoundsException e) {

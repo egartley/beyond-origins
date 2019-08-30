@@ -8,8 +8,8 @@ import net.egartley.gamelib.logic.math.Calculate;
 
 public class House1 extends Building {
 
-    public House1() {
-        super("house-1");
+    public House1(int playerLeaveX, int playerLeaveY) {
+        super("house-1", playerLeaveX, playerLeaveY);
 
         BuildingFloor floor = new BuildingFloor(0, this) {
             @Override
@@ -18,7 +18,8 @@ public class House1 extends Building {
             }
         };
         floor.upperYLimit = 152;
-        floor.addChanger(new BuildingChanger(BuildingChanger.UPSTAIRS, 300, 300, 50, 50));
+        floor.addChanger(new BuildingChanger(BuildingChanger.UPSTAIRS, 313, 253, 56, 56));
+        floor.addChanger(new BuildingChanger(BuildingChanger.LEAVE, 447, 406, 100, 12));
         addFloor(floor);
 
         floor = new BuildingFloor(1, this) {
@@ -28,7 +29,7 @@ public class House1 extends Building {
             }
         };
         floor.upperYLimit = 152;
-        floor.addChanger(new BuildingChanger(BuildingChanger.DOWNSTAIRS, 300, 300, 50, 50));
+        floor.addChanger(new BuildingChanger(BuildingChanger.DOWNSTAIRS, 313, 253, 56, 56));
         addFloor(floor);
     }
 
