@@ -30,6 +30,13 @@ public class Util {
     }
 
     /**
+     * Returns a re-sized image of the original, with the width and height multipled by the given percentage (e.x. an 8x8 image would be resized to 4x4 with a percentage of 0.5)
+     */
+    public static BufferedImage resize(BufferedImage image, double percent) {
+        return resize(image, (int) (image.getWidth() * percent), (int) (image.getHeight() * percent), Image.SCALE_SMOOTH);
+    }
+
+    /**
      * Returns a re-sized image of the original, at the given width and height
      */
     public static BufferedImage resize(BufferedImage image, int width, int height) {
@@ -39,7 +46,7 @@ public class Util {
     /**
      * Returns a re-sized image of the original, at the given width and height
      */
-    static BufferedImage resize(BufferedImage image, int width, int height, int hints) {
+    public static BufferedImage resize(BufferedImage image, int width, int height, int hints) {
         return toBufferedImage(image.getScaledInstance(width, height, hints));
     }
 

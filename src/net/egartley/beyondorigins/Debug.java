@@ -49,8 +49,7 @@ public class Debug {
     /**
      * Prints the given object using {@link java.io.PrintStream#println(Object) System.out.println(object)}
      *
-     * @param object
-     *         The object to print out
+     * @param object The object to print out
      */
     public static void out(Object object) {
         System.out.println("[" + Thread.currentThread().getName() + " " + System.currentTimeMillis() + "] " + object);
@@ -60,8 +59,7 @@ public class Debug {
      * Prints the given object using {@link java.io.PrintStream#println(Object) System.out.println(object)} with the tag
      * "INFO"
      *
-     * @param object
-     *         The object to print out
+     * @param object The object to print out
      */
     public static void info(Object object) {
         out("INFO: " + object);
@@ -71,8 +69,7 @@ public class Debug {
      * Prints the given object using {@link java.io.PrintStream#println(Object) System.out.println(object)} with the tag
      * "WARNING"
      *
-     * @param object
-     *         The object to print out
+     * @param object The object to print out
      */
     public static void warning(Object object) {
         out("WARNING: " + object);
@@ -82,8 +79,7 @@ public class Debug {
      * Prints the given object using {@link java.io.PrintStream#println(Object) System.out.println(object)} with the tag
      * "ERROR"
      *
-     * @param object
-     *         The object to print out
+     * @param object The object to print out
      */
     public static void error(Object object) {
         out("ERROR: " + object);
@@ -109,19 +105,17 @@ public class Debug {
      * Render debug information
      */
     public static void render(Graphics graphics) {
-        if (Game.debug) {
-            row = 0;
-            graphics.setFont(font);
-            drawLine("Position: " + Entities.PLAYER.x() + ", " + Entities.PLAYER.y(), graphics);
-            drawLine("Location: " + Game.in().map.sector, graphics);
-            drawLine("Mouse: " + Mouse.x + ", " + Mouse.y, graphics);
-            drawLine("Keyboard: " + Keyboard.pressed(), graphics);
-            drawLine("EntityStore: " + EntityStore.amount, graphics);
-            if (Entities.PLAYER.lastCollision != null) {
-                drawLine("Last collision: " + Entities.PLAYER.lastCollision, graphics);
-            }
-            drawLine("isCollided = " + Entities.PLAYER.isCollided, graphics);
+        row = 0;
+        graphics.setFont(font);
+        drawLine("Position: " + Entities.PLAYER.x() + ", " + Entities.PLAYER.y(), graphics);
+        drawLine("Location: " + Game.in().map.sector, graphics);
+        drawLine("Mouse: " + Mouse.x + ", " + Mouse.y, graphics);
+        drawLine("Keyboard: " + Keyboard.pressed(), graphics);
+        drawLine("EntityStore: " + EntityStore.amount, graphics);
+        if (Entities.PLAYER.lastCollision != null) {
+            drawLine("Last collision: " + Entities.PLAYER.lastCollision, graphics);
         }
+        drawLine("isCollided = " + Entities.PLAYER.isCollided, graphics);
     }
 
 }

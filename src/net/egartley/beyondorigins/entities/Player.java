@@ -28,6 +28,7 @@ public class Player extends AnimatedEntity implements Character {
     private final byte RIGHT_ANIMATION = 1;
     private final int ANIMATION_THRESHOLD = 165;
 
+    private boolean frozen;
     private boolean isMovementInvalidated;
 
     public EntityBoundary boundary;
@@ -108,6 +109,22 @@ public class Player extends AnimatedEntity implements Character {
         isMovementInvalidated = true;
     }
 
+    public void freeze() {
+        frozen = true;
+        isAllowedToMoveUpwards = false;
+        isAllowedToMoveDownwards = false;
+        isAllowedToMoveLeftwards = false;
+        isAllowedToMoveRightwards = false;
+    }
+
+    public void thaw() {
+        frozen = false;
+        isAllowedToMoveUpwards = true;
+        isAllowedToMoveDownwards = true;
+        isAllowedToMoveLeftwards = true;
+        isAllowedToMoveRightwards = true;
+    }
+
     public void enteredBuilding() {
         removeSectorSpecificCollisions(Game.in().map.sector);
         // invalidateAllMovement();
@@ -157,7 +174,9 @@ public class Player extends AnimatedEntity implements Character {
         boolean down = Keyboard.isKeyPressed(KeyEvent.VK_S) && !isMovementInvalidated;
         boolean right = Keyboard.isKeyPressed(KeyEvent.VK_D) && !isMovementInvalidated;
 
-        move(up, down, left, right);
+        if (!frozen) {
+            move(up, down, left, right);
+        }
 
         if (!left && !right && !down && !up) {
             // not moving, so stop the animation if it's not already stopped
@@ -194,6 +213,7 @@ public class Player extends AnimatedEntity implements Character {
         isMovingDownwards = false;
         isMovingLeftwards = false;
         isMovingRightwards = false;
+
         if (up) {
             if (isAllowedToMoveUpwards) {
                 move(DIRECTION_UP);

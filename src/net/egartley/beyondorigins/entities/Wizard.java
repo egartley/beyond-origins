@@ -87,10 +87,10 @@ public class Wizard extends AnimatedEntity implements Character {
         boolean playerHasHat = Game.in().inventory.has(Item.WIZARD_HAT);
         if (!foundHat) {
             if (!playerHasHat) {
-                Game.in().dialoguePanel.startExchange(dialogue_meetPlayer);
+                Game.in().dialogue.startExchange(dialogue_meetPlayer);
             } else {
                 foundHat = true;
-                Game.in().dialoguePanel.startExchange(dialogue_gotHat);
+                Game.in().dialogue.startExchange(dialogue_gotHat);
             }
         } else {
             // generic dialogue

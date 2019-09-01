@@ -164,17 +164,9 @@ public class Dummy extends AnimatedEntity implements Character {
     public void setCollisions() {
         collisions.add(new EntityEntityCollision(defaultBoundary, Entities.PLAYER.defaultBoundary) {
             public void onCollide(EntityEntityCollisionEvent event) {
-                Game.in().dialoguePanel.startExchange(dialogue_playerCollision);
+                Game.in().dialogue.startExchange(dialogue_playerCollision);
                 isTalkingToPlayer = true;
-
-                if (Entities.WIZARD.metPlayer && !Entities.WIZARD.foundHat) {
-                    Game.in().inventory.put(Item.WIZARD_HAT);
-                } else {
-                    Game.in().inventory.put(Item.BIG_CHUNGUS);
-                    Game.in().inventory.put(Item.THE_ZUCC);
-                    Game.in().inventory.put(Item.CURRENT_YEAR);
-                    Game.in().inventory.put(Item.TUCKER);
-                }
+                Game.in().inventory.put(Item.CURRENT_YEAR, 99);
             }
 
             public void onCollisionEnd(EntityEntityCollisionEvent event) {

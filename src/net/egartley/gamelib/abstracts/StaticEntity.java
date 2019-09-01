@@ -21,7 +21,6 @@ public abstract class StaticEntity extends Entity {
     public StaticEntity(String id, Sprite sprite) {
         super(id, sprite);
         isAnimated = false;
-        setBoundaries();
     }
 
 }

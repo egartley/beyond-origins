@@ -34,7 +34,7 @@ public enum Item {
     }
 
     Item(String id, String name, BufferedImage image) {
-        this.id = id + "_item";
+        this.id = id + "-item";
         this.name = name;
         this.image = image;
     }

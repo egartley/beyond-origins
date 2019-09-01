@@ -54,15 +54,19 @@ public class DialogueExchange {
     }
 
     public void advance() {
-        isFinished = isCurrentDialogueFinished() && characterDialogueIndex + 1 == dialogues.size();
+        boolean advance = Game.in().dialogue.readyToAdvance;
+
+        isFinished = isCurrentDialogueFinished() && characterDialogueIndex + 1 == dialogues.size() && advance;
         if (isFinished) {
             return;
         }
-        if (isCurrentDialogueFinished()) {
+
+        if (isCurrentDialogueFinished() && advance) {
             DialogueController.onFinished(currentDialogue);
             nextDialogue();
-            Game.in().dialoguePanel.setFontMetrics = false;
-        } else {
+            Game.in().dialogue.setFontMetrics = false;
+            Game.in().dialogue.delay();
+        } else if (advance) {
             nextLine();
         }
     }

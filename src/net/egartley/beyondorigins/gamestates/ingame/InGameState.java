@@ -21,7 +21,7 @@ public class InGameState extends GameState {
 
     public Map map;
     public Inventory inventory;
-    public DialoguePanel dialoguePanel;
+    public DialoguePanel dialogue;
 
     public boolean isInventoryVisible;
     public boolean isDialogueVisible;
@@ -38,7 +38,7 @@ public class InGameState extends GameState {
         inventory = new Inventory();
 
         // load dialogue panel
-        dialoguePanel = new DialoguePanel();
+        dialogue = new DialoguePanel();
 
         // initialize key typeds
         toggleInventory = new KeyTyped(KeyEvent.VK_E) {
@@ -52,7 +52,7 @@ public class InGameState extends GameState {
         advanceDialogue = new KeyTyped(KeyEvent.VK_SPACE) {
             @Override
             public void onType() {
-                dialoguePanel.advance();
+                dialogue.advance();
             }
         };
         backToMainMenu = new KeyTyped(KeyEvent.VK_ESCAPE) {
@@ -72,9 +72,6 @@ public class InGameState extends GameState {
 
     private void render_this(Graphics graphics) {
         map.render(graphics);
-        if (isInventoryVisible) {
-            inventory.render(graphics);
-        }
     }
 
     public void setBuilding(Building building) {
@@ -104,10 +101,14 @@ public class InGameState extends GameState {
         } else {
             render_this(graphics);
         }
-        if (isDialogueVisible) {
-            dialoguePanel.render(graphics);
+        if (isInventoryVisible) {
+            inventory.render(graphics);
+        } else if (isDialogueVisible) {
+            dialogue.render(graphics);
         }
-        Debug.render(graphics);
+        if (Game.debug) {
+            Debug.render(graphics);
+        }
     }
 
     @Override
@@ -120,8 +121,10 @@ public class InGameState extends GameState {
         }
 
         // tick regardless of gamestate
-        if (isDialogueVisible) {
-            dialoguePanel.tick();
+        if (isInventoryVisible) {
+            inventory.tick();
+        } else if (isDialogueVisible) {
+            dialogue.tick();
         }
     }
 

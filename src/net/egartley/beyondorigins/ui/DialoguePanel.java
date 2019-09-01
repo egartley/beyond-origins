@@ -3,13 +3,17 @@ package net.egartley.beyondorigins.ui;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.gamelib.logic.dialogue.DialogueExchange;
 import net.egartley.gamelib.logic.math.Calculate;
+import net.egartley.gamelib.threads.DelayedEvent;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class DialoguePanel extends UIElement {
+
+    private static final double DELAY = 1.5D;
 
     /**
      * The maximum number of lines that can be displayed at once
@@ -20,6 +24,7 @@ public class DialoguePanel extends UIElement {
      * Whether or not the dialogue panel is showing (visible)
      */
     public boolean isShowing;
+    public boolean readyToAdvance;
 
     /**
      * The width of the character's name when rendered
@@ -63,14 +68,25 @@ public class DialoguePanel extends UIElement {
     }
 
     public void advance() {
-        if (isShowing) {
-            exchange.advance();
-            if (exchange.isFinished) {
-                DialogueController.onFinished(exchange);
-                exchange.reset();
-                hide();
-            }
+        if (!isShowing) {
+            return;
         }
+        exchange.advance();
+        if (exchange.isFinished) {
+            DialogueController.onFinished(exchange);
+            exchange.reset();
+            hide();
+        }
+    }
+
+    public void delay() {
+        readyToAdvance = false;
+        new DelayedEvent(DELAY) {
+            @Override
+            public void onFinish() {
+                readyToAdvance = true;
+            }
+        }.start();
     }
 
     /**
@@ -79,6 +95,8 @@ public class DialoguePanel extends UIElement {
     public void show() {
         isShowing = true;
         Game.in().isDialogueVisible = true;
+        delay();
+        Entities.PLAYER.freeze();
     }
 
     /**
@@ -86,8 +104,10 @@ public class DialoguePanel extends UIElement {
      */
     public void hide() {
         isShowing = false;
-        Game.in().isDialogueVisible = false;
         setFontMetrics = false;
+        readyToAdvance = false;
+        Game.in().isDialogueVisible = false;
+        Entities.PLAYER.thaw();
     }
 
     public void startExchange(DialogueExchange exchange) {
@@ -110,7 +130,7 @@ public class DialoguePanel extends UIElement {
         graphics.drawImage(image, x(), y(), null);
         // render character image and name
         BufferedImage characterImage = exchange.currentDialogue.character.getCharacterImage();
-        graphics.drawImage(characterImage, 247 + 26 - (characterImage.getWidth() / 2), 414, null);
+        graphics.drawImage(characterImage, 272 - characterImage.getWidth() / 2, 414, null);
         graphics.setColor(Color.WHITE);
         graphics.setFont(characterNameFont);
         graphics.drawString(exchange.currentDialogue.character.getName(), 272 - characterNameStringWidth / 2, 476);
@@ -120,8 +140,9 @@ public class DialoguePanel extends UIElement {
             renderLine(line, graphics);
         }
         lineIndex = 0;
-        // render more lines thing
-        if (exchange.queuedLines != null && exchange.queuedLines.length > 0) {
+        // render more lines indiciator
+        if (readyToAdvance) {
+            // exchange.queuedLines != null && exchange.queuedLines.length > 0
             graphics.drawImage(moreLinesImage, 700, 500, null);
         }
     }

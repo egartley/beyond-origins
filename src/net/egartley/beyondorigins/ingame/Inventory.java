@@ -39,12 +39,12 @@ public class Inventory implements Tickable {
     }
 
     /**
-     * Puts the item in the next available slot, does nothing if full
+     * Puts the item(s) in the next available slot, does nothing if full
      *
      * @param item The item to put in the inventory
      * @param amount How many of that item to put
      *
-     * @return Whether or not the item was successfully put into the inventory
+     * @return Whether or not the item(s) were successfully put into the inventory
      */
     public boolean put(Item item, int amount) {
         if (isFull()) {

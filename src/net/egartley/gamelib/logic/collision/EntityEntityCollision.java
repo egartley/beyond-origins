@@ -227,6 +227,8 @@ public class EntityEntityCollision {
                 entity.isCollided = false;
             }
         }
+        determineBoundaryColor(boundaries[0]);
+        determineBoundaryColor(boundaries[1]);
         // Debug.out("onCollisionEnd_internal end");
     }
 
