@@ -1,5 +1,7 @@
 package net.egartley.gamelib.abstracts;
 
+import net.egartley.beyondorigins.Debug;
+import net.egartley.beyondorigins.Game;
 import net.egartley.gamelib.graphics.Animation;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.graphics.SpriteSheet;
@@ -15,31 +17,23 @@ import java.util.ArrayList;
 public abstract class AnimatedEntity extends Entity {
 
     /**
-     * The animation that is being used while rendering
+     * The animation that is currently being used
      */
     protected Animation animation;
     /**
      * All of the animations that available to use
-     *
-     * @see Animation
      */
     protected ArrayList<Animation> animations = new ArrayList<>();
 
-    /**
-     * Creates a new animated entity, while setting {@link Entity#isAnimated} to <code>true</code>
-     *
-     * @see Entity#Entity(String, Sprite) Entity(String, Sprite)
-     */
-    public AnimatedEntity(String id, Sprite sprite) {
-        super(id, sprite);
+    public AnimatedEntity(String id) {
+        super(id, (Sprite) null);
         isAnimated = true;
         setAnimations();
     }
 
     public AnimatedEntity(String id, SpriteSheet sheet) {
-        super(id, sheet.sprites.get(0));
+        super(id, sheet);
         isAnimated = true;
-        sprites = sheet.sprites;
         setAnimations();
     }
 
@@ -51,10 +45,30 @@ public abstract class AnimatedEntity extends Entity {
     public abstract void setAnimations();
 
     /**
+     * Changes {@link #animation}
+     *
+     * @param i The index of the animation to switch to in {@link #animations}
+     */
+    protected void switchAnimation(int i) {
+        if (i >= animations.size()) {
+            Debug.warning("Tried to switch to an animation at an invalid index");
+            return;
+        }
+        if (animations.indexOf(animation) != i) {
+            // this prevents the same animation being set again
+            animation.stop(false);
+            animation = animations.get(i);
+        }
+    }
+
+    /**
      * Calls {@link Animation#render(Graphics, int, int)} for {@link #animation} and then {@link #drawDebug(Graphics)}
      */
     @Override
     public void render(Graphics graphics) {
         animation.render(graphics, x(), y());
+        if (Game.debug) {
+            drawDebug(graphics);
+        }
     }
 }

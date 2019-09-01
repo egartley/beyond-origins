@@ -1,6 +1,5 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.controllers.DialogueController;
@@ -31,7 +30,7 @@ public class Dummy extends AnimatedEntity implements Character {
     private final byte RIGHT_ANIMATION = 1;
     private final int ANIMATION_THRESHOLD = 150;
 
-    private boolean isAngry;
+    private boolean isTalkingToPlayer;
     private short walktime = 0;
     private byte dir = DIRECTION_RIGHT;
     private DialogueExchange dialogue_playerCollision;
@@ -53,21 +52,9 @@ public class Dummy extends AnimatedEntity implements Character {
         DialogueController.addFinished(new DialogueExchangeFinishedEvent(dialogue_playerCollision) {
             @Override
             public void onFinish() {
-                isAngry = false;
+                isTalkingToPlayer = false;
             }
         });
-    }
-
-    private void switchAnimation(byte i) {
-        if (i >= animations.size()) {
-            Debug.warning("Tried to switch to an animation at an invalid index");
-            return;
-        }
-        if (!animation.equals(animations.get(i))) {
-            // this prevents the same animation being set again
-            animation.stop(false);
-            animation = animations.get(i);
-        }
     }
 
     public void onSectorEnter(MapSector sector) {
@@ -134,20 +121,17 @@ public class Dummy extends AnimatedEntity implements Character {
             animation.stop();
         }
 
-        if (isAngry) {
+        if (isTalkingToPlayer) {
             exp.tick();
         }
     }
 
     @Override
     public void render(Graphics graphics) {
-        if (isAngry) {
+        if (isTalkingToPlayer) {
             exp.render(graphics);
         }
         super.render(graphics);
-        if (Game.debug) {
-            drawDebug(graphics);
-        }
     }
 
     @Override
@@ -171,7 +155,6 @@ public class Dummy extends AnimatedEntity implements Character {
 
     @Override
     public void setAnimations() {
-        animations.clear();
         animations.add(new Animation(sprites.get(0), ANIMATION_THRESHOLD));
         animations.add(new Animation(sprites.get(1), ANIMATION_THRESHOLD));
         animation = animations.get(0);
@@ -179,27 +162,19 @@ public class Dummy extends AnimatedEntity implements Character {
 
     @Override
     public void setCollisions() {
-        collisions.clear();
         collisions.add(new EntityEntityCollision(defaultBoundary, Entities.PLAYER.defaultBoundary) {
             public void onCollide(EntityEntityCollisionEvent event) {
-                if (Game.in().dialoguePanel.isShowing) {
-                    return;
-                }
-                Game.in().dialoguePanel.exchange = dialogue_playerCollision;
-                Game.in().dialoguePanel.show();
-                isAngry = true;
+                Game.in().dialoguePanel.startExchange(dialogue_playerCollision);
+                isTalkingToPlayer = true;
 
-                Game.in().inventory.put(Item.WOJAK);
-                Game.in().inventory.put(Item.HONKLER);
-                Game.in().inventory.put(Item.BOOMER);
-                Game.in().inventory.put(Item.ZOOMER);
-                Game.in().inventory.put(Item.BIG_CHUNGUS);
-                Game.in().inventory.put(Item.THE_ZUCC);
-                Game.in().inventory.put(Item.BITCONNECT);
-                Game.in().inventory.put(Item.AINT_CLICKIN_THAT);
-                Game.in().inventory.put(Item.CURRENT_YEAR);
-                Game.in().inventory.put(Item.TUCKER);
-                Game.in().inventory.put(Item.HMM);
+                if (Entities.WIZARD.metPlayer && !Entities.WIZARD.foundHat) {
+                    Game.in().inventory.put(Item.WIZARD_HAT);
+                } else {
+                    Game.in().inventory.put(Item.BIG_CHUNGUS);
+                    Game.in().inventory.put(Item.THE_ZUCC);
+                    Game.in().inventory.put(Item.CURRENT_YEAR);
+                    Game.in().inventory.put(Item.TUCKER);
+                }
             }
 
             public void onCollisionEnd(EntityEntityCollisionEvent event) {
@@ -210,11 +185,11 @@ public class Dummy extends AnimatedEntity implements Character {
 
     @Override
     public String getName() {
-        return "Dummy";
+        return id;
     }
 
     @Override
-    public BufferedImage getDialoguePanelImage() {
-        return sprite.toBufferedImage(0);
+    public BufferedImage getCharacterImage() {
+        return image;
     }
 }

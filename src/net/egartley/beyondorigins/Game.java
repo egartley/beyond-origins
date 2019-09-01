@@ -2,15 +2,14 @@ package net.egartley.beyondorigins;
 
 import net.egartley.beyondorigins.controllers.KeyboardController;
 import net.egartley.beyondorigins.definitions.maps.AllSectors;
-import net.egartley.beyondorigins.entities.Dummy;
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.entities.Player;
 import net.egartley.beyondorigins.gamestates.MainMenuState;
 import net.egartley.beyondorigins.gamestates.ingame.InGameState;
 import net.egartley.gamelib.abstracts.GameState;
 import net.egartley.gamelib.input.KeyTyped;
 import net.egartley.gamelib.input.Keyboard;
 import net.egartley.gamelib.input.Mouse;
+import net.egartley.gamelib.logic.math.Calculate;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,7 +27,7 @@ public class Game extends JPanel implements Runnable {
     private static long startTime;
     private static JFrame frame;
     private static Dimension windowDimension = new Dimension(976, 583);
-    private static boolean running = false;
+    private static boolean running = false, started = false;
     private int fps;
     private long lastFpsTime;
     public static Game self;
@@ -73,6 +72,7 @@ public class Game extends JPanel implements Runnable {
         frame.getContentPane().add(self);
 
         frame.setVisible(true);
+        self.setFocusable(true);
         self.requestFocusInWindow();
 
         running = true;
@@ -99,7 +99,7 @@ public class Game extends JPanel implements Runnable {
         Debug.out("Maps were loaded");
 
         Debug.out("Initializing entities...");
-        initializeEntities();
+        Entities.initialize();
         Debug.out("Entities were initialized");
 
         Debug.out("Initializing game states...");
@@ -111,11 +111,6 @@ public class Game extends JPanel implements Runnable {
             setState(mainMenuState);
         }
         Debug.out("Game states were initialized");
-    }
-
-    private void initializeEntities() {
-        Entities.PLAYER = new Player();
-        Entities.DUMMY = new Dummy();
     }
 
     public static boolean isState(int id) {
@@ -200,37 +195,51 @@ public class Game extends JPanel implements Runnable {
     @Override
     public void run() {
         // load images, save data, etc.
-        init();
-        Debug.out("init() took " + ((System.nanoTime() - startTime) / 1000000000.0) + " seconds");
-
-        // Credit:
-        // http://www.java-gaming.org/index.php?topic=24220.0
-        // http://www.cokeandcode.com/info/showsrc/showsrc.php?src=../spaceinvaders102/org/newdawn/spaceinvaders/Game.java
-        long lastLoopTime = System.nanoTime();
-        final int TARGET_FPS = 60;
-        final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
-        while (running) {
-            long now = System.nanoTime();
-            long updateLength = now - lastLoopTime;
-            lastLoopTime = now;
-            lastFpsTime += updateLength;
-            fps++;
-            if (lastFpsTime >= 1000000000) {
-                lastFpsTime = 0;
-                fps = 0;
-            }
-
-            tick(updateLength / (double) OPTIMAL_TIME);
-            repaint();
-
-            try {
-                Thread.sleep(Math.abs((lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        boolean success = false;
+        try {
+            Debug.out("Starting initialization...");
+            init();
+            success = true;
+        } catch (Exception e) {
+            Debug.out("FATAL ERROR: Did not successfully initialize!");
+            e.printStackTrace();
         }
+        if (!success) {
+            quit();
+        } else {
+            Debug.out("Initialization took " + ((System.nanoTime() - startTime) / 1000000000.0) + " seconds");
 
-        stop();
+            started = true;
+
+            // Credit:
+            // http://www.java-gaming.org/index.php?topic=24220.0
+            // http://www.cokeandcode.com/info/showsrc/showsrc.php?src=../spaceinvaders102/org/newdawn/spaceinvaders/Game.java
+            long lastLoopTime = System.nanoTime();
+            final int TARGET_FPS = 60;
+            final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
+            while (running) {
+                long now = System.nanoTime();
+                long updateLength = now - lastLoopTime;
+                lastLoopTime = now;
+                lastFpsTime += updateLength;
+                fps++;
+                if (lastFpsTime >= 1000000000) {
+                    lastFpsTime = 0;
+                    fps = 0;
+                }
+
+                tick(updateLength / (double) OPTIMAL_TIME);
+                repaint();
+
+                try {
+                    Thread.sleep(Math.abs((lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            stop();
+        }
     }
 
     private synchronized void tick(double delta) {
@@ -248,7 +257,13 @@ public class Game extends JPanel implements Runnable {
     @Override
     public void paint(Graphics graphics) {
         ((Graphics2D) graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        render(graphics);
+        if (started) {
+            render(graphics);
+        } else {
+            graphics.setColor(Color.BLACK);
+            graphics.setFont(new Font("Consolas", Font.PLAIN, 32));
+            graphics.drawString("Loading...", Calculate.getCenteredX(graphics.getFontMetrics().stringWidth("Loading...")), Calculate.getCenteredY(32) + 16);
+        }
     }
 
 }

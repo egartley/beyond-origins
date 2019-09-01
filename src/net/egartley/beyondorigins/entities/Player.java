@@ -46,18 +46,6 @@ public class Player extends AnimatedEntity implements Character {
         }
     }
 
-    /**
-     * Changes the animation to another one in the collection
-     *
-     * @param i The index of the animation
-     */
-    private void switchAnimation(byte i) {
-        if (!animation.equals(animations.get(i))) {
-            // this prevents the same animation being set again
-            animation = animations.get(i);
-        }
-    }
-
     public void generateSectorSpecificCollisions(MapSector sector) {
         // generate collisions with sector entities that aren't traversable
         for (Entity e : sector.entities) {
@@ -122,18 +110,17 @@ public class Player extends AnimatedEntity implements Character {
 
     public void enteredBuilding() {
         removeSectorSpecificCollisions(Game.in().map.sector);
-        invalidateAllMovement();
+        // invalidateAllMovement();
     }
 
     public void leftBuilding(Building building) {
         generateSectorSpecificCollisions(Game.in().map.sector);
         setPosition(building.playerLeaveX, building.playerLeaveY);
-        invalidateAllMovement();
+        // invalidateAllMovement();
     }
 
     @Override
     public void setAnimations() {
-        animations.clear();
         animations.add(new Animation(sprites.get(0), ANIMATION_THRESHOLD));
         animations.add(new Animation(sprites.get(1), ANIMATION_THRESHOLD));
         animation = animations.get(0);
@@ -194,9 +181,6 @@ public class Player extends AnimatedEntity implements Character {
 
     public void render(Graphics graphics) {
         super.render(graphics);
-        if (Game.debug) {
-            drawDebug(graphics);
-        }
     }
 
     private void move(boolean up, boolean down, boolean left, boolean right) {
@@ -235,11 +219,11 @@ public class Player extends AnimatedEntity implements Character {
 
     @Override
     public String getName() {
-        return "Player";
+        return id;
     }
 
     @Override
-    public BufferedImage getDialoguePanelImage() {
-        return sprite.toBufferedImage(0);
+    public BufferedImage getCharacterImage() {
+        return image;
     }
 }

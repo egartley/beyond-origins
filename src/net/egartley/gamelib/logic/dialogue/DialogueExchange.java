@@ -9,14 +9,14 @@ import java.util.Arrays;
 
 public class DialogueExchange {
 
-    public int index = -1;
+    public int characterDialogueIndex = -1;
     public boolean isFinished;
 
     public String[] allLines;
     public String[] displayedLines;
     public String[] queuedLines;
 
-    public CharacterDialogue dialogue;
+    public CharacterDialogue currentDialogue;
     public ArrayList<CharacterDialogue> dialogues;
 
     public DialogueExchange(CharacterDialogue... dialogues) {
@@ -25,9 +25,9 @@ public class DialogueExchange {
         nextDialogue();
     }
 
-    public void setDialogue(CharacterDialogue dialogue) {
-        this.dialogue = dialogue;
-        allLines = this.dialogue.lines;
+    private void setCurrentDialogue(CharacterDialogue currentDialogue) {
+        this.currentDialogue = currentDialogue;
+        allLines = this.currentDialogue.lines;
         if (allLines.length <= DialoguePanel.MAX_LINES) {
             // max number or less lines, will always display all of them
             displayedLines = allLines;
@@ -45,32 +45,35 @@ public class DialogueExchange {
         queuedLines = Arrays.copyOfRange(queuedLines, 1, queuedLines.length);
     }
 
-    public void nextDialogue() {
-        index++;
+    private void nextDialogue() {
+        characterDialogueIndex++;
         if (isFinished) {
             return;
         }
-        setDialogue(dialogues.get(index));
+        setCurrentDialogue(dialogues.get(characterDialogueIndex));
     }
 
     public void advance() {
-        if (currentDialogueFinished()) {
-            DialogueController.onFinished(dialogue);
+        isFinished = isCurrentDialogueFinished() && characterDialogueIndex + 1 == dialogues.size();
+        if (isFinished) {
+            return;
+        }
+        if (isCurrentDialogueFinished()) {
+            DialogueController.onFinished(currentDialogue);
             nextDialogue();
             Game.in().dialoguePanel.setFontMetrics = false;
         } else {
             nextLine();
-            isFinished = currentDialogueFinished() && index + 1 == dialogues.size();
         }
     }
 
     public void reset() {
-        index = 0;
-        setDialogue(dialogues.get(0));
+        characterDialogueIndex = 0;
+        setCurrentDialogue(dialogues.get(0));
         isFinished = false;
     }
 
-    public boolean currentDialogueFinished() {
+    private boolean isCurrentDialogueFinished() {
         return queuedLines == null || queuedLines.length == 0;
     }
 

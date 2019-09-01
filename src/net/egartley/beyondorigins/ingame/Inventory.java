@@ -61,6 +61,24 @@ public class Inventory implements Tickable {
         return true;
     }
 
+    public boolean has(Item item) {
+        for (InventorySlot slot : slots) {
+            if (slot.item != null && slot.item.item.equals(item)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public InventoryItem take(Item item) {
+        for (InventorySlot slot : slots) {
+            if (slot.item.item.equals(item)) {
+                return slot.removeItem();
+            }
+        }
+        return null;
+    }
+
     @Override
     public void tick() {
         slots.forEach(InventorySlot::tick);

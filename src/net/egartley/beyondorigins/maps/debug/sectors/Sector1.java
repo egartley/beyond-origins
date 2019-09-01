@@ -65,8 +65,7 @@ public class Sector1 extends MapSector {
             }
 
             // buildings
-            house = new House1(700, 140);
-            house.setPosition(280, 200);
+            house = new House1(280, 200, 700, 140);
             entities.add(house);
 
             didInitialize = true;

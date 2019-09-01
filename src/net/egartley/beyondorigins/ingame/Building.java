@@ -22,10 +22,11 @@ public class Building extends StaticEntity {
     public EntityEntityCollision playerCollision;
     public ArrayList<BuildingFloor> floors = new ArrayList<>();
 
-    public Building(String id, int playerLeaveX, int playerLeaveY) {
+    public Building(String id, int x, int y, int playerLeaveX, int playerLeaveY) {
         super(id, new SpriteSheet(ImageStore.get("resources/images/buildings/" + id + ".png"), 1, 1).sprites.get(0));
         isSectorSpecific = true;
         isTraversable = true;
+        setPosition(x, y);
         this.playerLeaveX = playerLeaveX;
         this.playerLeaveY = playerLeaveY;
     }
@@ -40,15 +41,14 @@ public class Building extends StaticEntity {
 
     public void changeFloor(BuildingFloor floor) {
         currentFloor.onPlayerLeave();
+        floor.onPlayerEnter(currentFloor);
         currentFloor = floor;
-        currentFloor.onPlayerEnter();
-
-        Entities.PLAYER.invalidateAllMovement();
+        // Entities.PLAYER.invalidateAllMovement();
     }
 
     public void onPlayerEnter() {
         Entities.PLAYER.enteredBuilding();
-        entryFloor.onPlayerEnter();
+        entryFloor.onPlayerEnter(null);
     }
 
     public void onPlayerLeave() {

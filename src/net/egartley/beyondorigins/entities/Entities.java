@@ -10,6 +10,13 @@ public class Entities {
 
     public static Player PLAYER;
     public static Dummy DUMMY;
+    public static Wizard WIZARD;
+
+    public static void initialize() {
+        PLAYER = new Player();
+        DUMMY = new Dummy();
+        WIZARD = new Wizard();
+    }
 
     public static Sprite getSpriteTemplate(byte id) {
         switch (id) {

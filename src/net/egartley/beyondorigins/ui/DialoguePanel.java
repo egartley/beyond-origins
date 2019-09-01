@@ -54,7 +54,7 @@ public class DialoguePanel extends UIElement {
     /**
      * The dialogue that is currently being used
      */
-    public DialogueExchange exchange;
+    private DialogueExchange exchange;
 
     public DialoguePanel() {
         super(ImageStore.get(ImageStore.DIALOGUE_PANEL), true);
@@ -63,12 +63,13 @@ public class DialoguePanel extends UIElement {
     }
 
     public void advance() {
-        if (exchange.isFinished) {
-            DialogueController.onFinished(exchange);
-            exchange.reset();
-            hide();
-        } else if (isShowing) {
+        if (isShowing) {
             exchange.advance();
+            if (exchange.isFinished) {
+                DialogueController.onFinished(exchange);
+                exchange.reset();
+                hide();
+            }
         }
     }
 
@@ -89,9 +90,11 @@ public class DialoguePanel extends UIElement {
         setFontMetrics = false;
     }
 
-    @Override
-    public void tick() {
-
+    public void startExchange(DialogueExchange exchange) {
+        this.exchange = exchange;
+        if (!isShowing) {
+            show();
+        }
     }
 
     @Override
@@ -100,17 +103,17 @@ public class DialoguePanel extends UIElement {
             return;
         }
         if (!setFontMetrics) {
-            characterNameStringWidth = graphics.getFontMetrics(characterNameFont).stringWidth(exchange.dialogue.character.getName());
+            characterNameStringWidth = graphics.getFontMetrics(characterNameFont).stringWidth(exchange.currentDialogue.character.getName());
             setFontMetrics = true;
         }
         // render background (panel)
         graphics.drawImage(image, x(), y(), null);
         // render character image and name
-        BufferedImage characterImage = exchange.dialogue.character.getDialoguePanelImage();
+        BufferedImage characterImage = exchange.currentDialogue.character.getCharacterImage();
         graphics.drawImage(characterImage, 247 + 26 - (characterImage.getWidth() / 2), 414, null);
         graphics.setColor(Color.WHITE);
         graphics.setFont(characterNameFont);
-        graphics.drawString(exchange.dialogue.character.getName(), 272 - characterNameStringWidth / 2, 476);
+        graphics.drawString(exchange.currentDialogue.character.getName(), 272 - characterNameStringWidth / 2, 476);
         // render text
         graphics.setFont(lineFont);
         for (String line : exchange.displayedLines) {

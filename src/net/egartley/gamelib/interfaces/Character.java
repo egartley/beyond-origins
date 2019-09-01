@@ -6,6 +6,6 @@ public interface Character {
 
     String getName();
 
-    BufferedImage getDialoguePanelImage();
+    BufferedImage getCharacterImage();
 
 }

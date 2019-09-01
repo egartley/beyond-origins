@@ -65,18 +65,14 @@ public class InGameState extends GameState {
 
     private void tick_this() {
         map.tick();
-        if (isDialogueVisible) {
-            dialoguePanel.tick();
-        } else if (isInventoryVisible) {
+        if (isInventoryVisible) {
             inventory.tick();
         }
     }
 
     private void render_this(Graphics graphics) {
         map.render(graphics);
-        if (isDialogueVisible) {
-            dialoguePanel.render(graphics);
-        } else if (isInventoryVisible) {
+        if (isInventoryVisible) {
             inventory.render(graphics);
         }
     }
@@ -108,15 +104,24 @@ public class InGameState extends GameState {
         } else {
             render_this(graphics);
         }
+        if (isDialogueVisible) {
+            dialoguePanel.render(graphics);
+        }
         Debug.render(graphics);
     }
 
     @Override
     public void tick() {
+        // normal gmaestate tick
         if (currentSubState != null) {
             currentSubState.tick();
         } else {
             tick_this();
+        }
+
+        // tick regardless of gamestate
+        if (isDialogueVisible) {
+            dialoguePanel.tick();
         }
     }
 

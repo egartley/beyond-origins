@@ -11,37 +11,40 @@ public class ImageStore {
 
     public final static byte PLAYER = 0;
     public final static byte DUMMY = 1;
+    public final static byte WIZARD_DEFAULT = 11;
+    public final static byte WIZARD_WITH_HAT = 12;
 
     public final static byte TILE_GRASS = 2;
     public final static byte TILE_SAND = 3;
 
     public final static byte TREE_DEFAULT = 4;
     public final static byte ROCK_DEFAULT = 5;
-
-    public final static byte EXPRESSION_CONFUSION = 6;
-    public final static byte EXPRESSION_CONCERN = 99;
-    public final static byte EXPRESSION_ANGER = 98;
-    public final static byte EXPRESSION_HEART = 97;
+    public final static byte WIZARD_HAT = 13;
 
     public final static byte DIALOGUE_PANEL = 7;
     public final static byte INVENTORY_PANEL = 8;
     public final static byte MORE_LINES = 9;
     public final static byte INVENTORY_SLOT = 10;
 
+    public static String path = "resources/images/";
+    public static String entityPath = path + "entities/";
+    public static String expressionPath = entityPath + "expressions/";
+    public static String mapTilePath = path + "map-tiles/";
+    public static String uiPath = path + "ui/";
+
     /**
      * Returns the specified image
      */
     public static BufferedImage get(byte image) {
-        String path = "resources/images/";
-        String entityPath = path + "entities/";
-        String expressionPath = entityPath + "expressions/";
-        String mapTilePath = path + "map-tiles/";
-        String uiPath = path + "ui/";
         switch (image) {
             case PLAYER:
                 return get(entityPath + "player-default.png");
             case DUMMY:
                 return get(entityPath + "dummy.png");
+            case WIZARD_DEFAULT:
+                return get(entityPath + "wizard-default.png");
+            case WIZARD_WITH_HAT:
+                return get(entityPath + "wizard-with-hat.png");
             case TILE_GRASS:
                 return get(mapTilePath + "grass-default.png");
             case TILE_SAND:
@@ -50,14 +53,8 @@ public class ImageStore {
                 return get(entityPath + "tree-default.png");
             case ROCK_DEFAULT:
                 return get(entityPath + "rock-default.png");
-            case EXPRESSION_CONFUSION:
-                return get(expressionPath + "confusion.png");
-            case EXPRESSION_CONCERN:
-                return get(expressionPath + "concern.png");
-            case EXPRESSION_ANGER:
-                return get(expressionPath + "anger.png");
-            case EXPRESSION_HEART:
-                return get(expressionPath + "heart.png");
+            case WIZARD_HAT:
+                return get(entityPath + "wizard-hat.png");
             case DIALOGUE_PANEL:
                 return get(uiPath + "dialogue-panel.png");
             case INVENTORY_PANEL:

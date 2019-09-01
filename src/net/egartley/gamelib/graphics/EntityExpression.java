@@ -9,8 +9,8 @@ import java.awt.*;
 
 public class EntityExpression extends AnimatedEntity {
 
-    public static final byte INTEREST = 0, DISGUST = 1, HAPPINESS = 2, ANGER = 3, SADDNESS = 4, CONFUSION = 5, THINKING = 6, SURPRISE = 7, CONCERN = 8, HEART = 9;
-    // public static final short ANIMATIONSPEED_NORMAL = 0, ANIMATIONSPEED_FAST = 1, ANIMATIONSPEED_SLOW = 3;
+    public static final byte INTEREST = 0, DISGUST = 1, HAPPINESS = 2, ANGER = 3, SADDNESS = 4, CONFUSION = 5, THINKING = 6, SURPRISE = 7, ATTENTION = 8, HEART = 9;
+    public static final short ANIMATIONSPEED_NORMAL = 417, ANIMATIONSPEED_FAST = 626, ANIMATIONSPEED_SLOW = 313;
 
     /**
      * Whether or not the expression is currently being shown
@@ -25,29 +25,32 @@ public class EntityExpression extends AnimatedEntity {
     public Entity target;
 
     public EntityExpression(byte type, Entity target) {
-        super("Expression", new SpriteSheet(ImageStore.get(ImageStore.EXPRESSION_CONFUSION), 18, 18, 1, 1).sprites.get(0));
+        super("Expression");
         this.type = type;
         this.target = target;
         animations.add(getTemplateAnimation(type));
         animation = animations.get(0);
         sprite = animation.sprite;
-        setBoundaries();
         image = sprite.toBufferedImage();
     }
 
-    private Animation getTemplateAnimation(byte type) {
+    private SpriteSheet getTemplateSpriteSheet(byte type) {
         switch (type) {
             case CONFUSION:
-                return new Animation(new SpriteSheet(ImageStore.get(ImageStore.EXPRESSION_CONFUSION), 18, 18, 1, 4).sprites.get(0), 417);
-            case CONCERN:
-                return new Animation(new SpriteSheet(ImageStore.get(ImageStore.EXPRESSION_CONCERN), 18, 18, 1, 4).sprites.get(0), 417);
+                return new SpriteSheet(ImageStore.get(ImageStore.expressionPath + "confusion.png"), 18, 18, 1, 4);
+            case ATTENTION:
+                return new SpriteSheet(ImageStore.get(ImageStore.expressionPath + "attention.png"), 18, 18, 1, 4);
             case ANGER:
-                return new Animation(new SpriteSheet(ImageStore.get(ImageStore.EXPRESSION_ANGER), 18, 18, 1, 2).sprites.get(0), 417);
+                return new SpriteSheet(ImageStore.get(ImageStore.expressionPath + "anger.png"), 18, 18, 1, 2);
             case HEART:
-                return new Animation(new SpriteSheet(ImageStore.get(ImageStore.EXPRESSION_HEART), 18, 18, 1, 2).sprites.get(0), 417);
+                return new SpriteSheet(ImageStore.get(ImageStore.expressionPath + "heart.png"), 18, 18, 1, 2);
             default:
                 return null;
         }
+    }
+
+    private Animation getTemplateAnimation(byte type) {
+        return new Animation(getTemplateSpriteSheet(type).sprites.get(0), ANIMATIONSPEED_NORMAL);
     }
 
     public void tick() {

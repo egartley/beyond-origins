@@ -4,6 +4,7 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.data.ImageStore;
 import net.egartley.beyondorigins.entities.BuildingChanger;
 import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.abstracts.Renderable;
 import net.egartley.gamelib.interfaces.Tickable;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
@@ -16,13 +17,14 @@ import java.util.ArrayList;
 
 public class BuildingFloor extends Renderable implements Tickable {
 
+    private ArrayList<Entity> entities = new ArrayList<>();
+    private ArrayList<BuildingChanger> changers = new ArrayList<>();
     private ArrayList<EntityEntityCollision> changerCollisions = new ArrayList<>();
 
     public int number;
     public int upperYLimit, lowerYLimit, leftLimit, rightLimit;
     public Building parent;
     public BufferedImage image;
-    public ArrayList<BuildingChanger> changers = new ArrayList<>();
 
     public BuildingFloor(int number, Building parent) {
         this.number = number;
@@ -35,7 +37,7 @@ public class BuildingFloor extends Renderable implements Tickable {
         rightLimit = x() + image.getWidth() - Entities.PLAYER.sprite.width;
     }
 
-    public void onPlayerEnter() {
+    public void onPlayerEnter(BuildingFloor from) {
 
     }
 
@@ -78,9 +80,14 @@ public class BuildingFloor extends Renderable implements Tickable {
         changerCollisions.add(collision);
     }
 
+    public void addEntity(Entity e) {
+        entities.add(e);
+    }
+
     @Override
     public void render(Graphics graphics) {
         graphics.drawImage(image, x(), y(), null);
+        entities.forEach(e -> e.render(graphics));
 
         if (Game.debug) {
             changers.forEach(c -> c.defaultBoundary.draw(graphics));
@@ -90,6 +97,7 @@ public class BuildingFloor extends Renderable implements Tickable {
     @Override
     public void tick() {
         changerCollisions.forEach(EntityEntityCollision::tick);
+        entities.forEach(Entity::tick);
     }
 
 }

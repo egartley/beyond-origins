@@ -5,6 +5,7 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.data.EntityStore;
 import net.egartley.gamelib.graphics.Sprite;
+import net.egartley.gamelib.graphics.SpriteSheet;
 import net.egartley.gamelib.interfaces.Interactable;
 import net.egartley.gamelib.interfaces.Tickable;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
@@ -32,6 +33,10 @@ public abstract class Entity extends Renderable implements Tickable {
      * The entity's sprites
      */
     protected ArrayList<Sprite> sprites = new ArrayList<>();
+    /**
+     * The entity's sprite sheets
+     */
+    protected ArrayList<SpriteSheet> sheets = new ArrayList<>();
     /**
      * Collection of the entity's boundaries
      */
@@ -158,11 +163,10 @@ public abstract class Entity extends Renderable implements Tickable {
      */
     public boolean isSectorSpecific;
     /**
-     * Human-readable identifier for the entity
+     * Human-readable identifier for the entity (not unique)
      */
     public String id;
 
-    // the font and color are static because they're always the same
     private static Font nameTagFont = new Font("Arial", Font.PLAIN, 11);
     private static Color nameTagBackgroundColor = new Color(0, 0, 0, 128);
 
@@ -180,7 +184,7 @@ public abstract class Entity extends Renderable implements Tickable {
     private boolean setFontMetrics;
 
     Entity(String id) {
-        this(id, null);
+        this(id, (Sprite) null);
     }
 
     /**
@@ -204,12 +208,20 @@ public abstract class Entity extends Renderable implements Tickable {
         EntityStore.register(this);
     }
 
+    Entity(String id, SpriteSheet sheet) {
+        this(id, sheet.sprites.get(0));
+        sprites = sheet.sprites;
+        sheets.add(sheet);
+    }
+
     /**
      * Renders the entity, using {@link #image}, at ({@link #x()}, {@link #y()})
      */
     public void render(Graphics graphics) {
         graphics.drawImage(image, x(), y(), null);
-        drawDebug(graphics);
+        if (Game.debug) {
+            drawDebug(graphics);
+        }
     }
 
     /**
@@ -296,16 +308,19 @@ public abstract class Entity extends Renderable implements Tickable {
      * @see #deltaX
      * @see #deltaY
      */
+    @Override
     public void setPosition(int x, int y) {
         super.setPosition(x, y);
         deltaX = x;
         deltaY = y;
     }
 
+    @Override
     public void x(int x) {
         x(x, true);
     }
 
+    @Override
     public void y(int y) {
         y(y, true);
     }
@@ -323,7 +338,6 @@ public abstract class Entity extends Renderable implements Tickable {
             deltaY = y;
         }
     }
-
 
     /**
      * Updates the entity's location by {@link #speed}, unless the
@@ -468,16 +482,47 @@ public abstract class Entity extends Renderable implements Tickable {
      */
     protected abstract void setCollisions();
 
+    private void onSpriteChanged() {
+        image = sprite.toBufferedImage();
+        if (this instanceof AnimatedEntity) {
+            ((AnimatedEntity) this).animations.clear();
+            ((AnimatedEntity) this).setAnimations();
+        }
+        boundaries.clear();
+        setBoundaries();
+        collisions.clear();
+        setCollisions();
+    }
+
     /**
      * Sets the current sprite
      *
+     * @param index The index in {@link #sprites}
      * @see #sprite
      */
     public void setSprite(int index) {
-        if (index < sprites.size())
+        if (index < sprites.size()) {
             sprite = sprites.get(index);
-        else
+            onSpriteChanged();
+        } else {
             Debug.warning("Tried to get a sprite for \"" + this + "\" at an valid index, " + index + " (must be less than " + sprites.size() + ")");
+        }
+    }
+
+    /**
+     * Sets {@link #sprites} to {@link SpriteSheet#sprites} from {@link #sheets} at the given index
+     *
+     * @param index The index in {@link #sheets}
+     * @see #sheets
+     * @see #sprites
+     */
+    public void setSpriteSheet(int index) {
+        if (index < sheets.size()) {
+            sprites = sheets.get(index).sprites;
+            setSprite(0);
+        } else {
+            Debug.warning("Tried to get a sprite for \"" + this + "\" at an valid index, " + index + " (must be less than " + sprites.size() + ")");
+        }
     }
 
     /**
