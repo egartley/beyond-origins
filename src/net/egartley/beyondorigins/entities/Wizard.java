@@ -32,6 +32,7 @@ public class Wizard extends AnimatedEntity implements Character {
     private EntityExpression foundHatExpression;
     private DialogueExchange dialogue_meetPlayer;
     private DialogueExchange dialogue_gotHat;
+    private DialogueExchange dialogue_playerGeneric;
 
     public Wizard() {
         super("Wizard", new SpriteSheet(ImageStore.get(ImageStore.WIZARD_DEFAULT), 30, 44, 2, 4));
@@ -42,8 +43,13 @@ public class Wizard extends AnimatedEntity implements Character {
         meetPlayerExpression = new EntityExpression(EntityExpression.ATTENTION, this);
         foundHatExpression = new EntityExpression(EntityExpression.HEART, this);
 
-        dialogue_meetPlayer = new DialogueExchange(new CharacterDialogue(this, "wizard/meet-player-1.def"), new CharacterDialogue(this, "wizard/meet-player-2.def"), new CharacterDialogue(Entities.PLAYER, "player/meet-wizard-1.def"), new CharacterDialogue(this, "wizard/meet-player-3.def"));
-        dialogue_gotHat = new DialogueExchange(new CharacterDialogue(this, "wizard/player-found-hat-1.def"), new CharacterDialogue(this, "wizard/player-found-hat-2.def"));
+        dialogue_meetPlayer = new DialogueExchange(new CharacterDialogue(this, "wizard/meet-player-1.def"),
+                new CharacterDialogue(this, "wizard/meet-player-2.def"),
+                new CharacterDialogue(Entities.PLAYER, "player/meet-wizard-1.def"),
+                new CharacterDialogue(this, "wizard/meet-player-3.def"));
+        dialogue_gotHat = new DialogueExchange(new CharacterDialogue(this, "wizard/player-found-hat-1.def"),
+                new CharacterDialogue(this, "wizard/player-found-hat-2.def"));
+        dialogue_playerGeneric = new DialogueExchange(new CharacterDialogue(this, "wizard/generic", true, 3));
 
         DialogueController.addFinished(new DialogueExchangeFinishedEvent(dialogue_meetPlayer) {
             @Override
@@ -60,6 +66,7 @@ public class Wizard extends AnimatedEntity implements Character {
                 // switch to sprite that is wearing the hat
                 setSpriteSheet(1);
                 wearingHat = true;
+                // update position so that it looks like he doesn't move (hat makes him "taller")
                 y(y() - 12);
             }
         });
@@ -84,6 +91,9 @@ public class Wizard extends AnimatedEntity implements Character {
     }
 
     private void onCollideWithPlayer() {
+
+        // TODO: fix generic dialogue after giving hat
+
         boolean playerHasHat = Game.in().inventory.has(Item.WIZARD_HAT);
         if (!foundHat) {
             if (!playerHasHat) {
@@ -93,7 +103,7 @@ public class Wizard extends AnimatedEntity implements Character {
                 Game.in().dialogue.startExchange(dialogue_gotHat);
             }
         } else {
-            // generic dialogue
+            Game.in().dialogue.startExchange(dialogue_playerGeneric);
         }
     }
 
@@ -112,7 +122,7 @@ public class Wizard extends AnimatedEntity implements Character {
 
     @Override
     protected void setCollisions() {
-        collisions.add(new EntityEntityCollision(defaultBoundary, Entities.PLAYER.boundary) {
+        collisions.add(new EntityEntityCollision(Entities.PLAYER.boundary, defaultBoundary) {
             @Override
             public void onCollide(EntityEntityCollisionEvent event) {
                 onCollideWithPlayer();

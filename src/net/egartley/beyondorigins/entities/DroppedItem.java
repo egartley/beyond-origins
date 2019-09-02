@@ -14,6 +14,9 @@ import net.egartley.gamelib.threads.DelayedEvent;
 public class DroppedItem extends StaticEntity {
 
     private static final double PICKUP_DELAY = 2.25D;
+    private static final double LIFETIME_DELAY = 120.0D;
+
+    private DelayedEvent lifetimeDelay;
 
     public boolean canPickup;
     public boolean over;
@@ -30,21 +33,35 @@ public class DroppedItem extends StaticEntity {
         new DelayedEvent(PICKUP_DELAY) {
             @Override
             public void onFinish() {
+                // 2 and 1/4 seconds
                 canPickup = true;
                 if (pickup()) {
                     collisions.get(0).end();
                 }
             }
         }.start();
+        lifetimeDelay = new DelayedEvent(LIFETIME_DELAY) {
+            @Override
+            public void onFinish() {
+                // 2 minutes
+                destroy();
+            }
+        };
+        lifetimeDelay.start();
 
         this.item = item;
+    }
+
+    private void destroy() {
+        Game.in().map.sector.removeEntity(this);
+        kill();
     }
 
     private boolean pickup() {
         if (!Game.in().inventory.isFull() && canPickup && over) {
             Game.in().inventory.put(item);
-            Game.in().map.sector.removeEntity(this);
-            kill();
+            lifetimeDelay.cancel();
+            destroy();
             return true;
         }
         return false;
@@ -71,7 +88,6 @@ public class DroppedItem extends StaticEntity {
                     end();
                 }
             }
-
             @Override
             public void onCollisionEnd(EntityEntityCollisionEvent event) {
                 over = false;

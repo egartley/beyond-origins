@@ -17,7 +17,6 @@ import net.egartley.gamelib.logic.interaction.BoundaryOffset;
 import net.egartley.gamelib.logic.interaction.BoundaryPadding;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -32,9 +31,9 @@ public class Player extends AnimatedEntity implements Character {
     private boolean isMovementInvalidated;
 
     public EntityBoundary boundary;
-    EntityBoundary headBoundary;
-    EntityBoundary bodyBoundary;
-    EntityBoundary feetBoundary;
+    public EntityBoundary headBoundary;
+    public EntityBoundary bodyBoundary;
+    public EntityBoundary feetBoundary;
 
     public Player() {
         super("Player", new SpriteSheet(ImageStore.get(ImageStore.PLAYER), 30, 44, 2, 4));
@@ -51,42 +50,12 @@ public class Player extends AnimatedEntity implements Character {
         // generate collisions with sector entities that aren't traversable
         for (Entity e : sector.entities) {
             if (!e.isTraversable && e.isSectorSpecific) {
-                EntityEntityCollision baseCollision = new EntityEntityCollision(headBoundary, e.defaultBoundary) {
-                    public void onCollide(EntityEntityCollisionEvent event) {
-                        Util.onCollisionWithNonTraversableEntity(event, Entities.PLAYER);
-                    }
-
-                    public void onCollisionEnd(EntityEntityCollisionEvent event) {
-                        boolean noMovementRestrictions = true;
-                        for (EntityEntityCollision c : Entities.PLAYER.concurrentCollisions) {
-                            if (c.isMovementRestricting) {
-                                noMovementRestrictions = false;
-                                break;
-                            }
-                        }
-                        if (!Entities.PLAYER.isCollided || noMovementRestrictions) {
-                            allowAllMovement();
-                        } else {
-                            Util.annulCollisionEvent(event, Entities.PLAYER);
-                        }
-                    }
-                };
-                baseCollision.isMovementRestricting = true;
-                collisions.add(baseCollision);
-
-                for (EntityEntityCollision collision : Util.getAllBoundaryCollisions(baseCollision, this, e.defaultBoundary)) {
-                    if (collision.boundaries[0] != boundary && collision.boundaries[0] != headBoundary) {
-                        collisions.add(collision);
-                    }
-                }
+                generateMovementRestrictionCollisions(e.defaultBoundary, boundary, headBoundary);
             }
         }
     }
 
     public void removeSectorSpecificCollisions(MapSector sector) {
-        // remove the generated collisions
-
-        // prevents concurrent modification
         ArrayList<EntityEntityCollision> removeCollisions = new ArrayList<>();
 
         for (Entity e : sector.entities) {
@@ -99,10 +68,65 @@ public class Player extends AnimatedEntity implements Character {
             }
         }
 
-        for (EntityEntityCollision c : removeCollisions)
+        for (EntityEntityCollision c : removeCollisions) {
             collisions.remove(c);
+        }
+    }
 
-        removeCollisions.clear();
+    public void generateMovementRestrictionCollisions(EntityBoundary otherBoundary, EntityBoundary... exclusions) {
+        EntityEntityCollision baseCollision = new EntityEntityCollision(headBoundary, otherBoundary) {
+            public void onCollide(EntityEntityCollisionEvent event) {
+                Util.onCollisionWithNonTraversableEntity(event, Entities.PLAYER);
+            }
+
+            public void onCollisionEnd(EntityEntityCollisionEvent event) {
+                boolean noMovementRestrictions = true;
+                for (EntityEntityCollision c : Entities.PLAYER.concurrentCollisions) {
+                    if (c.isMovementRestricting) {
+                        noMovementRestrictions = false;
+                        break;
+                    }
+                }
+                if (!Entities.PLAYER.isCollided || noMovementRestrictions) {
+                    allowAllMovement();
+                } else {
+                    Util.annulCollisionEvent(event, Entities.PLAYER);
+                }
+            }
+        };
+        baseCollision.isMovementRestricting = true;
+        collisions.add(baseCollision);
+
+        for (EntityEntityCollision collision : Util.getAllBoundaryCollisions(baseCollision, this, otherBoundary)) {
+            boolean add = true;
+            for (EntityBoundary exclude : exclusions) {
+                if (collision.boundaries[0] == exclude) {
+                    add = false;
+                    break;
+                }
+            }
+            if (add) {
+                collisions.add(collision);
+            }
+        }
+    }
+
+    public void deactivateBuildingCollisions() {
+        for (EntityEntityCollision c : collisions) {
+            if (c.boundaries[0].parent instanceof Building ||
+                    c.boundaries[1].parent instanceof Building) {
+                c.deactivate();
+            }
+        }
+    }
+
+    public void reactivateBuildingCollisions() {
+        for (EntityEntityCollision c : collisions) {
+            if (c.boundaries[0].parent instanceof Building ||
+                    c.boundaries[1].parent instanceof Building) {
+                c.activate();
+            }
+        }
     }
 
     public void invalidateAllMovement() {
@@ -127,12 +151,14 @@ public class Player extends AnimatedEntity implements Character {
 
     public void enteredBuilding() {
         removeSectorSpecificCollisions(Game.in().map.sector);
+        deactivateBuildingCollisions();
         // invalidateAllMovement();
     }
 
     public void leftBuilding(Building building) {
         generateSectorSpecificCollisions(Game.in().map.sector);
         setPosition(building.playerLeaveX, building.playerLeaveY);
+        reactivateBuildingCollisions();
         // invalidateAllMovement();
     }
 
@@ -196,10 +222,6 @@ public class Player extends AnimatedEntity implements Character {
         }
 
         super.tick();
-    }
-
-    public void render(Graphics graphics) {
-        super.render(graphics);
     }
 
     private void move(boolean up, boolean down, boolean left, boolean right) {

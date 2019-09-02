@@ -1,7 +1,6 @@
 package net.egartley.gamelib.logic.dialogue;
 
 import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.ui.DialoguePanel;
 
 import java.util.ArrayList;
@@ -26,6 +25,7 @@ public class DialogueExchange {
     }
 
     private void setCurrentDialogue(CharacterDialogue currentDialogue) {
+        currentDialogue.onStart();
         this.currentDialogue = currentDialogue;
         allLines = this.currentDialogue.lines;
         if (allLines.length <= DialoguePanel.MAX_LINES) {
@@ -62,7 +62,7 @@ public class DialogueExchange {
         }
 
         if (isCurrentDialogueFinished() && advance) {
-            DialogueController.onFinished(currentDialogue);
+            // chardialogue finished
             nextDialogue();
             Game.in().dialogue.setFontMetrics = false;
             Game.in().dialogue.delay();

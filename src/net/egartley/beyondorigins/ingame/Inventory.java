@@ -72,7 +72,7 @@ public class Inventory implements Tickable {
 
     public InventoryItem take(Item item) {
         for (InventorySlot slot : slots) {
-            if (slot.item.item.equals(item)) {
+            if (slot.item != null && slot.item.item.equals(item)) {
                 return slot.removeItem();
             }
         }

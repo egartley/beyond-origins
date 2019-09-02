@@ -490,6 +490,8 @@ public abstract class Entity extends Renderable implements Tickable {
         }
         boundaries.clear();
         setBoundaries();
+        // end all collisions because if they're not, both boundaries will never have isCollided updated
+        collisions.forEach(EntityEntityCollision::end);
         collisions.clear();
         setCollisions();
     }

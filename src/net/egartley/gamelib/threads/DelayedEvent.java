@@ -1,8 +1,11 @@
 package net.egartley.gamelib.threads;
 
+import net.egartley.beyondorigins.Debug;
+
 public class DelayedEvent implements Runnable {
 
     private boolean isRunning;
+    private boolean naturalStop = true;
 
     /**
      * The amount of time to wait (in seconds)
@@ -17,7 +20,7 @@ public class DelayedEvent implements Runnable {
      */
     public DelayedEvent(double duration) {
         this.duration = duration;
-        thread = new Thread(this, "TimedEvent-" + this.hashCode());
+        thread = new Thread(this, "DelayedEvent-" + this.hashCode());
         ThreadBroker.register(thread);
     }
 
@@ -27,6 +30,22 @@ public class DelayedEvent implements Runnable {
     public void start() {
         isRunning = true;
         thread.start();
+    }
+
+    /**
+     * Cancel the delayed event, and kill its thread. {@link #onFinish()} is not called
+     */
+    public void cancel() {
+        naturalStop = false;
+        thread.interrupt();
+    }
+
+    /**
+     * Call {@link #onFinish()} now ("fast forward" through the delay)
+     */
+    public void fastForward() {
+        naturalStop = true;
+        thread.interrupt();
     }
 
     /**
@@ -42,9 +61,11 @@ public class DelayedEvent implements Runnable {
             try {
                 Thread.sleep((long) (duration * 1000.0D));
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Debug.warning("Delayed event was killed");
             }
-            onFinish();
+            if (naturalStop) {
+                onFinish();
+            }
         }
         isRunning = false;
         ThreadBroker.deregister(thread);
