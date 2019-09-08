@@ -87,6 +87,10 @@ public class Debug {
         out("ERROR: " + object);
     }
 
+    public static void error(Exception e) {
+        error(e.getMessage());
+    }
+
     private static void drawLine(String s, Graphics graphics) {
         if (!setFontMetrics) {
             fontMetrics = graphics.getFontMetrics();

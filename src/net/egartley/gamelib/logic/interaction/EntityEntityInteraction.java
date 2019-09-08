@@ -1,35 +1,67 @@
 package net.egartley.gamelib.logic.interaction;
 
+import net.egartley.beyondorigins.Debug;
+import net.egartley.beyondorigins.controllers.KeyboardController;
 import net.egartley.gamelib.abstracts.Entity;
+import net.egartley.gamelib.input.KeyTyped;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
+import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 
-/**
- * For now, just a collision between two entities
- */
+import java.awt.event.KeyEvent;
+
 public class EntityEntityInteraction {
 
-    private boolean didDoInteraction;
-
     public Entity[] entities;
+
+    private static int defaultKeyCode = KeyEvent.VK_ENTER;
+
+    private boolean isActive;
+    private boolean didInteract;
+    private KeyTyped keyTyped;
     private EntityEntityCollision collision;
 
     public EntityEntityInteraction(Entity e1, Entity e2) {
-        entities = new Entity[]{e1, e2};
-        collision = new EntityEntityCollision(e1.defaultBoundary, e2.defaultBoundary);
+        this(e1.defaultBoundary, e2.defaultBoundary);
+    }
+
+    public EntityEntityInteraction(EntityBoundary b1, EntityBoundary b2) {
+        Debug.out(b1.parent + ", " + b2.parent);
+        entities = new Entity[]{b1.parent, b2.parent};
+        collision = new EntityEntityCollision(b1, b2) {
+            @Override
+            public void end(EntityEntityCollisionEvent event) {
+                didInteract = false;
+            }
+        };
+        keyTyped = new KeyTyped(defaultKeyCode) {
+            @Override
+            public void onType() {
+                if (collision.isCollided && !didInteract) {
+                    interact();
+                    didInteract = true;
+                }
+            }
+        };
     }
 
     public void tick() {
-        collision.tick();
-        if (collision.isCollided && !didDoInteraction) {
-            onInteraction();
-            collision.end();
-            didDoInteraction = true;
-        } else if (!collision.isCollided) {
-            didDoInteraction = false;
+        if (!isActive) {
+            return;
         }
+        collision.tick();
     }
 
-    public void onInteraction() {
+    public void activate() {
+        isActive = true;
+        KeyboardController.addKeyTyped(keyTyped);
+    }
+
+    public void deactivate() {
+        isActive = false;
+        KeyboardController.removeKeyTyped(keyTyped);
+    }
+
+    public void interact() {
 
     }
 

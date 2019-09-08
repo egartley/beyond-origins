@@ -3,7 +3,6 @@ package net.egartley.gamelib.threads;
 import net.egartley.beyondorigins.Debug;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ThreadBroker {
 
@@ -25,12 +24,6 @@ public class ThreadBroker {
             toKill.join();
         } catch (InterruptedException e) {
             Debug.error(e);
-        }
-    }
-
-    public static void killAll() {
-        for (Object t : Arrays.copyOf(threads.toArray(), threads.size())) {
-            kill((Thread) t);
         }
     }
 

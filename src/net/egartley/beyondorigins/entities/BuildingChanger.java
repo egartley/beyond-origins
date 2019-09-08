@@ -42,4 +42,9 @@ public class BuildingChanger extends StaticEntity {
     protected void setCollisions() {
     }
 
+    @Override
+    protected void setInteractions() {
+
+    }
+
 }

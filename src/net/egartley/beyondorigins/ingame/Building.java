@@ -96,13 +96,18 @@ public class Building extends StaticEntity {
         Building me = this;
         playerCollision = new EntityEntityCollision(entryBoundary, Entities.PLAYER.boundary) {
             @Override
-            public void onCollide(EntityEntityCollisionEvent event) {
+            public void start(EntityEntityCollisionEvent event) {
                 Game.in().setBuilding(me);
                 Game.in().setSubState(Game.in().subStates.get(0));
                 end();
             }
         };
         collisions.add(playerCollision);
+    }
+
+    @Override
+    protected void setInteractions() {
+
     }
 
 }

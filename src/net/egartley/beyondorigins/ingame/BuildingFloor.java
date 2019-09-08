@@ -57,7 +57,7 @@ public class BuildingFloor extends Renderable implements Tickable {
         BuildingFloor me = this;
         EntityEntityCollision collision = new EntityEntityCollision(Entities.PLAYER.boundary, changer.defaultBoundary) {
             @Override
-            public void onCollide(EntityEntityCollisionEvent event) {
+            public void start(EntityEntityCollisionEvent event) {
                 end();
                 switch (changer.action) {
                     case BuildingChanger.UPSTAIRS:

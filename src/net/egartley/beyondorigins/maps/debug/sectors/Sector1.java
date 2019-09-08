@@ -64,7 +64,7 @@ public class Sector1 extends MapSector {
             entities.add(new DefaultTree(s, 36, 200));
             DefaultTree tree = new DefaultTree(s, 100, 200);
             tree.collisions.add(new EntityEntityCollision(Entities.PLAYER.boundary, tree.defaultBoundary) {
-                public void onCollide(EntityEntityCollisionEvent e) {
+                public void start(EntityEntityCollisionEvent e) {
                     Inventory inventory = Game.in().inventory;
                     if (!inventory.has(Item.WIZARD_HAT) && Entities.WIZARD.metPlayer && !Entities.WIZARD.foundHat) {
                         inventory.put(Item.WIZARD_HAT);

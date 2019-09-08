@@ -75,11 +75,11 @@ public class Player extends AnimatedEntity implements Character {
 
     public void generateMovementRestrictionCollisions(EntityBoundary otherBoundary, EntityBoundary... exclusions) {
         EntityEntityCollision baseCollision = new EntityEntityCollision(headBoundary, otherBoundary) {
-            public void onCollide(EntityEntityCollisionEvent event) {
+            public void start(EntityEntityCollisionEvent event) {
                 Util.onCollisionWithNonTraversableEntity(event, Entities.PLAYER);
             }
 
-            public void onCollisionEnd(EntityEntityCollisionEvent event) {
+            public void end(EntityEntityCollisionEvent event) {
                 boolean noMovementRestrictions = true;
                 for (EntityEntityCollision c : Entities.PLAYER.concurrentCollisions) {
                     if (c.isMovementRestricting) {
@@ -189,6 +189,11 @@ public class Player extends AnimatedEntity implements Character {
 
     @Override
     public void setCollisions() {
+
+    }
+
+    @Override
+    public void setInteractions() {
 
     }
 

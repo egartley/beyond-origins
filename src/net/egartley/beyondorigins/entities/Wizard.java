@@ -1,5 +1,6 @@
 package net.egartley.beyondorigins.entities;
 
+import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.data.ImageStore;
@@ -9,13 +10,12 @@ import net.egartley.gamelib.graphics.Animation;
 import net.egartley.gamelib.graphics.EntityExpression;
 import net.egartley.gamelib.graphics.SpriteSheet;
 import net.egartley.gamelib.interfaces.Character;
-import net.egartley.gamelib.logic.collision.EntityEntityCollision;
 import net.egartley.gamelib.logic.dialogue.CharacterDialogue;
 import net.egartley.gamelib.logic.dialogue.DialogueExchange;
 import net.egartley.gamelib.logic.events.DialogueExchangeFinishedEvent;
-import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 import net.egartley.gamelib.logic.interaction.BoundaryPadding;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
+import net.egartley.gamelib.logic.interaction.EntityEntityInteraction;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -90,19 +90,19 @@ public class Wizard extends AnimatedEntity implements Character {
         super.render(graphics);
     }
 
-    private void onCollideWithPlayer() {
-
-        // TODO: fix generic dialogue after giving hat
-
+    private void onPlayerInteraction() {
         boolean playerHasHat = Game.in().inventory.has(Item.WIZARD_HAT);
         if (!foundHat) {
             if (!playerHasHat) {
+                Debug.out("Meet player exchange starting");
                 Game.in().dialogue.startExchange(dialogue_meetPlayer);
             } else {
                 foundHat = true;
+                Debug.out("Got hat exchange starting");
                 Game.in().dialogue.startExchange(dialogue_gotHat);
             }
-        } else {
+        } else if (wearingHat) {
+            Debug.out("Generic exchange starting");
             Game.in().dialogue.startExchange(dialogue_playerGeneric);
         }
     }
@@ -122,12 +122,18 @@ public class Wizard extends AnimatedEntity implements Character {
 
     @Override
     protected void setCollisions() {
-        collisions.add(new EntityEntityCollision(Entities.PLAYER.boundary, defaultBoundary) {
+
+    }
+
+    @Override
+    public void setInteractions() {
+        interactions.add(new EntityEntityInteraction(defaultBoundary, Entities.PLAYER.boundary) {
             @Override
-            public void onCollide(EntityEntityCollisionEvent event) {
-                onCollideWithPlayer();
+            public void interact() {
+                onPlayerInteraction();
             }
         });
+        interactions.get(0).activate();
     }
 
     @Override
@@ -139,4 +145,5 @@ public class Wizard extends AnimatedEntity implements Character {
     public BufferedImage getCharacterImage() {
         return image;
     }
+
 }

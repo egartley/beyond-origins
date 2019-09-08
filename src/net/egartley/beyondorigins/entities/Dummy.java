@@ -19,6 +19,7 @@ import net.egartley.gamelib.logic.events.DialogueExchangeFinishedEvent;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 import net.egartley.gamelib.logic.interaction.BoundaryPadding;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
+import net.egartley.gamelib.logic.interaction.EntityEntityInteraction;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -62,11 +63,11 @@ public class Dummy extends AnimatedEntity implements Character {
         for (Entity e : sector.entities) {
             if (!e.isTraversable && e.isSectorSpecific) {
                 EntityEntityCollision baseCollision = new EntityEntityCollision(boundaries.get(0), e.defaultBoundary) {
-                    public void onCollide(EntityEntityCollisionEvent event) {
+                    public void start(EntityEntityCollisionEvent event) {
                         Util.onCollisionWithNonTraversableEntity(event, Entities.DUMMY);
                     }
 
-                    public void onCollisionEnd(EntityEntityCollisionEvent event) {
+                    public void end(EntityEntityCollisionEvent event) {
                         if (!Entities.DUMMY.isCollided) {
                             allowAllMovement();
                         } else {
@@ -162,17 +163,20 @@ public class Dummy extends AnimatedEntity implements Character {
 
     @Override
     public void setCollisions() {
-        collisions.add(new EntityEntityCollision(defaultBoundary, Entities.PLAYER.defaultBoundary) {
-            public void onCollide(EntityEntityCollisionEvent event) {
+
+    }
+
+    @Override
+    public void setInteractions() {
+        interactions.add(new EntityEntityInteraction(this, Entities.PLAYER) {
+            @Override
+            public void interact() {
                 Game.in().dialogue.startExchange(dialogue_playerCollision);
                 isTalkingToPlayer = true;
                 Game.in().inventory.put(Item.CURRENT_YEAR, 99);
             }
-
-            public void onCollisionEnd(EntityEntityCollisionEvent event) {
-
-            }
         });
+        interactions.get(0).activate();
     }
 
     @Override

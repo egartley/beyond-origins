@@ -34,4 +34,9 @@ public class DefaultTree extends StaticEntity {
 
     }
 
+    @Override
+    protected void setInteractions() {
+
+    }
+
 }

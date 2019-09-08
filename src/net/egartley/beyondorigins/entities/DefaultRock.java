@@ -35,4 +35,9 @@ public class DefaultRock extends StaticEntity {
 
     }
 
+    @Override
+    protected void setInteractions() {
+
+    }
+
 }

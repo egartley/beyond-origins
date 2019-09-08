@@ -6,11 +6,11 @@ import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.data.EntityStore;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.graphics.SpriteSheet;
-import net.egartley.gamelib.interfaces.Interactable;
 import net.egartley.gamelib.interfaces.Tickable;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
+import net.egartley.gamelib.logic.interaction.EntityEntityInteraction;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -45,6 +45,10 @@ public abstract class Entity extends Renderable implements Tickable {
      * Collection of the entity's collisions
      */
     public ArrayList<EntityEntityCollision> collisions = new ArrayList<>();
+    /**
+     * Collection of the entity's interactions
+     */
+    public ArrayList<EntityEntityInteraction> interactions = new ArrayList<>();
     /**
      * Collection of the entity's concurrent collisions
      */
@@ -112,6 +116,10 @@ public abstract class Entity extends Renderable implements Tickable {
      * Whether or not the entity is currently collided with another entity
      */
     public boolean isCollided;
+    /**
+     * Whether or not the entity is "allowed" to collide with others
+     */
+    public boolean canCollide = true;
     /**
      * Whether or not the entity is currently moving upwards
      */
@@ -202,9 +210,7 @@ public abstract class Entity extends Renderable implements Tickable {
         speed = 1.0;
         setBoundaries();
         setCollisions();
-        if (this instanceof Interactable) {
-            ((Interactable) this).setInteractions();
-        }
+        setInteractions();
         EntityStore.register(this);
     }
 
@@ -298,6 +304,7 @@ public abstract class Entity extends Renderable implements Tickable {
     public void tick() {
         boundaries.forEach(EntityBoundary::tick);
         collisions.forEach(EntityEntityCollision::tick);
+        interactions.forEach(EntityEntityInteraction::tick);
     }
 
     /**
@@ -482,6 +489,13 @@ public abstract class Entity extends Renderable implements Tickable {
      */
     protected abstract void setCollisions();
 
+    /**
+     * Sets the entity's interactions
+     *
+     * @see #interactions
+     */
+    protected abstract void setInteractions();
+
     private void onSpriteChanged() {
         image = sprite.toBufferedImage();
         if (this instanceof AnimatedEntity) {
@@ -494,6 +508,8 @@ public abstract class Entity extends Renderable implements Tickable {
         collisions.forEach(EntityEntityCollision::end);
         collisions.clear();
         setCollisions();
+        interactions.clear();
+        setInteractions();
     }
 
     /**

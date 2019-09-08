@@ -130,7 +130,7 @@ public class DialoguePanel extends UIElement {
         graphics.drawImage(image, x(), y(), null);
         // render character image and name
         BufferedImage characterImage = exchange.currentDialogue.character.getCharacterImage();
-        graphics.drawImage(characterImage, 272 - characterImage.getWidth() / 2, 414, null);
+        graphics.drawImage(characterImage, 272 - characterImage.getWidth() / 2, 414 - (characterImage.getHeight() - 44), null);
         graphics.setColor(Color.WHITE);
         graphics.setFont(characterNameFont);
         graphics.drawString(exchange.currentDialogue.character.getName(), 272 - characterNameStringWidth / 2, 476);

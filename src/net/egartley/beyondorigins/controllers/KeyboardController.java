@@ -18,9 +18,7 @@ public class KeyboardController {
     }
 
     public static void addKeyTyped(KeyTyped kt) {
-        if (!typeds.contains(kt)) {
-            typeds.add(kt);
-        }
+        typeds.add(kt);
     }
 
     public static void removeKeyTyped(KeyTyped kt) {

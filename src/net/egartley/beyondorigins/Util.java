@@ -126,12 +126,12 @@ public class Util {
         ArrayList<EntityEntityCollision> collisions = new ArrayList<>();
         for (EntityBoundary boundary : entity.boundaries) {
             EntityEntityCollision c = new EntityEntityCollision(boundary, baseBoundary) {
-                public void onCollide(EntityEntityCollisionEvent event) {
-                    baseEvent.onCollide(event);
+                public void start(EntityEntityCollisionEvent event) {
+                    baseEvent.start(event);
                 }
 
-                public void onCollisionEnd(EntityEntityCollisionEvent event) {
-                    baseEvent.onCollisionEnd(event);
+                public void end(EntityEntityCollisionEvent event) {
+                    baseEvent.end(event);
                 }
             };
             c.isMovementRestricting = baseEvent.isMovementRestricting;

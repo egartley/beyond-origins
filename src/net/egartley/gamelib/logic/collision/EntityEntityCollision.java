@@ -66,11 +66,11 @@ public class EntityEntityCollision {
     /**
      * Updates coordinates, then checks for collision between the entities
      *
-     * @see #onCollide(EntityEntityCollisionEvent)
-     * @see #onCollisionEnd(EntityEntityCollisionEvent)
+     * @see #start(EntityEntityCollisionEvent)
+     * @see #end(EntityEntityCollisionEvent)
      */
     public void tick() {
-        if (!isActive) {
+        if (!isActive || !entities[0].canCollide || !entities[1].canCollide) {
             return;
         }
 
@@ -83,13 +83,13 @@ public class EntityEntityCollision {
 
         if (isCollided && !firedEvent) {
             lastEvent = new EntityEntityCollisionEvent(this);
-            onCollide_internal();
-            onCollide(lastEvent);
+            onCollide();
+            start(lastEvent);
             firedEvent = true;
         }
         if (!isCollided && firedEvent) {
-            onCollisionEnd_internal();
-            onCollisionEnd(lastEvent);
+            onCollisionEnd();
+            end(lastEvent);
             firedEvent = false;
         }
         if (previouslyCollided != isCollided) {
@@ -104,7 +104,7 @@ public class EntityEntityCollision {
      *
      * @param event The collision's event
      */
-    public void onCollide(EntityEntityCollisionEvent event) {
+    public void start(EntityEntityCollisionEvent event) {
 
     }
 
@@ -113,14 +113,14 @@ public class EntityEntityCollision {
      *
      * @param event The collision's event
      */
-    public void onCollisionEnd(EntityEntityCollisionEvent event) {
+    public void end(EntityEntityCollisionEvent event) {
 
     }
 
     public void end() {
         isCollided = false;
-        onCollisionEnd_internal();
-        onCollisionEnd(lastEvent);
+        onCollisionEnd();
+        end(lastEvent);
         firedEvent = false;
     }
 
@@ -161,9 +161,9 @@ public class EntityEntityCollision {
     }
 
     /**
-     * Called right before {@link #onCollide(EntityEntityCollisionEvent)}
+     * Called right before {@link #start(EntityEntityCollisionEvent)}
      */
-    private void onCollide_internal() {
+    private void onCollide() {
         for (Entity e : entities) {
             // both entities are collided
             e.lastCollision = this;
@@ -177,9 +177,9 @@ public class EntityEntityCollision {
     }
 
     /**
-     * Called right before {@link #onCollisionEnd(EntityEntityCollisionEvent)}
+     * Called right before {@link #end(EntityEntityCollisionEvent)}
      */
-    private void onCollisionEnd_internal() {
+    private void onCollisionEnd() {
         // determine boundary.isCollided
         for (EntityBoundary boundary : boundaries) {
             // for both boundaries

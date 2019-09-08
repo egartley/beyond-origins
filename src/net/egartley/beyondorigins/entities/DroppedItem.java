@@ -82,16 +82,21 @@ public class DroppedItem extends StaticEntity {
     public void setCollisions() {
         collisions.add(new EntityEntityCollision(defaultBoundary, Entities.PLAYER.boundary) {
             @Override
-            public void onCollide(EntityEntityCollisionEvent event) {
+            public void start(EntityEntityCollisionEvent event) {
                 over = true;
                 if (pickup()) {
                     end();
                 }
             }
             @Override
-            public void onCollisionEnd(EntityEntityCollisionEvent event) {
+            public void end(EntityEntityCollisionEvent event) {
                 over = false;
             }
         });
+    }
+
+    @Override
+    protected void setInteractions() {
+
     }
 }
