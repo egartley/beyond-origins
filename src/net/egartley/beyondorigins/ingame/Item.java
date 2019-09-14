@@ -6,8 +6,8 @@ import java.awt.image.BufferedImage;
 
 public enum Item {
 
-    WOJAK("wojak", "Feels Bad, Man"),
-    HONKLER("honkler", "Honkler"),
+    WOJAK("wojak", "Feels bad, man"),
+    HONKLER("honkler", "Honkler"), // clown world
     BOOMER("boomer", "30 year-old Boomer"),
     ZOOMER("zoomer", "Fortnite Zoomer"),
     BIG_CHUNGUS("big-chungus", "Big Chungus"),
@@ -15,11 +15,9 @@ public enum Item {
     BITCONNECT("bitconnect", "BITCONNNNNNEEECCCTTT"),
     CURRENT_YEAR("current-year", "It's current year!"),
     AINT_CLICKIN_THAT("aint-clickin-that", "Ain't clickin' that"),
-    HMM("hmm", "HMMMMM"),
+    HMM("hmm", "Thinking face"),
     TUCKER("tucker", "Tucker Carlson"),
-    WIZARD_HAT("wizard-hat", "Wizard's Hat");
-
-    public boolean isRegistered;
+    WIZARD_HAT("wizard-hat", "Wizard Hat");
 
     public String id;
     public String name;

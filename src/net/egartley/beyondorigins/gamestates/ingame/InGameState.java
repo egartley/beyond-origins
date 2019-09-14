@@ -58,7 +58,9 @@ public class InGameState extends GameState {
         backToMainMenu = new KeyTyped(KeyEvent.VK_ESCAPE) {
             @Override
             public void onType() {
-                Game.setState(Game.getState(GameState.MAIN_MENU));
+                if (!isInventoryVisible && !isDialogueVisible) {
+                    Game.setState(Game.getState(GameState.MAIN_MENU));
+                }
             }
         };
     }

@@ -1,6 +1,5 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.data.ImageStore;
@@ -95,15 +94,12 @@ public class Wizard extends AnimatedEntity implements Character {
         boolean playerHasHat = Game.in().inventory.has(Item.WIZARD_HAT);
         if (!foundHat) {
             if (!playerHasHat) {
-                Debug.out("Meet player exchange starting");
                 Game.in().dialogue.startExchange(dialogue_meetPlayer);
             } else {
                 foundHat = true;
-                Debug.out("Got hat exchange starting");
                 Game.in().dialogue.startExchange(dialogue_gotHat);
             }
         } else if (wearingHat) {
-            Debug.out("Generic exchange starting");
             Game.in().dialogue.startExchange(dialogue_playerGeneric);
         }
     }

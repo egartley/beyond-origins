@@ -25,7 +25,7 @@ public class Entities {
             case TEMPLATE_ROCK:
                 return new SpriteSheet(ImageStore.get(ImageStore.ROCK_DEFAULT), 1, 1).getSprite(0);
             default:
-                return null;
+                return new Sprite(ImageStore.get("resources/images/unknown.png"));
         }
     }
 

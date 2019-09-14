@@ -31,7 +31,7 @@ public class NotificationBanner extends UIElement {
         super(ImageStore.get(ImageStore.uiPath + "notification-banner.png"));
         icon = ImageStore.get(ImageStore.path + iconFile);
         startY = -8 - image.getHeight();
-        lines = Util.toLines(text, MAX_LINE_LENGTH);
+        lines = Util.toLines(text, 260, 31);
         setPosition(Calculate.getCenteredX(width), startY);
     }
 

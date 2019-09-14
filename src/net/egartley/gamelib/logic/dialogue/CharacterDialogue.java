@@ -46,7 +46,7 @@ public class CharacterDialogue {
 
     private void setLines(String path) {
         try {
-            lines = Util.toLines(Files.readString(FileSystems.getDefault().getPath("resources", "dialogue", path)), MAX_LINE_LENGTH);
+            lines = Util.toLines(Files.readString(FileSystems.getDefault().getPath("resources", "dialogue", path)), 380);
         } catch (IOException e) {
             Debug.error(e);
         }

@@ -69,6 +69,21 @@ public class Util {
         return rotateImage(image, Math.PI / 2);
     }
 
+    /**
+     * Stitches two images together, side by side
+     */
+    public static BufferedImage stitchImage(BufferedImage base, BufferedImage toStitch) {
+        // Credit: http://www.java2s.com/Tutorials/Java/Graphics_How_to/Image/Copy_Join_two_buffered_image_into_one_image_side_by_side.htm
+        int width = base.getWidth() + toStitch.getWidth();
+        int height = Math.max(base.getHeight(), toStitch.getHeight());
+        BufferedImage stitched = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D graphics = stitched.createGraphics();
+        graphics.drawImage(base, null, 0, 0);
+        graphics.drawImage(toStitch, null, base.getWidth(), 0);
+        graphics.dispose();
+        return stitched;
+    }
+
     public static Animation getTemplateAnimation(byte imageStore, int width, int height, int rows, int frames, int frameDelay) {
         return getTemplateAnimation(imageStore, width, height, rows, frames, frameDelay, 0);
     }
@@ -216,13 +231,16 @@ public class Util {
     /**
      * Returns an array containing the given dialogue split into seperate lines, wrapped at words
      */
-    public static String[] toLines(String dialogue, int maxLineLength) {
+    public static String[] toLines(String fullText, int maxLineLength) {
+        return Util.toLines(fullText, maxLineLength, 49);
+    }
+
+    public static String[] toLines(String fullText, int maxLineLength, int maxCharacterCount) {
         ArrayList<String> splits = new ArrayList<>();
         FontMetrics fm = Game.graphics.getFontMetrics(DialoguePanel.lineFont);
-        maxLineLength = 380;
-        if (fm.stringWidth(dialogue) > maxLineLength) {
-            while (fm.stringWidth(dialogue) > maxLineLength) {
-                String l = dialogue.substring(0, 49);
+        if (fm.stringWidth(fullText) > maxLineLength) {
+            while (fm.stringWidth(fullText) > maxLineLength) {
+                String l = fullText.substring(0, maxCharacterCount);
                 if (l.startsWith(" ")) {
                     // starts with space, probably from a previous split from within a word
                     l = l.substring(1);
@@ -230,24 +248,24 @@ public class Util {
                     // ends with space at max length
                     l = l.substring(0, l.length() - 1);
                 }
-                if (!dialogue.substring(dialogue.indexOf(l) + l.length(), dialogue.indexOf(l) + l.length() + 1).equals(" ")) {
+                if (!fullText.substring(fullText.indexOf(l) + l.length(), fullText.indexOf(l) + l.length() + 1).equals(" ")) {
                     // max length within a word, so split from preceding
                     l = l.substring(0, l.lastIndexOf(" "));
                 }
                 splits.add(l);
-                dialogue = dialogue.substring(l.length() + 1);
-                // Debug.out(dialogue + ", " + dialogue.length());
+                fullText = fullText.substring(l.length() + 1);
+                // Debug.out(fullText + ", " + fullText.length());
             }
-            if (!dialogue.isEmpty() && !dialogue.equals(" ")) {
-                // add any remaining dialogue that isn't just a space
-                if (dialogue.startsWith(" ")) {
+            if (!fullText.isEmpty() && !fullText.equals(" ")) {
+                // add any remaining fullText that isn't just a space
+                if (fullText.startsWith(" ")) {
                     // check for extra space at start
-                    dialogue = dialogue.substring(1);
+                    fullText = fullText.substring(1);
                 }
-                splits.add(dialogue);
+                splits.add(fullText);
             }
         } else {
-            return new String[]{dialogue};
+            return new String[]{fullText};
         }
 
         return splits.toArray(new String[]{});

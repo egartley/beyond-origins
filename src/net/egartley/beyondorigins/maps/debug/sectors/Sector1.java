@@ -4,6 +4,7 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.entities.DefaultRock;
 import net.egartley.beyondorigins.entities.DefaultTree;
 import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.entities.WoodenFence;
 import net.egartley.beyondorigins.ingame.Inventory;
 import net.egartley.beyondorigins.ingame.Item;
 import net.egartley.beyondorigins.ingame.buildings.House1;
@@ -83,6 +84,9 @@ public class Sector1 extends MapSector {
             for (byte i = 0; i < 14; i++) {
                 entities.add(new DefaultRock(s, (s.width * 2) * off++ + 48, 400));
             }
+            WoodenFence fence = new WoodenFence(8, true);
+            fence.setPosition(534, 268);
+            entities.add(fence);
 
             // buildings
             house = new House1(280, 200, 334, 313);

@@ -168,7 +168,7 @@ public class Dummy extends AnimatedEntity implements Character {
 
     @Override
     public void setInteractions() {
-        interactions.add(new EntityEntityInteraction(this, Entities.PLAYER) {
+        interactions.add(new EntityEntityInteraction(defaultBoundary, Entities.PLAYER.chatBoundary) {
             @Override
             public void interact() {
                 Game.in().dialogue.startExchange(dialogue_playerCollision);

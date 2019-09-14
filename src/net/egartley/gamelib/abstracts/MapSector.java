@@ -329,7 +329,7 @@ public abstract class MapSector implements Tickable {
      * @see #parent
      */
     public String toString() {
-        return parent.toString() + ", sector " + (parent.sectors.indexOf(this) + 1);
+        return parent.toString() + ", Sector " + (parent.sectors.indexOf(this) + 1);
     }
 
 }

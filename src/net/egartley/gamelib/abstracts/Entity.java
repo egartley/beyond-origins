@@ -203,12 +203,10 @@ public abstract class Entity extends Renderable implements Tickable {
         generateUUID();
         this.id = id;
         if (sprite != null) {
-            this.sprite = sprite;
-            sprites.add(sprite);
-            image = sprite.toBufferedImage();
+            setSprite(sprite);
+            setBoundaries();
         }
         speed = 1.0;
-        setBoundaries();
         setCollisions();
         setInteractions();
         EntityStore.register(this);
@@ -519,13 +517,26 @@ public abstract class Entity extends Renderable implements Tickable {
      * @param index The index in {@link #sprites}
      * @see #sprite
      */
-    public void setSprite(int index) {
+    public void setSprite(int index, boolean update) {
         if (index < sprites.size()) {
             sprite = sprites.get(index);
-            onSpriteChanged();
+            if (update) {
+                onSpriteChanged();
+            }
         } else {
             Debug.warning("Tried to get a sprite for \"" + this + "\" at an valid index, " + index + " (must be less than " + sprites.size() + ")");
         }
+    }
+
+    public void setSprite(Sprite sprite) {
+        if (sprite == null) {
+            Debug.warning("Tried to set the sprite for " + this + " to null");
+            return;
+        }
+        this.sprite = sprite;
+        sprites.clear();
+        sprites.add(sprite);
+        image = sprite.toBufferedImage();
     }
 
     /**
@@ -538,7 +549,7 @@ public abstract class Entity extends Renderable implements Tickable {
     public void setSpriteSheet(int index) {
         if (index < sheets.size()) {
             sprites = sheets.get(index).sprites;
-            setSprite(0);
+            setSprite(0, true);
         } else {
             Debug.warning("Tried to get a sprite for \"" + this + "\" at an valid index, " + index + " (must be less than " + sprites.size() + ")");
         }

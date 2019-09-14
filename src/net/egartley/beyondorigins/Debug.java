@@ -13,7 +13,6 @@ public class Debug {
      * Font to use while rendering debug lines
      */
     private static Font font = new Font("Consolas", Font.PLAIN, 12);
-    private static Runtime runtime;
     /**
      * Used for calculating width of strings so that each line's background will be sized correctly
      */
@@ -26,7 +25,6 @@ public class Debug {
      * Whether or not font metrics have been set
      */
     private static boolean setFontMetrics;
-    private static boolean gotRuntime;
     /**
      * Initial line x-coordinate
      */
@@ -111,17 +109,12 @@ public class Debug {
      * Render debug information
      */
     public static void render(Graphics graphics) {
-        if (!gotRuntime) {
-            runtime = Runtime.getRuntime();
-            gotRuntime = true;
-        }
         row = 0;
         graphics.setFont(font);
-        drawLine("Position: " + Game.in().map.sector + " (" + Entities.PLAYER.x() + ", " + Entities.PLAYER.y() + ")", graphics);
+        drawLine("Location: " + Game.in().map.sector + " (" + Entities.PLAYER.x() + ", " + Entities.PLAYER.y() + ")", graphics);
         drawLine("Mouse: " + Mouse.x + ", " + Mouse.y, graphics);
-        drawLine("Memory: " + (runtime.totalMemory() - runtime.freeMemory()), graphics);
-        drawLine("EntityStore: " + EntityStore.amount, graphics);
-        drawLine("Threads: " + ThreadBroker.threads.size(), graphics);
+        drawLine("Entities: " + EntityStore.amount, graphics);
+        drawLine("Threads: " + (ThreadBroker.threads.size() + 1), graphics);
         if (Entities.PLAYER.lastCollision != null) {
             drawLine("Last collision: " + Entities.PLAYER.lastCollision, graphics);
         }
