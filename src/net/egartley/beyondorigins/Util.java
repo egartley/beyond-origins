@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins;
 
 import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.ui.DialoguePanel;
 import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.graphics.Animation;
 import net.egartley.gamelib.graphics.SpriteSheet;
@@ -157,7 +158,7 @@ public class Util {
     }
 
     /**
-     * Annuls, or "cancels," the movement restrictions specified by entity-entity collision event on the entity
+     * Annuls, or "cancels," the movement restrictions specified by the collision event
      */
     public static void annulCollisionEvent(EntityEntityCollisionEvent event, Entity e) {
         // check for other movement restrictions
@@ -196,19 +197,15 @@ public class Util {
         e.lastCollisionEvent = event;
         switch (event.collidedSide) {
             case EntityEntityCollisionEvent.RIGHT_SIDE:
-                // collided on the right, so disable leftwards movement
                 e.isAllowedToMoveLeftwards = false;
                 break;
             case EntityEntityCollisionEvent.LEFT_SIDE:
-                // collided on the left, so disable rightwards movement
                 e.isAllowedToMoveRightwards = false;
                 break;
             case EntityEntityCollisionEvent.TOP_SIDE:
-                // collided at the top, so disable downwards movement
                 e.isAllowedToMoveDownwards = false;
                 break;
             case EntityEntityCollisionEvent.BOTTOM_SIDE:
-                // collided at the bottom, so disable upwards movement
                 e.isAllowedToMoveUpwards = false;
                 break;
             default:
@@ -217,10 +214,50 @@ public class Util {
     }
 
     /**
+     * Returns an array containing the given dialogue split into seperate lines, wrapped at words
+     */
+    public static String[] toLines(String dialogue, int maxLineLength) {
+        ArrayList<String> splits = new ArrayList<>();
+        FontMetrics fm = Game.graphics.getFontMetrics(DialoguePanel.lineFont);
+        maxLineLength = 380;
+        if (fm.stringWidth(dialogue) > maxLineLength) {
+            while (fm.stringWidth(dialogue) > maxLineLength) {
+                String l = dialogue.substring(0, 49);
+                if (l.startsWith(" ")) {
+                    // starts with space, probably from a previous split from within a word
+                    l = l.substring(1);
+                } else if (l.endsWith(" ")) {
+                    // ends with space at max length
+                    l = l.substring(0, l.length() - 1);
+                }
+                if (!dialogue.substring(dialogue.indexOf(l) + l.length(), dialogue.indexOf(l) + l.length() + 1).equals(" ")) {
+                    // max length within a word, so split from preceding
+                    l = l.substring(0, l.lastIndexOf(" "));
+                }
+                splits.add(l);
+                dialogue = dialogue.substring(l.length() + 1);
+                // Debug.out(dialogue + ", " + dialogue.length());
+            }
+            if (!dialogue.isEmpty() && !dialogue.equals(" ")) {
+                // add any remaining dialogue that isn't just a space
+                if (dialogue.startsWith(" ")) {
+                    // check for extra space at start
+                    dialogue = dialogue.substring(1);
+                }
+                splits.add(dialogue);
+            }
+        } else {
+            return new String[]{dialogue};
+        }
+
+        return splits.toArray(new String[]{});
+    }
+
+    /**
      * Returns whether or not the specified point is "within bounds," or overlapping, the specified area
      */
-    public static boolean isWithinBounds(int pointX, int pointY, int x, int y, int width, int height) {
-        return pointX >= x && pointX <= x + width && pointY >= y && pointY <= y + height;
+    public static boolean isWithinBounds(int pointX, int pointY, int boundsX, int boundsY, int width, int height) {
+        return pointX >= boundsX && pointX <= boundsX + width && pointY >= boundsY && pointY <= boundsY + height;
     }
 
 }

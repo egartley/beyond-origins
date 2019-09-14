@@ -31,6 +31,7 @@ public class Game extends JPanel implements Runnable {
     private int fps;
     private long lastFpsTime;
     public static Game self;
+    public static Graphics graphics;
 
     // CONSTANTS
     /**
@@ -257,6 +258,7 @@ public class Game extends JPanel implements Runnable {
     @Override
     public void paint(Graphics graphics) {
         ((Graphics2D) graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        Game.graphics = graphics;
         if (started) {
             render(graphics);
         } else {

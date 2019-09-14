@@ -34,8 +34,8 @@ public class DialogueExchange {
             queuedLines = null;
         } else {
             // (max number + 1) or more lines, queue up remaining
-            displayedLines = Arrays.copyOfRange(allLines, 0, 6);
-            queuedLines = Arrays.copyOfRange(allLines, 6, allLines.length);
+            displayedLines = Arrays.copyOfRange(allLines, 0, DialoguePanel.MAX_LINES);
+            queuedLines = Arrays.copyOfRange(allLines, DialoguePanel.MAX_LINES, allLines.length);
         }
     }
 
@@ -62,7 +62,6 @@ public class DialogueExchange {
         }
 
         if (isCurrentDialogueFinished() && advance) {
-            // chardialogue finished
             nextDialogue();
             Game.in().dialogue.setFontMetrics = false;
             Game.in().dialogue.delay();

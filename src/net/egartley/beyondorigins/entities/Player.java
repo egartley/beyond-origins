@@ -34,6 +34,7 @@ public class Player extends AnimatedEntity implements Character {
     public EntityBoundary headBoundary;
     public EntityBoundary bodyBoundary;
     public EntityBoundary feetBoundary;
+    public EntityBoundary chatBoundary;
 
     public Player() {
         super("Player", new SpriteSheet(ImageStore.get(ImageStore.PLAYER), 30, 44, 2, 4));
@@ -50,7 +51,7 @@ public class Player extends AnimatedEntity implements Character {
         // generate collisions with sector entities that aren't traversable
         for (Entity e : sector.entities) {
             if (!e.isTraversable && e.isSectorSpecific) {
-                generateMovementRestrictionCollisions(e.defaultBoundary, boundary, headBoundary);
+                generateMovementRestrictionCollisions(e.defaultBoundary, boundary, headBoundary, chatBoundary);
             }
         }
     }
@@ -180,11 +181,15 @@ public class Player extends AnimatedEntity implements Character {
         bodyBoundary.name = "Body";
         feetBoundary = new EntityBoundary(this, 17, 16, new BoundaryPadding(0), new BoundaryOffset(0, 29, 0, 6));
         feetBoundary.name = "Feet";
+        chatBoundary = new EntityBoundary(this, sprite, new BoundaryPadding(36));
+        chatBoundary.name = "Chat";
+        chatBoundary.isVisible = false;
 
         boundaries.add(boundary);
         boundaries.add(headBoundary);
         boundaries.add(bodyBoundary);
         boundaries.add(feetBoundary);
+        boundaries.add(chatBoundary);
     }
 
     @Override

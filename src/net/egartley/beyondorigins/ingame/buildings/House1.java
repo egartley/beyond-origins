@@ -11,7 +11,7 @@ import net.egartley.gamelib.logic.math.Calculate;
 
 public class House1 extends Building {
 
-    private EntityBoundary blockBoundary1, blockBoundary2;
+    private EntityBoundary blockBoundary1, blockBoundary2, blockBoundary3;
 
     public House1(int x, int y, int playerLeaveX, int playerLeaveY) {
         super("house-1", x, y, playerLeaveX, playerLeaveY);
@@ -22,7 +22,11 @@ public class House1 extends Building {
         BuildingFloor floor = new BuildingFloor(0, this) {
             @Override
             public void onPlayerEnter(BuildingFloor from) {
-                Entities.PLAYER.setPosition(Calculate.getCenteredX(Entities.PLAYER.sprite.width), 356);
+                if (from != null && from.equals(this.parent.floors.get(1))) {
+                    Entities.PLAYER.setPosition(220, 229);
+                } else {
+                    Entities.PLAYER.setPosition(Calculate.getCenteredX(Entities.PLAYER.sprite.width), 356);
+                }
             }
         };
         floor.upperYLimit = 152;
@@ -33,7 +37,7 @@ public class House1 extends Building {
         floor = new BuildingFloor(1, this) {
             @Override
             public void onPlayerEnter(BuildingFloor from) {
-                Entities.PLAYER.setPosition(273, 316);
+                Entities.PLAYER.setPosition(223, 282);
                 Entities.WIZARD.setPosition(658, 216);
             }
         };
@@ -48,18 +52,21 @@ public class House1 extends Building {
         defaultBoundary = new EntityBoundary(this, 31, 24, new BoundaryPadding(0), new BoundaryOffset(0, 75, 0, 53));
         blockBoundary1 = new EntityBoundary(this, 31, 23, new BoundaryPadding(0), new BoundaryOffset(0, 64, 0, 22));
         blockBoundary2 = new EntityBoundary(this, 30, 23, new BoundaryPadding(0), new BoundaryOffset(0, 64, 0, 84));
+        blockBoundary3 = new EntityBoundary(this, 31, 11, new BoundaryPadding(0), new BoundaryOffset(0, 64, 0, 53));
 
         entryBoundary = defaultBoundary;
         boundaries.add(defaultBoundary);
         boundaries.add(blockBoundary1);
         boundaries.add(blockBoundary2);
+        boundaries.add(blockBoundary3);
     }
 
     @Override
     protected void setCollisions() {
         super.setCollisions();
-        Entities.PLAYER.generateMovementRestrictionCollisions(blockBoundary1, Entities.PLAYER.boundary);
-        Entities.PLAYER.generateMovementRestrictionCollisions(blockBoundary2, Entities.PLAYER.boundary);
+        Entities.PLAYER.generateMovementRestrictionCollisions(blockBoundary1, Entities.PLAYER.boundary, Entities.PLAYER.chatBoundary);
+        Entities.PLAYER.generateMovementRestrictionCollisions(blockBoundary2, Entities.PLAYER.boundary, Entities.PLAYER.chatBoundary);
+        Entities.PLAYER.generateMovementRestrictionCollisions(blockBoundary3, Entities.PLAYER.boundary, Entities.PLAYER.chatBoundary);
     }
 
 }

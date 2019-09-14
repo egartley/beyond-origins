@@ -508,6 +508,7 @@ public abstract class Entity extends Renderable implements Tickable {
         collisions.forEach(EntityEntityCollision::end);
         collisions.clear();
         setCollisions();
+        interactions.forEach(i -> i.collision.end());
         interactions.clear();
         setInteractions();
     }

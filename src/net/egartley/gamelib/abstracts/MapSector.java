@@ -4,6 +4,7 @@ import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.ui.NotificationBanner;
 import net.egartley.gamelib.graphics.MapTile;
 import net.egartley.gamelib.interfaces.Tickable;
 import net.egartley.gamelib.logic.collision.MapSectorChangeCollision;
@@ -77,6 +78,10 @@ public abstract class MapSector implements Tickable {
      */
     public ArrayList<Entity> entities;
     /**
+     * Any notifications that are being shown
+     */
+    public ArrayList<NotificationBanner> notifications;
+    /**
      * Entities that are queued for removal from {@link #entities}
      */
     private Entity[] queuedForRemoval;
@@ -84,6 +89,14 @@ public abstract class MapSector implements Tickable {
      * Entities that are queued for addition to {@link #entities}
      */
     private Entity[] queuedForAddition;
+    /**
+     * Entities that are queued for removal from {@link #entities}
+     */
+    private NotificationBanner[] removalNotifications;
+    /**
+     * Entities that are queued for addition to {@link #entities}
+     */
+    private NotificationBanner[] additionNotifications;
     /**
      * The sector's definition, such as its tiles and other properties
      */
@@ -107,6 +120,7 @@ public abstract class MapSector implements Tickable {
             neighbors.add(null);
         }
         entities = new ArrayList<>();
+        notifications = new ArrayList<>();
     }
 
     /**
@@ -154,6 +168,8 @@ public abstract class MapSector implements Tickable {
         if (Game.debug) {
             changeBoundaries.forEach(boundary -> boundary.draw(graphics));
         }
+
+        notifications.forEach(notification -> notification.render(graphics));
     }
 
     /**
@@ -172,9 +188,21 @@ public abstract class MapSector implements Tickable {
             queuedForRemoval = null;
         }
 
+        if (additionNotifications != null && additionNotifications.length > 0) {
+            Collections.addAll(notifications, additionNotifications);
+            additionNotifications = null;
+        }
+        if (removalNotifications != null && removalNotifications.length > 0) {
+            for (NotificationBanner notification : removalNotifications) {
+                notifications.remove(notification);
+            }
+            removalNotifications = null;
+        }
+
         Entities.PLAYER.tick();
         changeCollisions.forEach(MapSectorChangeCollision::tick);
         entities.forEach(Entity::tick);
+        notifications.forEach(NotificationBanner::tick);
     }
 
     public void removeEntity(Entity e) {
@@ -191,6 +219,14 @@ public abstract class MapSector implements Tickable {
 
     public void addEntities(Entity[] e) {
         queuedForAddition = e;
+    }
+
+    public void pushNotification(NotificationBanner notification) {
+        additionNotifications = new NotificationBanner[]{notification};
+    }
+
+    public void killNotification(NotificationBanner notification) {
+        removalNotifications = new NotificationBanner[]{notification};
     }
 
     /**

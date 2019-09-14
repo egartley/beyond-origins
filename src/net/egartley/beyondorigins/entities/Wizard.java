@@ -60,7 +60,6 @@ public class Wizard extends AnimatedEntity implements Character {
         DialogueController.addFinished(new DialogueExchangeFinishedEvent(dialogue_gotHat) {
             @Override
             public void onFinish() {
-                // TODO: give coins
                 // take hat from player
                 Game.in().inventory.take(Item.WIZARD_HAT);
                 // switch to sprite that is wearing the hat
@@ -68,6 +67,8 @@ public class Wizard extends AnimatedEntity implements Character {
                 wearingHat = true;
                 // update position so that it looks like he doesn't move (hat makes him "taller")
                 y(y() - 12);
+
+                interactions.get(0).collision.end();
             }
         });
     }
@@ -127,7 +128,7 @@ public class Wizard extends AnimatedEntity implements Character {
 
     @Override
     public void setInteractions() {
-        interactions.add(new EntityEntityInteraction(defaultBoundary, Entities.PLAYER.boundary) {
+        interactions.add(new EntityEntityInteraction(defaultBoundary, Entities.PLAYER.chatBoundary) {
             @Override
             public void interact() {
                 onPlayerInteraction();

@@ -7,6 +7,7 @@ import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.ingame.Inventory;
 import net.egartley.beyondorigins.ingame.Item;
 import net.egartley.beyondorigins.ingame.buildings.House1;
+import net.egartley.beyondorigins.ui.NotificationBanner;
 import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.abstracts.Map;
 import net.egartley.gamelib.abstracts.MapSector;
@@ -20,6 +21,8 @@ import java.awt.*;
 public class Sector1 extends MapSector {
 
     public House1 house;
+
+    private NotificationBanner testBanner;
 
     public Sector1(Map parent, MapSectorDefinition def) {
         super(parent, def);
@@ -46,6 +49,8 @@ public class Sector1 extends MapSector {
         if (Game.debug) {
             changeBoundaries.forEach(boundary -> boundary.draw(graphics));
         }
+
+        notifications.forEach(notification -> notification.render(graphics));
     }
 
     @Override
@@ -68,8 +73,8 @@ public class Sector1 extends MapSector {
                     Inventory inventory = Game.in().inventory;
                     if (!inventory.has(Item.WIZARD_HAT) && Entities.WIZARD.metPlayer && !Entities.WIZARD.foundHat) {
                         inventory.put(Item.WIZARD_HAT);
+                        pushNotification(new NotificationBanner("You have found the Wizard's hat!", "items/wizard-hat.png"));
                     }
-                    // TODO: "you found the wizard's hat!" thing
                 }
             });
             entities.add(tree);
@@ -80,7 +85,7 @@ public class Sector1 extends MapSector {
             }
 
             // buildings
-            house = new House1(280, 200, 700, 140);
+            house = new House1(280, 200, 334, 313);
             entities.add(house);
 
             didInitialize = true;

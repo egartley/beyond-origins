@@ -13,12 +13,12 @@ import java.awt.image.BufferedImage;
 
 public class DialoguePanel extends UIElement {
 
-    private static final double DELAY = 1.5D;
+    private static final double DELAY = 1.225D;
 
     /**
      * The maximum number of lines that can be displayed at once
      */
-    public static final short MAX_LINES = 6;
+    public static final short MAX_LINES = 5;
 
     /**
      * Whether or not the dialogue panel is showing (visible)
@@ -46,7 +46,7 @@ public class DialoguePanel extends UIElement {
     /**
      * The font used when rendering the actual dialogue
      */
-    private static Font lineFont = new Font("Bookman Old Style", Font.BOLD, 14);
+    public static Font lineFont = new Font("Bookman Old Style", Font.PLAIN, 14);
     /**
      * The font used when rendering the character's name
      */
@@ -130,10 +130,10 @@ public class DialoguePanel extends UIElement {
         graphics.drawImage(image, x(), y(), null);
         // render character image and name
         BufferedImage characterImage = exchange.currentDialogue.character.getCharacterImage();
-        graphics.drawImage(characterImage, 272 - characterImage.getWidth() / 2, 414 - (characterImage.getHeight() - 44), null);
+        graphics.drawImage(characterImage, 277 - characterImage.getWidth() / 2, 414 - (characterImage.getHeight() - 44), null);
         graphics.setColor(Color.WHITE);
         graphics.setFont(characterNameFont);
-        graphics.drawString(exchange.currentDialogue.character.getName(), 272 - characterNameStringWidth / 2, 476);
+        graphics.drawString(exchange.currentDialogue.character.getName(), 277 - characterNameStringWidth / 2, 476);
         // render text
         graphics.setFont(lineFont);
         for (String line : exchange.displayedLines) {
@@ -142,15 +142,14 @@ public class DialoguePanel extends UIElement {
         lineIndex = 0;
         // render more lines indiciator
         if (readyToAdvance) {
-            // exchange.queuedLines != null && exchange.queuedLines.length > 0
             graphics.drawImage(moreLinesImage, 700, 500, null);
         }
     }
 
     private void renderLine(String text, Graphics graphics) {
-        // max width 380, or max str length 55
+        // max width 380, or max str length 49
         lineIndex++;
-        graphics.drawString(text, x() + 96, y() + 16 + (18 * lineIndex));
+        graphics.drawString(text, x() + 106, y() + 18 + (22 * lineIndex));
     }
 
 }

@@ -45,6 +45,7 @@ public abstract class Boundary {
      * Whether or not the boundary is collided with another
      */
     public boolean isCollided;
+    public boolean isVisible = true;
 
     /**
      * This boundary's padding (extra space added/subtracted from any or all of the four sides)
@@ -65,8 +66,10 @@ public abstract class Boundary {
      * @param graphics Graphics object to use
      */
     public void draw(Graphics graphics) {
-        graphics.setColor(drawColor);
-        graphics.drawRect(x, y, width, height);
+        if (isVisible) {
+            graphics.setColor(drawColor);
+            graphics.drawRect(x, y, width, height);
+        }
     }
 
     /**
