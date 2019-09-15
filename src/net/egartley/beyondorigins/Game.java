@@ -249,7 +249,6 @@ public class Game extends Canvas implements Runnable {
         ((Graphics2D) graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         if (started) {
             render(graphics);
-            graphics.drawString(fps + "", 200, 100);
         } else {
             graphics.setColor(Color.BLACK);
             graphics.setFont(new Font("Consolas", Font.PLAIN, 32));

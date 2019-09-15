@@ -3,10 +3,52 @@
 		{
 			"key": "g",
 			"tile": "grass-default"
+		},
+		{
+			"key": "gp1",
+			"tile": "grass-path-1"
+		},
+		{
+			"key": "gp2",
+			"tile": "grass-path-2"
 		}
 	],
 	"tiles" : {
-		"type": "fill",
-		"data": "g"
-	}
+		"type": "mixed",
+		"data": {
+			"common": "g",
+			"custom": [
+				{
+					"c": 27,
+					"r": 16,
+					"key": "gp1"
+				},
+				{
+					"c": 27,
+					"r": 15,
+					"key": "gp1"
+				},
+				{
+					"c": 27,
+					"r": 14,
+					"key": "gp2"
+				},
+				{
+					"c": 28,
+					"r": 14,
+					"key": "gp1",
+					"rotate": 90
+				},
+				{
+					"c": 29,
+					"r": 14,
+					"key": "gp1",
+					"rotate": 90
+				}
+			]
+		}
+	},
+	"random": [
+		"g"
+	]
 }

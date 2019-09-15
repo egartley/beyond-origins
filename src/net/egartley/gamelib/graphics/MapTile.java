@@ -1,32 +1,35 @@
 package net.egartley.gamelib.graphics;
 
+import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.data.ImageStore;
 
 import java.awt.image.BufferedImage;
 
-public enum MapTile {
+public class MapTile {
 
-    GRASS("grass-default"),
-    GRASS_PATH_1("grass-path-1"),
-    GRASS_PATH_2("grass-path-2"),
-    SAND("sand-default");
+    public static final String GRASS = "grass-default";
+    public static final String GRASS_PATH_1 = "grass-path-1";
+    public static final String GRASS_PATH_2 = "grass-path-2";
+    public static final String SAND = "sand-default";
 
     public String id;
     public BufferedImage image;
 
-    MapTile(String id) {
-        this.id = id;
-        image = ImageStore.get(ImageStore.mapTilePath + id + ".png");
+    public MapTile(String id) {
+        this(id, ImageStore.get(ImageStore.mapTilePath + id + ".png"));
     }
 
-    public static MapTile get(String id) {
-        for (MapTile tile : MapTile.values()) {
-            if (tile.id.equalsIgnoreCase(id)) {
-                return tile;
-            }
-        }
-        // return grass tile if not found
-        return GRASS;
+    public MapTile(String id, BufferedImage image) {
+        this.id = id;
+        this.image = image;
+    }
+
+    public void rotate() {
+        image = Util.rotateImage(image);
+    }
+
+    public void rotate(double radians) {
+        image = Util.rotateImage(image, radians);
     }
 
 }

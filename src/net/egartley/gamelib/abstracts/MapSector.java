@@ -3,6 +3,7 @@ package net.egartley.gamelib.abstracts;
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
+import net.egartley.beyondorigins.data.ImageStore;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.ui.NotificationBanner;
 import net.egartley.gamelib.graphics.MapTile;
@@ -13,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -346,15 +348,66 @@ public abstract class MapSector implements Tickable {
             tileIDs.add(entry.getString("tile"));
         }
 
-        if (buildType.equalsIgnoreCase("fill")) {
-            String tileID = tileIDs.get(tileKeys.indexOf(tilesObject.getString("data")));
-            for (int r = 0; r < TILE_ROWS; r++) {
-                ArrayList<MapTile> column = new ArrayList<>();
-                for (int c = 0; c < TILE_COLUMNS; c++) {
-                    column.add(MapTile.get(tileID));
+        switch (buildType.toLowerCase()) {
+            case "fill":
+                fill(tileIDs.get(tileKeys.indexOf(tilesObject.getString("data"))));
+                break;
+            case "mixed":
+                fill(tileIDs.get(tileKeys.indexOf(tilesObject.getJSONObject("data").getString("common"))));
+                mixed(tilesObject.getJSONObject("data").getJSONArray("custom"), tileIDs, tileKeys);
+                break;
+        }
+
+        if (root.has("random")) {
+            JSONArray keys = root.getJSONArray("random");
+            for (int i = 0; i < keys.length(); i++) {
+                String id = tileIDs.get(tileKeys.indexOf(keys.getString(i)));
+                for (int r = 0; r < TILE_ROWS; r++) {
+                    for (int c = 0; c < TILE_COLUMNS; c++) {
+                        MapTile tile = tiles.get(r).get(c);
+                        if (tile.id.equalsIgnoreCase(id)) {
+                            if (Util.percentChance(0.5D)) {
+                                switch (Util.randomInt(2, 0, true)) {
+                                    case 0:
+                                        tile.rotate();
+                                        break;
+                                    case 1:
+                                        tile.rotate(Math.PI);
+                                        break;
+                                    case 2:
+                                        tile.rotate(Math.PI * 1.5D);
+                                        break;
+                                }
+                            }
+                        }
+                    }
                 }
-                tiles.add(column);
             }
+        }
+    }
+
+    private void fill(String id) {
+        BufferedImage image = ImageStore.get(ImageStore.mapTilePath + id + ".png");
+        for (int r = 0; r < TILE_ROWS; r++) {
+            ArrayList<MapTile> column = new ArrayList<>();
+            for (int c = 0; c < TILE_COLUMNS; c++) {
+                column.add(new MapTile(id, image));
+            }
+            tiles.add(column);
+        }
+    }
+
+    private void mixed(JSONArray custom, ArrayList<String> tileIDs, ArrayList<String> tileKeys) {
+        for (int i = 0; i < custom.length(); i++) {
+            JSONObject o = (JSONObject) custom.get(i);
+            int c = o.getInt("c");
+            int r = o.getInt("r");
+            String id = tileIDs.get(tileKeys.indexOf(o.getString("key")));
+            BufferedImage image = ImageStore.get(ImageStore.mapTilePath + id + ".png");
+            if (o.has("rotate")) {
+                image = Util.rotateImage(image, Math.toRadians(o.getInt("rotate")));
+            }
+            tiles.get(r).set(c, new MapTile(id, image));
         }
     }
 

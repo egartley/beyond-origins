@@ -45,10 +45,6 @@ public class ImageStore {
                 return get(entityPath + "wizard-default.png");
             case WIZARD_WITH_HAT:
                 return get(entityPath + "wizard-with-hat.png");
-            case TILE_GRASS:
-                return get(mapTilePath + "grass-default.png");
-            case TILE_SAND:
-                return get(mapTilePath + "sand-default.png");
             case TREE_DEFAULT:
                 return get(entityPath + "tree-default.png");
             case ROCK_DEFAULT:
