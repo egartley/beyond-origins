@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins;
 
 import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.ui.DialoguePanel;
 import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.graphics.Animation;
@@ -124,7 +125,7 @@ public class Util {
      */
     public static boolean percentChance(double percent) {
         // assert percent <= 1.0D;
-        return randomInt(100, 1, true) < percent * 100;
+        return randomInt(100, 1, true) <= percent * 100;
     }
 
     /**
@@ -237,7 +238,7 @@ public class Util {
 
     public static String[] toLines(String fullText, int maxLineLength, int maxCharacterCount) {
         ArrayList<String> splits = new ArrayList<>();
-        FontMetrics fm = Game.graphics.getFontMetrics(DialoguePanel.lineFont);
+        FontMetrics fm = Entities.PLAYER.sprite.toBufferedImage().getGraphics().getFontMetrics(DialoguePanel.lineFont);
         if (fm.stringWidth(fullText) > maxLineLength) {
             while (fm.stringWidth(fullText) > maxLineLength) {
                 String l = fullText.substring(0, maxCharacterCount);

@@ -1,13 +1,12 @@
-package net.egartley.beyondorigins.maps.debug.sectors;
+package net.egartley.beyondorigins.ingame.maps.debug.sectors;
 
 import net.egartley.gamelib.abstracts.Map;
 import net.egartley.gamelib.abstracts.MapSector;
-import net.egartley.gamelib.objects.MapSectorDefinition;
 
 public class Sector2 extends MapSector {
 
-    public Sector2(Map parent, MapSectorDefinition def) {
-        super(parent, def);
+    public Sector2(Map parent) {
+        super(parent, 2);
     }
 
     @Override

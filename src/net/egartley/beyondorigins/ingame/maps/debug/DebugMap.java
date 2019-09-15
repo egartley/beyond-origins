@@ -1,10 +1,9 @@
-package net.egartley.beyondorigins.maps.debug;
+package net.egartley.beyondorigins.ingame.maps.debug;
 
-import net.egartley.beyondorigins.definitions.maps.debug.Sectors;
-import net.egartley.beyondorigins.maps.debug.sectors.Sector1;
-import net.egartley.beyondorigins.maps.debug.sectors.Sector2;
-import net.egartley.beyondorigins.maps.debug.sectors.Sector3;
-import net.egartley.beyondorigins.maps.debug.sectors.Sector4;
+import net.egartley.beyondorigins.ingame.maps.debug.sectors.Sector1;
+import net.egartley.beyondorigins.ingame.maps.debug.sectors.Sector2;
+import net.egartley.beyondorigins.ingame.maps.debug.sectors.Sector3;
+import net.egartley.beyondorigins.ingame.maps.debug.sectors.Sector4;
 import net.egartley.gamelib.abstracts.Map;
 import net.egartley.gamelib.abstracts.MapSector;
 import net.egartley.gamelib.logic.events.MapSectorChangeEvent;
@@ -13,12 +12,13 @@ import java.awt.*;
 
 public class DebugMap extends Map {
 
-    public DebugMap(String id) {
-        super(id);
-        sectors.add(new Sector1(this, Sectors.sector1));
-        sectors.add(new Sector2(this, Sectors.sector2));
-        sectors.add(new Sector3(this, Sectors.sector3));
-        sectors.add(new Sector4(this, Sectors.sector4));
+    public DebugMap() {
+        super("debug");
+
+        sectors.add(new Sector1(this));
+        sectors.add(new Sector2(this));
+        sectors.add(new Sector3(this));
+        sectors.add(new Sector4(this));
 
         MapSector sec1 = sectors.get(0);
         MapSector sec2 = sectors.get(1);
@@ -33,11 +33,6 @@ public class DebugMap extends Map {
     }
 
     @Override
-    public void tick() {
-        sector.tick();
-    }
-
-    @Override
     public void render(Graphics graphics) {
         sector.render(graphics);
     }
@@ -47,4 +42,8 @@ public class DebugMap extends Map {
 
     }
 
+    @Override
+    public void tick() {
+        sector.tick();
+    }
 }

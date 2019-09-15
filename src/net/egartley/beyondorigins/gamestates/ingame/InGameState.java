@@ -6,7 +6,7 @@ import net.egartley.beyondorigins.controllers.KeyboardController;
 import net.egartley.beyondorigins.gamestates.ingame.substates.InBuildingState;
 import net.egartley.beyondorigins.ingame.Building;
 import net.egartley.beyondorigins.ingame.Inventory;
-import net.egartley.beyondorigins.maps.debug.DebugMap;
+import net.egartley.beyondorigins.ingame.maps.debug.DebugMap;
 import net.egartley.beyondorigins.ui.DialoguePanel;
 import net.egartley.gamelib.abstracts.GameState;
 import net.egartley.gamelib.abstracts.Map;
@@ -14,6 +14,7 @@ import net.egartley.gamelib.input.KeyTyped;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class InGameState extends GameState {
 
@@ -22,6 +23,7 @@ public class InGameState extends GameState {
     public Map map;
     public Inventory inventory;
     public DialoguePanel dialogue;
+    public ArrayList<Map> maps = new ArrayList<>();
 
     public boolean isInventoryVisible;
     public boolean isDialogueVisible;
@@ -32,7 +34,9 @@ public class InGameState extends GameState {
         subStates.add(new InBuildingState());
 
         // load map
-        map = new DebugMap("Debug Map");
+        // map = new DebugMap("Debug Map");
+        maps.add(new DebugMap());
+        map = maps.get(0);
 
         // load inventory
         inventory = new Inventory();

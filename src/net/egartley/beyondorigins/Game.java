@@ -1,7 +1,6 @@
 package net.egartley.beyondorigins;
 
 import net.egartley.beyondorigins.controllers.KeyboardController;
-import net.egartley.beyondorigins.definitions.maps.AllSectors;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.gamestates.MainMenuState;
 import net.egartley.beyondorigins.gamestates.ingame.InGameState;
@@ -13,14 +12,13 @@ import net.egartley.gamelib.logic.math.Calculate;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 /**
  * @author Evan Gartley (https://github.com/egartley)
  * @version https://egartley.net/projects/beyond-origins/?via=javadocgameclass
  */
-public class Game extends JPanel implements Runnable {
+public class Game extends Canvas implements Runnable {
 
     // SELF
     private static final long serialVersionUID = 8213282993283826186L;
@@ -28,10 +26,8 @@ public class Game extends JPanel implements Runnable {
     private static JFrame frame;
     private static Dimension windowDimension = new Dimension(976, 583);
     private static boolean running = false, started = false;
-    private int fps;
     private long lastFpsTime;
-    public static Game self;
-    public static Graphics graphics;
+    private int fps;
 
     // CONSTANTS
     /**
@@ -67,22 +63,19 @@ public class Game extends JPanel implements Runnable {
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
 
-        // Credit: https://stackoverflow.com/a/11671311
-        self = new Game();
-        self.setDoubleBuffered(true);
-        frame.getContentPane().add(self);
-
+        Game game = new Game();
+        frame.getContentPane().add(game);
         frame.setVisible(true);
-        self.setFocusable(true);
-        self.requestFocusInWindow();
+        game.setFocusable(true);
+        game.requestFocusInWindow();
 
         running = true;
-        mainThread = new Thread(self, "Game-Main");
+        mainThread = new Thread(game, "Game-Main");
         mainThread.start();
     }
 
     private void init() {
-        Debug.out("Initializing input stuff...");
+        Debug.out("Initializing input...");
         this.addKeyListener(new Keyboard());
         Mouse m = new Mouse();
         this.addMouseListener(m);
@@ -93,11 +86,7 @@ public class Game extends JPanel implements Runnable {
                 debug = !debug;
             }
         });
-        Debug.out("Input stuff was initialized");
-
-        Debug.out("Loading maps...");
-        AllSectors.define();
-        Debug.out("Maps were loaded");
+        Debug.out("Input was initialized");
 
         Debug.out("Initializing entities...");
         Entities.initialize();
@@ -158,25 +147,6 @@ public class Game extends JPanel implements Runnable {
         currentState.onStart();
     }
 
-    public static void addKeyBinding(int keyCode, AbstractAction action) {
-        // Credit: https://stackoverflow.com/a/52919766
-        int modifier = 0;
-        switch (keyCode) {
-            case KeyEvent.VK_CONTROL:
-                modifier = InputEvent.CTRL_DOWN_MASK;
-                break;
-            case KeyEvent.VK_SHIFT:
-                modifier = InputEvent.SHIFT_DOWN_MASK;
-                break;
-            case KeyEvent.VK_ALT:
-                modifier = InputEvent.ALT_DOWN_MASK;
-                break;
-
-        }
-        self.getInputMap().put(KeyStroke.getKeyStroke(keyCode, modifier), keyCode);
-        self.getActionMap().put(keyCode, action);
-    }
-
     public static synchronized void quit() {
         System.exit(0);
     }
@@ -205,11 +175,11 @@ public class Game extends JPanel implements Runnable {
             Debug.out("FATAL ERROR: Did not successfully initialize!");
             e.printStackTrace();
         }
+
         if (!success) {
             quit();
         } else {
             Debug.out("Initialization took " + ((System.nanoTime() - startTime) / 1000000000.0) + " seconds");
-
             started = true;
 
             // Credit:
@@ -230,7 +200,6 @@ public class Game extends JPanel implements Runnable {
                 }
 
                 tick(updateLength / (double) OPTIMAL_TIME);
-                repaint();
 
                 try {
                     Thread.sleep(Math.abs((lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000));
@@ -243,12 +212,32 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
-    private synchronized void tick(double delta) {
+    @Override
+    public void update(Graphics graphics) {
+        // Credit: https://web.archive.org/web/20101020140036/http://home.comcast.net/~jml3on/java/tricks/dbuf.java
+        Graphics offgc;
+        Image offscreen = null;
+        Rectangle box = graphics.getClipBounds();
+        // create the offscreen buffer and associated Graphics
+        offscreen = createImage(box.width, box.height);
+        offgc = offscreen.getGraphics();
+        // clear the exposed area
+        offgc.setColor(getBackground());
+        offgc.fillRect(0, 0, box.width, box.height);
+        offgc.setColor(getForeground());
+        // do normal redraw
+        offgc.translate(-box.x, -box.y);
+        paint(offgc);
+        // transfer offscreen to window
+        graphics.drawImage(offscreen, box.x, box.y, this);
+    }
+
+    private void tick(double delta) {
         // ignore interpolation for now
         currentState.tick();
     }
 
-    private synchronized void render(Graphics graphics) {
+    private void render(Graphics graphics) {
         if (currentState == null) {
             return;
         }
@@ -258,14 +247,15 @@ public class Game extends JPanel implements Runnable {
     @Override
     public void paint(Graphics graphics) {
         ((Graphics2D) graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        Game.graphics = graphics;
         if (started) {
             render(graphics);
+            graphics.drawString(fps + "", 200, 100);
         } else {
             graphics.setColor(Color.BLACK);
             graphics.setFont(new Font("Consolas", Font.PLAIN, 32));
             graphics.drawString("Loading...", Calculate.getCenteredX(graphics.getFontMetrics().stringWidth("Loading...")), Calculate.getCenteredY(32) + 16);
         }
+        repaint();
     }
 
 }

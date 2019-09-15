@@ -1,43 +1,32 @@
 package net.egartley.gamelib.graphics;
 
-import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.data.ImageStore;
 
 import java.awt.image.BufferedImage;
 
-/**
- * A "tile" that is rendered within a map sector
- */
-public class MapTile {
+public enum MapTile {
 
-    public static MapTile GRASS = new MapTile(ImageStore.get("resources/images/map-tiles/grass-default.png"));
-    public static MapTile SAND = new MapTile(ImageStore.get("resources/images/map-tiles/sand-default.png"));
-    public static MapTile GRASS_PATH_1 = new MapTile(ImageStore.get("resources/images/map-tiles/grass-path-1.png"));
-    public static MapTile GRASS_PATH_2 = new MapTile(ImageStore.get("resources/images/map-tiles/grass-path-2.png"));
+    GRASS("grass-default"),
+    GRASS_PATH_1("grass-path-1"),
+    GRASS_PATH_2("grass-path-2"),
+    SAND("sand-default");
 
-
-    /**
-     * This tile as a {@link BufferedImage}
-     */
+    public String id;
     public BufferedImage image;
-    public int width, height;
-    public boolean isTraversable;
 
-    /**
-     * Creates a new map tile
-     */
-    MapTile(BufferedImage image) {
-        this.image = image;
-        width = image.getWidth();
-        height = image.getHeight();
+    MapTile(String id) {
+        this.id = id;
+        image = ImageStore.get(ImageStore.mapTilePath + id + ".png");
     }
 
-    public MapTile rotate() {
-        return new MapTile(Util.rotateImage(image));
-    }
-
-    public MapTile rotate(double radians) {
-        return new MapTile(Util.rotateImage(image, radians));
+    public static MapTile get(String id) {
+        for (MapTile tile : MapTile.values()) {
+            if (tile.id.equalsIgnoreCase(id)) {
+                return tile;
+            }
+        }
+        // return grass tile if not found
+        return GRASS;
     }
 
 }

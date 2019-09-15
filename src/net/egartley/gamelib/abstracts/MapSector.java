@@ -9,9 +9,13 @@ import net.egartley.gamelib.graphics.MapTile;
 import net.egartley.gamelib.interfaces.Tickable;
 import net.egartley.gamelib.logic.collision.MapSectorChangeCollision;
 import net.egartley.gamelib.logic.interaction.MapSectorChangeBoundary;
-import net.egartley.gamelib.objects.MapSectorDefinition;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.awt.*;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -46,11 +50,13 @@ public abstract class MapSector implements Tickable {
     /**
      * Number of rows of tiles in any sector
      */
-    public static final short TILE_ROWS = 30;
+    public static final short TILE_ROWS = 17;
     /**
      * Number of columns of tiles in any sector
      */
-    public static final short TILE_COLUMNS = 17;
+    public static final short TILE_COLUMNS = 30;
+
+    public int number;
 
     private int deltaX;
     private int deltaY;
@@ -62,25 +68,25 @@ public abstract class MapSector implements Tickable {
     /**
      * The sector's neighbors
      */
-    private ArrayList<MapSector> neighbors;
+    private ArrayList<MapSector> neighbors = new ArrayList<>(MAX_NEIGHBORS);
     /**
      * Boundaries, or areas, of all of the possible sector changes
      */
-    protected ArrayList<MapSectorChangeBoundary> changeBoundaries;
+    protected ArrayList<MapSectorChangeBoundary> changeBoundaries = new ArrayList<>();
     /**
      * All of the collisions for the sector changes
      */
-    private ArrayList<MapSectorChangeCollision> changeCollisions;
+    private ArrayList<MapSectorChangeCollision> changeCollisions = new ArrayList<>();
     /**
      * Entities that only "exist" within the sector
      *
      * @see Entity#isSectorSpecific
      */
-    public ArrayList<Entity> entities;
+    public ArrayList<Entity> entities = new ArrayList<>();
     /**
      * Any notifications that are being shown
      */
-    public ArrayList<NotificationBanner> notifications;
+    public ArrayList<NotificationBanner> notifications = new ArrayList<>();
     /**
      * Entities that are queued for removal from {@link #entities}
      */
@@ -97,30 +103,21 @@ public abstract class MapSector implements Tickable {
      * Entities that are queued for addition to {@link #entities}
      */
     private NotificationBanner[] additionNotifications;
-    /**
-     * The sector's definition, such as its tiles and other properties
-     */
-    protected MapSectorDefinition definition;
+
+    protected ArrayList<ArrayList<MapTile>> tiles = new ArrayList<>();
 
     public boolean didInitialize;
 
     /**
-     * Creates a new sector with the given definition
-     *
-     * @param parent     The map that this sector is in
-     * @param definition The {@link MapSectorDefinition} to use
+     * Creates a new map sector
      */
-    public MapSector(Map parent, MapSectorDefinition definition) {
+    public MapSector(Map parent, int sector) {
         this.parent = parent;
-        this.definition = definition;
-        changeBoundaries = new ArrayList<>();
-        changeCollisions = new ArrayList<>();
-        neighbors = new ArrayList<>(MAX_NEIGHBORS);
+        number = sector;
         for (byte i = 0; i < MAX_NEIGHBORS; i++) {
             neighbors.add(null);
         }
-        entities = new ArrayList<>();
-        notifications = new ArrayList<>();
+        buildTiles();
     }
 
     /**
@@ -308,19 +305,56 @@ public abstract class MapSector implements Tickable {
     }
 
     /**
-     * Renders all of the sector's tiles, defined by {@link #definition}
+     * Renders all of the sector's tiles
      */
     protected void drawTiles(Graphics graphics) {
         deltaX = 0;
         deltaY = 0;
-        for (int r = 0; r < definition.tiles.size(); r++) {
-            ArrayList<MapTile> row = definition.tiles.get(r);
+        for (int r = 0; r < tiles.size(); r++) {
+            ArrayList<MapTile> row = tiles.get(r);
             for (MapTile tile : row) {
                 graphics.drawImage(tile.image, deltaX, deltaY, null);
                 deltaX += TILE_SIZE;
             }
             deltaX = 0;
             deltaY += TILE_SIZE;
+        }
+    }
+
+    private void buildTiles() {
+        String entireJSONString = null;
+        try {
+            entireJSONString = Files.readString(FileSystems.getDefault().getPath("resources", "data", "maps", parent.id, "sector-" + number + ".def"));
+        } catch (IOException e) {
+            Debug.error(e);
+        }
+        if (entireJSONString == null) {
+            Debug.warning("There was a problem while building the tiles for \"" + this + "\"");
+            return;
+        }
+
+        JSONObject root = new JSONObject(entireJSONString);
+        JSONArray legend = root.getJSONArray("legend");
+        JSONObject tilesObject = root.getJSONObject("tiles");
+        ArrayList<String> tileKeys = new ArrayList<>();
+        ArrayList<String> tileIDs = new ArrayList<>();
+        String buildType = tilesObject.getString("type");
+
+        for (int i = 0; i < legend.length(); i++) {
+            JSONObject entry = legend.getJSONObject(i);
+            tileKeys.add(entry.getString("key"));
+            tileIDs.add(entry.getString("tile"));
+        }
+
+        if (buildType.equalsIgnoreCase("fill")) {
+            String tileID = tileIDs.get(tileKeys.indexOf(tilesObject.getString("data")));
+            for (int r = 0; r < TILE_ROWS; r++) {
+                ArrayList<MapTile> column = new ArrayList<>();
+                for (int c = 0; c < TILE_COLUMNS; c++) {
+                    column.add(MapTile.get(tileID));
+                }
+                tiles.add(column);
+            }
         }
     }
 

@@ -14,7 +14,7 @@ public abstract class Map implements Tickable {
     /**
      * Human-readable identifier
      */
-    private String id;
+    public String id;
     /**
      * Collection of the map's sectors
      */

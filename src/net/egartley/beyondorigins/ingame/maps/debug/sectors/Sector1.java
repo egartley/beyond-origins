@@ -1,4 +1,4 @@
-package net.egartley.beyondorigins.maps.debug.sectors;
+package net.egartley.beyondorigins.ingame.maps.debug.sectors;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.entities.DefaultRock;
@@ -15,7 +15,6 @@ import net.egartley.gamelib.abstracts.MapSector;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
-import net.egartley.gamelib.objects.MapSectorDefinition;
 
 import java.awt.*;
 
@@ -25,8 +24,8 @@ public class Sector1 extends MapSector {
 
     private NotificationBanner testBanner;
 
-    public Sector1(Map parent, MapSectorDefinition def) {
-        super(parent, def);
+    public Sector1(Map parent) {
+        super(parent, 1);
     }
 
     @Override
