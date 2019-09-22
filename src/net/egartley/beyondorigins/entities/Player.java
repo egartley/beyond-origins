@@ -114,8 +114,7 @@ public class Player extends AnimatedEntity implements Character {
 
     public void deactivateBuildingCollisions() {
         for (EntityEntityCollision c : collisions) {
-            if (c.boundaries[0].parent instanceof Building ||
-                    c.boundaries[1].parent instanceof Building) {
+            if (c.boundaries[0].parent instanceof Building || c.boundaries[1].parent instanceof Building) {
                 c.deactivate();
             }
         }
@@ -123,8 +122,7 @@ public class Player extends AnimatedEntity implements Character {
 
     public void reactivateBuildingCollisions() {
         for (EntityEntityCollision c : collisions) {
-            if (c.boundaries[0].parent instanceof Building ||
-                    c.boundaries[1].parent instanceof Building) {
+            if (c.boundaries[0].parent instanceof Building || c.boundaries[1].parent instanceof Building) {
                 c.activate();
             }
         }
@@ -134,6 +132,9 @@ public class Player extends AnimatedEntity implements Character {
         isMovementInvalidated = true;
     }
 
+    /**
+     * Makes the player immovable
+     */
     public void freeze() {
         frozen = true;
         isAllowedToMoveUpwards = false;
@@ -142,6 +143,9 @@ public class Player extends AnimatedEntity implements Character {
         isAllowedToMoveRightwards = false;
     }
 
+    /**
+     * Restores the player's ability to move
+     */
     public void thaw() {
         frozen = false;
         isAllowedToMoveUpwards = true;
@@ -150,12 +154,20 @@ public class Player extends AnimatedEntity implements Character {
         isAllowedToMoveRightwards = true;
     }
 
+    /**
+     * Called when the player enters a building
+     */
     public void enteredBuilding() {
         removeSectorSpecificCollisions(Game.in().map.sector);
         deactivateBuildingCollisions();
         // invalidateAllMovement();
     }
 
+    /**
+     * Called when a player leaves a building
+     *
+     * @param building The building that was just left
+     */
     public void leftBuilding(Building building) {
         generateSectorSpecificCollisions(Game.in().map.sector);
         setPosition(building.playerLeaveX, building.playerLeaveY);

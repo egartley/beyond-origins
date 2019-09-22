@@ -1,7 +1,7 @@
 # Beyond Origins
 
 RPG (role-playing game) written in Java, which is not using any sort of game engine - <b>everything is from scratch.</b> 
-This is still very much a work in progress. There is no specific goal or deadline, and commits will be sporadic.
+This is still very much a work in progress. There is no specific goal or deadline, and commits will be sporadic. All graphics are preliminary.
 
 An earlier attempt at this was made back in 2013 through 2015, and is available <a href="https://github.com/egartley/archive/tree/master/Java/Source/Beyond%20Origins/src/net/egartley/beyondorigins">here</a>.
 

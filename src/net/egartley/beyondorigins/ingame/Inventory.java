@@ -2,6 +2,8 @@ package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.ui.InventoryPanel;
+import net.egartley.beyondorigins.ui.QuestsPanel;
+import net.egartley.beyondorigins.ui.UIElement;
 import net.egartley.gamelib.interfaces.Tickable;
 
 import java.awt.*;
@@ -9,22 +11,26 @@ import java.util.ArrayList;
 
 public class Inventory implements Tickable {
 
-    public static final int ROWS = 5, COLUMNS = 4;
+    static final int ROWS = 5, COLUMNS = 4;
 
+    public UIElement panel;
     public InventoryItem itemBeingDragged;
-    public InventoryPanel panel;
+    public InventoryPanel inventoryPanel;
+    public QuestsPanel questsPanel;
     public ArrayList<InventorySlot> slots = new ArrayList<>();
 
     private Color backgroundColor = new Color(0, 0, 0, 152);
 
     public Inventory() {
-        panel = new InventoryPanel();
-
+        inventoryPanel = new InventoryPanel();
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMNS; c++) {
                 slots.add(new InventorySlot(r, c));
             }
         }
+        panel = inventoryPanel;
+
+        questsPanel = new QuestsPanel();
     }
 
     /**
@@ -61,6 +67,10 @@ public class Inventory implements Tickable {
         return true;
     }
 
+    /**
+     * @param item The item to check for
+     * @return Whether or not the item is in the inventory
+     */
     public boolean has(Item item) {
         for (InventorySlot slot : slots) {
             if (slot.item != null && slot.item.item.equals(item)) {
@@ -70,6 +80,12 @@ public class Inventory implements Tickable {
         return false;
     }
 
+    /**
+     * Removes the item from the inventory and returns it
+     *
+     * @param item The item to take
+     * @return The item, or <code>null</code> if it wasn't there
+     */
     public InventoryItem take(Item item) {
         for (InventorySlot slot : slots) {
             if (slot.item != null && slot.item.item.equals(item)) {
@@ -107,6 +123,9 @@ public class Inventory implements Tickable {
         }
     }
 
+    /**
+     * @return Whether or not the inventory is full
+     */
     public boolean isFull() {
         for (InventorySlot slot : slots) {
             if (slot.isEmpty()) {
@@ -116,6 +135,13 @@ public class Inventory implements Tickable {
         return true;
     }
 
+    /**
+     * "Converts" the given row and column to the index in {@link #slots}
+     *
+     * @param row    Row number
+     * @param column Column number
+     * @return The index in {@link #slots}
+     */
     private int getSlotIndexFromRowColumn(int row, int column) {
         return row * ROWS + column;
     }

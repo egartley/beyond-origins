@@ -62,6 +62,9 @@ public class Building extends StaticEntity {
         onPlayerLeave();
     }
 
+    /**
+     * Change the floor to the one above it
+     */
     public void upstairs() {
         BuildingFloor up;
         try {
@@ -73,6 +76,9 @@ public class Building extends StaticEntity {
         changeFloor(up);
     }
 
+    /**
+     * Change the floor to the one below it
+     */
     public void downstairs() {
         BuildingFloor down;
         try {
@@ -107,7 +113,6 @@ public class Building extends StaticEntity {
 
     @Override
     protected void setInteractions() {
-
     }
 
 }

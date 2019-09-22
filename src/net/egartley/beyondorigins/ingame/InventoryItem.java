@@ -120,7 +120,7 @@ public class InventoryItem extends Renderable implements Tickable {
             }
         } else {
             // did not end over any slots
-            InventoryPanel i = Game.in().inventory.panel;
+            InventoryPanel i = Game.in().inventory.inventoryPanel;
             if (!Util.isWithinBounds(x(), y(), i.x(), i.y(), i.width, i.height)) {
                 drop();
             }

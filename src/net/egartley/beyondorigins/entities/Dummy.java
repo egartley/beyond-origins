@@ -25,6 +25,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+/**
+ * Test dummy
+ */
 public class Dummy extends AnimatedEntity implements Character {
 
     private final byte LEFT_ANIMATION = 0;

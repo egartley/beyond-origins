@@ -24,7 +24,7 @@ public class InventoryPanel extends UIElement {
     }
 
     private void renderLine(String text, Graphics graphics) {
-        graphics.drawString(text, x() + 282, y() + 66 + (detailsLineIndex * 14));
+        graphics.drawString(text, x() + 282, y() + 91 + (detailsLineIndex * 14));
         detailsLineIndex++;
     }
 
@@ -38,11 +38,11 @@ public class InventoryPanel extends UIElement {
         graphics.drawImage(image, x(), y(), null);
         // player display
         BufferedImage playerImage = Entities.PLAYER.sprite.toBufferedImage();
-        graphics.drawImage(playerImage, Calculate.getCenter(516, playerImage.getWidth()), Calculate.getCenter(212, playerImage.getHeight()), null);
+        graphics.drawImage(playerImage, Calculate.getCenter(x() + 243, playerImage.getWidth()), Calculate.getCenter(y() + 96, playerImage.getHeight()), null);
         // details text
         graphics.setColor(playerNameColor);
         graphics.setFont(playerNameFont);
-        graphics.drawString("Player's Name", x() + 282, y() + 48);
+        graphics.drawString("Player's Name", x() + 282, y() + 73);
 
         graphics.setColor(detailsColor);
         graphics.setFont(detailsFont);

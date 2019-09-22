@@ -106,7 +106,7 @@ public class Debug {
     }
 
     /**
-     * Render debug information
+     * Render debug information, toggled with F3
      */
     public static void render(Graphics graphics) {
         row = 0;

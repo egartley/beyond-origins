@@ -72,6 +72,7 @@ public class Wizard extends AnimatedEntity implements Character {
         });
     }
 
+    @Override
     public void tick() {
         super.tick();
         if (!metPlayer) {
@@ -81,6 +82,7 @@ public class Wizard extends AnimatedEntity implements Character {
         }
     }
 
+    @Override
     public void render(Graphics graphics) {
         if (!metPlayer) {
             meetPlayerExpression.render(graphics);
@@ -90,6 +92,9 @@ public class Wizard extends AnimatedEntity implements Character {
         super.render(graphics);
     }
 
+    /**
+     * Called whenever the player interacts with the wizard
+     */
     private void onPlayerInteraction() {
         boolean playerHasHat = Game.in().inventory.has(Item.WIZARD_HAT);
         if (!foundHat) {

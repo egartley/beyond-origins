@@ -45,6 +45,9 @@ public class BuildingFloor extends Renderable implements Tickable {
 
     }
 
+    /**
+     * Ensures the player doesn't move beyond the limits of this floor (into the black)
+     */
     public void checkPlayerLimits() {
         Entities.PLAYER.isAllowedToMoveUpwards = Entities.PLAYER.y() > upperYLimit;
         Entities.PLAYER.isAllowedToMoveDownwards = Entities.PLAYER.y() < lowerYLimit;

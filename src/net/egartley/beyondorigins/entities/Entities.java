@@ -4,6 +4,9 @@ import net.egartley.beyondorigins.data.ImageStore;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.graphics.SpriteSheet;
 
+/**
+ * Commonly referenced entities, such as the player
+ */
 public class Entities {
 
     public static final byte TEMPLATE_TREE = 1, TEMPLATE_ROCK = 2;

@@ -13,6 +13,9 @@ import java.awt.image.BufferedImage;
 
 public class DialoguePanel extends UIElement {
 
+    /**
+     * How long before the dialogue can be advanced after starting or switching
+     */
     private static final double DELAY = 1.225D;
 
     /**
@@ -67,6 +70,9 @@ public class DialoguePanel extends UIElement {
         setPosition(Calculate.getCenter(Game.WINDOW_WIDTH / 2, image.getWidth()), Game.WINDOW_HEIGHT - image.getHeight() - 8);
     }
 
+    /**
+     * Called when the space bar is pressed
+     */
     public void advance() {
         if (!isShowing) {
             return;
@@ -79,6 +85,9 @@ public class DialoguePanel extends UIElement {
         }
     }
 
+    /**
+     * Disable advancing the dialogue for {@link #DELAY} amount of time
+     */
     public void delay() {
         readyToAdvance = false;
         new DelayedEvent(DELAY) {
@@ -110,6 +119,11 @@ public class DialoguePanel extends UIElement {
         Entities.PLAYER.thaw();
     }
 
+    /**
+     * Sets {@link #exchange} and calls {@link #show()}
+     *
+     * @param exchange The exchange to start
+     */
     public void startExchange(DialogueExchange exchange) {
         this.exchange = exchange;
         if (!isShowing) {

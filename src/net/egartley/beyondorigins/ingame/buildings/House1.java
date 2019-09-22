@@ -9,6 +9,9 @@ import net.egartley.gamelib.logic.interaction.BoundaryPadding;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
 import net.egartley.gamelib.logic.math.Calculate;
 
+/**
+ * Test building
+ */
 public class House1 extends Building {
 
     private EntityBoundary blockBoundary1, blockBoundary2, blockBoundary3;

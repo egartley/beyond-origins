@@ -4,8 +4,9 @@ import net.egartley.gamelib.abstracts.StaticEntity;
 import net.egartley.gamelib.logic.interaction.BoundaryPadding;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
 
-import java.awt.*;
-
+/**
+ * An area that will trigger a change in the player's location/floor within a building
+ */
 public class BuildingChanger extends StaticEntity {
 
     public static final byte UPSTAIRS = 0, DOWNSTAIRS = 1, LEAVE = 2, JUMP = 3;
@@ -30,10 +31,6 @@ public class BuildingChanger extends StaticEntity {
         this.jumpNumber = jumpNumber;
     }
 
-    public void render_debug(Graphics graphics) {
-        defaultBoundary.draw(graphics);
-    }
-
     @Override
     protected void setBoundaries() {
     }
@@ -44,7 +41,6 @@ public class BuildingChanger extends StaticEntity {
 
     @Override
     protected void setInteractions() {
-
     }
 
 }

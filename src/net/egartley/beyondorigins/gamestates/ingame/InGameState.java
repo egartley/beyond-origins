@@ -34,7 +34,6 @@ public class InGameState extends GameState {
         subStates.add(new InBuildingState());
 
         // load map
-        // map = new DebugMap("Debug Map");
         maps.add(new DebugMap());
         map = maps.get(0);
 
@@ -119,7 +118,7 @@ public class InGameState extends GameState {
 
     @Override
     public void tick() {
-        // normal gmaestate tick
+        // normal gamestate tick
         if (currentSubState != null) {
             currentSubState.tick();
         } else {
