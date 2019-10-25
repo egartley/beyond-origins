@@ -1,5 +1,6 @@
 package net.egartley.beyondorigins.ingame.maps.debug.sectors;
 
+import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.entities.DefaultRock;
 import net.egartley.beyondorigins.entities.DefaultTree;
@@ -31,19 +32,27 @@ public class Sector1 extends MapSector {
     @Override
     public void render(Graphics graphics) {
         drawTiles(graphics);
-        for (Entity e : entities) {
-            if (e.isDualRendered) {
-                e.drawFirstLayer(graphics);
-            } else {
-                e.render(graphics);
+        try {
+            for (Entity e : entities) {
+                if (e.isDualRendered) {
+                    e.drawFirstLayer(graphics);
+                } else {
+                    e.render(graphics);
+                }
             }
+        } catch (Exception e) {
+            Debug.error(e);
         }
         Entities.DUMMY.render(graphics);
         Entities.PLAYER.render(graphics);
-        for (Entity e : entities) {
-            if (e.isDualRendered) {
-                e.drawSecondLayer(graphics);
+        try {
+            for (Entity e : entities) {
+                if (e.isDualRendered) {
+                    e.drawSecondLayer(graphics);
+                }
             }
+        } catch (Exception e) {
+            Debug.error(e);
         }
 
         if (Game.debug) {

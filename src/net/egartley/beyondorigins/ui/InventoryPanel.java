@@ -48,8 +48,6 @@ public class InventoryPanel extends UIElement {
         graphics.setFont(detailsFont);
         renderLine("Level: NaN", graphics);
         renderLine("Experience: NaN", graphics);
-        renderLine("Wallet: Empty", graphics);
-        renderLine("Equipment: None", graphics);
 
         detailsLineIndex = 0;
     }
