@@ -51,7 +51,7 @@ public class NotificationBanner extends UIElement {
     @Override
     public void tick() {
         if (done) {
-            Game.in().map.sector.killNotification(this);
+            Game.in().map.sector.onNotificationFinish(this);
             return;
         }
 

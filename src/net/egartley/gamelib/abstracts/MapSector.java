@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.ConcurrentModificationException;
 
 /**
  * Specific part, or area, of a map
@@ -85,26 +85,9 @@ public abstract class MapSector implements Tickable {
      * @see Entity#isSectorSpecific
      */
     public ArrayList<Entity> entities = new ArrayList<>();
-    /**
-     * Any notifications that are being shown
-     */
-    public ArrayList<NotificationBanner> notifications = new ArrayList<>();
-    /**
-     * Entities that are queued for removal from {@link #entities}
-     */
-    private Entity[] queuedForRemoval;
-    /**
-     * Entities that are queued for addition to {@link #entities}
-     */
-    private Entity[] queuedForAddition;
-    /**
-     * Entities that are queued for removal from {@link #entities}
-     */
-    private NotificationBanner[] removalNotifications;
-    /**
-     * Entities that are queued for addition to {@link #entities}
-     */
-    private NotificationBanner[] additionNotifications;
+    public ArrayList<Entity> primaryEntities = new ArrayList<>();
+    public ArrayList<Renderable> renderables = new ArrayList<>();
+    public ArrayList<Tickable> tickables = new ArrayList<>();
 
     protected ArrayList<ArrayList<MapTile>> tiles = new ArrayList<>();
 
@@ -138,11 +121,13 @@ public abstract class MapSector implements Tickable {
     public abstract void initialize();
 
     void onPlayerEnter_internal() {
+        addEntity(Entities.PLAYER, true);
         Util.fixCrossSectorCollisions(entities);
     }
 
     void onPlayerLeave_internal() {
         Util.fixCrossSectorCollisions(entities);
+        removeEntity(Entities.PLAYER, true);
     }
 
     /**
@@ -150,25 +135,31 @@ public abstract class MapSector implements Tickable {
      */
     public void render(Graphics graphics) {
         drawTiles(graphics);
-        for (Entity e : entities) {
-            if (e.isDualRendered) {
-                e.drawFirstLayer(graphics);
+        try {
+            for (Entity e : entities) {
+                if (e.isDualRendered) {
+                    e.drawFirstLayer(graphics);
+                }
             }
-        }
-        Entities.PLAYER.render(graphics);
-        for (Entity e : entities) {
-            if (e.isDualRendered) {
-                e.drawSecondLayer(graphics);
-            } else {
-                e.render(graphics);
+            primaryEntities.forEach(r -> r.render(graphics));
+            for (Entity e : entities) {
+                if (e.isDualRendered) {
+                    e.drawSecondLayer(graphics);
+                } else {
+                    e.render(graphics);
+                }
             }
-        }
 
-        if (Game.debug) {
-            changeBoundaries.forEach(boundary -> boundary.draw(graphics));
-        }
+            if (Game.debug) {
+                changeBoundaries.forEach(boundary -> boundary.draw(graphics));
+            }
 
-        notifications.forEach(notification -> notification.render(graphics));
+            renderables.forEach(r -> r.render(graphics));
+        } catch (ConcurrentModificationException cme) {
+            // ignore for now
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 
     /**
@@ -176,56 +167,68 @@ public abstract class MapSector implements Tickable {
      */
     @Override
     public void tick() {
-        if (queuedForAddition != null && queuedForAddition.length > 0) {
-            Collections.addAll(entities, queuedForAddition);
-            queuedForAddition = null;
+        try {
+            tickables.forEach(Tickable::tick);
+            changeCollisions.forEach(MapSectorChangeCollision::tick);
+        } catch (ConcurrentModificationException cme) {
+            // ignore for now
+        } catch (Exception e) {
+            Debug.error(e);
         }
-        if (queuedForRemoval != null && queuedForRemoval.length > 0) {
-            for (Entity entity : queuedForRemoval) {
-                entities.remove(entity);
-            }
-            queuedForRemoval = null;
-        }
-
-        if (additionNotifications != null && additionNotifications.length > 0) {
-            Collections.addAll(notifications, additionNotifications);
-            additionNotifications = null;
-        }
-        if (removalNotifications != null && removalNotifications.length > 0) {
-            for (NotificationBanner notification : removalNotifications) {
-                notifications.remove(notification);
-            }
-            removalNotifications = null;
-        }
-
-        Entities.PLAYER.tick();
-        changeCollisions.forEach(MapSectorChangeCollision::tick);
-        entities.forEach(Entity::tick);
-        notifications.forEach(NotificationBanner::tick);
-    }
-
-    public void removeEntity(Entity e) {
-        removeEntities(new Entity[]{e});
-    }
-
-    public void removeEntities(Entity[] e) {
-        queuedForRemoval = e;
     }
 
     public void addEntity(Entity e) {
-        addEntities(new Entity[]{e});
+        entities.add(e);
+        addTickable(e);
     }
 
-    public void addEntities(Entity[] e) {
-        queuedForAddition = e;
+    public void addEntity(Entity e, boolean primary) {
+        if (primary) {
+            primaryEntities.add(e);
+            addTickable(e);
+        } else {
+            addEntity(e);
+        }
+    }
+
+    public void removeEntity(Entity e) {
+        entities.remove(e);
+        removeTickable(e);
+    }
+
+    public void removeEntity(Entity e, boolean primary) {
+        if (primary) {
+            primaryEntities.remove(e);
+            removeTickable(e);
+        } else {
+            removeEntity(e);
+        }
     }
 
     public void pushNotification(NotificationBanner notification) {
-        additionNotifications = new NotificationBanner[]{notification};
+        addTickable(notification);
+        addRenderable(notification);
     }
 
-    public void killNotification(NotificationBanner notification) {
-        removalNotifications = new NotificationBanner[]{notification};
+    public void onNotificationFinish(NotificationBanner notification) {
+        removeTickable(notification);
+        removeRenderable(notification);
+    }
+
+    public void addTickable(Tickable tickable) {
+        tickables.add(tickable);
+    }
+
+    public void removeTickable(Tickable tickable) {
+        tickables.remove(tickable);
+    }
+
+    public void addRenderable(Renderable renderable) {
+        renderables.add(renderable);
+    }
+
+    public void removeRenderable(Renderable renderable) {
+        renderables.remove(renderable);
     }
 
     /**
