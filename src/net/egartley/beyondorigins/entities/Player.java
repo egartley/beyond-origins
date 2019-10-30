@@ -26,7 +26,11 @@ public class Player extends AnimatedEntity implements Character {
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
     private final int ANIMATION_THRESHOLD = 165;
+    private final int MAX_LEVEL = 100;
+    private final int MAX_EXPERIENCE = 10390; // 100 + (100 * 98) + (5 * 98)
 
+    private int level = 1;
+    private int totalExperience = 0;
     private boolean frozen;
     private boolean isMovementInvalidated;
 
@@ -279,6 +283,41 @@ public class Player extends AnimatedEntity implements Character {
             }
             switchAnimation(RIGHT_ANIMATION);
         }
+    }
+
+    private int getExperienceNeededForNextLevel() {
+        // 100 needed to get level 2, 205 needed for level 3, 310 needed for 4, and so on
+        int n = level - 1;
+        return 100 + (100 * n) + (5 * n);
+    }
+
+    private void nextLevel() {
+        if (level < MAX_LEVEL) {
+            level++;
+        }
+        if (level > MAX_LEVEL) {
+            level = MAX_LEVEL;
+        }
+    }
+
+    public void giveExperience(int amount) {
+        if (totalExperience < MAX_EXPERIENCE) {
+            totalExperience += amount;
+        }
+        if (totalExperience > MAX_EXPERIENCE) {
+            totalExperience = MAX_EXPERIENCE;
+        }
+        if (totalExperience >= getExperienceNeededForNextLevel()) {
+            nextLevel();
+        }
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getExperience() {
+        return totalExperience;
     }
 
     @Override

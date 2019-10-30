@@ -44,7 +44,7 @@ public class DroppedItem extends StaticEntity {
     public Item item;
 
     public DroppedItem(Item item, int x, int y) {
-        super("DroppedItem_" + item.id, new Sprite(Util.resize(item.image, 0.5)));
+        super("DroppedItem", new Sprite(Util.resize(item.image, 0.5)));
         isSectorSpecific = true;
         isDualRendered = false;
         isTraversable = true;

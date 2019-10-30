@@ -1,6 +1,5 @@
 package net.egartley.beyondorigins.ingame;
 
-import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.ui.ClickableArea;
 import net.egartley.beyondorigins.ui.InventoryPanel;
@@ -47,7 +46,6 @@ public class Inventory implements Tickable {
 
             @Override
             public void onClick() {
-                Debug.out("inventory click");
                 onTabClicked(this);
             }
         };
@@ -59,7 +57,6 @@ public class Inventory implements Tickable {
 
             @Override
             public void onClick() {
-                Debug.out("quests click");
                 onTabClicked(this);
             }
         };
@@ -130,7 +127,6 @@ public class Inventory implements Tickable {
     }
 
     private void onTabClicked(ClickableArea tab) {
-        Debug.out("tab clicked");
         isShowing = false;
         if (tab.equals(inventoryPanelTab)) {
             panel = inventoryPanel;

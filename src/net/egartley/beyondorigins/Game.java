@@ -24,6 +24,7 @@ public class Game extends Canvas implements Runnable {
     private static final long serialVersionUID = 8213282993283826186L;
     private static long startTime;
     private static JFrame frame;
+    private static String loadingStatus = "Loading...";
     private static Dimension windowDimension = new Dimension(976, 583);
     private static boolean running = false, started = false;
     private long lastFpsTime;
@@ -76,6 +77,7 @@ public class Game extends Canvas implements Runnable {
 
     private void init() {
         Debug.out("Initializing input...");
+        setLoadingStatus("Loading... (input)");
         this.addKeyListener(new Keyboard());
         Mouse m = new Mouse();
         this.addMouseListener(m);
@@ -89,11 +91,14 @@ public class Game extends Canvas implements Runnable {
         Debug.out("Input was initialized");
 
         Debug.out("Initializing entities...");
+        setLoadingStatus("Loading... (entities)");
         Entities.initialize();
         Debug.out("Entities were initialized");
 
         Debug.out("Initializing game states...");
+        setLoadingStatus("Loading... (ingame state)");
         inGameState = new InGameState();
+        setLoadingStatus("Loading... (mainmenu state)");
         mainMenuState = new MainMenuState();
         if (debug) {
             setState(inGameState);
@@ -145,6 +150,10 @@ public class Game extends Canvas implements Runnable {
         }
         currentState = changeTo;
         currentState.onStart();
+    }
+
+    public static void setLoadingStatus(String status) {
+        loadingStatus = status;
     }
 
     public static synchronized void quit() {
@@ -252,7 +261,7 @@ public class Game extends Canvas implements Runnable {
         } else {
             graphics.setColor(Color.BLACK);
             graphics.setFont(new Font("Consolas", Font.PLAIN, 32));
-            graphics.drawString("Loading...", Calculate.getCenteredX(graphics.getFontMetrics().stringWidth("Loading...")), Calculate.getCenteredY(32) + 16);
+            graphics.drawString(loadingStatus, Calculate.getCenteredX(graphics.getFontMetrics().stringWidth(loadingStatus)), Calculate.getCenteredY(32) + 16);
         }
         repaint();
     }

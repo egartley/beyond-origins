@@ -16,11 +16,12 @@ public class NotificationBanner extends UIElement {
 
     public boolean done = false;
     private int offset = 0;
+    private int move = 2;
     private boolean startedAnimation = false, readyToMoveAgain = true, reachedTargetY = false, shown = false;
 
     private static int MAX_LINE_LENGTH = 31;
     private static int startY, targetY = 8;
-    private static final double SLIDE_DELAY = 0.0001D, SHOW_DELAY = 3.5D;
+    private static final double SLIDE_DELAY = 0.001D, SHOW_DELAY = 3.5D;
     private static Font font = new Font("Bookman Old Style", Font.BOLD, 14);
 
     public NotificationBanner(String text) {
@@ -40,11 +41,11 @@ public class NotificationBanner extends UIElement {
     }
 
     private void slideDown() {
-        y(y() + 1);
+        y(y() + move);
     }
 
     private void slideUp() {
-        y(y() - 1);
+        y(y() - move);
     }
 
     @Override

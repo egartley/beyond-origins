@@ -46,8 +46,8 @@ public class InventoryPanel extends UIElement {
 
         graphics.setColor(detailsColor);
         graphics.setFont(detailsFont);
-        renderLine("Level: NaN", graphics);
-        renderLine("Experience: NaN", graphics);
+        renderLine("Level " + Entities.PLAYER.getLevel(), graphics);
+        renderLine("EXP: " + Entities.PLAYER.getExperience(), graphics);
 
         detailsLineIndex = 0;
     }
