@@ -1,7 +1,6 @@
 package net.egartley.beyondorigins.ingame.maps.debug.sectors;
 
 import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.entities.DefaultRock;
 import net.egartley.beyondorigins.entities.DefaultTree;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.WoodenFence;
@@ -44,7 +43,7 @@ public class Sector1 extends MapSector {
             s = Entities.getSpriteTemplate(Entities.TEMPLATE_ROCK);
             int off = 0;
             for (byte i = 0; i < 14; i++) {
-                addEntity(new DefaultRock(s, (s.width * 2) * off++ + 48, 400));
+                // addEntity(new DefaultRock(s, (s.width * 2) * off++ + 48, 400));
             }
             WoodenFence fence = new WoodenFence(8, true);
             fence.setPosition(534, 268);
@@ -65,16 +64,13 @@ public class Sector1 extends MapSector {
         } else {
             updatePlayerPosition(from);
         }
-        initialize();
         Entities.DUMMY.onSectorEnter(this);
-        addEntity(Entities.DUMMY);
         Entities.PLAYER.generateSectorSpecificCollisions(this);
     }
 
     @Override
     public void onPlayerLeave(MapSector to) {
         Entities.DUMMY.onSectorLeave(this);
-        removeEntity(Entities.DUMMY);
         Entities.PLAYER.removeSectorSpecificCollisions(this);
     }
 

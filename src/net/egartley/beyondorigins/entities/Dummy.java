@@ -62,6 +62,8 @@ public class Dummy extends AnimatedEntity implements Character {
     }
 
     public void onSectorEnter(MapSector sector) {
+        sector.addEntity(this, true);
+
         // generate collisions with sector entities that aren't traversable
         for (Entity e : sector.entities) {
             if (!e.isTraversable && e.isSectorSpecific) {
@@ -89,16 +91,23 @@ public class Dummy extends AnimatedEntity implements Character {
         // prevents concurrent modification
         ArrayList<EntityEntityCollision> removeCollisions = new ArrayList<>();
 
-        for (Entity e : sector.entities)
-            if (!e.isTraversable && e.isSectorSpecific)
-                for (EntityEntityCollision c : collisions)
-                    if (c.entities[0].equals(e) || c.entities[1].equals(e))
+        for (Entity e : sector.entities) {
+            if (!e.isTraversable && e.isSectorSpecific) {
+                for (EntityEntityCollision c : collisions) {
+                    if (c.entities[0].equals(e) || c.entities[1].equals(e)) {
                         removeCollisions.add(c);
+                    }
+                }
+            }
+        }
 
-        for (EntityEntityCollision c : removeCollisions)
+        for (EntityEntityCollision c : removeCollisions) {
             collisions.remove(c);
+        }
 
         removeCollisions.clear();
+
+        sector.removeEntity(this, true);
     }
 
     @Override
@@ -145,10 +154,11 @@ public class Dummy extends AnimatedEntity implements Character {
             animation.start();
         }
 
-        if (direction == DIRECTION_RIGHT && !animations.get(RIGHT_ANIMATION).clock.isRunning)
+        if (direction == DIRECTION_RIGHT && !animations.get(RIGHT_ANIMATION).clock.isRunning) {
             switchAnimation(RIGHT_ANIMATION);
-        else if (direction == DIRECTION_LEFT && !animations.get(LEFT_ANIMATION).clock.isRunning)
+        } else if (direction == DIRECTION_LEFT && !animations.get(LEFT_ANIMATION).clock.isRunning) {
             switchAnimation(LEFT_ANIMATION);
+        }
     }
 
     @Override
@@ -191,4 +201,5 @@ public class Dummy extends AnimatedEntity implements Character {
     public BufferedImage getCharacterImage() {
         return image;
     }
+
 }

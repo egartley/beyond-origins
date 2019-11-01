@@ -123,6 +123,7 @@ public abstract class MapSector implements Tickable {
     void onPlayerEnter_internal() {
         addEntity(Entities.PLAYER, true);
         Util.fixCrossSectorCollisions(entities);
+        initialize();
     }
 
     void onPlayerLeave_internal() {
@@ -178,31 +179,29 @@ public abstract class MapSector implements Tickable {
     }
 
     public void addEntity(Entity e) {
-        entities.add(e);
-        addTickable(e);
+        addEntity(e, false);
     }
 
     public void addEntity(Entity e, boolean primary) {
         if (primary) {
             primaryEntities.add(e);
-            addTickable(e);
         } else {
-            addEntity(e);
+            entities.add(e);
         }
+        addTickable(e);
     }
 
     public void removeEntity(Entity e) {
-        entities.remove(e);
-        removeTickable(e);
+        removeEntity(e, false);
     }
 
     public void removeEntity(Entity e, boolean primary) {
         if (primary) {
             primaryEntities.remove(e);
-            removeTickable(e);
         } else {
-            removeEntity(e);
+            entities.remove(e);
         }
+        removeTickable(e);
     }
 
     public void pushNotification(NotificationBanner notification) {
