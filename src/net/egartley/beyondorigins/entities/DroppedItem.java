@@ -2,8 +2,8 @@ package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.ingame.Item;
 import net.egartley.gamelib.abstracts.Entity;
+import net.egartley.gamelib.abstracts.GameItem;
 import net.egartley.gamelib.abstracts.StaticEntity;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
@@ -41,9 +41,9 @@ public class DroppedItem extends StaticEntity {
     /**
      * The item being represented
      */
-    public Item item;
+    public GameItem item;
 
-    public DroppedItem(Item item, int x, int y) {
+    public DroppedItem(GameItem item, int x, int y) {
         super("DroppedItem", new Sprite(Util.resize(item.image, 0.5)));
         isSectorSpecific = true;
         isDualRendered = false;
@@ -87,8 +87,8 @@ public class DroppedItem extends StaticEntity {
      * @return Whether or not the dropped item was successfully picked up by the player
      */
     private boolean pickup() {
-        if (!Game.in().playerMenu.isFull() && canPickup && over) {
-            Game.in().playerMenu.put(item);
+        if (!Entities.PLAYER.inventory.isFull() && canPickup && over) {
+            Entities.PLAYER.inventory.put(item);
             lifetimeDelay.cancel();
             destroy();
             return true;

@@ -1,9 +1,11 @@
-package net.egartley.beyondorigins.ingame;
+package net.egartley.gamelib.logic.inventory;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.entities.DroppedItem;
+import net.egartley.beyondorigins.ingame.InventorySlot;
 import net.egartley.beyondorigins.ui.InventoryPanel;
+import net.egartley.gamelib.abstracts.GameItem;
 import net.egartley.gamelib.abstracts.Renderable;
 import net.egartley.gamelib.input.Mouse;
 import net.egartley.gamelib.interfaces.Tickable;
@@ -11,61 +13,76 @@ import net.egartley.gamelib.interfaces.Tickable;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class InventoryItem extends Renderable implements Tickable {
+public class ItemStack extends Renderable implements Tickable {
+
+    public static int MAX_AMOUNT = 99;
 
     private static Font tooltipFont = new Font("Arial", Font.BOLD, 14);
     private static Color tooltipBorderColor = new Color(65, 11, 67);
-
     private int tooltipWidth;
 
     public boolean isBeingDragged, didStartDrag, mouseHover, setFontMetrics, isShowingTooltip;
 
-    private PlayerMenu playerMenu;
-
-    public Item item;
+    public int amount;
+    public GameItem item;
     public InventorySlot slot;
 
-    public InventoryItem(PlayerMenu playerMenu, Item item, InventorySlot slot) {
-        this(playerMenu, item, slot, false);
+    public ItemStack(GameItem item) {
+        this(item, 1);
     }
 
-    public InventoryItem(PlayerMenu playerMenu, Item item, InventorySlot slot, boolean setToSlot) {
-        this.playerMenu = playerMenu;
+    public ItemStack(GameItem item, int amount) {
         this.item = item;
-        this.slot = slot;
-        setPosition(slot.baseItemX, slot.baseItemY);
-        if (setToSlot) {
-            slot.set(this);
+        add(amount);
+    }
+
+    public void add(int number) {
+        if (isFull()) {
+            return;
+        }
+        amount += number;
+        if (amount > MAX_AMOUNT) {
+            amount = MAX_AMOUNT;
+        }
+    }
+
+    public void take(int number) {
+        amount -= number;
+        if (amount < 0) {
+            amount = 0;
+        }
+    }
+
+    public void render(Graphics graphics) {
+        graphics.drawImage(item.image, x(), y(), null);
+        graphics.setColor(Color.BLACK);
+        graphics.drawString(String.valueOf(amount), x(), y() - 4);
+        if (!setFontMetrics) {
+            tooltipWidth = graphics.getFontMetrics(tooltipFont).stringWidth(item.displayName);
+            setFontMetrics = true;
+        }
+        if (isShowingTooltip) {
+            drawToolTip(graphics);
         }
     }
 
     public void tick() {
         mouseHover = Util.isWithinBounds(Mouse.x, Mouse.y, x(), y(), InventorySlot.SIZE, InventorySlot.SIZE);
-        isShowingTooltip = isBeingDragged || (mouseHover && playerMenu.itemBeingDragged == null);
+        isShowingTooltip = isBeingDragged || (mouseHover && InventoryPanel.stackBeingDragged == null);
         if (Mouse.isDragging) {
-            if ((mouseHover || didStartDrag) && (playerMenu.itemBeingDragged == this || playerMenu.itemBeingDragged == null)) {
-                playerMenu.itemBeingDragged = this;
+            if ((mouseHover || didStartDrag) && (InventoryPanel.stackBeingDragged == this || InventoryPanel.stackBeingDragged == null)) {
+                InventoryPanel.stackBeingDragged = this;
                 setPosition(Mouse.x - (InventorySlot.SIZE / 2), Mouse.y - (InventorySlot.SIZE / 2));
                 didStartDrag = true;
                 isBeingDragged = true;
             }
         } else if (isBeingDragged) {
             onDragEnd();
-            playerMenu.itemBeingDragged = null;
+            InventoryPanel.stackBeingDragged = null;
             isBeingDragged = false;
         } else {
             setPosition(slot.baseItemX, slot.baseItemY);
             didStartDrag = false;
-        }
-    }
-
-    @Override
-    public void render(Graphics graphics) {
-        graphics.drawImage(item.image, x(), y(), null);
-
-        if (!setFontMetrics) {
-            tooltipWidth = graphics.getFontMetrics(tooltipFont).stringWidth(item.name);
-            setFontMetrics = true;
         }
     }
 
@@ -77,14 +94,14 @@ public class InventoryItem extends Renderable implements Tickable {
         graphics.fillRect(Mouse.x + 1, Mouse.y - 25, tooltipWidth + 8, 20);
         graphics.setColor(Color.WHITE);
         graphics.setFont(tooltipFont);
-        graphics.drawString(item.name, Mouse.x + 5, Mouse.y - 10);
+        graphics.drawString(item.displayName, Mouse.x + 5, Mouse.y - 10);
     }
 
     private void onDragEnd() {
         ArrayList<Rectangle> intersectionRectangles = new ArrayList<>();
         ArrayList<InventorySlot> intersectedSlots = new ArrayList<>();
 
-        for (InventorySlot slot : playerMenu.slots) {
+        for (InventorySlot slot : InventoryPanel.slots) {
             Rectangle r1 = new Rectangle(slot.x(), slot.y(), InventorySlot.SIZE, InventorySlot.SIZE);
             Rectangle r2 = new Rectangle(x(), y(), InventorySlot.SIZE, InventorySlot.SIZE);
             if (r1.intersects(r2)) {
@@ -116,7 +133,7 @@ public class InventoryItem extends Renderable implements Tickable {
                 this.move(closestSlot);
             } else {
                 // swap with the item in the closest slot
-                this.swap(closestSlot.item);
+                this.swap(closestSlot.stack);
             }
         } else {
             // did not end over any slots
@@ -128,40 +145,34 @@ public class InventoryItem extends Renderable implements Tickable {
     }
 
     /**
-     * Moves this item to the specified slot
-     *
-     * @param moveTo The slot to move this item to
+     * Removes this item from the inventory
      */
+    private void selfDestruct() {
+        slot.removeStack();
+    }
+
     private void move(InventorySlot moveTo) {
-        slot.removeItem();
+        slot.removeStack();
         slot = moveTo;
         moveTo.set(this);
     }
 
-    /**
-     * Swaps places (slots) with the specified item
-     *
-     * @param swapWith The item to swap places with
-     */
-    private void swap(InventoryItem swapWith) {
+    private void swap(ItemStack swapWith) {
         InventorySlot slot1 = this.slot;
-        InventoryItem item1 = this;
+        ItemStack stack1 = this;
         InventorySlot slot2 = swapWith.slot;
-        InventoryItem item2 = swapWith;
-        slot1.set(item2);
-        slot2.set(item1);
-    }
-
-    /**
-     * Removes this item from the inventory
-     */
-    private void selfDestruct() {
-        slot.removeItem();
+        ItemStack stack2 = swapWith;
+        slot1.set(stack2);
+        slot2.set(stack1);
     }
 
     private void drop() {
         Game.in().map.sector.addEntity(new DroppedItem(item, Mouse.x - 8, Mouse.y - 8));
         selfDestruct();
+    }
+
+    public boolean isFull() {
+        return amount < MAX_AMOUNT;
     }
 
 }

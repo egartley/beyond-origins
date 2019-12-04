@@ -11,6 +11,7 @@ import net.egartley.gamelib.logic.collision.EntityEntityCollision;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
 import net.egartley.gamelib.logic.interaction.EntityEntityInteraction;
+import net.egartley.gamelib.logic.inventory.EntityInventory;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -53,6 +54,9 @@ public abstract class Entity extends Renderable implements Tickable {
      * Collection of the entity's concurrent collisions
      */
     public ArrayList<EntityEntityCollision> concurrentCollisions = new ArrayList<>();
+
+    public EntityInventory inventory;
+
     /**
      * The sprite to use while rendering
      */
@@ -200,6 +204,7 @@ public abstract class Entity extends Renderable implements Tickable {
      * speed of <code>1.0</code>, then adds it to the entity store
      */
     Entity(String id, Sprite sprite) {
+        inventory = new EntityInventory(this);
         generateUUID();
         this.id = id;
         if (sprite != null) {

@@ -3,7 +3,7 @@ package net.egartley.beyondorigins.entities;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.data.ImageStore;
-import net.egartley.beyondorigins.ingame.Item;
+import net.egartley.beyondorigins.data.ItemStore;
 import net.egartley.beyondorigins.ui.NotificationBanner;
 import net.egartley.gamelib.abstracts.AnimatedEntity;
 import net.egartley.gamelib.graphics.Animation;
@@ -62,7 +62,7 @@ public class Wizard extends AnimatedEntity implements Character {
             @Override
             public void onFinish() {
                 // take hat from player
-                Game.in().playerMenu.take(Item.WIZARD_HAT);
+                Entities.PLAYER.inventory.remove(ItemStore.get(ItemStore.WIZARD_HAT));
                 // switch to sprite that is wearing the hat
                 setSpriteSheet(1);
                 wearingHat = true;
@@ -98,7 +98,7 @@ public class Wizard extends AnimatedEntity implements Character {
      * Called whenever the player interacts with the wizard
      */
     private void onPlayerInteraction() {
-        boolean playerHasHat = Game.in().playerMenu.has(Item.WIZARD_HAT);
+        boolean playerHasHat = Entities.PLAYER.inventory.contains(ItemStore.get(ItemStore.WIZARD_HAT));
         if (!foundHat) {
             if (!playerHasHat) {
                 Game.in().dialogue.startExchange(dialogue_meetPlayer);
