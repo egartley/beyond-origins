@@ -1,11 +1,9 @@
 package net.egartley.beyondorigins.ingame.maps.debug.sectors;
 
-import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.data.ItemStore;
 import net.egartley.beyondorigins.entities.DefaultTree;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.WoodenFence;
-import net.egartley.beyondorigins.ingame.PlayerMenu;
 import net.egartley.beyondorigins.ingame.buildings.House1;
 import net.egartley.beyondorigins.ui.NotificationBanner;
 import net.egartley.gamelib.abstracts.Map;
@@ -31,7 +29,6 @@ public class Sector1 extends MapSector {
             DefaultTree tree = new DefaultTree(s, 100, 200);
             tree.collisions.add(new EntityEntityCollision(Entities.PLAYER.boundary, tree.defaultBoundary) {
                 public void start(EntityEntityCollisionEvent e) {
-                    PlayerMenu playerMenu = Game.in().playerMenu;
                     if (!Entities.PLAYER.inventory.contains(ItemStore.get(ItemStore.WIZARD_HAT)) && Entities.WIZARD.metPlayer && !Entities.WIZARD.foundHat) {
                         Entities.PLAYER.inventory.put(ItemStore.get(ItemStore.WIZARD_HAT));
                         pushNotification(new NotificationBanner("You have found the Wizard's hat!", "items/wizard-hat.png"));
@@ -53,6 +50,7 @@ public class Sector1 extends MapSector {
             addEntity(house);
 
             didInitialize = true;
+            Entities.PLAYER.inventory.put(ItemStore.get(ItemStore.WIZARD_HAT));
         }
     }
 

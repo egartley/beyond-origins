@@ -21,7 +21,16 @@ public class EntityInventory {
     public EntityInventory(Entity parent, int numberOfSlots) {
         this.parent = parent;
         slots = new ArrayList<>(numberOfSlots);
-        slots.add(new ItemStack(null));
+        for (int i = 0; i < numberOfSlots; i++) {
+            slots.add(null);
+        }
+    }
+
+    public ItemStack get(int slot) {
+        if (slot > 0 && slot < slots.size()) {
+            return slots.get(slot);
+        }
+        return null;
     }
 
     public int nextEmptySlot() {

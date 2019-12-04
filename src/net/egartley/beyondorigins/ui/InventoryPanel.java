@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class InventoryPanel extends UIElement {
 
-    static final int ROWS = 5, COLUMNS = 4;
+    public static final int ROWS = 5, COLUMNS = 4;
 
     private int detailsLineIndex = 0;
     private boolean gotFontMetrics;
@@ -44,7 +44,7 @@ public class InventoryPanel extends UIElement {
 
     @Override
     public void tick() {
-        slots.forEach(InventorySlot::tick);
+        slots.forEach(slot -> slot.set(Entities.PLAYER.inventory.get(slot.index)));
     }
 
     @Override
