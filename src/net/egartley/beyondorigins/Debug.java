@@ -120,7 +120,6 @@ public class Debug {
         }
         drawLine("isCollided = " + Entities.PLAYER.isCollided, graphics);
         drawLine("Sector entities: " + Game.in().map.sector.entities, graphics);
-        drawLine("Primary entities: " + Game.in().map.sector.primaryEntities, graphics);
     }
 
 }

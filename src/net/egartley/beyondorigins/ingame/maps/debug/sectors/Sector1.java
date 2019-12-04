@@ -4,8 +4,8 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.entities.DefaultTree;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.WoodenFence;
-import net.egartley.beyondorigins.ingame.Inventory;
 import net.egartley.beyondorigins.ingame.Item;
+import net.egartley.beyondorigins.ingame.PlayerMenu;
 import net.egartley.beyondorigins.ingame.buildings.House1;
 import net.egartley.beyondorigins.ui.NotificationBanner;
 import net.egartley.gamelib.abstracts.Map;
@@ -24,7 +24,6 @@ public class Sector1 extends MapSector {
 
     @Override
     public void initialize() {
-        Game.in().inventory.put(Item.CURRENT_YEAR);
         if (!didInitialize) {
             // sector-specific entities
             Sprite s = Entities.getSpriteTemplate(Entities.TEMPLATE_TREE);
@@ -32,9 +31,9 @@ public class Sector1 extends MapSector {
             DefaultTree tree = new DefaultTree(s, 100, 200);
             tree.collisions.add(new EntityEntityCollision(Entities.PLAYER.boundary, tree.defaultBoundary) {
                 public void start(EntityEntityCollisionEvent e) {
-                    Inventory inventory = Game.in().inventory;
-                    if (!inventory.has(Item.WIZARD_HAT) && Entities.WIZARD.metPlayer && !Entities.WIZARD.foundHat) {
-                        inventory.put(Item.WIZARD_HAT);
+                    PlayerMenu playerMenu = Game.in().playerMenu;
+                    if (!playerMenu.has(Item.WIZARD_HAT) && Entities.WIZARD.metPlayer && !Entities.WIZARD.foundHat) {
+                        playerMenu.put(Item.WIZARD_HAT);
                         pushNotification(new NotificationBanner("You have found the Wizard's hat!", "items/wizard-hat.png"));
                     }
                 }
@@ -64,13 +63,13 @@ public class Sector1 extends MapSector {
         } else {
             updatePlayerPosition(from);
         }
-        Entities.DUMMY.onSectorEnter(this);
+        // Entities.DUMMY.onSectorEnter(this);
         Entities.PLAYER.generateSectorSpecificCollisions(this);
     }
 
     @Override
     public void onPlayerLeave(MapSector to) {
-        Entities.DUMMY.onSectorLeave(this);
+        // Entities.DUMMY.onSectorLeave(this);
         Entities.PLAYER.removeSectorSpecificCollisions(this);
     }
 

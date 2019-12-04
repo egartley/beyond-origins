@@ -87,8 +87,8 @@ public class DroppedItem extends StaticEntity {
      * @return Whether or not the dropped item was successfully picked up by the player
      */
     private boolean pickup() {
-        if (!Game.in().inventory.isFull() && canPickup && over) {
-            Game.in().inventory.put(item);
+        if (!Game.in().playerMenu.isFull() && canPickup && over) {
+            Game.in().playerMenu.put(item);
             lifetimeDelay.cancel();
             destroy();
             return true;

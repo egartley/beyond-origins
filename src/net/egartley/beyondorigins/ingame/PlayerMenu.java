@@ -10,7 +10,7 @@ import net.egartley.gamelib.interfaces.Tickable;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Inventory implements Tickable {
+public class PlayerMenu implements Tickable {
 
     static final int ROWS = 5, COLUMNS = 4;
 
@@ -26,7 +26,7 @@ public class Inventory implements Tickable {
 
     private Color backgroundColor = new Color(0, 0, 0, 152);
 
-    public Inventory() {
+    public PlayerMenu() {
         inventoryPanel = new InventoryPanel();
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMNS; c++) {

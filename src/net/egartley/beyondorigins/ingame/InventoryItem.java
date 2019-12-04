@@ -20,17 +20,17 @@ public class InventoryItem extends Renderable implements Tickable {
 
     public boolean isBeingDragged, didStartDrag, mouseHover, setFontMetrics, isShowingTooltip;
 
-    private Inventory inventory;
+    private PlayerMenu playerMenu;
 
     public Item item;
     public InventorySlot slot;
 
-    public InventoryItem(Inventory inventory, Item item, InventorySlot slot) {
-        this(inventory, item, slot, false);
+    public InventoryItem(PlayerMenu playerMenu, Item item, InventorySlot slot) {
+        this(playerMenu, item, slot, false);
     }
 
-    public InventoryItem(Inventory inventory, Item item, InventorySlot slot, boolean setToSlot) {
-        this.inventory = inventory;
+    public InventoryItem(PlayerMenu playerMenu, Item item, InventorySlot slot, boolean setToSlot) {
+        this.playerMenu = playerMenu;
         this.item = item;
         this.slot = slot;
         setPosition(slot.baseItemX, slot.baseItemY);
@@ -41,17 +41,17 @@ public class InventoryItem extends Renderable implements Tickable {
 
     public void tick() {
         mouseHover = Util.isWithinBounds(Mouse.x, Mouse.y, x(), y(), InventorySlot.SIZE, InventorySlot.SIZE);
-        isShowingTooltip = isBeingDragged || (mouseHover && inventory.itemBeingDragged == null);
+        isShowingTooltip = isBeingDragged || (mouseHover && playerMenu.itemBeingDragged == null);
         if (Mouse.isDragging) {
-            if ((mouseHover || didStartDrag) && (inventory.itemBeingDragged == this || inventory.itemBeingDragged == null)) {
-                inventory.itemBeingDragged = this;
+            if ((mouseHover || didStartDrag) && (playerMenu.itemBeingDragged == this || playerMenu.itemBeingDragged == null)) {
+                playerMenu.itemBeingDragged = this;
                 setPosition(Mouse.x - (InventorySlot.SIZE / 2), Mouse.y - (InventorySlot.SIZE / 2));
                 didStartDrag = true;
                 isBeingDragged = true;
             }
         } else if (isBeingDragged) {
             onDragEnd();
-            inventory.itemBeingDragged = null;
+            playerMenu.itemBeingDragged = null;
             isBeingDragged = false;
         } else {
             setPosition(slot.baseItemX, slot.baseItemY);
@@ -84,7 +84,7 @@ public class InventoryItem extends Renderable implements Tickable {
         ArrayList<Rectangle> intersectionRectangles = new ArrayList<>();
         ArrayList<InventorySlot> intersectedSlots = new ArrayList<>();
 
-        for (InventorySlot slot : inventory.slots) {
+        for (InventorySlot slot : playerMenu.slots) {
             Rectangle r1 = new Rectangle(slot.x(), slot.y(), InventorySlot.SIZE, InventorySlot.SIZE);
             Rectangle r2 = new Rectangle(x(), y(), InventorySlot.SIZE, InventorySlot.SIZE);
             if (r1.intersects(r2)) {
@@ -120,7 +120,7 @@ public class InventoryItem extends Renderable implements Tickable {
             }
         } else {
             // did not end over any slots
-            InventoryPanel i = Game.in().inventory.inventoryPanel;
+            InventoryPanel i = Game.in().playerMenu.inventoryPanel;
             if (!Util.isWithinBounds(x(), y(), i.x(), i.y(), i.width, i.height)) {
                 drop();
             }

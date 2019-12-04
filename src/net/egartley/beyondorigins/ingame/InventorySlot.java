@@ -24,7 +24,7 @@ public class InventorySlot extends UIElement {
         this.column = column;
         set(item);
         x((column * (SIZE + MARGIN)) + ((Game.WINDOW_WIDTH / 2) - (ImageStore.get(ImageStore.INVENTORY_PANEL).getWidth() / 2)) + 24);
-        y((row * (SIZE + MARGIN)) + (((Game.WINDOW_HEIGHT / 2) + 12) - ((Inventory.ROWS * (SIZE + MARGIN)) / 2)));
+        y((row * (SIZE + MARGIN)) + (((Game.WINDOW_HEIGHT / 2) + 12) - ((PlayerMenu.ROWS * (SIZE + MARGIN)) / 2)));
         baseItemX = x() + 2;
         baseItemY = y() + 2;
     }

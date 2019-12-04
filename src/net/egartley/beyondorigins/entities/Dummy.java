@@ -4,7 +4,6 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.data.ImageStore;
-import net.egartley.beyondorigins.ingame.Item;
 import net.egartley.gamelib.abstracts.AnimatedEntity;
 import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.abstracts.MapSector;
@@ -186,7 +185,6 @@ public class Dummy extends AnimatedEntity implements Character {
             public void interact() {
                 Game.in().dialogue.startExchange(dialogue_playerCollision);
                 isTalkingToPlayer = true;
-                Game.in().inventory.put(Item.CURRENT_YEAR, 99);
             }
         });
         interactions.get(0).activate();

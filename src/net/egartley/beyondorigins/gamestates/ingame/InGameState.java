@@ -5,7 +5,7 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.KeyboardController;
 import net.egartley.beyondorigins.gamestates.ingame.substates.InBuildingState;
 import net.egartley.beyondorigins.ingame.Building;
-import net.egartley.beyondorigins.ingame.Inventory;
+import net.egartley.beyondorigins.ingame.PlayerMenu;
 import net.egartley.beyondorigins.ingame.maps.debug.DebugMap;
 import net.egartley.beyondorigins.ui.DialoguePanel;
 import net.egartley.gamelib.abstracts.GameState;
@@ -21,7 +21,7 @@ public class InGameState extends GameState {
     private KeyTyped toggleInventory, advanceDialogue, backToMainMenu;
 
     public Map map;
-    public Inventory inventory;
+    public PlayerMenu playerMenu;
     public DialoguePanel dialogue;
     public ArrayList<Map> maps = new ArrayList<>();
 
@@ -38,7 +38,7 @@ public class InGameState extends GameState {
         map = maps.get(0);
 
         // load inventory
-        inventory = new Inventory();
+        playerMenu = new PlayerMenu();
 
         // load dialogue panel
         dialogue = new DialoguePanel();
@@ -68,17 +68,6 @@ public class InGameState extends GameState {
         };
     }
 
-    private void tick_this() {
-        map.tick();
-        if (isInventoryVisible) {
-            inventory.tick();
-        }
-    }
-
-    private void render_this(Graphics graphics) {
-        map.render(graphics);
-    }
-
     public void setBuilding(Building building) {
         ((InBuildingState) subStates.get(0)).building = building;
     }
@@ -104,10 +93,10 @@ public class InGameState extends GameState {
         if (currentSubState != null) {
             currentSubState.render(graphics);
         } else {
-            render_this(graphics);
+            map.render(graphics);
         }
         if (isInventoryVisible) {
-            inventory.render(graphics);
+            playerMenu.render(graphics);
         } else if (isDialogueVisible) {
             dialogue.render(graphics);
         }
@@ -122,12 +111,12 @@ public class InGameState extends GameState {
         if (currentSubState != null) {
             currentSubState.tick();
         } else {
-            tick_this();
+            map.tick();
         }
 
         // tick regardless of gamestate
         if (isInventoryVisible) {
-            inventory.tick();
+            playerMenu.tick();
         } else if (isDialogueVisible) {
             dialogue.tick();
         }
