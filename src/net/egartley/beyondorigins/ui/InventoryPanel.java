@@ -2,7 +2,8 @@ package net.egartley.beyondorigins.ui;
 
 import net.egartley.beyondorigins.data.ImageStore;
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.ingame.InventorySlot;
+import net.egartley.beyondorigins.ingame.PlayerInventorySlot;
+import net.egartley.beyondorigins.ingame.PlayerInventoryStack;
 import net.egartley.gamelib.logic.inventory.ItemStack;
 import net.egartley.gamelib.logic.math.Calculate;
 
@@ -17,9 +18,9 @@ public class InventoryPanel extends UIElement {
     private int detailsLineIndex = 0;
     private boolean gotFontMetrics;
 
-    public static ArrayList<InventorySlot> slots = new ArrayList<>();
+    public static ArrayList<PlayerInventorySlot> slots = new ArrayList<>();
 
-    public static ItemStack stackBeingDragged;
+    public static PlayerInventoryStack stackBeingDragged;
 
     private static Font detailsFont = new Font("Bookman Old Style", Font.BOLD, 11);
     private static Font playerNameFont = new Font("Bookman Old Style", Font.BOLD, 14);
@@ -32,9 +33,12 @@ public class InventoryPanel extends UIElement {
         setPosition(Calculate.getCenteredX(width), Calculate.getCenteredY(height));
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMNS; c++) {
-                slots.add(new InventorySlot(null, r, c));
+                PlayerInventorySlot slot = new PlayerInventorySlot(null, r, c);
+                slot.stack = new PlayerInventoryStack(null, slot.baseItemX, slot.baseItemY);
+                slots.add(slot);
             }
         }
+        populate();
     }
 
     private void renderLine(String text, Graphics graphics) {
@@ -44,7 +48,7 @@ public class InventoryPanel extends UIElement {
 
     @Override
     public void tick() {
-        slots.forEach(slot -> slot.set(Entities.PLAYER.inventory.get(slot.index)));
+        populate();
     }
 
     @Override
@@ -76,6 +80,23 @@ public class InventoryPanel extends UIElement {
         renderLine("Level " + Entities.PLAYER.getLevel(), graphics);
         renderLine("EXP: " + Entities.PLAYER.getExperience(), graphics);
         detailsLineIndex = 0;
+    }
+
+    public static void swapStacks(PlayerInventoryStack stack1, PlayerInventoryStack stack2) {
+
+    }
+
+    public static void moveStack(PlayerInventoryStack stack, PlayerInventorySlot slot) {
+
+    }
+
+    private void populate() {
+        for (PlayerInventorySlot slot : slots) {
+            ItemStack itemStack = Entities.PLAYER.inventory.get(slots.indexOf(slot));
+            if (itemStack != null) {
+                slot.stack.itemStack = itemStack;
+            }
+        }
     }
 
 }

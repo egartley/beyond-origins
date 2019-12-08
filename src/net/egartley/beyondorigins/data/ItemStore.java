@@ -5,14 +5,10 @@ import net.egartley.gamelib.abstracts.GameItem;
 
 public class ItemStore {
 
-    public static final byte WIZARD_HAT = 1;
+    public static GameItem WIZARD_HAT;
 
-    public static GameItem get(byte id) {
-        switch (id) {
-            case WIZARD_HAT:
-                return new WizardHat();
-        }
-        return null;
+    public static void init() {
+        WIZARD_HAT = new WizardHat();
     }
 
 }

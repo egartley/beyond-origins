@@ -3,6 +3,7 @@ package net.egartley.beyondorigins.gamestates.ingame;
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.KeyboardController;
+import net.egartley.beyondorigins.data.ItemStore;
 import net.egartley.beyondorigins.gamestates.ingame.substates.InBuildingState;
 import net.egartley.beyondorigins.ingame.Building;
 import net.egartley.beyondorigins.ingame.PlayerMenu;
@@ -32,6 +33,8 @@ public class InGameState extends GameState {
         id = GameState.IN_GAME;
 
         subStates.add(new InBuildingState());
+
+        ItemStore.init();
 
         // load map
         maps.add(new DebugMap());

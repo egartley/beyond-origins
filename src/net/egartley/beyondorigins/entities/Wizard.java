@@ -62,7 +62,7 @@ public class Wizard extends AnimatedEntity implements Character {
             @Override
             public void onFinish() {
                 // take hat from player
-                Entities.PLAYER.inventory.remove(ItemStore.get(ItemStore.WIZARD_HAT));
+                Entities.PLAYER.inventory.remove(ItemStore.WIZARD_HAT);
                 // switch to sprite that is wearing the hat
                 setSpriteSheet(1);
                 wearingHat = true;
@@ -98,7 +98,7 @@ public class Wizard extends AnimatedEntity implements Character {
      * Called whenever the player interacts with the wizard
      */
     private void onPlayerInteraction() {
-        boolean playerHasHat = Entities.PLAYER.inventory.contains(ItemStore.get(ItemStore.WIZARD_HAT));
+        boolean playerHasHat = Entities.PLAYER.inventory.contains(ItemStore.WIZARD_HAT);
         if (!foundHat) {
             if (!playerHasHat) {
                 Game.in().dialogue.startExchange(dialogue_meetPlayer);

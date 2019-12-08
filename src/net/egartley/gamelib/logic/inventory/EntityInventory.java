@@ -5,6 +5,7 @@ import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.abstracts.GameItem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class EntityInventory {
 
@@ -26,11 +27,8 @@ public class EntityInventory {
         }
     }
 
-    public ItemStack get(int slot) {
-        if (slot > 0 && slot < slots.size()) {
-            return slots.get(slot);
-        }
-        return null;
+    public ItemStack get(int index) {
+        return slots.get(index);
     }
 
     public int nextEmptySlot() {
@@ -101,11 +99,8 @@ public class EntityInventory {
 
         // TODO: when amount is over 99 (multiple stacks)
 
-        if (isEmpty()) {
-            slots.set(0, new ItemStack(item, amount));
-        } else {
-            slots.set(slotIndex, new ItemStack(item, amount));
-        }
+        Debug.out("Setting " + slotIndex + " to " + amount + " of " + item.displayName);
+        slots.set(slotIndex, new ItemStack(item, amount));
 
         return true;
     }
@@ -142,6 +137,11 @@ public class EntityInventory {
             }
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(slots.toArray());
     }
 
 }

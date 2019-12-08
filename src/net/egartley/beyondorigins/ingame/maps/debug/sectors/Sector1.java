@@ -1,5 +1,6 @@
 package net.egartley.beyondorigins.ingame.maps.debug.sectors;
 
+import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.data.ItemStore;
 import net.egartley.beyondorigins.entities.DefaultTree;
 import net.egartley.beyondorigins.entities.Entities;
@@ -29,8 +30,8 @@ public class Sector1 extends MapSector {
             DefaultTree tree = new DefaultTree(s, 100, 200);
             tree.collisions.add(new EntityEntityCollision(Entities.PLAYER.boundary, tree.defaultBoundary) {
                 public void start(EntityEntityCollisionEvent e) {
-                    if (!Entities.PLAYER.inventory.contains(ItemStore.get(ItemStore.WIZARD_HAT)) && Entities.WIZARD.metPlayer && !Entities.WIZARD.foundHat) {
-                        Entities.PLAYER.inventory.put(ItemStore.get(ItemStore.WIZARD_HAT));
+                    if (!Entities.PLAYER.inventory.contains(ItemStore.WIZARD_HAT) && Entities.WIZARD.metPlayer && !Entities.WIZARD.foundHat) {
+                        Entities.PLAYER.inventory.put(ItemStore.WIZARD_HAT);
                         pushNotification(new NotificationBanner("You have found the Wizard's hat!", "items/wizard-hat.png"));
                     }
                 }
@@ -50,7 +51,8 @@ public class Sector1 extends MapSector {
             addEntity(house);
 
             didInitialize = true;
-            Entities.PLAYER.inventory.put(ItemStore.get(ItemStore.WIZARD_HAT));
+            Entities.PLAYER.inventory.put(ItemStore.WIZARD_HAT);
+            Debug.out(Entities.PLAYER.inventory);
         }
     }
 
