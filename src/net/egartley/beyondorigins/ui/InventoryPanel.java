@@ -1,5 +1,6 @@
 package net.egartley.beyondorigins.ui;
 
+import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.data.ImageStore;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.ingame.PlayerInventorySlot;
@@ -34,7 +35,7 @@ public class InventoryPanel extends UIElement {
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMNS; c++) {
                 PlayerInventorySlot slot = new PlayerInventorySlot(null, r, c);
-                slot.stack = new PlayerInventoryStack(null, slot.baseItemX, slot.baseItemY);
+                slot.stack = new PlayerInventoryStack(null, slot);
                 slots.add(slot);
             }
         }
@@ -49,6 +50,7 @@ public class InventoryPanel extends UIElement {
     @Override
     public void tick() {
         populate();
+        slots.forEach(PlayerInventorySlot::tick);
     }
 
     @Override
@@ -83,11 +85,19 @@ public class InventoryPanel extends UIElement {
     }
 
     public static void swapStacks(PlayerInventoryStack stack1, PlayerInventoryStack stack2) {
-
+        ItemStack items1 = stack1.itemStack;
+        ItemStack items2 = stack2.itemStack;
+        stack1.itemStack = items2;
+        stack2.itemStack = items1;
+        Entities.PLAYER.inventory.set(items1, stack2.slot.index);
+        Entities.PLAYER.inventory.set(items2, stack1.slot.index);
     }
 
-    public static void moveStack(PlayerInventoryStack stack, PlayerInventorySlot slot) {
-
+    public static void moveStackToEmpty(PlayerInventoryStack stack, int emptySlotIndex) {
+        Debug.out("Moving " + stack.slot.index + " to " + emptySlotIndex);
+        Entities.PLAYER.inventory.set(null, stack.slot.index);
+        Entities.PLAYER.inventory.set(stack.itemStack, emptySlotIndex);
+        stack.slot.clear();
     }
 
     private void populate() {

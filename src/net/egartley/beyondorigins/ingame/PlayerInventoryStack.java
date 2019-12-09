@@ -1,6 +1,5 @@
 package net.egartley.beyondorigins.ingame;
 
-import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.entities.DroppedItem;
@@ -24,17 +23,15 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
     public boolean isBeingDragged, didStartDrag, mouseHover, setFontMetrics, isShowingTooltip;
 
     public ItemStack itemStack;
-    public int bx, by;
+    public PlayerInventorySlot slot;
 
-    public PlayerInventoryStack(ItemStack itemStack, int bx, int by) {
+    public PlayerInventoryStack(ItemStack itemStack, PlayerInventorySlot slot) {
         this.itemStack = itemStack;
-        this.bx = bx;
-        this.by = by;
-        setPosition(bx, by);
+        this.slot = slot;
+        setPosition(slot.baseItemX, slot.baseItemY);
     }
 
     public void tick() {
-        Debug.out("ticking");
         mouseHover = Util.isWithinBounds(Mouse.x, Mouse.y, x(), y(), PlayerInventorySlot.SIZE, PlayerInventorySlot.SIZE);
         isShowingTooltip = isBeingDragged || (mouseHover && InventoryPanel.stackBeingDragged == null);
         if (Mouse.isDragging) {
@@ -49,15 +46,15 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
             InventoryPanel.stackBeingDragged = null;
             isBeingDragged = false;
         } else {
-            setPosition(bx, by);
+            setPosition(slot.baseItemX, slot.baseItemY);
             didStartDrag = false;
         }
     }
 
     public void render(Graphics graphics) {
         graphics.drawImage(itemStack.item.image, x(), y(), null);
-        graphics.setColor(Color.BLACK);
-        graphics.drawString(String.valueOf(itemStack.amount), x(), y() - 4);
+        graphics.setColor(Color.WHITE);
+        graphics.drawString(String.valueOf(itemStack.amount), x() + PlayerInventorySlot.SIZE - 12, y() + PlayerInventorySlot.SIZE - 6);
         if (!setFontMetrics) {
             tooltipWidth = graphics.getFontMetrics(tooltipFont).stringWidth(itemStack.item.displayName);
             setFontMetrics = true;
@@ -99,7 +96,7 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
             // at least one slot
             int i = 0, n = 0;
             Rectangle closest = intersectionRectangles.get(0);
-            // find the slot the item is closet to
+            // find the slot the stack is closet to
             for (Rectangle r : intersectionRectangles) {
                 if ((r.width * r.height) > (closest.width * closest.height)) {
                     closest = r;
@@ -111,15 +108,15 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
             PlayerInventorySlot closestSlot = intersectedSlots.get(i);
             if (closestSlot.isEmpty()) {
                 // simply move the stack
-                InventoryPanel.moveStack(this, closestSlot);
+                InventoryPanel.moveStackToEmpty(this, closestSlot.index);
             } else {
                 // swap with the stack in the closest slot
                 InventoryPanel.swapStacks(this, closestSlot.stack);
             }
         } else {
             // did not end over any slots
-            InventoryPanel i = Game.in().playerMenu.inventoryPanel;
-            if (!Util.isWithinBounds(x(), y(), i.x(), i.y(), i.width, i.height)) {
+            InventoryPanel panel = Game.in().playerMenu.inventoryPanel;
+            if (!Util.isWithinBounds(x(), y(), panel.x(), panel.y(), panel.width, panel.height)) {
                 drop();
             }
         }

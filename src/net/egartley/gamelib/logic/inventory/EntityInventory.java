@@ -31,6 +31,10 @@ public class EntityInventory {
         return slots.get(index);
     }
 
+    public void set(ItemStack stack, int index) {
+        slots.set(index, stack);
+    }
+
     public int nextEmptySlot() {
         for (int i = 0; i < slots.size(); i++) {
             if (slots.get(i) == null) {
