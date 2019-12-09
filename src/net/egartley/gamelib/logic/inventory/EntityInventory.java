@@ -42,8 +42,7 @@ public class EntityInventory {
 
     public int nextEmptySlot() {
         for (int i = 0; i < slots.size(); i++) {
-            if (slots.get(i) == null) {
-                Debug.info("Next empty slot is " + i);
+            if (isEmpty(i)) {
                 return i;
             }
         }
@@ -51,13 +50,14 @@ public class EntityInventory {
         return -1;
     }
 
-    public int firstAvailableSlot(GameItem item) {
+    public int firstAvailableSlotFor(GameItem item) {
         if (isEmpty()) {
             return 0;
         }
+        // first check for filled slots with the same item
         for (int i = 0; i < slots.size(); i++) {
             if (isEmpty(i)) {
-                return i;
+                continue;
             }
             ItemStack stack = slots.get(i);
             if (stack.item.id.equals(item.id)) {
@@ -67,8 +67,7 @@ public class EntityInventory {
                 return i;
             }
         }
-        // -1 to indicate that there are no available slots for the item
-        return -1;
+        return nextEmptySlot();
     }
 
     public boolean isFull() {
@@ -102,17 +101,34 @@ public class EntityInventory {
     }
 
     public boolean put(GameItem item, int amount) {
-        return put(item, amount, firstAvailableSlot(item));
+        int index = firstAvailableSlotFor(item);
+        if (index == -1) {
+            // there's no where to put the item(s)
+            Debug.out("Couldn't find anywhere to put " + amount + " of " + item);
+            return false;
+        }
+        if (isEmpty(index)) {
+            return put(item, amount, index);
+        } else {
+            ItemStack mergeStack = get(index);
+            int mergeAmount = mergeStack.amount;
+            boolean overflow = mergeAmount + amount > ItemStack.MAX_AMOUNT;
+            if (!overflow) {
+                mergeStack.add(amount);
+                set(mergeStack, index);
+                return true;
+            } else {
+                int diff = ItemStack.MAX_AMOUNT - mergeAmount;
+                mergeStack.add(diff);
+                set(mergeStack, index);
+                amount -= diff;
+                return put(item, amount);
+            }
+        }
     }
 
-    public boolean put(GameItem item, int amount, int slotIndex) {
-        Debug.out("Setting " + slotIndex + " to " + amount + " of " + item.displayName);
-        if (isEmpty(slotIndex)) {
-            slots.set(slotIndex, new ItemStack(item, amount));
-        } else {
-
-        }
-        onUpdate();
+    private boolean put(GameItem item, int amount, int slotIndex) {
+        set(new ItemStack(item, amount), slotIndex);
         return true;
     }
 
@@ -121,10 +137,30 @@ public class EntityInventory {
     }
 
     public boolean remove(GameItem item, int amount) {
-        // TODO: when amount is over 99 (multiple stacks)
-
-        onUpdate();
-        return !isEmpty();
+        // first find the smallest stack
+        int smallestIndex = -1, smallestAmount = ItemStack.MAX_AMOUNT + 1;
+        for (int i = 0; i < slots.size(); i++) {
+            if (!isEmpty(i)) {
+                ItemStack stack = get(i);
+                if (stack.item.id.equals(item.id)) {
+                    if (stack.amount < smallestAmount) {
+                        smallestAmount = stack.amount;
+                        smallestIndex = i;
+                    }
+                }
+            }
+        }
+        if (smallestAmount > amount) {
+            // easy, just take away the amount and that's it
+            ItemStack stack = get(smallestIndex);
+            stack.take(amount);
+            set(stack, smallestIndex);
+        } else {
+            // remove the stack, and call remove again with the remaining amount
+            set(null, smallestIndex);
+            return remove(item, amount - smallestAmount);
+        }
+        return false;
     }
 
     public boolean contains(GameItem item) {

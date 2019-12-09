@@ -36,4 +36,8 @@ public class ItemStack {
         return amount == MAX_AMOUNT;
     }
 
+    public String toString() {
+        return item.displayName + " (" + amount + ")";
+    }
+
 }

@@ -120,6 +120,8 @@ public class PlayerInventory extends UIElement {
             ItemStack itemStack = Entities.PLAYER.inventory.get(slots.indexOf(slot));
             if (itemStack != null) {
                 slot.stack = new PlayerInventoryStack(itemStack, slot);
+            } else {
+                slot.stack = null;
             }
         }
     }

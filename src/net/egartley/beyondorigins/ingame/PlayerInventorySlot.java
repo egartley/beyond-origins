@@ -2,6 +2,7 @@ package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.ui.PlayerInventory;
 import net.egartley.beyondorigins.ui.UIElement;
 
 import java.awt.*;
@@ -42,6 +43,7 @@ public class PlayerInventorySlot extends UIElement {
 
     public void clear() {
         stack = null;
+        PlayerInventory.clearSlot(index);
     }
 
     public boolean isEmpty() {
