@@ -4,6 +4,7 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.data.ImageStore;
 import net.egartley.beyondorigins.ingame.Building;
+import net.egartley.beyondorigins.ui.InventoryPanel;
 import net.egartley.gamelib.abstracts.AnimatedEntity;
 import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.abstracts.MapSector;
@@ -16,6 +17,7 @@ import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 import net.egartley.gamelib.logic.interaction.BoundaryOffset;
 import net.egartley.gamelib.logic.interaction.BoundaryPadding;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
+import net.egartley.gamelib.logic.inventory.EntityInventory;
 
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -49,6 +51,13 @@ public class Player extends AnimatedEntity implements Character {
         if (Game.debug) {
             speed = 1.8;
         }
+
+        inventory = new EntityInventory(this) {
+            @Override
+            public void onUpdate() {
+                InventoryPanel.populate();
+            }
+        };
     }
 
     public void generateSectorSpecificCollisions(MapSector sector) {

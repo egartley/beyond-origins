@@ -52,6 +52,7 @@ public class Sector1 extends MapSector {
 
             didInitialize = true;
             Entities.PLAYER.inventory.put(ItemStore.WIZARD_HAT);
+            Entities.PLAYER.inventory.put(ItemStore.WIZARD_HAT);
             Debug.out(Entities.PLAYER.inventory);
         }
     }

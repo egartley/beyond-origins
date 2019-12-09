@@ -33,6 +33,11 @@ public class EntityInventory {
 
     public void set(ItemStack stack, int index) {
         slots.set(index, stack);
+        onUpdate();
+    }
+
+    public void onUpdate() {
+
     }
 
     public int nextEmptySlot() {
@@ -52,7 +57,7 @@ public class EntityInventory {
         }
         for (int i = 0; i < slots.size(); i++) {
             if (isEmpty(i)) {
-                continue;
+                return i;
             }
             ItemStack stack = slots.get(i);
             if (stack.item.id.equals(item.id)) {
@@ -106,6 +111,7 @@ public class EntityInventory {
         Debug.out("Setting " + slotIndex + " to " + amount + " of " + item.displayName);
         slots.set(slotIndex, new ItemStack(item, amount));
 
+        onUpdate();
         return true;
     }
 
@@ -117,6 +123,7 @@ public class EntityInventory {
 
         // TODO: when amount is over 99 (multiple stacks)
 
+        onUpdate();
         return !isEmpty();
     }
 

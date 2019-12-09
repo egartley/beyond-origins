@@ -34,12 +34,9 @@ public class InventoryPanel extends UIElement {
         setPosition(Calculate.getCenteredX(width), Calculate.getCenteredY(height));
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMNS; c++) {
-                PlayerInventorySlot slot = new PlayerInventorySlot(null, r, c);
-                slot.stack = new PlayerInventoryStack(null, slot);
-                slots.add(slot);
+                slots.add(new PlayerInventorySlot(null, r, c));
             }
         }
-        populate();
     }
 
     private void renderLine(String text, Graphics graphics) {
@@ -49,7 +46,7 @@ public class InventoryPanel extends UIElement {
 
     @Override
     public void tick() {
-        populate();
+        // populate();
         slots.forEach(PlayerInventorySlot::tick);
     }
 
@@ -84,7 +81,17 @@ public class InventoryPanel extends UIElement {
         detailsLineIndex = 0;
     }
 
+    public static void populate() {
+        for (PlayerInventorySlot slot : slots) {
+            ItemStack itemStack = Entities.PLAYER.inventory.get(slots.indexOf(slot));
+            if (itemStack != null) {
+                slot.stack = new PlayerInventoryStack(itemStack, slot);
+            }
+        }
+    }
+
     public static void swapStacks(PlayerInventoryStack stack1, PlayerInventoryStack stack2) {
+        Debug.out("Swapping " + stack1.slot.index + " (" + stack1.slot.isEmpty() + ") " + " and " + stack2.slot.index + " (" + stack2.slot.isEmpty() + ")");
         ItemStack items1 = stack1.itemStack;
         ItemStack items2 = stack2.itemStack;
         stack1.itemStack = items2;
@@ -98,15 +105,6 @@ public class InventoryPanel extends UIElement {
         Entities.PLAYER.inventory.set(null, stack.slot.index);
         Entities.PLAYER.inventory.set(stack.itemStack, emptySlotIndex);
         stack.slot.clear();
-    }
-
-    private void populate() {
-        for (PlayerInventorySlot slot : slots) {
-            ItemStack itemStack = Entities.PLAYER.inventory.get(slots.indexOf(slot));
-            if (itemStack != null) {
-                slot.stack.itemStack = itemStack;
-            }
-        }
     }
 
 }

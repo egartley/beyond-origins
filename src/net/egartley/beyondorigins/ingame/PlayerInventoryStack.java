@@ -124,7 +124,7 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
 
     private void drop() {
         Game.in().map.sector.addEntity(new DroppedItem(itemStack.item, Mouse.x - 8, Mouse.y - 8));
-        // selfDestruct();
+        slot.clear();
     }
 
 }

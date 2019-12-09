@@ -29,29 +29,30 @@ public class PlayerInventorySlot extends UIElement {
 
     @Override
     public void tick() {
-        if (stack != null && !isEmpty() && stack.itemStack != null) {
+        if (!isEmpty()) {
             stack.tick();
         }
     }
 
+    @Override
     public void render(Graphics graphics) {
         graphics.drawImage(image, x(), y(), null);
         graphics.setColor(Color.BLACK);
         graphics.drawString(String.valueOf(index), x() + SIZE - 8, y() + SIZE - 6);
     }
 
-    public void clear() {
-        stack = null;
-    }
-
     public void renderStack(Graphics graphics) {
-        if (stack != null && stack.itemStack != null) {
+        if (!isEmpty()) {
             stack.render(graphics);
         }
     }
 
+    public void clear() {
+        stack = null;
+    }
+
     public boolean isEmpty() {
-        return stack.itemStack == null;
+        return stack == null;
     }
 
 }
