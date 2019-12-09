@@ -19,9 +19,6 @@ public class ItemStack {
     }
 
     public void add(int number) {
-        if (isFull()) {
-            return;
-        }
         amount += number;
         if (amount > MAX_AMOUNT) {
             amount = MAX_AMOUNT;
@@ -36,7 +33,7 @@ public class ItemStack {
     }
 
     public boolean isFull() {
-        return amount < MAX_AMOUNT;
+        return amount == MAX_AMOUNT;
     }
 
 }

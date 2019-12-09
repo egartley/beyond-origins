@@ -94,23 +94,24 @@ public class EntityInventory {
     }
 
     public boolean put(GameItem item) {
-        return put(item, 1);
+        return put(new ItemStack(item));
+    }
+
+    public boolean put(ItemStack stack) {
+        return put(stack.item, stack.amount);
     }
 
     public boolean put(GameItem item, int amount) {
-
-        // TODO: when amount is over 99 (multiple stacks)
-
         return put(item, amount, firstAvailableSlot(item));
     }
 
     public boolean put(GameItem item, int amount, int slotIndex) {
-
-        // TODO: when amount is over 99 (multiple stacks)
-
         Debug.out("Setting " + slotIndex + " to " + amount + " of " + item.displayName);
-        slots.set(slotIndex, new ItemStack(item, amount));
+        if (isEmpty(slotIndex)) {
+            slots.set(slotIndex, new ItemStack(item, amount));
+        } else {
 
+        }
         onUpdate();
         return true;
     }
@@ -120,7 +121,6 @@ public class EntityInventory {
     }
 
     public boolean remove(GameItem item, int amount) {
-
         // TODO: when amount is over 99 (multiple stacks)
 
         onUpdate();
@@ -132,7 +132,6 @@ public class EntityInventory {
     }
 
     public boolean contains(GameItem item, int amount) {
-
         // TODO: when amount is over 99 (multiple stacks)
 
         if (isEmpty()) {

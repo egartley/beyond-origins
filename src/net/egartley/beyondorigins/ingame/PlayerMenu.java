@@ -2,7 +2,7 @@ package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.ui.ClickableArea;
-import net.egartley.beyondorigins.ui.InventoryPanel;
+import net.egartley.beyondorigins.ui.PlayerInventory;
 import net.egartley.beyondorigins.ui.QuestsPanel;
 import net.egartley.beyondorigins.ui.UIElement;
 import net.egartley.gamelib.interfaces.Tickable;
@@ -17,7 +17,7 @@ public class PlayerMenu implements Tickable {
     public boolean isShowing;
 
     public UIElement panel;
-    public InventoryPanel inventoryPanel;
+    public PlayerInventory inventoryPanel;
     public QuestsPanel questsPanel;
     public ArrayList<ClickableArea> tabs = new ArrayList<>();
     public ClickableArea inventoryPanelTab, questsPanelTab;
@@ -25,7 +25,7 @@ public class PlayerMenu implements Tickable {
     private Color backgroundColor = new Color(0, 0, 0, 152);
 
     public PlayerMenu() {
-        inventoryPanel = new InventoryPanel();
+        inventoryPanel = new PlayerInventory();
         questsPanel = new QuestsPanel();
 
         // show inventory by default

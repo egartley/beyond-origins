@@ -3,7 +3,7 @@ package net.egartley.beyondorigins.ingame;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.entities.DroppedItem;
-import net.egartley.beyondorigins.ui.InventoryPanel;
+import net.egartley.beyondorigins.ui.PlayerInventory;
 import net.egartley.gamelib.abstracts.Renderable;
 import net.egartley.gamelib.input.Mouse;
 import net.egartley.gamelib.interfaces.Tickable;
@@ -16,8 +16,7 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
 
     public static int MAX_AMOUNT = 99;
 
-    private static Font tooltipFont = new Font("Arial", Font.BOLD, 14);
-    private static Color tooltipBorderColor = new Color(65, 11, 67);
+    private static Font amountFont = new Font("Arial", Font.PLAIN, 12);
     private int tooltipWidth;
 
     public boolean isBeingDragged, didStartDrag, mouseHover, setFontMetrics, isShowingTooltip;
@@ -33,17 +32,21 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
 
     public void tick() {
         mouseHover = Util.isWithinBounds(Mouse.x, Mouse.y, x(), y(), PlayerInventorySlot.SIZE, PlayerInventorySlot.SIZE);
-        isShowingTooltip = isBeingDragged || (mouseHover && InventoryPanel.stackBeingDragged == null);
+        isShowingTooltip = isBeingDragged || (mouseHover && PlayerInventory.stackBeingDragged == null);
+        if (isShowingTooltip) {
+            PlayerInventory.tooltipWidth = tooltipWidth;
+            PlayerInventory.tooltipText = itemStack.item.displayName;
+        }
         if (Mouse.isDragging) {
-            if ((mouseHover || didStartDrag) && (InventoryPanel.stackBeingDragged == this || InventoryPanel.stackBeingDragged == null)) {
-                InventoryPanel.stackBeingDragged = this;
+            if ((mouseHover || didStartDrag) && (PlayerInventory.stackBeingDragged == this || PlayerInventory.stackBeingDragged == null)) {
+                PlayerInventory.stackBeingDragged = this;
                 setPosition(Mouse.x - (PlayerInventorySlot.SIZE / 2), Mouse.y - (PlayerInventorySlot.SIZE / 2));
                 didStartDrag = true;
                 isBeingDragged = true;
             }
         } else if (isBeingDragged) {
             onDragEnd();
-            InventoryPanel.stackBeingDragged = null;
+            PlayerInventory.stackBeingDragged = null;
             isBeingDragged = false;
         } else {
             setPosition(slot.baseItemX, slot.baseItemY);
@@ -54,39 +57,26 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
     public void render(Graphics graphics) {
         graphics.drawImage(itemStack.item.image, x(), y(), null);
         graphics.setColor(Color.WHITE);
+        graphics.setFont(amountFont);
         graphics.drawString(String.valueOf(itemStack.amount), x() + PlayerInventorySlot.SIZE - 12, y() + PlayerInventorySlot.SIZE - 6);
         if (!setFontMetrics) {
-            tooltipWidth = graphics.getFontMetrics(tooltipFont).stringWidth(itemStack.item.displayName);
+            tooltipWidth = graphics.getFontMetrics(PlayerInventory.tooltipFont).stringWidth(itemStack.item.displayName);
             setFontMetrics = true;
         }
-        if (isShowingTooltip) {
-            drawToolTip(graphics);
-        }
-    }
-
-    public void drawToolTip(Graphics graphics) {
-        ((Graphics2D) graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        graphics.setColor(tooltipBorderColor);
-        graphics.fillRoundRect(Mouse.x - 2, Mouse.y - 28, tooltipWidth + 14, 26, 8, 8);
-        graphics.setColor(Color.BLACK);
-        graphics.fillRect(Mouse.x + 1, Mouse.y - 25, tooltipWidth + 8, 20);
-        graphics.setColor(Color.WHITE);
-        graphics.setFont(tooltipFont);
-        graphics.drawString(itemStack.item.displayName, Mouse.x + 5, Mouse.y - 10);
     }
 
     private void onDragEnd() {
         ArrayList<Rectangle> intersectionRectangles = new ArrayList<>();
         ArrayList<PlayerInventorySlot> intersectedSlots = new ArrayList<>();
 
-        for (PlayerInventorySlot slot : InventoryPanel.slots) {
+        for (PlayerInventorySlot slot : PlayerInventory.slots) {
             Rectangle r1 = new Rectangle(slot.x(), slot.y(), PlayerInventorySlot.SIZE, PlayerInventorySlot.SIZE);
             Rectangle r2 = new Rectangle(x(), y(), PlayerInventorySlot.SIZE, PlayerInventorySlot.SIZE);
             if (r1.intersects(r2)) {
                 intersectionRectangles.add(r1.intersection(r2));
                 intersectedSlots.add(slot);
                 if (intersectionRectangles.size() == 4) {
-                    // item can only be within bounds of up to four slots
+                    // stack can only be within bounds of up to four slots
                     break;
                 }
             }
@@ -108,14 +98,14 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
             PlayerInventorySlot closestSlot = intersectedSlots.get(i);
             if (closestSlot.isEmpty()) {
                 // simply move the stack
-                InventoryPanel.moveStackToEmpty(this, closestSlot.index);
+                PlayerInventory.moveStackToEmpty(this, closestSlot.index);
             } else {
                 // swap with the stack in the closest slot
-                InventoryPanel.swapStacks(this, closestSlot.stack);
+                PlayerInventory.swapStacks(this, closestSlot.stack);
             }
         } else {
             // did not end over any slots
-            InventoryPanel panel = Game.in().playerMenu.inventoryPanel;
+            PlayerInventory panel = Game.in().playerMenu.inventoryPanel;
             if (!Util.isWithinBounds(x(), y(), panel.x(), panel.y(), panel.width, panel.height)) {
                 drop();
             }
@@ -123,8 +113,9 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
     }
 
     private void drop() {
-        Game.in().map.sector.addEntity(new DroppedItem(itemStack.item, Mouse.x - 8, Mouse.y - 8));
+        Game.in().map.sector.addEntity(new DroppedItem(itemStack, Mouse.x - 8, Mouse.y - 8));
         slot.clear();
+        PlayerInventory.clearSlot(slot.index);
     }
 
 }

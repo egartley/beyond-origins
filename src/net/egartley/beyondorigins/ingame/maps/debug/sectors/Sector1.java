@@ -1,6 +1,5 @@
 package net.egartley.beyondorigins.ingame.maps.debug.sectors;
 
-import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.data.ItemStore;
 import net.egartley.beyondorigins.entities.DefaultTree;
 import net.egartley.beyondorigins.entities.Entities;
@@ -51,9 +50,10 @@ public class Sector1 extends MapSector {
             addEntity(house);
 
             didInitialize = true;
-            Entities.PLAYER.inventory.put(ItemStore.WIZARD_HAT);
-            Entities.PLAYER.inventory.put(ItemStore.WIZARD_HAT);
-            Debug.out(Entities.PLAYER.inventory);
+            Entities.PLAYER.inventory.put(ItemStore.WIZARD_HAT, 2);
+            Entities.PLAYER.inventory.put(ItemStore.HMM, 1);
+            Entities.PLAYER.inventory.put(ItemStore.CURRENT_YEAR, 3);
+            // Debug.out(Entities.PLAYER.inventory);
         }
     }
 

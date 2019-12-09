@@ -4,7 +4,7 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.data.ImageStore;
 import net.egartley.beyondorigins.ingame.Building;
-import net.egartley.beyondorigins.ui.InventoryPanel;
+import net.egartley.beyondorigins.ui.PlayerInventory;
 import net.egartley.gamelib.abstracts.AnimatedEntity;
 import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.abstracts.MapSector;
@@ -55,7 +55,7 @@ public class Player extends AnimatedEntity implements Character {
         inventory = new EntityInventory(this) {
             @Override
             public void onUpdate() {
-                InventoryPanel.populate();
+                PlayerInventory.populate();
             }
         };
     }

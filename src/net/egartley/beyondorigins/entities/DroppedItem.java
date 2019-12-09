@@ -3,13 +3,13 @@ package net.egartley.beyondorigins.entities;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.gamelib.abstracts.Entity;
-import net.egartley.gamelib.abstracts.GameItem;
 import net.egartley.gamelib.abstracts.StaticEntity;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 import net.egartley.gamelib.logic.interaction.BoundaryPadding;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
+import net.egartley.gamelib.logic.inventory.ItemStack;
 import net.egartley.gamelib.threads.DelayedEvent;
 
 /**
@@ -41,10 +41,10 @@ public class DroppedItem extends StaticEntity {
     /**
      * The item being represented
      */
-    public GameItem item;
+    public ItemStack itemStack;
 
-    public DroppedItem(GameItem item, int x, int y) {
-        super("DroppedItem", new Sprite(Util.resize(item.image, 0.5)));
+    public DroppedItem(ItemStack stack, int x, int y) {
+        super("DroppedItem", new Sprite(Util.resize(stack.item.image, 0.5)));
         isSectorSpecific = true;
         isDualRendered = false;
         isTraversable = true;
@@ -68,7 +68,7 @@ public class DroppedItem extends StaticEntity {
         };
         lifetimeDelay.start();
 
-        this.item = item;
+        itemStack = stack;
     }
 
     /**
@@ -88,7 +88,7 @@ public class DroppedItem extends StaticEntity {
      */
     private boolean pickup() {
         if (!Entities.PLAYER.inventory.isFull() && canPickup && over) {
-            Entities.PLAYER.inventory.put(item);
+            Entities.PLAYER.inventory.put(itemStack);
             lifetimeDelay.cancel();
             destroy();
             return true;

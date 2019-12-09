@@ -34,13 +34,6 @@ public class PlayerInventorySlot extends UIElement {
         }
     }
 
-    @Override
-    public void render(Graphics graphics) {
-        graphics.drawImage(image, x(), y(), null);
-        graphics.setColor(Color.BLACK);
-        graphics.drawString(String.valueOf(index), x() + SIZE - 8, y() + SIZE - 6);
-    }
-
     public void renderStack(Graphics graphics) {
         if (!isEmpty()) {
             stack.render(graphics);
