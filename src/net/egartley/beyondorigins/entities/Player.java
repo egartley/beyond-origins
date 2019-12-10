@@ -52,7 +52,7 @@ public class Player extends AnimatedEntity implements Character {
             speed = 1.8;
         }
 
-        inventory = new EntityInventory(this) {
+        inventory = new EntityInventory(this, 20) {
             @Override
             public void onUpdate() {
                 PlayerInventory.populate();

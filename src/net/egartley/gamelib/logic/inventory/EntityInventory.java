@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class EntityInventory {
 
-    public static int DEFAULT_SLOTS = 20;
+    public static int DEFAULT_SLOTS = 3;
 
     private ArrayList<ItemStack> slots;
 
