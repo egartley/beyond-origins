@@ -53,7 +53,6 @@ public class Sector1 extends MapSector {
             Entities.PLAYER.inventory.put(ItemStore.WIZARD_HAT, 2);
             Entities.PLAYER.inventory.put(ItemStore.HMM, 1);
             Entities.PLAYER.inventory.put(ItemStore.CURRENT_YEAR, 3);
-            // Debug.out(Entities.PLAYER.inventory);
         }
     }
 

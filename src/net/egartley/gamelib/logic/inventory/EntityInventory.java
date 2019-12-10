@@ -27,6 +27,10 @@ public class EntityInventory {
         }
     }
 
+    public void onUpdate() {
+
+    }
+
     public ItemStack get(int index) {
         return slots.get(index);
     }
@@ -34,10 +38,6 @@ public class EntityInventory {
     public void set(ItemStack stack, int index) {
         slots.set(index, stack);
         onUpdate();
-    }
-
-    public void onUpdate() {
-
     }
 
     public int nextEmptySlot() {
@@ -60,7 +60,7 @@ public class EntityInventory {
                 continue;
             }
             ItemStack stack = slots.get(i);
-            if (stack.item.id.equals(item.id)) {
+            if (stack.item.is(item)) {
                 if (stack.isFull()) {
                     continue;
                 }
@@ -142,13 +142,16 @@ public class EntityInventory {
         for (int i = 0; i < slots.size(); i++) {
             if (!isEmpty(i)) {
                 ItemStack stack = get(i);
-                if (stack.item.id.equals(item.id)) {
+                if (stack.item.is(item)) {
                     if (stack.amount < smallestAmount) {
                         smallestAmount = stack.amount;
                         smallestIndex = i;
                     }
                 }
             }
+        }
+        if (smallestIndex == -1) {
+            return false;
         }
         if (smallestAmount > amount) {
             // easy, just take away the amount and that's it
@@ -168,21 +171,29 @@ public class EntityInventory {
     }
 
     public boolean contains(GameItem item, int amount) {
-        // TODO: when amount is over 99 (multiple stacks)
+        return contains(item, amount, false);
+    }
 
-        if (isEmpty()) {
-            return false;
+    public boolean contains(GameItem item, int amount, boolean exact) {
+        if (exact) {
+            return amountOf(item) == amount;
+        } else {
+            return amountOf(item) >= amount;
         }
+    }
+
+    public int amountOf(GameItem item) {
+        int amount = 0;
         for (int i = 0; i < slots.size(); i++) {
             if (isEmpty(i)) {
                 continue;
             }
             ItemStack stack = slots.get(i);
-            if (stack.item.id.equals(item.id) && stack.amount == amount) {
-                return true;
+            if (stack.item.is(item)) {
+                amount += stack.amount;
             }
         }
-        return false;
+        return amount;
     }
 
     @Override

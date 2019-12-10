@@ -14,4 +14,8 @@ public abstract class GameItem {
         this.image = image;
     }
 
+    public boolean is(GameItem other) {
+        return id.equals(other.id);
+    }
+
 }

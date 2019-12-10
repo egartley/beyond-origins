@@ -58,10 +58,12 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
         graphics.drawImage(itemStack.item.image, x(), y(), null);
         graphics.setColor(Color.WHITE);
         graphics.setFont(amountFont);
-        if (itemStack.amount < 10) {
-            graphics.drawString(String.valueOf(itemStack.amount), x() + PlayerInventorySlot.SIZE - 12, y() + PlayerInventorySlot.SIZE - 6);
-        } else {
-            graphics.drawString(String.valueOf(itemStack.amount), x() + PlayerInventorySlot.SIZE - 18, y() + PlayerInventorySlot.SIZE - 6);
+        if (itemStack.amount > 1) {
+            if (itemStack.amount < 10) {
+                graphics.drawString(String.valueOf(itemStack.amount), x() + PlayerInventorySlot.SIZE - 12, y() + PlayerInventorySlot.SIZE - 6);
+            } else {
+                graphics.drawString(String.valueOf(itemStack.amount), x() + PlayerInventorySlot.SIZE - 18, y() + PlayerInventorySlot.SIZE - 6);
+            }
         }
         if (!setFontMetrics) {
             tooltipWidth = graphics.getFontMetrics(PlayerInventory.tooltipFont).stringWidth(itemStack.item.displayName);
