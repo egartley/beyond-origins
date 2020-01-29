@@ -10,6 +10,7 @@ import net.egartley.beyondorigins.ingame.Building;
 import net.egartley.beyondorigins.ingame.PlayerMenu;
 import net.egartley.beyondorigins.ingame.maps.debug.DebugMap;
 import net.egartley.beyondorigins.ui.DialoguePanel;
+import net.egartley.beyondorigins.ui.QuestsPanel;
 import net.egartley.gamelib.abstracts.GameState;
 import net.egartley.gamelib.abstracts.Map;
 import net.egartley.gamelib.input.KeyTyped;
@@ -25,6 +26,7 @@ public class InGameState extends GameState {
     public Map map;
     public PlayerMenu playerMenu;
     public DialoguePanel dialogue;
+    public QuestsPanel quests;
     public ArrayList<Map> maps = new ArrayList<>();
 
     public boolean isInventoryVisible;
@@ -37,15 +39,12 @@ public class InGameState extends GameState {
 
         ItemStore.init();
 
-        // load map
         maps.add(new DebugMap());
         map = maps.get(0);
 
-        // load inventory
         playerMenu = new PlayerMenu();
-
-        // load dialogue panel
         dialogue = new DialoguePanel();
+        quests = new QuestsPanel();
 
         // initialize key typeds
         toggleInventory = new KeyTyped(KeyEvent.VK_E) {
