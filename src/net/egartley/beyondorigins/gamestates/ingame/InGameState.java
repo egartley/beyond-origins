@@ -26,6 +26,7 @@ public class InGameState extends GameState {
     public Map map;
     public PlayerMenu playerMenu;
     public DialoguePanel dialogue;
+    // redundant, but it just looks better to use Game.in().quests rather than Game.in().playerMenu.questsPanel
     public QuestsPanel quests;
     public ArrayList<Map> maps = new ArrayList<>();
 
@@ -44,7 +45,7 @@ public class InGameState extends GameState {
 
         playerMenu = new PlayerMenu();
         dialogue = new DialoguePanel();
-        quests = new QuestsPanel();
+        quests = playerMenu.questsPanel;
 
         // initialize key typeds
         toggleInventory = new KeyTyped(KeyEvent.VK_E) {

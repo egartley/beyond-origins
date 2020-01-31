@@ -27,6 +27,7 @@ public class ImageStore {
     public final static byte INVENTORY_SLOT = 10;
     public final static byte QUESTS_PANEL = 14;
     public final static byte QUEST_SLOT = 15;
+    public final static byte QUEST_SLOT_HOVER = 16;
 
     public static String path = "resources/images/";
     public static String entityPath = path + "entities/";
@@ -65,6 +66,8 @@ public class ImageStore {
                 return get(uiPath + "inventory-slot.png");
             case QUEST_SLOT:
                 return get(uiPath + "quest-slot.png");
+            case QUEST_SLOT_HOVER:
+                return get(uiPath + "quest-slot_hover.png");
             default:
                 return get(path + "unknown.png");
         }

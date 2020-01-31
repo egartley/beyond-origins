@@ -51,7 +51,6 @@ public class PlayerInventory extends UIElement {
 
     @Override
     public void tick() {
-        // populate();
         boolean nohover = true;
         for (PlayerInventorySlot slot : slots) {
             slot.tick();

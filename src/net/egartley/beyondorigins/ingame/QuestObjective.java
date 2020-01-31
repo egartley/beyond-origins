@@ -29,8 +29,12 @@ public class QuestObjective {
     }
 
     public void complete() {
+        boolean first = !isComplete;
         isComplete = true;
-        onComplete();
+        if (first) {
+            // only call onComplete() once, so that if complete() is called more than once, onComplete() is not
+            onComplete();
+        }
     }
 
     @Override

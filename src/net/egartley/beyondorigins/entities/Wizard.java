@@ -4,7 +4,6 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.data.ImageStore;
 import net.egartley.beyondorigins.data.ItemStore;
-import net.egartley.beyondorigins.ui.NotificationBanner;
 import net.egartley.gamelib.abstracts.AnimatedEntity;
 import net.egartley.gamelib.graphics.Animation;
 import net.egartley.gamelib.graphics.EntityExpression;
@@ -55,7 +54,6 @@ public class Wizard extends AnimatedEntity implements Character {
             @Override
             public void onFinish() {
                 metPlayer = true;
-                Game.in().map.sector.pushNotification(new NotificationBanner("New quest added", "items/wizard-hat.png"));
             }
         });
         DialogueController.addFinished(new DialogueExchangeFinishedEvent(dialogue_gotHat) {

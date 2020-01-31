@@ -119,7 +119,7 @@ public class Debug {
             drawLine("Last collision: " + Entities.PLAYER.lastCollision, graphics);
         }
         drawLine("isCollided = " + Entities.PLAYER.isCollided, graphics);
-        drawLine("Sector entities: " + Game.in().map.sector.entities, graphics);
+        // drawLine("Sector entities: " + Game.in().map.sector.entities, graphics);
     }
 
 }

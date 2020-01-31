@@ -9,12 +9,11 @@ import java.awt.event.MouseEvent;
 
 public class ClickableArea {
 
-    public int x, y, width, height;
-
-    private boolean mouseWithinBounds = false;
     private boolean didHover = false;
-
     private MouseClicked clicked;
+
+    public int x, y, width, height;
+    public boolean mouseWithinBounds = false;
 
     public ClickableArea(int x, int y, int width, int height) {
         this.x = x;

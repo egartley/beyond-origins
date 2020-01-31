@@ -4,27 +4,47 @@ import java.util.ArrayList;
 
 public class Quest {
 
-    public String name;
+    public String title;
+    public String description;
     public ArrayList<QuestObjective> objectives;
 
     public boolean isComplete;
     public boolean didStart;
 
-    public Quest(String name) {
-        this(name, new ArrayList<>());
+    public Quest(String title, String description) {
+        this(title, description, new ArrayList<>());
     }
 
-    public Quest(String name, ArrayList<QuestObjective> objectives) {
-        this.name = name;
+    public Quest(String title, String description, ArrayList<QuestObjective> objectives) {
+        this.title = title;
+        this.description = description;
         this.objectives = objectives;
     }
 
+    public void onStart() {
+
+    }
+
+    public void onComplete() {
+
+    }
+
     public void start() {
+        if (!didStart) {
+            onStart();
+        }
         didStart = true;
     }
 
     public void complete() {
+        if (!isComplete) {
+            onComplete();
+        }
         isComplete = true;
+        for (QuestObjective objective : objectives) {
+            // just to make sure all the objectives are marked as complete
+            objective.complete();
+        }
     }
 
     public boolean inProgress() {
@@ -33,7 +53,7 @@ public class Quest {
 
     @Override
     public String toString() {
-        return name;
+        return title;
     }
 
 }
