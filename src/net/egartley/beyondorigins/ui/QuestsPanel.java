@@ -65,13 +65,17 @@ public class QuestsPanel extends UIElement {
             Debug.warning("Tried to click a quest slot that isn't showing in the panel! (\"" + clickedSlot.quest + "\")");
             return;
         }
-        if (sidePanel.quest != null && sidePanel.quest.equals(clickedSlot.quest)) {
+        if (sidePanel.getQuest() != null && sidePanel.getQuest().equals(clickedSlot.quest)) {
             // clicked the already selected slot, so remove it from the side panel
-            sidePanel.quest = null;
+            sidePanel.setQuest(null);
             clickedSlot.isSelected = false;
         } else {
             // clicked a slot not already selected, display its details in the side panel
-            sidePanel.quest = clickedSlot.quest;
+            for (QuestSlot slot : slots) {
+                // make sure any previously selected slot is de-selected
+                slot.isSelected = false;
+            }
+            sidePanel.setQuest(clickedSlot.quest);
             clickedSlot.isSelected = true;
         }
     }

@@ -2,6 +2,7 @@ package net.egartley.gamelib.logic.dialogue;
 
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Util;
+import net.egartley.beyondorigins.ui.DialoguePanel;
 import net.egartley.gamelib.interfaces.Character;
 
 import java.io.IOException;
@@ -46,7 +47,7 @@ public class CharacterDialogue {
 
     private void setLines(String path) {
         try {
-            lines = Util.toLines(Files.readString(FileSystems.getDefault().getPath("resources", "dialogue", path)), 380);
+            lines = Util.toLines(Files.readString(FileSystems.getDefault().getPath("resources", "dialogue", path)), DialoguePanel.lineFont, 380);
         } catch (IOException e) {
             Debug.error(e);
         }

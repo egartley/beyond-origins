@@ -2,7 +2,6 @@ package net.egartley.beyondorigins;
 
 import net.egartley.beyondorigins.data.ImageStore;
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.ui.DialoguePanel;
 import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.graphics.Animation;
 import net.egartley.gamelib.graphics.SpriteSheet;
@@ -232,30 +231,37 @@ public class Util {
     /**
      * Returns an array containing the given dialogue split into seperate lines, wrapped at words
      */
-    public static String[] toLines(String fullText, int maxLineLength) {
-        return Util.toLines(fullText, maxLineLength, 49);
-    }
-
-    public static String[] toLines(String fullText, int maxLineLength, int maxCharacterCount) {
+    public static String[] toLines(String fullText, Font font, int maxLineLength) {
         ArrayList<String> splits = new ArrayList<>();
-        FontMetrics fm = Entities.PLAYER.sprite.toBufferedImage().getGraphics().getFontMetrics(DialoguePanel.lineFont);
-        if (fm.stringWidth(fullText) > maxLineLength) {
-            while (fm.stringWidth(fullText) > maxLineLength) {
-                String l = fullText.substring(0, maxCharacterCount);
-                if (l.startsWith(" ")) {
+
+        // lazy way to figure out how many characters fit within the specificed max line length
+        int lineCheckSize = 0;
+        String check = "";
+        while (stringWidth(check, font) < maxLineLength) {
+            check += "_";
+        }
+        lineCheckSize = check.length();
+
+        if (stringWidth(fullText, font) > maxLineLength) {
+            while (stringWidth(fullText, font) > maxLineLength) {
+                String line = fullText.substring(0, lineCheckSize);
+                if (line.startsWith(" ")) {
                     // starts with space, probably from a previous split from within a word
-                    l = l.substring(1);
-                } else if (l.endsWith(" ")) {
+                    line = line.substring(1);
+                } else if (line.endsWith(" ")) {
                     // ends with space at max length
-                    l = l.substring(0, l.length() - 1);
+                    line = line.substring(0, line.length() - 1);
                 }
-                if (!fullText.substring(fullText.indexOf(l) + l.length(), fullText.indexOf(l) + l.length() + 1).equals(" ")) {
+                if (fullText.indexOf(line) + line.length() + 1 < fullText.length()
+                        && !fullText.substring(fullText.indexOf(line) + line.length(), fullText.indexOf(line) + line.length() + 1).equals(" ")) {
                     // max length within a word, so split from preceding
-                    l = l.substring(0, l.lastIndexOf(" "));
+                    line = line.substring(0, line.lastIndexOf(" "));
                 }
-                splits.add(l);
-                fullText = fullText.substring(l.length() + 1);
-                // Debug.out(fullText + ", " + fullText.length());
+                splits.add(line);
+                if (fullText.length() == line.length()) {
+                    break;
+                }
+                fullText = fullText.substring(line.length() + 1);
             }
             if (!fullText.isEmpty() && !fullText.equals(" ")) {
                 // add any remaining fullText that isn't just a space
@@ -277,6 +283,13 @@ public class Util {
      */
     public static boolean isWithinBounds(int pointX, int pointY, int boundsX, int boundsY, int width, int height) {
         return pointX >= boundsX && pointX <= boundsX + width && pointY >= boundsY && pointY <= boundsY + height;
+    }
+
+    /**
+     * Returns the width of the string, in pixels, when rendered using the given font
+     */
+    public static int stringWidth(String text, Font font) {
+        return Entities.PLAYER.sprite.toBufferedImage().getGraphics().getFontMetrics(font).stringWidth(text);
     }
 
 }

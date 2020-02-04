@@ -19,7 +19,6 @@ public class NotificationBanner extends UIElement {
     private int move = 2;
     private boolean startedAnimation = false, readyToMoveAgain = true, reachedTargetY = false, shown = false;
 
-    private static int MAX_LINE_LENGTH = 31;
     private static int startY, targetY = 8;
     private static final double SLIDE_DELAY = 0.001D, SHOW_DELAY = 3.5D;
     private static Font font = new Font("Bookman Old Style", Font.BOLD, 14);
@@ -32,7 +31,7 @@ public class NotificationBanner extends UIElement {
         super(ImageStore.get(ImageStore.uiPath + "notification-banner.png"));
         icon = ImageStore.get(ImageStore.path + iconFile);
         startY = -8 - image.getHeight();
-        lines = Util.toLines(text, 260, MAX_LINE_LENGTH);
+        lines = Util.toLines(text, font, 260);
         setPosition(Calculate.getCenteredX(width), startY);
     }
 
