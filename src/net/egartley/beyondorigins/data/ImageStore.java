@@ -28,6 +28,8 @@ public class ImageStore {
     public final static byte QUESTS_PANEL = 14;
     public final static byte QUEST_SLOT = 15;
     public final static byte QUEST_SLOT_HOVER = 16;
+    public final static byte QUEST_CHECKBOX = 17;
+    public final static byte QUEST_CHECKBOX_CHECKED = 18;
 
     public static String path = "resources/images/";
     public static String entityPath = path + "entities/";
@@ -68,6 +70,10 @@ public class ImageStore {
                 return get(uiPath + "quest-slot.png");
             case QUEST_SLOT_HOVER:
                 return get(uiPath + "quest-slot_hover.png");
+            case QUEST_CHECKBOX:
+                return get(uiPath + "quest-checkbox.png");
+            case QUEST_CHECKBOX_CHECKED:
+                return get(uiPath + "quest-checkbox_checked.png");
             default:
                 return get(path + "unknown.png");
         }

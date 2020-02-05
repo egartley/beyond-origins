@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class Quest {
 
+    public byte id;
     public String title;
     public String description;
     public ArrayList<QuestObjective> objectives;
@@ -11,11 +12,12 @@ public class Quest {
     public boolean isComplete;
     public boolean didStart;
 
-    public Quest(String title, String description) {
-        this(title, description, new ArrayList<>());
+    public Quest(byte id, String title, String description) {
+        this(id, title, description, new ArrayList<>());
     }
 
-    public Quest(String title, String description, ArrayList<QuestObjective> objectives) {
+    public Quest(byte id, String title, String description, ArrayList<QuestObjective> objectives) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.objectives = objectives;

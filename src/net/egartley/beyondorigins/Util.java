@@ -269,7 +269,10 @@ public class Util {
                     // check for extra space at start
                     fullText = fullText.substring(1);
                 }
-                splits.add(fullText);
+                if (!splits.contains(fullText)) {
+                    // check for rare case of duplicates
+                    splits.add(fullText);
+                }
             }
         } else {
             return new String[]{fullText};

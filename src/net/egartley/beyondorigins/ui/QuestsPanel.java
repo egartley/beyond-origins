@@ -80,6 +80,15 @@ public class QuestsPanel extends UIElement {
         }
     }
 
+    public Quest get(byte id) {
+        for (QuestSlot slot : slots) {
+            if (slot.quest.id == id) {
+                return slot.quest;
+            }
+        }
+        return null;
+    }
+
     private int getSlotX(int i) {
         // keep the index argument in case of future use with resizable window
         return x() + 13;

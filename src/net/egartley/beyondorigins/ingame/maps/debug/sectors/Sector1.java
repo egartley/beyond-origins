@@ -2,6 +2,7 @@ package net.egartley.beyondorigins.ingame.maps.debug.sectors;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.data.ItemStore;
+import net.egartley.beyondorigins.data.QuestStore;
 import net.egartley.beyondorigins.entities.DefaultTree;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.WoodenFence;
@@ -35,6 +36,7 @@ public class Sector1 extends MapSector {
                     if (!Entities.PLAYER.inventory.contains(ItemStore.WIZARD_HAT) && Entities.WIZARD.metPlayer && !Entities.WIZARD.foundHat) {
                         Entities.PLAYER.inventory.put(ItemStore.WIZARD_HAT);
                         pushNotification(new NotificationBanner("You have found the Wizard's hat!", "items/wizard-hat.png"));
+                        Game.in().quests.get(QuestStore.WIZARD_HAT).objectives.get(0).complete();
                     }
                 }
             });
@@ -56,13 +58,8 @@ public class Sector1 extends MapSector {
             Entities.PLAYER.inventory.put(ItemStore.HMM, 1);
             Entities.PLAYER.inventory.put(ItemStore.CURRENT_YEAR, 3);
 
-            // test quests
-            Quest quest = new Quest("Missing hat", "The wizard's hat has gone missing! You must find it and ensure its safe return.");
-            quest.objectives.add(new QuestObjective("Locate the Wizard's hat", "It's in one of the trees, dummy!"));
-            quest.objectives.add(new QuestObjective("Return the hat", "Go back to the Wizard and give him back his magical hat."));
-            Game.in().quests.add(quest, true);
-
-            quest = new Quest("Test quest 2", "Here's another quest for testing, bud!");
+            // test quest
+            Quest quest = new Quest(QuestStore.TEST_QUEST_2, "Test quest 2", "Here's another quest for testing, bud!");
             quest.objectives.add(new QuestObjective("Do this thing", "Because you HAVE TO. That's why."));
             quest.objectives.add(new QuestObjective("Do this other thing", "Just do it, already."));
             quest.objectives.add(new QuestObjective("Final task", "Get it over with."));
