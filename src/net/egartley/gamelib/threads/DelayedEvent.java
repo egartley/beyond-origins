@@ -21,7 +21,6 @@ public class DelayedEvent implements Runnable {
     public DelayedEvent(double duration) {
         this.duration = duration;
         thread = new Thread(this, "DelayedEvent-" + this.hashCode());
-        ThreadBroker.register(thread);
     }
 
     /**
@@ -68,7 +67,6 @@ public class DelayedEvent implements Runnable {
             }
         }
         isRunning = false;
-        ThreadBroker.deregister(thread);
     }
 
 }

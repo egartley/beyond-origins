@@ -1,13 +1,8 @@
 package net.egartley.beyondorigins.ui;
 
-import net.egartley.beyondorigins.controllers.MouseController;
-import net.egartley.gamelib.input.Mouse;
-import net.egartley.gamelib.input.MouseClicked;
-
 import java.awt.*;
-import java.awt.event.MouseEvent;
 
-public class MenuButton extends UIElement {
+public class MenuButton extends GenericButton {
 
     /**
      * Whether or not font metrics (string width and location) have been calculated. This is meant to avoid calculating the same thing every tick
@@ -15,8 +10,6 @@ public class MenuButton extends UIElement {
     public boolean setFontMetrics;
     private int stringX;
     private int stringY;
-
-    public MouseClicked clicked;
 
     public static Font font = new Font("Georgia", Font.BOLD, 24);
 
@@ -39,46 +32,17 @@ public class MenuButton extends UIElement {
     private Color currentTextColor;
 
     public MenuButton(String text, boolean isEnabledByDefault, int x, int y, int width, int height) {
-        super(width, height, isEnabledByDefault);
+        super(width, height, x, y);
+        if (isEnabledByDefault) {
+            isEnabled = true;
+        }
         this.text = text;
-        setPosition(x, y);
-
-        clicked = new MouseClicked() {
-            @Override
-            public void onClick(MouseEvent e) {
-                checkClick(e);
-            }
-        };
-    }
-
-    public void registerClicked() {
-        MouseController.addMouseClicked(clicked);
-    }
-
-    public void deregisterClicked() {
-        MouseController.removeMouseClicked(clicked);
     }
 
     public void setFontMetrics(FontMetrics fontMetrics) {
         stringX = (x() + (width / 2)) - (fontMetrics.stringWidth(text) / 2);
         stringY = y() + (height / 2) + (font.getSize() / 4);
         setFontMetrics = true;
-    }
-
-    /**
-     * Should be called whenever the user clicks/releases the mouse
-     */
-    public void checkClick(MouseEvent e) {
-        if (isClickInBounds(e.getX(), e.getY()) && isEnabled) {
-            onClick();
-        }
-    }
-
-    /**
-     * Called when the button is clicked and enabled
-     */
-    public void onClick() {
-
     }
 
     @Override
@@ -103,8 +67,9 @@ public class MenuButton extends UIElement {
 
     @Override
     public void tick() {
+        super.tick();
         // emulate hover effect
-        if (isClickInBounds(Mouse.x, Mouse.y) && isEnabled) {
+        if (isBeingHovered) {
             currentColor = hoverColor;
             currentTextColor = hoverTextColor;
         } else {

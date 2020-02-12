@@ -14,7 +14,6 @@ public class AnimationClock implements Runnable {
         this.animation = animation;
         this.frameDelay = animation.frameDelay;
         thread = new Thread(this, "AnimationClock-" + animation.hashCode());
-        ThreadBroker.register(thread);
     }
 
     public void start() {
@@ -32,7 +31,6 @@ public class AnimationClock implements Runnable {
             }
             animation.increment();
         }
-        ThreadBroker.deregister(thread);
     }
 
 }

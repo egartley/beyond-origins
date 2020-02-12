@@ -3,7 +3,6 @@ package net.egartley.beyondorigins;
 import net.egartley.beyondorigins.data.EntityStore;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.gamelib.input.Mouse;
-import net.egartley.gamelib.threads.ThreadBroker;
 
 import java.awt.*;
 
@@ -114,7 +113,7 @@ public class Debug {
         drawLine("Location: " + Game.in().map.sector + " (" + Entities.PLAYER.x() + ", " + Entities.PLAYER.y() + ")", graphics);
         drawLine("Mouse: " + Mouse.x + ", " + Mouse.y, graphics);
         drawLine("Entities: " + EntityStore.amount, graphics);
-        drawLine("Threads: " + (ThreadBroker.threads.size() + 1), graphics);
+        drawLine("Threads: " + Thread.activeCount(), graphics);
         if (Entities.PLAYER.lastCollision != null) {
             drawLine("Last collision: " + Entities.PLAYER.lastCollision, graphics);
         }

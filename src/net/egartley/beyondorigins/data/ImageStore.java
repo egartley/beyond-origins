@@ -30,6 +30,9 @@ public class ImageStore {
     public final static byte QUEST_SLOT_HOVER = 16;
     public final static byte QUEST_CHECKBOX = 17;
     public final static byte QUEST_CHECKBOX_CHECKED = 18;
+    public final static byte PAGE_BUTTON_ENABLED = 19;
+    public final static byte PAGE_BUTTON_DISABLED = 20;
+    public final static byte PAGE_BUTTON_HOVER = 21;
 
     public static String path = "resources/images/";
     public static String entityPath = path + "entities/";
@@ -74,6 +77,12 @@ public class ImageStore {
                 return get(uiPath + "quest-checkbox.png");
             case QUEST_CHECKBOX_CHECKED:
                 return get(uiPath + "quest-checkbox_checked.png");
+            case PAGE_BUTTON_ENABLED:
+                return get(uiPath + "page-button.png");
+            case PAGE_BUTTON_DISABLED:
+                return get(uiPath + "page-button_disabled.png");
+            case PAGE_BUTTON_HOVER:
+                return get(uiPath + "page-button_hover.png");
             default:
                 return get(path + "unknown.png");
         }

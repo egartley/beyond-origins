@@ -2,17 +2,21 @@ package net.egartley.beyondorigins.ui;
 
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
+import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.data.ImageStore;
 import net.egartley.beyondorigins.ingame.Quest;
 import net.egartley.gamelib.logic.math.Calculate;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class QuestsPanel extends UIElement {
 
     private QuestsSidePanel sidePanel;
     private ArrayList<QuestSlot> slots;
+    private ImageButton pageLeftButton;
+    private ImageButton pageRightButton;
 
     public QuestsPanel() {
         super(ImageStore.get(ImageStore.QUESTS_PANEL));
@@ -20,6 +24,22 @@ public class QuestsPanel extends UIElement {
 
         slots = new ArrayList<>();
         sidePanel = new QuestsSidePanel();
+        BufferedImage e = ImageStore.get(ImageStore.PAGE_BUTTON_ENABLED);
+        BufferedImage d = ImageStore.get(ImageStore.PAGE_BUTTON_DISABLED);
+        BufferedImage h = ImageStore.get(ImageStore.PAGE_BUTTON_HOVER);
+        pageLeftButton = new ImageButton(e, d, h, 324, 359) {
+            public void onClick() {
+                pageLeftButtonClick();
+            }
+        };
+        e = Util.rotateImage(e, Math.PI);
+        d = Util.rotateImage(d, Math.PI);
+        h = Util.rotateImage(h, Math.PI);
+        pageRightButton = new ImageButton(e, d, h, 362, 359) {
+            public void onClick() {
+                pageRightButtonClick();
+            }
+        };
     }
 
     public void add(Quest quest) {
@@ -34,6 +54,7 @@ public class QuestsPanel extends UIElement {
                 break;
             }
         }
+        // contains = false;
         if (!contains) {
             slots.add(new QuestSlot(quest, getSlotX(slots.size()), getSlotY(slots.size())));
             if (start) {
@@ -80,6 +101,24 @@ public class QuestsPanel extends UIElement {
         }
     }
 
+    public void onShow() {
+        pageLeftButton.registerClicked();
+        pageRightButton.registerClicked();
+    }
+
+    public void onHide() {
+        pageLeftButton.deregisterClicked();
+        pageRightButton.deregisterClicked();
+    }
+
+    private void pageLeftButtonClick() {
+        // Debug.out("left");
+    }
+
+    private void pageRightButtonClick() {
+        // Debug.out("right");
+    }
+
     public Quest get(byte id) {
         for (QuestSlot slot : slots) {
             if (slot.quest.id == id) {
@@ -102,6 +141,8 @@ public class QuestsPanel extends UIElement {
     public void tick() {
         slots.forEach(QuestSlot::tick);
         sidePanel.tick();
+        pageLeftButton.tick();
+        pageRightButton.tick();
     }
 
     @Override
@@ -114,6 +155,9 @@ public class QuestsPanel extends UIElement {
         }
 
         sidePanel.render(graphics);
+
+        pageLeftButton.render(graphics);
+        pageRightButton.render(graphics);
     }
 
 }

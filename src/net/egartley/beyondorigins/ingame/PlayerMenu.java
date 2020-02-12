@@ -14,8 +14,6 @@ public class PlayerMenu implements Tickable {
 
     static final int ROWS = 5, COLUMNS = 4;
 
-    public boolean isShowing;
-
     public UIElement panel;
     public PlayerInventory inventoryPanel;
     public QuestsPanel questsPanel;
@@ -30,7 +28,6 @@ public class PlayerMenu implements Tickable {
 
         // show inventory by default
         panel = inventoryPanel;
-        isShowing = true;
 
         inventoryPanelTab = new ClickableArea(panel.x() + 20, panel.y() + 1, 53, 25) {
             @Override
@@ -58,12 +55,15 @@ public class PlayerMenu implements Tickable {
         tabs.add(questsPanelTab);
     }
 
-    private void onTabClicked(ClickableArea tab) {
-        isShowing = false;
-        if (tab.equals(inventoryPanelTab)) {
+    private void onTabClicked(ClickableArea clickedTab) {
+        if (clickedTab.equals(questsPanelTab) && !panel.equals(questsPanel)) {
+            questsPanel.onShow();
+        } else if (!clickedTab.equals(questsPanelTab) && panel.equals(questsPanel)) {
+            questsPanel.onHide();
+        }
+        if (clickedTab.equals(inventoryPanelTab)) {
             panel = inventoryPanel;
-            isShowing = true;
-        } else if (tab.equals(questsPanelTab)) {
+        } else if (clickedTab.equals(questsPanelTab)) {
             panel = questsPanel;
         }
     }
