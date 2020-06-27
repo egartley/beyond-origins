@@ -2,7 +2,7 @@ package net.egartley.beyondorigins.ui;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.data.Images;
 import net.egartley.gamelib.logic.math.Calculate;
 import net.egartley.gamelib.threads.DelayedEvent;
 
@@ -16,20 +16,21 @@ public class NotificationBanner extends UIElement {
 
     public boolean done = false;
     private int offset = 0;
-    private int move = 2;
+    private final int move = 2;
     private boolean startedAnimation = false, readyToMoveAgain = true, reachedTargetY = false, shown = false;
 
-    private static int startY, targetY = 8;
+    private static int startY;
+    private static final int targetY = 8;
     private static final double SLIDE_DELAY = 0.001D, SHOW_DELAY = 3.5D;
-    private static Font font = new Font("Bookman Old Style", Font.BOLD, 14);
+    private static final Font font = new Font("Bookman Old Style", Font.BOLD, 14);
 
     public NotificationBanner(String text) {
         this(text, "ui/notification-icon-default.png");
     }
 
     public NotificationBanner(String text, String iconFile) {
-        super(ImageStore.get(ImageStore.uiPath + "notification-banner.png"));
-        icon = ImageStore.get(ImageStore.path + iconFile);
+        super(Images.get(Images.uiPath + "notification-banner.png"));
+        icon = Images.get(Images.path + iconFile);
         startY = -8 - image.getHeight();
         lines = Util.toLines(text, font, 260);
         setPosition(Calculate.getCenteredX(width), startY);

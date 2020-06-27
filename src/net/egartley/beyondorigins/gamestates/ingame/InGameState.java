@@ -3,8 +3,7 @@ package net.egartley.beyondorigins.gamestates.ingame;
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.KeyboardController;
-import net.egartley.beyondorigins.data.ItemStore;
-import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.data.Items;
 import net.egartley.beyondorigins.gamestates.ingame.substates.InBuildingState;
 import net.egartley.beyondorigins.ingame.Building;
 import net.egartley.beyondorigins.ingame.PlayerMenu;
@@ -21,7 +20,9 @@ import java.util.ArrayList;
 
 public class InGameState extends GameState {
 
-    private KeyTyped toggleInventory, advanceDialogue, backToMainMenu, itest, itest2;
+    private final KeyTyped toggleInventory;
+    private final KeyTyped advanceDialogue;
+    private final KeyTyped backToMainMenu;
 
     public Map map;
     public PlayerMenu playerMenu;
@@ -38,7 +39,7 @@ public class InGameState extends GameState {
 
         subStates.add(new InBuildingState());
 
-        ItemStore.init();
+        Items.init();
 
         maps.add(new DebugMap());
         map = maps.get(0);
@@ -70,18 +71,6 @@ public class InGameState extends GameState {
                 }
             }
         };
-        itest = new KeyTyped(KeyEvent.VK_U) {
-            @Override
-            public void onType() {
-                Entities.PLAYER.inventory.put(ItemStore.WIZARD_HAT, 21);
-            }
-        };
-        itest2 = new KeyTyped(KeyEvent.VK_Y) {
-            @Override
-            public void onType() {
-                Entities.PLAYER.inventory.remove(ItemStore.WIZARD_HAT, 3);
-            }
-        };
     }
 
     public void setBuilding(Building building) {
@@ -93,8 +82,6 @@ public class InGameState extends GameState {
         KeyboardController.addKeyTyped(toggleInventory);
         KeyboardController.addKeyTyped(advanceDialogue);
         KeyboardController.addKeyTyped(backToMainMenu);
-        KeyboardController.addKeyTyped(itest);
-        KeyboardController.addKeyTyped(itest2);
 
         map.changeSector(map.sectors.get(0), null);
     }
@@ -104,8 +91,6 @@ public class InGameState extends GameState {
         KeyboardController.removeKeyTyped(toggleInventory);
         KeyboardController.removeKeyTyped(advanceDialogue);
         KeyboardController.removeKeyTyped(backToMainMenu);
-        KeyboardController.addKeyTyped(itest);
-        KeyboardController.addKeyTyped(itest2);
     }
 
     @Override

@@ -2,9 +2,9 @@ package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.DialogueController;
-import net.egartley.beyondorigins.data.ImageStore;
-import net.egartley.beyondorigins.data.ItemStore;
-import net.egartley.beyondorigins.data.QuestStore;
+import net.egartley.beyondorigins.data.Images;
+import net.egartley.beyondorigins.data.Items;
+import net.egartley.beyondorigins.data.Quests;
 import net.egartley.beyondorigins.ingame.Quest;
 import net.egartley.beyondorigins.ingame.QuestObjective;
 import net.egartley.gamelib.abstracts.AnimatedEntity;
@@ -30,17 +30,17 @@ public class Wizard extends AnimatedEntity implements Character {
     public boolean foundHat = false;
     public boolean wearingHat = false;
 
-    private EntityExpression meetPlayerExpression;
-    private EntityExpression foundHatExpression;
-    private DialogueExchange dialogue_meetPlayer;
-    private DialogueExchange dialogue_gotHat;
-    private DialogueExchange dialogue_playerGeneric;
+    private final EntityExpression meetPlayerExpression;
+    private final EntityExpression foundHatExpression;
+    private final DialogueExchange dialogue_meetPlayer;
+    private final DialogueExchange dialogue_gotHat;
+    private final DialogueExchange dialogue_playerGeneric;
 
     public Wizard() {
-        super("Wizard", new SpriteSheet(ImageStore.get(ImageStore.WIZARD_DEFAULT), 30, 44, 2, 4));
+        super("Wizard", new SpriteSheet(Images.get(Images.WIZARD_DEFAULT), 30, 44, 2, 4));
         speed = 0.8;
         image = animations.get(0).sprite.toBufferedImage(0);
-        sheets.add(new SpriteSheet(ImageStore.get(ImageStore.WIZARD_WITH_HAT), 30, 56, 2, 4));
+        sheets.add(new SpriteSheet(Images.get(Images.WIZARD_WITH_HAT), 30, 56, 2, 4));
 
         meetPlayerExpression = new EntityExpression(EntityExpression.ATTENTION, this);
         foundHatExpression = new EntityExpression(EntityExpression.HEART, this);
@@ -57,7 +57,7 @@ public class Wizard extends AnimatedEntity implements Character {
             @Override
             public void onFinish() {
                 metPlayer = true;
-                Quest quest = new Quest(QuestStore.WIZARD_HAT, "Missing hat", "The wizard's hat has gone missing! You must find it and ensure its safe return.");
+                Quest quest = new Quest(Quests.WIZARD_HAT, "Missing hat", "The wizard's hat has gone missing! You must find it and ensure its safe return.");
                 quest.objectives.add(new QuestObjective("Locate the Wizard's hat", "It's in one of the trees, dummy!"));
                 quest.objectives.add(new QuestObjective("Return the hat", "Go back to the Wizard and give him back his magical hat."));
                 Game.in().quests.add(quest, true);
@@ -67,7 +67,7 @@ public class Wizard extends AnimatedEntity implements Character {
             @Override
             public void onFinish() {
                 // take hat from player
-                Entities.PLAYER.inventory.remove(ItemStore.WIZARD_HAT);
+                Entities.PLAYER.inventory.remove(Items.WIZARD_HAT);
                 // switch to sprite that is wearing the hat
                 setSpriteSheet(1);
                 wearingHat = true;
@@ -76,8 +76,8 @@ public class Wizard extends AnimatedEntity implements Character {
 
                 interactions.get(0).collision.end();
 
-                Game.in().quests.get(QuestStore.WIZARD_HAT).objectives.get(1).complete();
-                Game.in().quests.get(QuestStore.WIZARD_HAT).complete();
+                Game.in().quests.get(Quests.WIZARD_HAT).objectives.get(1).complete();
+                Game.in().quests.get(Quests.WIZARD_HAT).complete();
             }
         });
     }
@@ -106,15 +106,13 @@ public class Wizard extends AnimatedEntity implements Character {
      * Called whenever the player interacts with the wizard
      */
     private void onPlayerInteraction() {
-        boolean playerHasHat = Entities.PLAYER.inventory.contains(ItemStore.WIZARD_HAT);
-        if (!foundHat) {
-            if (!playerHasHat) {
-                Game.in().dialogue.startExchange(dialogue_meetPlayer);
-            } else {
-                foundHat = true;
-                Game.in().dialogue.startExchange(dialogue_gotHat);
-            }
-        } else if (wearingHat) {
+        boolean playerHasHat = Entities.PLAYER.inventory.contains(Items.WIZARD_HAT);
+        if (!metPlayer) {
+            Game.in().dialogue.startExchange(dialogue_meetPlayer);
+        } else if (playerHasHat && !foundHat) {
+            foundHat = true;
+            Game.in().dialogue.startExchange(dialogue_gotHat);
+        } else {
             Game.in().dialogue.startExchange(dialogue_playerGeneric);
         }
     }
@@ -150,7 +148,7 @@ public class Wizard extends AnimatedEntity implements Character {
 
     @Override
     public String getName() {
-        return id;
+        return name;
     }
 
     @Override

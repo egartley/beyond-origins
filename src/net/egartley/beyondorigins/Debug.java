@@ -1,6 +1,5 @@
 package net.egartley.beyondorigins;
 
-import net.egartley.beyondorigins.data.EntityStore;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.gamelib.input.Mouse;
 
@@ -11,7 +10,7 @@ public class Debug {
     /**
      * Font to use while rendering debug lines
      */
-    private static Font font = new Font("Consolas", Font.PLAIN, 12);
+    private static final Font font = new Font("Consolas", Font.PLAIN, 12);
     /**
      * Used for calculating width of strings so that each line's background will be sized correctly
      */
@@ -19,7 +18,7 @@ public class Debug {
     /**
      * Color for the background of debug lines
      */
-    private static Color backgroundColor = Color.BLACK;
+    private static final Color backgroundColor = Color.BLACK;
     /**
      * Whether or not font metrics have been set
      */
@@ -27,15 +26,15 @@ public class Debug {
     /**
      * Initial line x-coordinate
      */
-    private static int lx = 24;
+    private static final int lx = 24;
     /**
      * Initial line y-coordinate
      */
-    private static int ly = 42;
+    private static final int ly = 42;
     /**
      * Offset for each line
      */
-    private static int rowOffset = 18;
+    private static final int rowOffset = 18;
     /**
      * What row to render the line on, for {@link #drawLine(String, Graphics)}
      */
@@ -112,13 +111,11 @@ public class Debug {
         graphics.setFont(font);
         drawLine("Location: " + Game.in().map.sector + " (" + Entities.PLAYER.x() + ", " + Entities.PLAYER.y() + ")", graphics);
         drawLine("Mouse: " + Mouse.x + ", " + Mouse.y, graphics);
-        drawLine("Entities: " + EntityStore.amount, graphics);
         drawLine("Threads: " + Thread.activeCount(), graphics);
         if (Entities.PLAYER.lastCollision != null) {
             drawLine("Last collision: " + Entities.PLAYER.lastCollision, graphics);
         }
         drawLine("isCollided = " + Entities.PLAYER.isCollided, graphics);
-        // drawLine("Sector entities: " + Game.in().map.sector.entities, graphics);
     }
 
 }

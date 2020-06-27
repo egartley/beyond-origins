@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class ImageStore {
+public class Images {
 
     public final static byte PLAYER = 0;
     public final static byte DUMMY = 1;

@@ -1,8 +1,8 @@
 package net.egartley.beyondorigins.ingame.maps.debug.sectors;
 
 import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.data.ItemStore;
-import net.egartley.beyondorigins.data.QuestStore;
+import net.egartley.beyondorigins.data.Items;
+import net.egartley.beyondorigins.data.Quests;
 import net.egartley.beyondorigins.entities.DefaultTree;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.WoodenFence;
@@ -33,19 +33,19 @@ public class Sector1 extends MapSector {
             DefaultTree tree = new DefaultTree(s, 100, 200);
             tree.collisions.add(new EntityEntityCollision(Entities.PLAYER.boundary, tree.defaultBoundary) {
                 public void start(EntityEntityCollisionEvent e) {
-                    if (!Entities.PLAYER.inventory.contains(ItemStore.WIZARD_HAT) && Entities.WIZARD.metPlayer && !Entities.WIZARD.foundHat) {
-                        Entities.PLAYER.inventory.put(ItemStore.WIZARD_HAT);
+                    if (!Entities.PLAYER.inventory.contains(Items.WIZARD_HAT) && Entities.WIZARD.metPlayer && !Entities.WIZARD.foundHat) {
+                        Entities.PLAYER.inventory.put(Items.WIZARD_HAT);
                         pushNotification(new NotificationBanner("You have found the Wizard's hat!", "items/wizard-hat.png"));
-                        Game.in().quests.get(QuestStore.WIZARD_HAT).objectives.get(0).complete();
+                        Game.in().quests.get(Quests.WIZARD_HAT).objectives.get(0).complete();
                     }
                 }
             });
             addEntity(tree);
             s = Entities.getSpriteTemplate(Entities.TEMPLATE_ROCK);
-            int off = 0;
+            /*int off = 0;
             for (byte i = 0; i < 14; i++) {
-                // addEntity(new DefaultRock(s, (s.width * 2) * off++ + 48, 400));
-            }
+                addEntity(new DefaultRock(s, (s.width * 2) * off++ + 48, 400));
+            }*/
             WoodenFence fence = new WoodenFence(8, true);
             fence.setPosition(534, 268);
             addEntity(fence);
@@ -55,11 +55,11 @@ public class Sector1 extends MapSector {
             addEntity(house);
 
             didInitialize = true;
-            Entities.PLAYER.inventory.put(ItemStore.HMM, 1);
-            Entities.PLAYER.inventory.put(ItemStore.CURRENT_YEAR, 3);
+            Entities.PLAYER.inventory.put(Items.HMM, 1);
+            Entities.PLAYER.inventory.put(Items.CURRENT_YEAR, 3);
 
             // test quest
-            Quest quest = new Quest(QuestStore.TEST_QUEST_2, "Test quest 2", "Here's another quest for testing, bud!");
+            Quest quest = new Quest(Quests.TEST_QUEST_2, "Test quest 2", "Here's another quest for testing, bud!");
             quest.objectives.add(new QuestObjective("Do this thing", "Because you HAVE TO. That's why."));
             quest.objectives.add(new QuestObjective("Do this other thing", "Just do it, already."));
             quest.objectives.add(new QuestObjective("Final task", "Get it over with."));

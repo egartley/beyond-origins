@@ -3,7 +3,7 @@ package net.egartley.beyondorigins.ui;
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.ingame.Quest;
 import net.egartley.gamelib.logic.math.Calculate;
 
@@ -13,20 +13,20 @@ import java.util.ArrayList;
 
 public class QuestsPanel extends UIElement {
 
-    private QuestsSidePanel sidePanel;
-    private ArrayList<QuestSlot> slots;
-    private ImageButton pageLeftButton;
-    private ImageButton pageRightButton;
+    private final QuestsSidePanel sidePanel;
+    private final ArrayList<QuestSlot> slots;
+    private final ImageButton pageLeftButton;
+    private final ImageButton pageRightButton;
 
     public QuestsPanel() {
-        super(ImageStore.get(ImageStore.QUESTS_PANEL));
+        super(Images.get(Images.QUESTS_PANEL));
         setPosition(Calculate.getCenteredX(width), Calculate.getCenteredY(height));
 
         slots = new ArrayList<>();
         sidePanel = new QuestsSidePanel();
-        BufferedImage e = ImageStore.get(ImageStore.PAGE_BUTTON_ENABLED);
-        BufferedImage d = ImageStore.get(ImageStore.PAGE_BUTTON_DISABLED);
-        BufferedImage h = ImageStore.get(ImageStore.PAGE_BUTTON_HOVER);
+        BufferedImage e = Images.get(Images.PAGE_BUTTON_ENABLED);
+        BufferedImage d = Images.get(Images.PAGE_BUTTON_DISABLED);
+        BufferedImage h = Images.get(Images.PAGE_BUTTON_HOVER);
         pageLeftButton = new ImageButton(e, d, h, 324, 359) {
             public void onClick() {
                 pageLeftButtonClick();

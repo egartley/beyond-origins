@@ -3,7 +3,6 @@ package net.egartley.gamelib.abstracts;
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.data.EntityStore;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.graphics.SpriteSheet;
 import net.egartley.gamelib.interfaces.Tickable;
@@ -103,7 +102,7 @@ public abstract class Entity extends Renderable implements Tickable {
      */
     public double speed;
     /**
-     * The entity's unique identification number. Use {@link #id} for
+     * The entity's unique identification number. Use {@link #name} for
      * user-friendly identification
      */
     public int uuid;
@@ -165,11 +164,6 @@ public abstract class Entity extends Renderable implements Tickable {
      */
     public boolean isDualRendered;
     /**
-     * Whether or not the entity is currently registered in the entity
-     * store
-     */
-    public boolean isRegistered;
-    /**
      * Whether or not the entity is "bound" to, or only exists in, a
      * specific map sector
      */
@@ -177,10 +171,10 @@ public abstract class Entity extends Renderable implements Tickable {
     /**
      * Human-readable identifier for the entity (not unique)
      */
-    public String id;
+    public String name;
 
-    private static Font nameTagFont = new Font("Arial", Font.PLAIN, 11);
-    private static Color nameTagBackgroundColor = new Color(0, 0, 0, 128);
+    private static final Font nameTagFont = new Font("Arial", Font.PLAIN, 11);
+    private static final Color nameTagBackgroundColor = new Color(0, 0, 0, 128);
 
     private int nameTagWidth;
     private int entityWidth;
@@ -195,18 +189,14 @@ public abstract class Entity extends Renderable implements Tickable {
      */
     private boolean setFontMetrics;
 
-    Entity(String id) {
-        this(id, (Sprite) null);
+    Entity(String name) {
+        this(name, (Sprite) null);
     }
 
-    /**
-     * Creates a new entity with a randomly generated UUID, an initial
-     * speed of <code>1.0</code>, then adds it to the entity store
-     */
-    Entity(String id, Sprite sprite) {
+    Entity(String name, Sprite sprite) {
         inventory = new EntityInventory(this);
-        generateUUID();
-        this.id = id;
+        uuid = Util.randomInt(999999, 100000, true);
+        this.name = name;
         if (sprite != null) {
             setSprite(sprite);
             setBoundaries();
@@ -214,11 +204,10 @@ public abstract class Entity extends Renderable implements Tickable {
         speed = 1.0;
         setCollisions();
         setInteractions();
-        EntityStore.register(this);
     }
 
-    Entity(String id, SpriteSheet sheet) {
-        this(id, sheet.sprites.get(0));
+    Entity(String name, SpriteSheet sheet) {
+        this(name, sheet.sprites.get(0));
         sprites = sheet.sprites;
         sheets.add(sheet);
     }
@@ -283,18 +272,6 @@ public abstract class Entity extends Renderable implements Tickable {
      */
     private void drawBoundaries(Graphics graphics) {
         boundaries.forEach(boundary -> boundary.draw(graphics));
-    }
-
-    /**
-     * "Kills" the entity by removing it from the entity store, but only if
-     * it is sector-specific
-     */
-    public void kill() {
-        if (isSectorSpecific) {
-            EntityStore.remove(this);
-        } else {
-            Debug.warning("Tried to kill \"" + this + "\", but it is not sector-specific");
-        }
     }
 
     /**
@@ -561,28 +538,13 @@ public abstract class Entity extends Renderable implements Tickable {
     }
 
     /**
-     * Generates a new value for {@link #uuid}
-     *
-     * @see Util#randomInt(int, int, boolean)
-     */
-    private void generateUUID() {
-        int gen = Util.randomInt(9999, 1000, true);
-        if (EntityStore.getEntityByUUID(gen) != null) {
-            // there's already an entity with the same uuid, so generate another one
-            generateUUID();
-            return;
-        }
-        uuid = gen;
-    }
-
-    /**
      * Returns the entity as a string, in the format <code>id#uuid</code>
      *
-     * @see #id
+     * @see #name
      * @see #uuid
      */
     public String toString() {
-        return id + "#" + uuid;
+        return name + "#" + uuid;
     }
 
 }

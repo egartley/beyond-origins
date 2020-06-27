@@ -2,7 +2,7 @@ package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.ingame.Building;
 import net.egartley.beyondorigins.ui.PlayerInventory;
 import net.egartley.gamelib.abstracts.AnimatedEntity;
@@ -43,7 +43,7 @@ public class Player extends AnimatedEntity implements Character {
     public EntityBoundary chatBoundary;
 
     public Player() {
-        super("Player", new SpriteSheet(ImageStore.get(ImageStore.PLAYER), 30, 44, 2, 4));
+        super("Player", new SpriteSheet(Images.get(Images.PLAYER), 30, 44, 2, 4));
 
         isSectorSpecific = false;
         isDualRendered = false;
@@ -331,7 +331,7 @@ public class Player extends AnimatedEntity implements Character {
 
     @Override
     public String getName() {
-        return id;
+        return name;
     }
 
     @Override

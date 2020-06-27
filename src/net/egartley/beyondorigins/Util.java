@@ -1,6 +1,6 @@
 package net.egartley.beyondorigins;
 
-import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.graphics.Animation;
@@ -89,7 +89,7 @@ public class Util {
     }
 
     public static Animation getTemplateAnimation(byte imageStore, int width, int height, int rows, int frames, int frameDelay, int rowOffset) {
-        return new Animation(new SpriteSheet(ImageStore.get(imageStore), width, height, rows, frames).sprites.get(rowOffset), frameDelay);
+        return new Animation(new SpriteSheet(Images.get(imageStore), width, height, rows, frames).sprites.get(rowOffset), frameDelay);
     }
 
     /**

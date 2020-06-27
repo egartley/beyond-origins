@@ -2,7 +2,7 @@ package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.gamelib.abstracts.StaticEntity;
 import net.egartley.gamelib.graphics.SpriteSheet;
@@ -23,7 +23,7 @@ public class Building extends StaticEntity {
     public ArrayList<BuildingFloor> floors = new ArrayList<>();
 
     public Building(String id, int x, int y, int playerLeaveX, int playerLeaveY) {
-        super(id, new SpriteSheet(ImageStore.get("resources/images/buildings/" + id + ".png"), 1, 1).sprites.get(0));
+        super(id, new SpriteSheet(Images.get("resources/images/buildings/" + id + ".png"), 1, 1).sprites.get(0));
         isSectorSpecific = true;
         isTraversable = true;
         setPosition(x, y);
@@ -70,7 +70,7 @@ public class Building extends StaticEntity {
         try {
             up = floors.get(floors.indexOf(currentFloor) + 1);
         } catch (IndexOutOfBoundsException e) {
-            Debug.warning("Tried to go up a floor in \"" + id + "\", but already at the top floor!");
+            Debug.warning("Tried to go up a floor in \"" + name + "\", but already at the top floor!");
             return;
         }
         changeFloor(up);
@@ -84,7 +84,7 @@ public class Building extends StaticEntity {
         try {
             down = floors.get(floors.indexOf(currentFloor) - 1);
         } catch (IndexOutOfBoundsException e) {
-            Debug.warning("Tried to go down a floor in \"" + id + "\", but already at the bottom floor!");
+            Debug.warning("Tried to go down a floor in \"" + name + "\", but already at the bottom floor!");
             return;
         }
         changeFloor(down);

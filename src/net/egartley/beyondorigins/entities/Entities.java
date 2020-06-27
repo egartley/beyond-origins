@@ -1,6 +1,6 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.data.Images;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.graphics.SpriteSheet;
 
@@ -24,11 +24,11 @@ public class Entities {
     public static Sprite getSpriteTemplate(byte id) {
         switch (id) {
             case TEMPLATE_TREE:
-                return new SpriteSheet(ImageStore.get(ImageStore.TREE_DEFAULT), 1, 1).getSprite(0);
+                return new SpriteSheet(Images.get(Images.TREE_DEFAULT), 1, 1).getSprite(0);
             case TEMPLATE_ROCK:
-                return new SpriteSheet(ImageStore.get(ImageStore.ROCK_DEFAULT), 1, 1).getSprite(0);
+                return new SpriteSheet(Images.get(Images.ROCK_DEFAULT), 1, 1).getSprite(0);
             default:
-                return new Sprite(ImageStore.get("resources/images/unknown.png"));
+                return new Sprite(Images.get("resources/images/unknown.png"));
         }
     }
 

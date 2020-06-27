@@ -3,7 +3,7 @@ package net.egartley.gamelib.abstracts;
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.ui.NotificationBanner;
 import net.egartley.gamelib.graphics.MapTile;
@@ -70,7 +70,7 @@ public abstract class MapSector implements Tickable {
     /**
      * The sector's neighbors
      */
-    private ArrayList<MapSector> neighbors = new ArrayList<>(MAX_NEIGHBORS);
+    private final ArrayList<MapSector> neighbors = new ArrayList<>(MAX_NEIGHBORS);
     /**
      * Boundaries, or areas, of all of the possible sector changes
      */
@@ -78,7 +78,7 @@ public abstract class MapSector implements Tickable {
     /**
      * All of the collisions for the sector changes
      */
-    private ArrayList<MapSectorChangeCollision> changeCollisions = new ArrayList<>();
+    private final ArrayList<MapSectorChangeCollision> changeCollisions = new ArrayList<>();
     /**
      * Entities that only "exist" within the sector
      *
@@ -389,7 +389,7 @@ public abstract class MapSector implements Tickable {
     }
 
     private void fill(String id) {
-        BufferedImage image = ImageStore.get(ImageStore.mapTilePath + id + ".png");
+        BufferedImage image = Images.get(Images.mapTilePath + id + ".png");
         for (int r = 0; r < TILE_ROWS; r++) {
             ArrayList<MapTile> column = new ArrayList<>();
             for (int c = 0; c < TILE_COLUMNS; c++) {
@@ -405,7 +405,7 @@ public abstract class MapSector implements Tickable {
             int c = o.getInt("c");
             int r = o.getInt("r");
             String id = tileIDs.get(tileKeys.indexOf(o.getString("key")));
-            BufferedImage image = ImageStore.get(ImageStore.mapTilePath + id + ".png");
+            BufferedImage image = Images.get(Images.mapTilePath + id + ".png");
             if (o.has("rotate")) {
                 image = Util.rotateImage(image, Math.toRadians(o.getInt("rotate")));
             }

@@ -14,10 +14,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-/**
- * @author Evan Gartley (https://github.com/egartley)
- * @version https://egartley.net/projects/beyond-origins/?via=javadocgameclass
- */
 public class Game extends Canvas implements Runnable {
 
     // SELF
@@ -25,7 +21,7 @@ public class Game extends Canvas implements Runnable {
     private static long startTime;
     private static JFrame frame;
     private static String loadingStatus = "Loading...";
-    private static Dimension windowDimension = new Dimension(976, 583);
+    private static final Dimension windowDimension = new Dimension(976, 583);
     private static boolean running = false, started = false;
     private long lastFpsTime;
     private int fps;

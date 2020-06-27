@@ -1,6 +1,6 @@
 package net.egartley.beyondorigins.ui;
 
-import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.ingame.PlayerInventorySlot;
 import net.egartley.beyondorigins.ingame.PlayerInventoryStack;
@@ -19,7 +19,7 @@ public class PlayerInventory extends UIElement {
     private int detailsLineIndex = 0;
     private boolean gotFontMetrics;
 
-    private static Color tooltipBorderColor = new Color(65, 11, 67);
+    private static final Color tooltipBorderColor = new Color(65, 11, 67);
 
     public static int tooltipWidth;
     public static boolean isShowingTooltip;
@@ -28,14 +28,14 @@ public class PlayerInventory extends UIElement {
     public static PlayerInventoryStack stackBeingDragged;
     public static ArrayList<PlayerInventorySlot> slots = new ArrayList<>();
 
-    private static Font detailsFont = new Font("Bookman Old Style", Font.BOLD, 11);
-    private static Font playerNameFont = new Font("Bookman Old Style", Font.BOLD, 14);
-    private static Color playerNameColor = new Color(65, 53, 37);
-    private static Color detailsColor = new Color(111, 88, 61);
+    private static final Font detailsFont = new Font("Bookman Old Style", Font.BOLD, 11);
+    private static final Font playerNameFont = new Font("Bookman Old Style", Font.BOLD, 14);
+    private static final Color playerNameColor = new Color(65, 53, 37);
+    private static final Color detailsColor = new Color(111, 88, 61);
     private static FontMetrics fontMetrics;
 
     public PlayerInventory() {
-        super(ImageStore.get(ImageStore.INVENTORY_PANEL));
+        super(Images.get(Images.INVENTORY_PANEL));
         setPosition(Calculate.getCenteredX(width), Calculate.getCenteredY(height));
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMNS; c++) {

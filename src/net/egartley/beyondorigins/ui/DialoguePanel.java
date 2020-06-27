@@ -2,7 +2,7 @@ package net.egartley.beyondorigins.ui;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.DialogueController;
-import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.gamelib.logic.dialogue.DialogueExchange;
 import net.egartley.gamelib.logic.math.Calculate;
@@ -53,11 +53,11 @@ public class DialoguePanel extends UIElement {
     /**
      * The font used when rendering the character's name
      */
-    private static Font characterNameFont = new Font("Arial", Font.PLAIN, 12);
+    private static final Font characterNameFont = new Font("Arial", Font.PLAIN, 12);
     /**
      * The image displayed when there are more lines available
      */
-    private BufferedImage moreLinesImage;
+    private final BufferedImage moreLinesImage;
 
     /**
      * The dialogue that is currently being used
@@ -65,8 +65,8 @@ public class DialoguePanel extends UIElement {
     private DialogueExchange exchange;
 
     public DialoguePanel() {
-        super(ImageStore.get(ImageStore.DIALOGUE_PANEL), true);
-        moreLinesImage = ImageStore.get(ImageStore.MORE_LINES);
+        super(Images.get(Images.DIALOGUE_PANEL), true);
+        moreLinesImage = Images.get(Images.MORE_LINES);
         setPosition(Calculate.getCenter(Game.WINDOW_WIDTH / 2, image.getWidth()), Game.WINDOW_HEIGHT - image.getHeight() - 8);
     }
 

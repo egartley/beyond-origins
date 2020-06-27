@@ -2,7 +2,6 @@ package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
-import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.abstracts.StaticEntity;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
@@ -26,7 +25,7 @@ public class DroppedItem extends StaticEntity {
      */
     private static final double LIFETIME_DELAY = 120.0D;
 
-    private DelayedEvent lifetimeDelay;
+    private final DelayedEvent lifetimeDelay;
 
     /**
      * Whether or not the dropped item can be picked up again
@@ -73,12 +72,9 @@ public class DroppedItem extends StaticEntity {
 
     /**
      * Removes the dropped item from the current sector's entities, and then kills it
-     *
-     * @see Entity#kill()
      */
     private void destroy() {
         Game.in().map.sector.removeEntity(this);
-        kill();
     }
 
     /**

@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.entities.BuildingChanger;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.gamelib.abstracts.Entity;
@@ -17,9 +17,9 @@ import java.util.ArrayList;
 
 public class BuildingFloor extends Renderable implements Tickable {
 
-    private ArrayList<Entity> entities = new ArrayList<>();
-    private ArrayList<BuildingChanger> changers = new ArrayList<>();
-    private ArrayList<EntityEntityCollision> changerCollisions = new ArrayList<>();
+    private final ArrayList<Entity> entities = new ArrayList<>();
+    private final ArrayList<BuildingChanger> changers = new ArrayList<>();
+    private final ArrayList<EntityEntityCollision> changerCollisions = new ArrayList<>();
 
     public int number;
     public int upperYLimit, lowerYLimit, leftLimit, rightLimit;
@@ -29,7 +29,7 @@ public class BuildingFloor extends Renderable implements Tickable {
     public BuildingFloor(int number, Building parent) {
         this.number = number;
         this.parent = parent;
-        image = ImageStore.get("resources/images/buildings/floors/" + parent.id + "_" + number + ".png");
+        image = Images.get("resources/images/buildings/floors/" + parent.name + "_" + number + ".png");
         setPosition(Calculate.getCenteredX(image.getWidth()), Calculate.getCenteredY(image.getHeight()));
         upperYLimit = y();
         lowerYLimit = y() + image.getHeight() - Entities.PLAYER.sprite.height;

@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.ui.PlayerInventory;
 import net.egartley.beyondorigins.ui.UIElement;
 
@@ -19,9 +19,9 @@ public class PlayerInventorySlot extends UIElement {
     public PlayerInventoryStack stack;
 
     public PlayerInventorySlot(PlayerInventoryStack stack, int row, int column) {
-        super(ImageStore.get("resources/images/ui/inventory-slot.png"));
+        super(Images.get("resources/images/ui/inventory-slot.png"));
         this.stack = stack;
-        x((column * (SIZE + MARGIN)) + ((Game.WINDOW_WIDTH / 2) - (ImageStore.get(ImageStore.INVENTORY_PANEL).getWidth() / 2)) + 24);
+        x((column * (SIZE + MARGIN)) + ((Game.WINDOW_WIDTH / 2) - (Images.get(Images.INVENTORY_PANEL).getWidth() / 2)) + 24);
         y((row * (SIZE + MARGIN)) + (((Game.WINDOW_HEIGHT / 2) + 12) - ((PlayerMenu.ROWS * (SIZE + MARGIN)) / 2)));
         baseItemX = x() + 2;
         baseItemY = y() + 2;

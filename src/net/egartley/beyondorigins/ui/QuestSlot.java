@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins.ui;
 
 import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.ingame.Quest;
 
 import java.awt.*;
@@ -16,17 +16,17 @@ public class QuestSlot extends ClickableArea {
     private static boolean loadedImages;
     private static BufferedImage slotNormalImage;
     private static BufferedImage slotHoverImage;
-    private static Font slotTitleFont = new Font("Bookman Old Style", Font.BOLD, 12);
-    private static Color slotTitleColor = new Color(65, 53, 37);
-    private static Color slotSelectedTitleColor = Color.WHITE;
+    private static final Font slotTitleFont = new Font("Bookman Old Style", Font.BOLD, 12);
+    private static final Color slotTitleColor = new Color(65, 53, 37);
+    private static final Color slotSelectedTitleColor = Color.WHITE;
 
     public QuestSlot(Quest quest, int x, int y) {
         super(x, y, 0, 0);
         this.quest = quest;
         if (!loadedImages) {
             // might not be the best way to do this, but don't want to reload the same images each time the constructor is called
-            slotNormalImage = ImageStore.get(ImageStore.QUEST_SLOT);
-            slotHoverImage = ImageStore.get(ImageStore.QUEST_SLOT_HOVER);
+            slotNormalImage = Images.get(Images.QUEST_SLOT);
+            slotHoverImage = Images.get(Images.QUEST_SLOT_HOVER);
             loadedImages = true;
         }
         slotImage = slotNormalImage;

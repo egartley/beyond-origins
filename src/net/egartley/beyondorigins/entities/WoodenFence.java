@@ -2,7 +2,7 @@ package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.data.Images;
 import net.egartley.gamelib.abstracts.StaticEntity;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.logic.interaction.BoundaryPadding;
@@ -12,8 +12,8 @@ import java.awt.image.BufferedImage;
 
 public class WoodenFence extends StaticEntity {
 
-    private int length;
-    private boolean hasCorners;
+    private final int length;
+    private final boolean hasCorners;
 
     public WoodenFence(int length, boolean corners) {
         super("Wooden-Fence");
@@ -34,9 +34,9 @@ public class WoodenFence extends StaticEntity {
 
     private Sprite buildSprite() {
         BufferedImage build = null;
-        BufferedImage full = ImageStore.get(ImageStore.entityPath + "wooden-fence-full.png");
+        BufferedImage full = Images.get(Images.entityPath + "wooden-fence-full.png");
         if (hasCorners) {
-            build = ImageStore.get(ImageStore.entityPath + "wooden-fence-left-end.png");
+            build = Images.get(Images.entityPath + "wooden-fence-left-end.png");
         } else {
             build = full;
         }
@@ -53,7 +53,7 @@ public class WoodenFence extends StaticEntity {
         }
 
         if (hasCorners) {
-            build = Util.stitchImage(build, ImageStore.get(ImageStore.entityPath + "wooden-fence-right-end.png"));
+            build = Util.stitchImage(build, Images.get(Images.entityPath + "wooden-fence-right-end.png"));
         }
 
         return new Sprite(build);

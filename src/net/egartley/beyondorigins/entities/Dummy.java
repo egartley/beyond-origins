@@ -3,7 +3,7 @@ package net.egartley.beyondorigins.entities;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.controllers.DialogueController;
-import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.data.Images;
 import net.egartley.gamelib.abstracts.AnimatedEntity;
 import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.abstracts.MapSector;
@@ -36,12 +36,12 @@ public class Dummy extends AnimatedEntity implements Character {
     private boolean isTalkingToPlayer;
     private short walktime = 0;
     private byte dir = DIRECTION_RIGHT;
-    private DialogueExchange dialogue_playerCollision;
+    private final DialogueExchange dialogue_playerCollision;
 
     EntityExpression exp;
 
     public Dummy() {
-        super("Dummy", new SpriteSheet(ImageStore.get(ImageStore.DUMMY), 30, 44, 2, 4));
+        super("Dummy", new SpriteSheet(Images.get(Images.DUMMY), 30, 44, 2, 4));
         setPosition(470, 132);
 
         isSectorSpecific = false;
@@ -192,7 +192,7 @@ public class Dummy extends AnimatedEntity implements Character {
 
     @Override
     public String getName() {
-        return id;
+        return name;
     }
 
     @Override

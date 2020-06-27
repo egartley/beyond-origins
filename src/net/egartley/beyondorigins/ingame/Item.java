@@ -1,6 +1,6 @@
 package net.egartley.beyondorigins.ingame;
 
-import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.data.Images;
 
 import java.awt.image.BufferedImage;
 
@@ -28,7 +28,7 @@ public enum Item {
     }
 
     Item(String id, String name, String imageFileName) {
-        this(id, name, ImageStore.get("resources/images/items/" + imageFileName));
+        this(id, name, Images.get("resources/images/items/" + imageFileName));
     }
 
     Item(String id, String name, BufferedImage image) {

@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins.ui;
 
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.ingame.Quest;
 import net.egartley.beyondorigins.ingame.QuestObjective;
 
@@ -15,22 +15,22 @@ public class QuestsSidePanel extends UIElement {
     private String[] descriptionLines;
     private ArrayList<String[]> objectiveLines;
 
-    private static Font titleFont = new Font("Bookman Old Style", Font.BOLD, 16);
-    private static Font descriptionFont = new Font("Arial", Font.PLAIN, 11);
-    private static Font objectiveTitleFont = new Font("Arial", Font.BOLD, 11);
-    private static Font objectiveDescriptionFont = descriptionFont;
-    private static Color titleColor = new Color(65, 53, 37);
-    private static Color descriptionColor = titleColor;
-    private static Color objectiveTitleColor = titleColor;
-    private static Color objectiveDescriptionColor = titleColor;
+    private static final Font titleFont = new Font("Bookman Old Style", Font.BOLD, 16);
+    private static final Font descriptionFont = new Font("Arial", Font.PLAIN, 11);
+    private static final Font objectiveTitleFont = new Font("Arial", Font.BOLD, 11);
+    private static final Font objectiveDescriptionFont = descriptionFont;
+    private static final Color titleColor = new Color(65, 53, 37);
+    private static final Color descriptionColor = titleColor;
+    private static final Color objectiveTitleColor = titleColor;
+    private static final Color objectiveDescriptionColor = titleColor;
     private static BufferedImage checkboxImage;
     private static BufferedImage checkboxCheckedImage;
 
     public QuestsSidePanel() {
         super(412, 277);
         setPosition(446, 186);
-        checkboxImage = ImageStore.get(ImageStore.QUEST_CHECKBOX);
-        checkboxCheckedImage = ImageStore.get(ImageStore.QUEST_CHECKBOX_CHECKED);
+        checkboxImage = Images.get(Images.QUEST_CHECKBOX);
+        checkboxCheckedImage = Images.get(Images.QUEST_CHECKBOX_CHECKED);
     }
 
     public void setQuest(Quest quest) {

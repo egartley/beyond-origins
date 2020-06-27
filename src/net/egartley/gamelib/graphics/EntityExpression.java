@@ -1,6 +1,6 @@
 package net.egartley.gamelib.graphics;
 
-import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.data.Images;
 import net.egartley.gamelib.abstracts.AnimatedEntity;
 import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.logic.math.Calculate;
@@ -37,13 +37,13 @@ public class EntityExpression extends AnimatedEntity {
     private SpriteSheet getTemplateSpriteSheet(byte type) {
         switch (type) {
             case CONFUSION:
-                return new SpriteSheet(ImageStore.get(ImageStore.expressionPath + "confusion.png"), 18, 18, 1, 4);
+                return new SpriteSheet(Images.get(Images.expressionPath + "confusion.png"), 18, 18, 1, 4);
             case ATTENTION:
-                return new SpriteSheet(ImageStore.get(ImageStore.expressionPath + "attention.png"), 18, 18, 1, 4);
+                return new SpriteSheet(Images.get(Images.expressionPath + "attention.png"), 18, 18, 1, 4);
             case ANGER:
-                return new SpriteSheet(ImageStore.get(ImageStore.expressionPath + "anger.png"), 18, 18, 1, 2);
+                return new SpriteSheet(Images.get(Images.expressionPath + "anger.png"), 18, 18, 1, 2);
             case HEART:
-                return new SpriteSheet(ImageStore.get(ImageStore.expressionPath + "heart.png"), 18, 18, 1, 2);
+                return new SpriteSheet(Images.get(Images.expressionPath + "heart.png"), 18, 18, 1, 2);
             default:
                 return null;
         }

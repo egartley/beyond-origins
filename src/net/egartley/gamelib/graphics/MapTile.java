@@ -1,7 +1,7 @@
 package net.egartley.gamelib.graphics;
 
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.data.ImageStore;
+import net.egartley.beyondorigins.data.Images;
 
 import java.awt.image.BufferedImage;
 
@@ -16,7 +16,7 @@ public class MapTile {
     public BufferedImage image;
 
     public MapTile(String id) {
-        this(id, ImageStore.get(ImageStore.mapTilePath + id + ".png"));
+        this(id, Images.get(Images.mapTilePath + id + ".png"));
     }
 
     public MapTile(String id, BufferedImage image) {
