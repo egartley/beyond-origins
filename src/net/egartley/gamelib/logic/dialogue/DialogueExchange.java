@@ -1,6 +1,6 @@
 package net.egartley.gamelib.logic.dialogue;
 
-import net.egartley.beyondorigins.gamestates.ingame.InGameState;
+import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.ui.DialoguePanel;
 
 import java.util.ArrayList;

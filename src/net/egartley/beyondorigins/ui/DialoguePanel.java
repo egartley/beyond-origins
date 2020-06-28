@@ -4,7 +4,7 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.gamestates.ingame.InGameState;
+import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.gamelib.logic.dialogue.DialogueExchange;
 import net.egartley.gamelib.logic.math.Calculate;
 import net.egartley.gamelib.threads.DelayedEvent;
@@ -123,10 +123,10 @@ public class DialoguePanel extends UIElement {
             return;
         }
         // render background (panel)
-        graphics.drawImage(image, x(), y(), null);
+        graphics.drawImage(image, x(), y());
         // render character image and name
         Image characterImage = exchange.currentDialogue.character.getCharacterImage();
-        graphics.drawImage(characterImage, 277 - characterImage.getWidth() / 2, 414 - (characterImage.getHeight() - 44), null);
+        graphics.drawImage(characterImage, 277 - characterImage.getWidth() / 2, 414 - (characterImage.getHeight() - 44));
         graphics.setColor(Color.white);
         graphics.setFont(characterNameFont);
         graphics.drawString(exchange.currentDialogue.character.getName(), 277 - characterNameFont.getWidth(exchange.currentDialogue.character.getName()) / 2, 476);
@@ -138,7 +138,7 @@ public class DialoguePanel extends UIElement {
         lineIndex = 0;
         // render more lines indiciator
         if (readyToAdvance) {
-            graphics.drawImage(moreLinesImage, 700, 500, null);
+            graphics.drawImage(moreLinesImage, 700, 500);
         }
     }
 

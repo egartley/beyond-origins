@@ -1,6 +1,6 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.beyondorigins.gamestates.ingame.InGameState;
+import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.gamelib.abstracts.StaticEntity;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;

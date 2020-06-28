@@ -317,7 +317,7 @@ public abstract class MapSector implements Tickable {
         for (int r = 0; r < tiles.size(); r++) {
             ArrayList<MapTile> row = tiles.get(r);
             for (MapTile tile : row) {
-                graphics.drawImage(tile.image, deltaX, deltaY, null);
+                graphics.drawImage(tile.image, deltaX, deltaY);
                 deltaX += TILE_SIZE;
             }
             deltaX = 0;

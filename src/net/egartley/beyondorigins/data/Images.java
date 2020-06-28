@@ -1,7 +1,11 @@
 package net.egartley.beyondorigins.data;
 
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.util.BufferedImageUtil;
+
+import javax.imageio.ImageIO;
+import java.io.File;
 
 public class Images {
 
@@ -88,9 +92,13 @@ public class Images {
      * Returns an image at the specified path
      */
     public static Image get(String path) {
+        // Credit: https://stackoverflow.com/a/23613661
         try {
-            return new Image(path);
-        } catch (SlickException e) {
+            Texture texture = BufferedImageUtil.getTexture("", ImageIO.read(new File(path)));
+            Image image = new Image(texture.getImageWidth(), texture.getImageHeight());
+            image.setTexture(texture);
+            return image;
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

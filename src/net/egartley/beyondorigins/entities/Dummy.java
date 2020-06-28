@@ -3,7 +3,7 @@ package net.egartley.beyondorigins.entities;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.data.Images;
-import net.egartley.beyondorigins.gamestates.ingame.InGameState;
+import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.gamelib.abstracts.AnimatedEntity;
 import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.abstracts.MapSector;

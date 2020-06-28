@@ -64,7 +64,7 @@ public class PlayerInventory extends UIElement {
     @Override
     public void render(Graphics graphics) {
         // panel (background)
-        graphics.drawImage(image, x(), y(), null);
+        graphics.drawImage(image, x(), y());
 
         // slots
         slots.forEach(slot -> slot.render(graphics));
@@ -72,7 +72,7 @@ public class PlayerInventory extends UIElement {
 
         // player display
         Image playerImage = Entities.PLAYER.sprite.asImage();
-        graphics.drawImage(playerImage, Calculate.getCenter(x() + 243, playerImage.getWidth()), Calculate.getCenter(y() + 96, playerImage.getHeight()), null);
+        graphics.drawImage(playerImage, Calculate.getCenter(x() + 243, playerImage.getWidth()), Calculate.getCenter(y() + 96, playerImage.getHeight()));
 
         // details text
         graphics.setColor(playerNameColor);

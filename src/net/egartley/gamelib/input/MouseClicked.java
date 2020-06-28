@@ -1,10 +1,8 @@
 package net.egartley.gamelib.input;
 
-import java.awt.event.MouseEvent;
-
 public class MouseClicked {
 
-    public void onClick(MouseEvent e) {
+    public void onClick(int button, int x, int y) {
 
     }
 

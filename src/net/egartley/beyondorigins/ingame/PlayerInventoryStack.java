@@ -2,7 +2,7 @@ package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.entities.DroppedItem;
-import net.egartley.beyondorigins.gamestates.ingame.InGameState;
+import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.ui.PlayerInventory;
 import net.egartley.gamelib.abstracts.Renderable;
 import net.egartley.gamelib.input.Mouse;
@@ -59,7 +59,7 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
     }
 
     public void render(Graphics graphics) {
-        graphics.drawImage(itemStack.item.image, x(), y(), null);
+        graphics.drawImage(itemStack.item.image, x(), y());
         graphics.setColor(Color.white);
         graphics.setFont(amountFont);
         if (itemStack.amount > 1) {

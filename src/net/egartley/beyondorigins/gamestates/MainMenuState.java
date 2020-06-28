@@ -1,7 +1,6 @@
 package net.egartley.beyondorigins.gamestates;
 
 import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.gamestates.ingame.InGameState;
 import net.egartley.beyondorigins.ui.MenuButton;
 import net.egartley.gamelib.logic.math.Calculate;
 import org.newdawn.slick.Color;

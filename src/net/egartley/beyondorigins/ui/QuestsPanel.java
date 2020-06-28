@@ -2,7 +2,7 @@ package net.egartley.beyondorigins.ui;
 
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.data.Images;
-import net.egartley.beyondorigins.gamestates.ingame.InGameState;
+import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.ingame.Quest;
 import net.egartley.gamelib.logic.math.Calculate;
 import org.newdawn.slick.Graphics;

@@ -3,7 +3,7 @@ package net.egartley.beyondorigins.ingame;
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.gamestates.ingame.InGameState;
+import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.gamelib.abstracts.StaticEntity;
 import net.egartley.gamelib.graphics.SpriteSheet;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;

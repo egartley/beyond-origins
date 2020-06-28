@@ -2,7 +2,7 @@ package net.egartley.beyondorigins.ui;
 
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.data.Images;
-import net.egartley.beyondorigins.gamestates.ingame.InGameState;
+import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.gamelib.logic.math.Calculate;
 import net.egartley.gamelib.threads.DelayedEvent;
 import org.newdawn.slick.*;
@@ -98,9 +98,9 @@ public class NotificationBanner extends UIElement {
     @Override
     public void render(Graphics graphics) {
         // background
-        graphics.drawImage(image, x(), y(), null);
+        graphics.drawImage(image, x(), y());
         // icon
-        graphics.drawImage(icon, x() + 8 + (48 - icon.getWidth()) / 2, y() + 8 + (48 - icon.getHeight()) / 2, null);
+        graphics.drawImage(icon, x() + 8 + (48 - icon.getWidth()) / 2, y() + 8 + (48 - icon.getHeight()) / 2);
         // text
         graphics.setColor(Color.white);
         graphics.setFont(font);

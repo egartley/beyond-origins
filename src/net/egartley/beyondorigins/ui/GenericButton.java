@@ -16,8 +16,8 @@ public class GenericButton extends UIElement {
 
         clicked = new MouseClicked() {
             @Override
-            public void onClick(MouseEvent e) {
-                checkClick(e);
+            public void onClick(int button, int x, int y) {
+                // checkClick(e);
             }
         };
     }

@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins.ui;
 
 import net.egartley.beyondorigins.data.Images;
-import net.egartley.beyondorigins.gamestates.ingame.InGameState;
+import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.ingame.Quest;
 import org.newdawn.slick.*;
 
@@ -48,7 +48,7 @@ public class QuestSlot extends ClickableArea {
     }
 
     public void render(Graphics graphics) {
-        graphics.drawImage(slotImage, x, y, null);
+        graphics.drawImage(slotImage, x, y);
         graphics.setFont(slotTitleFont);
         if (isSelected) {
             graphics.setColor(slotSelectedTitleColor);

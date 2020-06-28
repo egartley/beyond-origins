@@ -3,7 +3,7 @@ package net.egartley.beyondorigins.entities;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.data.Images;
-import net.egartley.beyondorigins.gamestates.ingame.InGameState;
+import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.ingame.Building;
 import net.egartley.beyondorigins.ui.PlayerInventory;
 import net.egartley.gamelib.abstracts.AnimatedEntity;
@@ -20,6 +20,7 @@ import net.egartley.gamelib.logic.interaction.BoundaryPadding;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
 import net.egartley.gamelib.logic.inventory.EntityInventory;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -235,10 +236,10 @@ public class Player extends AnimatedEntity implements Character {
     @Override
     public void tick() {
         // get keyboard input (typical WASD for now, make configurable in future)
-        boolean up = Keyboard.isKeyPressed(KeyEvent.VK_W) && !isMovementInvalidated;
-        boolean left = Keyboard.isKeyPressed(KeyEvent.VK_A) && !isMovementInvalidated;
-        boolean down = Keyboard.isKeyPressed(KeyEvent.VK_S) && !isMovementInvalidated;
-        boolean right = Keyboard.isKeyPressed(KeyEvent.VK_D) && !isMovementInvalidated;
+        boolean up = Game.input.isKeyDown(Input.KEY_W) && !isMovementInvalidated;
+        boolean left = Game.input.isKeyDown(Input.KEY_A) && !isMovementInvalidated;
+        boolean down = Game.input.isKeyDown(Input.KEY_S) && !isMovementInvalidated;
+        boolean right = Game.input.isKeyDown(Input.KEY_D) && !isMovementInvalidated;
 
         if (!frozen) {
             move(up, down, left, right);

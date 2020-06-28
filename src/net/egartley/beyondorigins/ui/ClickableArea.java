@@ -4,8 +4,6 @@ import net.egartley.beyondorigins.Util;
 import net.egartley.gamelib.input.Mouse;
 import net.egartley.gamelib.input.MouseClicked;
 
-import java.awt.event.MouseEvent;
-
 public class ClickableArea {
 
     private boolean didHover = false;
@@ -23,7 +21,7 @@ public class ClickableArea {
         ClickableArea me = this;
         clicked = new MouseClicked() {
             @Override
-            public void onClick(MouseEvent e) {
+            public void onClick(int button, int x, int y) {
                 me.checkClick();
             }
         };

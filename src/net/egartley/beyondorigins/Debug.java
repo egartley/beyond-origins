@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins;
 
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.gamestates.ingame.InGameState;
+import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.gamelib.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
@@ -88,7 +88,7 @@ public class Debug {
         graphics.fillRect(lx - TEXT_PADDING, ly + (row * rowOffset) - font.getLineHeight(), graphics.getFont().getWidth(s) + (TEXT_PADDING * 2), font.getLineHeight() + TEXT_PADDING);
         // draw line text
         graphics.setColor(Color.white);
-        graphics.drawString(s, lx, ly + (row * rowOffset));
+        graphics.drawString(s, lx, ly + (row * rowOffset) - font.getLineHeight() + 4);
         row++;
     }
 

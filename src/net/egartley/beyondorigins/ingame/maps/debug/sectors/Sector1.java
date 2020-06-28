@@ -5,7 +5,7 @@ import net.egartley.beyondorigins.data.Quests;
 import net.egartley.beyondorigins.entities.DefaultTree;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.WoodenFence;
-import net.egartley.beyondorigins.gamestates.ingame.InGameState;
+import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.ingame.Quest;
 import net.egartley.beyondorigins.ingame.QuestObjective;
 import net.egartley.beyondorigins.ingame.buildings.House1;

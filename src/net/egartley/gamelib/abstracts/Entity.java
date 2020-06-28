@@ -215,7 +215,7 @@ public abstract class Entity extends Renderable implements Tickable {
      * Renders the entity, using {@link #image}, at ({@link #x()}, {@link #y()})
      */
     public void render(Graphics graphics) {
-        graphics.drawImage(image, x(), y(), null);
+        graphics.drawImage(image, x(), y());
         if (Game.debug) {
             drawDebug(graphics);
         }
@@ -225,14 +225,14 @@ public abstract class Entity extends Renderable implements Tickable {
      * Draws the first "layer", assuming {@link #isDualRendered} is true (below the player)
      */
     public void drawFirstLayer(Graphics graphics) {
-        graphics.drawImage(firstLayer, x(), y() + secondLayer.getHeight(), null);
+        graphics.drawImage(firstLayer, x(), y() + secondLayer.getHeight());
     }
 
     /**
      * Draws the second "layer", assuming {@link #isDualRendered} is true (above the player)
      */
     public void drawSecondLayer(Graphics graphics) {
-        graphics.drawImage(secondLayer, x(), y(), null);
+        graphics.drawImage(secondLayer, x(), y());
         if (Game.debug) {
             drawDebug(graphics);
         }
@@ -263,7 +263,7 @@ public abstract class Entity extends Renderable implements Tickable {
 
         graphics.fillRect(nameX, nameY, nameTagWidth, 18);
         graphics.setColor(Color.white);
-        graphics.drawString(toString(), nameX + 5, nameY + 13);
+        graphics.drawString(toString(), nameX + 5, nameY + 16 - nameTagFont.getLineHeight());
     }
 
     /**

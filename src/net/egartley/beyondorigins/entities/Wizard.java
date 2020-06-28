@@ -4,7 +4,7 @@ import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.data.Items;
 import net.egartley.beyondorigins.data.Quests;
-import net.egartley.beyondorigins.gamestates.ingame.InGameState;
+import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.ingame.Quest;
 import net.egartley.beyondorigins.ingame.QuestObjective;
 import net.egartley.gamelib.abstracts.AnimatedEntity;
