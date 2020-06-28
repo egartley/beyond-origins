@@ -4,8 +4,7 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.ui.PlayerInventory;
 import net.egartley.beyondorigins.ui.UIElement;
-
-import java.awt.*;
+import org.newdawn.slick.Graphics;
 
 public class PlayerInventorySlot extends UIElement {
 

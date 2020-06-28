@@ -1,13 +1,17 @@
 package net.egartley.beyondorigins.ingame;
 
-import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.entities.DroppedItem;
+import net.egartley.beyondorigins.gamestates.ingame.InGameState;
 import net.egartley.beyondorigins.ui.PlayerInventory;
 import net.egartley.gamelib.abstracts.Renderable;
 import net.egartley.gamelib.input.Mouse;
 import net.egartley.gamelib.interfaces.Tickable;
 import net.egartley.gamelib.logic.inventory.ItemStack;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.TrueTypeFont;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -16,7 +20,7 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
 
     public static int MAX_AMOUNT = 99;
 
-    private static Font amountFont = new Font("Arial", Font.PLAIN, 12);
+    private static final Font amountFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12), true);
     private int tooltipWidth;
 
     public boolean isBeingDragged, didStartDrag, mouseHover, setFontMetrics, isShowingTooltip;
@@ -56,7 +60,7 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
 
     public void render(Graphics graphics) {
         graphics.drawImage(itemStack.item.image, x(), y(), null);
-        graphics.setColor(Color.WHITE);
+        graphics.setColor(Color.white);
         graphics.setFont(amountFont);
         if (itemStack.amount > 1) {
             if (itemStack.amount < 10) {
@@ -66,7 +70,7 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
             }
         }
         if (!setFontMetrics) {
-            tooltipWidth = graphics.getFontMetrics(PlayerInventory.tooltipFont).stringWidth(itemStack.item.displayName);
+            tooltipWidth = PlayerInventory.tooltipFont.getWidth(itemStack.item.displayName);
             setFontMetrics = true;
         }
     }
@@ -111,7 +115,7 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
             }
         } else {
             // did not end over any slots
-            PlayerInventory panel = Game.in().playerMenu.inventoryPanel;
+            PlayerInventory panel = InGameState.playerMenu.inventoryPanel;
             if (!Util.isWithinBounds(x(), y(), panel.x(), panel.y(), panel.width, panel.height)) {
                 drop();
             }
@@ -119,7 +123,7 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
     }
 
     private void drop() {
-        Game.in().map.sector.addEntity(new DroppedItem(itemStack, Mouse.x - 8, Mouse.y - 8));
+        InGameState.map.sector.addEntity(new DroppedItem(itemStack, Mouse.x - 8, Mouse.y - 8));
         slot.clear();
     }
 

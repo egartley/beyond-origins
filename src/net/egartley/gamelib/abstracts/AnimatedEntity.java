@@ -5,8 +5,8 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.gamelib.graphics.Animation;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.graphics.SpriteSheet;
+import org.newdawn.slick.Graphics;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /**

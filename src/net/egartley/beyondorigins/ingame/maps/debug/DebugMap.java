@@ -7,8 +7,7 @@ import net.egartley.beyondorigins.ingame.maps.debug.sectors.Sector4;
 import net.egartley.gamelib.abstracts.Map;
 import net.egartley.gamelib.abstracts.MapSector;
 import net.egartley.gamelib.logic.events.MapSectorChangeEvent;
-
-import java.awt.*;
+import org.newdawn.slick.Graphics;
 
 public class DebugMap extends Map {
 

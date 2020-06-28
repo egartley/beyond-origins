@@ -1,27 +1,27 @@
 package net.egartley.beyondorigins.ui;
 
-import java.awt.*;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.TrueTypeFont;
 
 public class MenuButton extends GenericButton {
 
-    /**
-     * Whether or not font metrics (string width and location) have been calculated. This is meant to avoid calculating the same thing every tick
-     */
-    public boolean setFontMetrics;
     private int stringX;
     private int stringY;
+    private boolean didSetStringCoords;
 
-    public static Font font = new Font("Georgia", Font.BOLD, 24);
+    public static Font font = new TrueTypeFont(new java.awt.Font("Georgia", java.awt.Font.PLAIN, 24), true);
 
     /**
      * String that is displayed on the button
      */
-    private String text;
-    private Color disabledColor = Color.DARK_GRAY;
-    private Color enabledColor = Color.RED.darker();
-    private Color hoverColor = enabledColor.brighter();
-    private Color textColor = new Color(0x0092ff);
-    private Color hoverTextColor = new Color(0x00448f);
+    private final String text;
+    private final Color disabledColor = Color.darkGray;
+    private final Color enabledColor = Color.red.darker();
+    private final Color hoverColor = enabledColor.brighter();
+    private final Color textColor = new Color(0x0092ff);
+    private final Color hoverTextColor = new Color(0x00448f);
     /**
      * The color that is currently being used for the button
      */
@@ -39,16 +39,16 @@ public class MenuButton extends GenericButton {
         this.text = text;
     }
 
-    public void setFontMetrics(FontMetrics fontMetrics) {
-        stringX = (x() + (width / 2)) - (fontMetrics.stringWidth(text) / 2);
-        stringY = y() + (height / 2) + (font.getSize() / 4);
-        setFontMetrics = true;
+    private void setStringCoords(Font font) {
+        stringX = (x() + (width / 2)) - (font.getWidth(text) / 2);
+        stringY = y() + (height / 2) + (font.getLineHeight() / 4);
+        didSetStringCoords = true;
     }
 
     @Override
     public void render(Graphics graphics) {
-        if (!setFontMetrics) {
-            setFontMetrics(graphics.getFontMetrics(font));
+        if (!didSetStringCoords) {
+            setStringCoords(graphics.getFont());
         }
 
         // background

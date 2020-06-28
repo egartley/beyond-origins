@@ -1,11 +1,11 @@
 package net.egartley.gamelib.interfaces;
 
-import java.awt.image.BufferedImage;
+import org.newdawn.slick.Image;
 
 public interface Character {
 
     String getName();
 
-    BufferedImage getCharacterImage();
+    Image getCharacterImage();
 
 }

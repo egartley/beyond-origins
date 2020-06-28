@@ -1,24 +1,22 @@
 package net.egartley.beyondorigins.ui;
 
-import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.data.Images;
+import net.egartley.beyondorigins.gamestates.ingame.InGameState;
 import net.egartley.beyondorigins.ingame.Quest;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import org.newdawn.slick.*;
 
 public class QuestSlot extends ClickableArea {
 
     public boolean isSelected;
     public Quest quest;
-    private BufferedImage slotImage;
+    private Image slotImage;
 
     private static boolean loadedImages;
-    private static BufferedImage slotNormalImage;
-    private static BufferedImage slotHoverImage;
-    private static final Font slotTitleFont = new Font("Bookman Old Style", Font.BOLD, 12);
+    private static Image slotNormalImage;
+    private static Image slotHoverImage;
+    private static final Font slotTitleFont = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 12), true);
     private static final Color slotTitleColor = new Color(65, 53, 37);
-    private static final Color slotSelectedTitleColor = Color.WHITE;
+    private static final Color slotSelectedTitleColor = Color.white;
 
     public QuestSlot(Quest quest, int x, int y) {
         super(x, y, 0, 0);
@@ -36,7 +34,7 @@ public class QuestSlot extends ClickableArea {
 
     @Override
     public void onClick() {
-        Game.in().playerMenu.questsPanel.slotClicked(this);
+        InGameState.playerMenu.questsPanel.slotClicked(this);
     }
 
     @Override

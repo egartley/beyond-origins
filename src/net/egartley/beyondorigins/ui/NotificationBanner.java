@@ -1,18 +1,16 @@
 package net.egartley.beyondorigins.ui;
 
-import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.data.Images;
+import net.egartley.beyondorigins.gamestates.ingame.InGameState;
 import net.egartley.gamelib.logic.math.Calculate;
 import net.egartley.gamelib.threads.DelayedEvent;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import org.newdawn.slick.*;
 
 public class NotificationBanner extends UIElement {
 
     public String[] lines;
-    public BufferedImage icon;
+    public Image icon;
 
     public boolean done = false;
     private int offset = 0;
@@ -22,7 +20,7 @@ public class NotificationBanner extends UIElement {
     private static int startY;
     private static final int targetY = 8;
     private static final double SLIDE_DELAY = 0.001D, SHOW_DELAY = 3.5D;
-    private static final Font font = new Font("Bookman Old Style", Font.BOLD, 14);
+    private static final Font font = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 14), true);
 
     public NotificationBanner(String text) {
         this(text, "ui/notification-icon-default.png");
@@ -51,7 +49,7 @@ public class NotificationBanner extends UIElement {
     @Override
     public void tick() {
         if (done) {
-            Game.in().map.sector.onNotificationFinish(this);
+            InGameState.map.sector.onNotificationFinish(this);
             return;
         }
 
@@ -104,7 +102,7 @@ public class NotificationBanner extends UIElement {
         // icon
         graphics.drawImage(icon, x() + 8 + (48 - icon.getWidth()) / 2, y() + 8 + (48 - icon.getHeight()) / 2, null);
         // text
-        graphics.setColor(Color.WHITE);
+        graphics.setColor(Color.white);
         graphics.setFont(font);
         for (String line : lines) {
             drawLine(line, graphics);

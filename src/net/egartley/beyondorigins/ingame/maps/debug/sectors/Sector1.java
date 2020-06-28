@@ -1,11 +1,11 @@
 package net.egartley.beyondorigins.ingame.maps.debug.sectors;
 
-import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.data.Items;
 import net.egartley.beyondorigins.data.Quests;
 import net.egartley.beyondorigins.entities.DefaultTree;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.WoodenFence;
+import net.egartley.beyondorigins.gamestates.ingame.InGameState;
 import net.egartley.beyondorigins.ingame.Quest;
 import net.egartley.beyondorigins.ingame.QuestObjective;
 import net.egartley.beyondorigins.ingame.buildings.House1;
@@ -36,13 +36,13 @@ public class Sector1 extends MapSector {
                     if (!Entities.PLAYER.inventory.contains(Items.WIZARD_HAT) && Entities.WIZARD.metPlayer && !Entities.WIZARD.foundHat) {
                         Entities.PLAYER.inventory.put(Items.WIZARD_HAT);
                         pushNotification(new NotificationBanner("You have found the Wizard's hat!", "items/wizard-hat.png"));
-                        Game.in().quests.get(Quests.WIZARD_HAT).objectives.get(0).complete();
+                        InGameState.quests.get(Quests.WIZARD_HAT).objectives.get(0).complete();
                     }
                 }
             });
             addEntity(tree);
-            s = Entities.getSpriteTemplate(Entities.TEMPLATE_ROCK);
-            /*int off = 0;
+            /*s = Entities.getSpriteTemplate(Entities.TEMPLATE_ROCK);
+            int off = 0;
             for (byte i = 0; i < 14; i++) {
                 addEntity(new DefaultRock(s, (s.width * 2) * off++ + 48, 400));
             }*/
@@ -63,7 +63,7 @@ public class Sector1 extends MapSector {
             quest.objectives.add(new QuestObjective("Do this thing", "Because you HAVE TO. That's why."));
             quest.objectives.add(new QuestObjective("Do this other thing", "Just do it, already."));
             quest.objectives.add(new QuestObjective("Final task", "Get it over with."));
-            Game.in().quests.add(quest);
+            InGameState.quests.add(quest);
         }
     }
 

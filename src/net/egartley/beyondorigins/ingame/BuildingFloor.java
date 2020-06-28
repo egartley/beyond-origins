@@ -10,9 +10,9 @@ import net.egartley.gamelib.interfaces.Tickable;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 import net.egartley.gamelib.logic.math.Calculate;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class BuildingFloor extends Renderable implements Tickable {
@@ -24,7 +24,7 @@ public class BuildingFloor extends Renderable implements Tickable {
     public int number;
     public int upperYLimit, lowerYLimit, leftLimit, rightLimit;
     public Building parent;
-    public BufferedImage image;
+    public Image image;
 
     public BuildingFloor(int number, Building parent) {
         this.number = number;
@@ -89,7 +89,7 @@ public class BuildingFloor extends Renderable implements Tickable {
 
     @Override
     public void render(Graphics graphics) {
-        graphics.drawImage(image, x(), y(), null);
+        graphics.drawImage(image, x(), y());
         entities.forEach(e -> e.render(graphics));
 
         if (Game.debug) {

@@ -3,6 +3,7 @@ package net.egartley.gamelib.logic.collision;
 import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
+import org.newdawn.slick.Color;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class EntityEntityCollision {
      */
     public boolean isMovementRestricting;
 
-    private Rectangle[] rectangles;
+    private final Rectangle[] rectangles;
 
     /**
      * The collision's most recent event
@@ -147,15 +148,15 @@ public class EntityEntityCollision {
     private void determineBoundaryColor(EntityBoundary e) {
         if (!e.isCollided) {
             if (!e.parent.isAnimated) {
-                e.drawColor = Color.BLACK;
+                e.drawColor = Color.black;
             } else {
-                e.drawColor = Color.ORANGE;
+                e.drawColor = Color.orange;
             }
         } else {
             if (!e.parent.isAnimated) {
-                e.drawColor = Color.YELLOW;
+                e.drawColor = Color.yellow;
             } else {
-                e.drawColor = Color.RED;
+                e.drawColor = Color.red;
             }
         }
     }

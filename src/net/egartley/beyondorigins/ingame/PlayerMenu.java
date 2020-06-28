@@ -6,8 +6,9 @@ import net.egartley.beyondorigins.ui.PlayerInventory;
 import net.egartley.beyondorigins.ui.QuestsPanel;
 import net.egartley.beyondorigins.ui.UIElement;
 import net.egartley.gamelib.interfaces.Tickable;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class PlayerMenu implements Tickable {
@@ -20,7 +21,7 @@ public class PlayerMenu implements Tickable {
     public ArrayList<ClickableArea> tabs = new ArrayList<>();
     public ClickableArea inventoryPanelTab, questsPanelTab;
 
-    private Color backgroundColor = new Color(0, 0, 0, 152);
+    private final Color backgroundColor = new Color(0, 0, 0, 152);
 
     public PlayerMenu() {
         inventoryPanel = new PlayerInventory();

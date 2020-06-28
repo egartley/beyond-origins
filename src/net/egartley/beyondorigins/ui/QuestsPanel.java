@@ -1,14 +1,13 @@
 package net.egartley.beyondorigins.ui;
 
 import net.egartley.beyondorigins.Debug;
-import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.data.Images;
+import net.egartley.beyondorigins.gamestates.ingame.InGameState;
 import net.egartley.beyondorigins.ingame.Quest;
 import net.egartley.gamelib.logic.math.Calculate;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class QuestsPanel extends UIElement {
@@ -24,17 +23,17 @@ public class QuestsPanel extends UIElement {
 
         slots = new ArrayList<>();
         sidePanel = new QuestsSidePanel();
-        BufferedImage e = Images.get(Images.PAGE_BUTTON_ENABLED);
-        BufferedImage d = Images.get(Images.PAGE_BUTTON_DISABLED);
-        BufferedImage h = Images.get(Images.PAGE_BUTTON_HOVER);
+        Image e = Images.get(Images.PAGE_BUTTON_ENABLED);
+        Image d = Images.get(Images.PAGE_BUTTON_DISABLED);
+        Image h = Images.get(Images.PAGE_BUTTON_HOVER);
         pageLeftButton = new ImageButton(e, d, h, 324, 359) {
             public void onClick() {
                 pageLeftButtonClick();
             }
         };
-        e = Util.rotateImage(e, Math.PI);
-        d = Util.rotateImage(d, Math.PI);
-        h = Util.rotateImage(h, Math.PI);
+        e.rotate(180);
+        d.rotate(180);
+        h.rotate(180);
         pageRightButton = new ImageButton(e, d, h, 362, 359) {
             public void onClick() {
                 pageRightButtonClick();
@@ -61,7 +60,7 @@ public class QuestsPanel extends UIElement {
                 quest.start();
             }
             // TODO: fix from within building
-            Game.in().map.sector.pushNotification(new NotificationBanner("New quest added!"));
+            InGameState.map.sector.pushNotification(new NotificationBanner("New quest added!"));
         }
     }
 
@@ -147,7 +146,7 @@ public class QuestsPanel extends UIElement {
 
     @Override
     public void render(Graphics graphics) {
-        graphics.drawImage(image, x(), y(), null);
+        graphics.drawImage(image, x(), y());
 
         // assume, at least for now, that there's no need for scrolling (more than 5 at a time)
         for (QuestSlot slot : slots) {

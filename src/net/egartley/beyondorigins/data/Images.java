@@ -1,11 +1,7 @@
 package net.egartley.beyondorigins.data;
 
-import net.egartley.beyondorigins.Debug;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 
 public class Images {
 
@@ -43,7 +39,7 @@ public class Images {
     /**
      * Returns the specified image
      */
-    public static BufferedImage get(byte image) {
+    public static Image get(byte image) {
         switch (image) {
             case PLAYER:
                 return get(entityPath + "player-default.png");
@@ -91,19 +87,13 @@ public class Images {
     /**
      * Returns an image at the specified path
      */
-    public static BufferedImage get(String path) {
-        BufferedImage r = null;
+    public static Image get(String path) {
         try {
-            r = ImageIO.read(new File(path));
-        } catch (IOException e) {
-            Debug.warning("There was an error while trying to read or find the image \"" + path + "\", using the \"unknown image\" file instead");
-            try {
-                r = ImageIO.read(new File("resources/images/unknown.png"));
-            } catch (IOException e2) {
-                Debug.error("Could not read or find the \"unknown image\" file (" + e2.getMessage() + ")");
-            }
+            return new Image(path);
+        } catch (SlickException e) {
+            e.printStackTrace();
+            return null;
         }
-        return r;
     }
 
 }

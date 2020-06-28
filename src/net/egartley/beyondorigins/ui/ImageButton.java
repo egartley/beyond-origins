@@ -1,23 +1,23 @@
 package net.egartley.beyondorigins.ui;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 
 public class ImageButton extends GenericButton {
 
-    public BufferedImage enabledImage;
-    public BufferedImage disabledImage;
-    public BufferedImage hoverImage;
+    public Image enabledImage;
+    public Image disabledImage;
+    public Image hoverImage;
 
-    public ImageButton(BufferedImage image) {
+    public ImageButton(Image image) {
         this(image, 0, 0);
     }
 
-    public ImageButton(BufferedImage image, int x, int y) {
+    public ImageButton(Image image, int x, int y) {
         this(image, image, image, x, y);
     }
 
-    public ImageButton(BufferedImage enabledImage, BufferedImage disabledImage, BufferedImage hoverImage, int x, int y) {
+    public ImageButton(Image enabledImage, Image disabledImage, Image hoverImage, int x, int y) {
         super(enabledImage, x, y);
         this.enabledImage = enabledImage;
         this.disabledImage = disabledImage;
@@ -32,11 +32,11 @@ public class ImageButton extends GenericButton {
     @Override
     public void render(Graphics graphics) {
         if (!isEnabled) {
-            graphics.drawImage(disabledImage, x(), y(), null);
+            graphics.drawImage(disabledImage, x(), y());
         } else if (isBeingHovered) {
-            graphics.drawImage(hoverImage, x(), y(), null);
+            graphics.drawImage(hoverImage, x(), y());
         } else {
-            graphics.drawImage(enabledImage, x(), y(), null);
+            graphics.drawImage(enabledImage, x(), y());
         }
     }
 

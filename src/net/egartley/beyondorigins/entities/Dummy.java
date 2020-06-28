@@ -1,9 +1,9 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.data.Images;
+import net.egartley.beyondorigins.gamestates.ingame.InGameState;
 import net.egartley.gamelib.abstracts.AnimatedEntity;
 import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.abstracts.MapSector;
@@ -19,9 +19,9 @@ import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 import net.egartley.gamelib.logic.interaction.BoundaryPadding;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
 import net.egartley.gamelib.logic.interaction.EntityEntityInteraction;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
@@ -183,7 +183,7 @@ public class Dummy extends AnimatedEntity implements Character {
         interactions.add(new EntityEntityInteraction(defaultBoundary, Entities.PLAYER.chatBoundary) {
             @Override
             public void interact() {
-                Game.in().dialogue.startExchange(dialogue_playerCollision);
+                InGameState.dialogue.startExchange(dialogue_playerCollision);
                 isTalkingToPlayer = true;
             }
         });
@@ -196,7 +196,7 @@ public class Dummy extends AnimatedEntity implements Character {
     }
 
     @Override
-    public BufferedImage getCharacterImage() {
+    public Image getCharacterImage() {
         return image;
     }
 

@@ -1,11 +1,10 @@
 package net.egartley.beyondorigins.ui;
 
-import net.egartley.beyondorigins.controllers.MouseController;
 import net.egartley.gamelib.input.Mouse;
 import net.egartley.gamelib.input.MouseClicked;
+import org.newdawn.slick.Image;
 
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 
 public class GenericButton extends UIElement {
 
@@ -23,12 +22,12 @@ public class GenericButton extends UIElement {
         };
     }
 
-    public GenericButton(BufferedImage image) {
+    public GenericButton(Image image) {
         this(image.getWidth(), image.getHeight());
         this.image = image;
     }
 
-    public GenericButton(BufferedImage image, int x, int y) {
+    public GenericButton(Image image, int x, int y) {
         this(image);
         setPosition(x, y);
     }
@@ -48,11 +47,11 @@ public class GenericButton extends UIElement {
     }
 
     public void registerClicked() {
-        MouseController.addMouseClicked(clicked);
+        // TODO: add
     }
 
     public void deregisterClicked() {
-        MouseController.removeMouseClicked(clicked);
+        // TODO: add
     }
 
     @Override

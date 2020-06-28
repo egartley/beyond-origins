@@ -7,8 +7,7 @@ import net.egartley.gamelib.abstracts.StaticEntity;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.logic.interaction.BoundaryPadding;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
-
-import java.awt.image.BufferedImage;
+import org.newdawn.slick.Image;
 
 public class WoodenFence extends StaticEntity {
 
@@ -28,13 +27,13 @@ public class WoodenFence extends StaticEntity {
         isTraversable = false;
         isDualRendered = true;
         isSectorSpecific = true;
-        firstLayer = image.getSubimage(0, 18, image.getWidth(), 9);
-        secondLayer = image.getSubimage(0, 0, image.getWidth(), 18);
+        firstLayer = image.getSubImage(0, 18, image.getWidth(), 9);
+        secondLayer = image.getSubImage(0, 0, image.getWidth(), 18);
     }
 
     private Sprite buildSprite() {
-        BufferedImage build = null;
-        BufferedImage full = Images.get(Images.entityPath + "wooden-fence-full.png");
+        Image build = null;
+        Image full = Images.get(Images.entityPath + "wooden-fence-full.png");
         if (hasCorners) {
             build = Images.get(Images.entityPath + "wooden-fence-left-end.png");
         } else {

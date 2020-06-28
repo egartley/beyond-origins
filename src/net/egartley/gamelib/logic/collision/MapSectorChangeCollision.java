@@ -13,14 +13,13 @@ public class MapSectorChangeCollision {
     private boolean isCollided;
     private boolean firedEvent;
 
-    private Map map;
-    private MapSector from;
-    private MapSector to;
-    private Boundary[] boundaries = new Boundary[2];
-    private Rectangle[] rectangles = new Rectangle[2];
+    private final Map map;
+    private final MapSector from;
+    private final MapSector to;
+    private final Boundary[] boundaries = new Boundary[2];
+    private final Rectangle[] rectangles = new Rectangle[2];
 
-    public MapSectorChangeCollision(MapSectorChangeBoundary changeBoundary, EntityBoundary playerBoundary, MapSector
-            to, MapSector from, Map map) {
+    public MapSectorChangeCollision(MapSectorChangeBoundary changeBoundary, EntityBoundary playerBoundary, MapSector to, MapSector from, Map map) {
         boundaries[0] = changeBoundary;
         boundaries[1] = playerBoundary;
         rectangles[0] = boundaries[0].asRectangle();

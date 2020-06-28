@@ -4,8 +4,8 @@ import net.egartley.beyondorigins.Debug;
 import net.egartley.gamelib.abstracts.AnimatedEntity;
 import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.abstracts.StaticEntity;
+import org.newdawn.slick.Image;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
@@ -22,7 +22,7 @@ public class Sprite {
      * @see AnimatedEntity
      * @see StaticEntity
      */
-    ArrayList<BufferedImage> frames = new ArrayList<>();
+    ArrayList<Image> frames = new ArrayList<>();
     /**
      * Width in pixels
      */
@@ -32,44 +32,31 @@ public class Sprite {
      */
     public int height;
 
-    public Sprite(BufferedImage image) {
+    public Sprite(Image image) {
         this(image, 1);
     }
 
-    public Sprite(BufferedImage row, int frames) {
+    public Sprite(Image row, int frames) {
         this(row, row.getWidth() / frames, row.getHeight(), frames);
     }
 
-    public Sprite(BufferedImage row, int width, int height, int frames) {
+    public Sprite(Image row, int width, int height, int frames) {
         this.width = width;
         this.height = height;
         if (frames == 1) {
-            this.frames.add(row.getSubimage(0, 0, width, height));
+            this.frames.add(row.getSubImage(0, 0, width, height));
             return;
         } else if (frames <= 0) {
             Debug.error("When setting frames for a sprite, there needs to be at least one!");
             return;
         }
         for (int i = 0; i < frames; i++) {
-            this.frames.add(row.getSubimage(i * width, 0, width, height));
+            this.frames.add(row.getSubImage(i * width, 0, width, height));
         }
     }
 
-    /**
-     * Returns the first frame in {@link #frames} as a buffered image
-     */
-    public BufferedImage toBufferedImage() {
-        return toBufferedImage(0);
-    }
-
-    /**
-     * Returns the frame at the index as a buffered image
-     */
-    public BufferedImage toBufferedImage(int index) {
-        if (index >= frames.size()) {
-            return null;
-        }
-        return frames.get(index);
+    public Image asImage() {
+        return frames.get(0);
     }
 
 }

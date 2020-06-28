@@ -1,10 +1,10 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.data.Items;
 import net.egartley.beyondorigins.data.Quests;
+import net.egartley.beyondorigins.gamestates.ingame.InGameState;
 import net.egartley.beyondorigins.ingame.Quest;
 import net.egartley.beyondorigins.ingame.QuestObjective;
 import net.egartley.gamelib.abstracts.AnimatedEntity;
@@ -18,9 +18,8 @@ import net.egartley.gamelib.logic.events.DialogueExchangeFinishedEvent;
 import net.egartley.gamelib.logic.interaction.BoundaryPadding;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
 import net.egartley.gamelib.logic.interaction.EntityEntityInteraction;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 
 public class Wizard extends AnimatedEntity implements Character {
 
@@ -39,7 +38,7 @@ public class Wizard extends AnimatedEntity implements Character {
     public Wizard() {
         super("Wizard", new SpriteSheet(Images.get(Images.WIZARD_DEFAULT), 30, 44, 2, 4));
         speed = 0.8;
-        image = animations.get(0).sprite.toBufferedImage(0);
+        image = animations.get(0).sprite.asImage();
         sheets.add(new SpriteSheet(Images.get(Images.WIZARD_WITH_HAT), 30, 56, 2, 4));
 
         meetPlayerExpression = new EntityExpression(EntityExpression.ATTENTION, this);
@@ -60,7 +59,7 @@ public class Wizard extends AnimatedEntity implements Character {
                 Quest quest = new Quest(Quests.WIZARD_HAT, "Missing hat", "The wizard's hat has gone missing! You must find it and ensure its safe return.");
                 quest.objectives.add(new QuestObjective("Locate the Wizard's hat", "It's in one of the trees, dummy!"));
                 quest.objectives.add(new QuestObjective("Return the hat", "Go back to the Wizard and give him back his magical hat."));
-                Game.in().quests.add(quest, true);
+                InGameState.quests.add(quest, true);
             }
         });
         DialogueController.addFinished(new DialogueExchangeFinishedEvent(dialogue_gotHat) {
@@ -76,8 +75,8 @@ public class Wizard extends AnimatedEntity implements Character {
 
                 interactions.get(0).collision.end();
 
-                Game.in().quests.get(Quests.WIZARD_HAT).objectives.get(1).complete();
-                Game.in().quests.get(Quests.WIZARD_HAT).complete();
+                InGameState.quests.get(Quests.WIZARD_HAT).objectives.get(1).complete();
+                InGameState.quests.get(Quests.WIZARD_HAT).complete();
             }
         });
     }
@@ -108,12 +107,12 @@ public class Wizard extends AnimatedEntity implements Character {
     private void onPlayerInteraction() {
         boolean playerHasHat = Entities.PLAYER.inventory.contains(Items.WIZARD_HAT);
         if (!metPlayer) {
-            Game.in().dialogue.startExchange(dialogue_meetPlayer);
+            InGameState.dialogue.startExchange(dialogue_meetPlayer);
         } else if (playerHasHat && !foundHat) {
             foundHat = true;
-            Game.in().dialogue.startExchange(dialogue_gotHat);
+            InGameState.dialogue.startExchange(dialogue_gotHat);
         } else {
-            Game.in().dialogue.startExchange(dialogue_playerGeneric);
+            InGameState.dialogue.startExchange(dialogue_playerGeneric);
         }
     }
 
@@ -152,7 +151,7 @@ public class Wizard extends AnimatedEntity implements Character {
     }
 
     @Override
-    public BufferedImage getCharacterImage() {
+    public Image getCharacterImage() {
         return image;
     }
 

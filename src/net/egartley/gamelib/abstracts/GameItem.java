@@ -1,14 +1,14 @@
 package net.egartley.gamelib.abstracts;
 
-import java.awt.image.BufferedImage;
+import org.newdawn.slick.Image;
 
 public abstract class GameItem {
 
     public String id;
     public String displayName;
-    public BufferedImage image;
+    public Image image;
 
-    public GameItem(String id, String displayName, BufferedImage image) {
+    public GameItem(String id, String displayName, Image image) {
         this.id = id;
         this.displayName = displayName;
         this.image = image;

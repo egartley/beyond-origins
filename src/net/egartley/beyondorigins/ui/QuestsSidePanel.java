@@ -4,9 +4,8 @@ import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.ingame.Quest;
 import net.egartley.beyondorigins.ingame.QuestObjective;
+import org.newdawn.slick.*;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class QuestsSidePanel extends UIElement {
@@ -15,16 +14,16 @@ public class QuestsSidePanel extends UIElement {
     private String[] descriptionLines;
     private ArrayList<String[]> objectiveLines;
 
-    private static final Font titleFont = new Font("Bookman Old Style", Font.BOLD, 16);
-    private static final Font descriptionFont = new Font("Arial", Font.PLAIN, 11);
-    private static final Font objectiveTitleFont = new Font("Arial", Font.BOLD, 11);
+    private static final Font titleFont = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 16), true);
+    private static final Font descriptionFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 11), true);
+    private static final Font objectiveTitleFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 11), true);
     private static final Font objectiveDescriptionFont = descriptionFont;
     private static final Color titleColor = new Color(65, 53, 37);
     private static final Color descriptionColor = titleColor;
     private static final Color objectiveTitleColor = titleColor;
     private static final Color objectiveDescriptionColor = titleColor;
-    private static BufferedImage checkboxImage;
-    private static BufferedImage checkboxCheckedImage;
+    private static Image checkboxImage;
+    private static Image checkboxCheckedImage;
 
     public QuestsSidePanel() {
         super(412, 277);
@@ -77,9 +76,9 @@ public class QuestsSidePanel extends UIElement {
                 QuestObjective objective = quest.objectives.get(i);
                 // checkbox
                 if (!objective.isComplete) {
-                    graphics.drawImage(checkboxImage, x() + 8, baseY, null);
+                    graphics.drawImage(checkboxImage, x() + 8, baseY);
                 } else {
-                    graphics.drawImage(checkboxCheckedImage, x() + 6, baseY - 2, null);
+                    graphics.drawImage(checkboxCheckedImage, x() + 6, baseY - 2);
                 }
                 // title
                 graphics.setFont(objectiveTitleFont);

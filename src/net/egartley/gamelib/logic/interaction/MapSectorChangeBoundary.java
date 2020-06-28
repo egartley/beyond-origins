@@ -1,8 +1,7 @@
 package net.egartley.gamelib.logic.interaction;
 
 import net.egartley.gamelib.abstracts.MapSector;
-
-import java.awt.*;
+import org.newdawn.slick.Color;
 
 /**
  * An area (boundary) where a map sector change can occur
@@ -23,7 +22,7 @@ public class MapSectorChangeBoundary extends Boundary {
         bottom = top + height;
         left = x;
         right = left + width;
-        drawColor = Color.MAGENTA;
+        drawColor = Color.magenta;
         this.to = to;
     }
 

@@ -1,6 +1,6 @@
 package net.egartley.gamelib.abstracts;
 
-import java.awt.*;
+import org.newdawn.slick.Graphics;
 
 /**
  * Makes something able to rendered on the screen at a specified position

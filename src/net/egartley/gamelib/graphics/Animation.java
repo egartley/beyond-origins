@@ -3,9 +3,8 @@ package net.egartley.gamelib.graphics;
 import net.egartley.beyondorigins.Debug;
 import net.egartley.gamelib.abstracts.AnimatedEntity;
 import net.egartley.gamelib.threads.AnimationClock;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 
 /**
  * Represents a collection of images, used for animating sprites
@@ -19,7 +18,7 @@ public class Animation {
      * Index in {@link Sprite#frames} for the frame to use when rendering (the current frame)
      */
     private int frameIndex;
-    private int startIndex;
+    private final int startIndex;
     /**
      * Milliseconds between frames
      */
@@ -35,11 +34,11 @@ public class Animation {
     /**
      * The frame that is currently being used when rendering
      */
-    private BufferedImage frame;
+    private Image frame;
     /**
      * The frame that the animation will start at
      */
-    private BufferedImage startFrame;
+    private final Image startFrame;
 
     /**
      * Creates a new animation, with a default frame delay of 500 and start index of 0
@@ -81,11 +80,11 @@ public class Animation {
     /**
      * Returns the frame at {@link #frameIndex} within {@link #sprite}'s {@link Sprite#frames}
      */
-    private BufferedImage getFrame() {
+    private Image getFrame() {
         return sprite.frames.get(frameIndex);
     }
 
-    private BufferedImage nextFrame() {
+    private Image nextFrame() {
         // check if we need to go back to the start of the animation or just go to the next one
         if (frameIndex + 1 >= sprite.frames.size())
             frameIndex = startIndex;
@@ -155,7 +154,7 @@ public class Animation {
      * Renders {@link Animation#frame frame} at the specified position
      */
     public void render(Graphics graphics, int x, int y) {
-        graphics.drawImage(frame, x, y, null);
+        graphics.drawImage(frame, x, y);
     }
 
 }

@@ -12,9 +12,9 @@ import net.egartley.gamelib.logic.collision.MapSectorChangeCollision;
 import net.egartley.gamelib.logic.interaction.MapSectorChangeBoundary;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -374,10 +374,10 @@ public abstract class MapSector implements Tickable {
                                         tile.rotate();
                                         break;
                                     case 1:
-                                        tile.rotate(Math.PI);
+                                        tile.rotate(180);
                                         break;
                                     case 2:
-                                        tile.rotate(Math.PI * 1.5D);
+                                        tile.rotate(270);
                                         break;
                                 }
                             }
@@ -389,7 +389,7 @@ public abstract class MapSector implements Tickable {
     }
 
     private void fill(String id) {
-        BufferedImage image = Images.get(Images.mapTilePath + id + ".png");
+        Image image = Images.get(Images.mapTilePath + id + ".png");
         for (int r = 0; r < TILE_ROWS; r++) {
             ArrayList<MapTile> column = new ArrayList<>();
             for (int c = 0; c < TILE_COLUMNS; c++) {
@@ -405,9 +405,9 @@ public abstract class MapSector implements Tickable {
             int c = o.getInt("c");
             int r = o.getInt("r");
             String id = tileIDs.get(tileKeys.indexOf(o.getString("key")));
-            BufferedImage image = Images.get(Images.mapTilePath + id + ".png");
+            Image image = Images.get(Images.mapTilePath + id + ".png");
             if (o.has("rotate")) {
-                image = Util.rotateImage(image, Math.toRadians(o.getInt("rotate")));
+                image.rotate(o.getInt("rotate"));
             }
             tiles.get(r).set(c, new MapTile(id, image));
         }

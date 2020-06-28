@@ -7,9 +7,8 @@ import net.egartley.beyondorigins.ingame.PlayerInventoryStack;
 import net.egartley.gamelib.input.Mouse;
 import net.egartley.gamelib.logic.inventory.ItemStack;
 import net.egartley.gamelib.logic.math.Calculate;
+import org.newdawn.slick.*;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class PlayerInventory extends UIElement {
@@ -17,22 +16,20 @@ public class PlayerInventory extends UIElement {
     public static final int ROWS = 5, COLUMNS = 4;
 
     private int detailsLineIndex = 0;
-    private boolean gotFontMetrics;
 
     private static final Color tooltipBorderColor = new Color(65, 11, 67);
 
     public static int tooltipWidth;
     public static boolean isShowingTooltip;
     public static String tooltipText;
-    public static Font tooltipFont = new Font("Arial", Font.BOLD, 14);
+    public static Font tooltipFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 14), true);
     public static PlayerInventoryStack stackBeingDragged;
     public static ArrayList<PlayerInventorySlot> slots = new ArrayList<>();
 
-    private static final Font detailsFont = new Font("Bookman Old Style", Font.BOLD, 11);
-    private static final Font playerNameFont = new Font("Bookman Old Style", Font.BOLD, 14);
+    private static final Font detailsFont = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 11), true);
+    private static final Font playerNameFont = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 14), true);
     private static final Color playerNameColor = new Color(65, 53, 37);
     private static final Color detailsColor = new Color(111, 88, 61);
-    private static FontMetrics fontMetrics;
 
     public PlayerInventory() {
         super(Images.get(Images.INVENTORY_PANEL));
@@ -66,10 +63,6 @@ public class PlayerInventory extends UIElement {
 
     @Override
     public void render(Graphics graphics) {
-        if (!gotFontMetrics) {
-            fontMetrics = graphics.getFontMetrics(detailsFont);
-            gotFontMetrics = true;
-        }
         // panel (background)
         graphics.drawImage(image, x(), y(), null);
 
@@ -78,7 +71,7 @@ public class PlayerInventory extends UIElement {
         slots.forEach(slot -> slot.renderStack(graphics));
 
         // player display
-        BufferedImage playerImage = Entities.PLAYER.sprite.toBufferedImage();
+        Image playerImage = Entities.PLAYER.sprite.asImage();
         graphics.drawImage(playerImage, Calculate.getCenter(x() + 243, playerImage.getWidth()), Calculate.getCenter(y() + 96, playerImage.getHeight()), null);
 
         // details text
@@ -100,12 +93,11 @@ public class PlayerInventory extends UIElement {
     }
 
     private void drawToolTip(Graphics graphics) {
-        ((Graphics2D) graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         graphics.setColor(tooltipBorderColor);
         graphics.fillRoundRect(Mouse.x - 2, Mouse.y - 28, tooltipWidth + 14, 26, 8, 8);
-        graphics.setColor(Color.BLACK);
+        graphics.setColor(Color.black);
         graphics.fillRect(Mouse.x + 1, Mouse.y - 25, tooltipWidth + 8, 20);
-        graphics.setColor(Color.WHITE);
+        graphics.setColor(Color.white);
         graphics.setFont(tooltipFont);
         graphics.drawString(tooltipText, Mouse.x + 5, Mouse.y - 10);
     }

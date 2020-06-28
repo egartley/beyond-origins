@@ -18,9 +18,9 @@ public class DefaultTree extends StaticEntity {
         isDualRendered = true;
         isTraversable = false;
         // set the first layer as the leaves
-        firstLayer = image.getSubimage(0, 45, image.getWidth(), 19);
+        firstLayer = image.getSubImage(0, 45, image.getWidth(), 19);
         // set the second layer as the trunk
-        secondLayer = image.getSubimage(0, 0, image.getWidth(), 45);
+        secondLayer = image.getSubImage(0, 0, image.getWidth(), 45);
     }
 
     @Override

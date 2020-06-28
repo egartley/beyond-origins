@@ -4,8 +4,7 @@ import net.egartley.beyondorigins.data.Images;
 import net.egartley.gamelib.abstracts.AnimatedEntity;
 import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.logic.math.Calculate;
-
-import java.awt.*;
+import org.newdawn.slick.Graphics;
 
 public class EntityExpression extends AnimatedEntity {
 
@@ -31,7 +30,7 @@ public class EntityExpression extends AnimatedEntity {
         animations.add(getTemplateAnimation(type));
         animation = animations.get(0);
         sprite = animation.sprite;
-        image = sprite.toBufferedImage();
+        image = sprite.asImage();
     }
 
     private SpriteSheet getTemplateSpriteSheet(byte type) {

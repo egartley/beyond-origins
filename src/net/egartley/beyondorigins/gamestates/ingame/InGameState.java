@@ -2,43 +2,48 @@ package net.egartley.beyondorigins.gamestates.ingame;
 
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.controllers.KeyboardController;
 import net.egartley.beyondorigins.data.Items;
-import net.egartley.beyondorigins.gamestates.ingame.substates.InBuildingState;
+import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.ingame.Building;
 import net.egartley.beyondorigins.ingame.PlayerMenu;
 import net.egartley.beyondorigins.ingame.maps.debug.DebugMap;
 import net.egartley.beyondorigins.ui.DialoguePanel;
 import net.egartley.beyondorigins.ui.QuestsPanel;
-import net.egartley.gamelib.abstracts.GameState;
 import net.egartley.gamelib.abstracts.Map;
-import net.egartley.gamelib.input.KeyTyped;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-public class InGameState extends GameState {
+public class InGameState extends BasicGameState {
 
-    private final KeyTyped toggleInventory;
-    private final KeyTyped advanceDialogue;
-    private final KeyTyped backToMainMenu;
+    public static final int ID = 1;
 
-    public Map map;
-    public PlayerMenu playerMenu;
-    public DialoguePanel dialogue;
-    // redundant, but it just looks better to use Game.in().quests rather than Game.in().playerMenu.questsPanel
-    public QuestsPanel quests;
     public ArrayList<Map> maps = new ArrayList<>();
 
-    public boolean isInventoryVisible;
-    public boolean isDialogueVisible;
+    public static Map map;
+    public static PlayerMenu playerMenu;
+    public static QuestsPanel quests;
+    public static DialoguePanel dialogue;
+    public static Building building;
 
-    public InGameState() {
-        id = GameState.IN_GAME;
+    public static boolean isInventoryVisible;
+    public static boolean isDialogueVisible;
 
-        subStates.add(new InBuildingState());
+    public InGameState(GameContainer container, StateBasedGame game) {
+        try {
+            init(container, game);
+        } catch (SlickException e) {
+            e.printStackTrace();
+        }
+    }
 
+    @Override
+    public void init(GameContainer container, StateBasedGame game) throws SlickException {
         Items.init();
 
         maps.add(new DebugMap());
@@ -48,7 +53,9 @@ public class InGameState extends GameState {
         dialogue = new DialoguePanel();
         quests = playerMenu.questsPanel;
 
-        // initialize key typeds
+        map.changeSector(map.sectors.get(0), null);
+
+        /* initialize key typeds
         toggleInventory = new KeyTyped(KeyEvent.VK_E) {
             @Override
             public void onType() {
@@ -70,33 +77,16 @@ public class InGameState extends GameState {
                     Game.setState(Game.getState(GameState.MAIN_MENU));
                 }
             }
-        };
-    }
-
-    public void setBuilding(Building building) {
-        ((InBuildingState) subStates.get(0)).building = building;
+        };*/
     }
 
     @Override
-    public void onStart() {
-        KeyboardController.addKeyTyped(toggleInventory);
-        KeyboardController.addKeyTyped(advanceDialogue);
-        KeyboardController.addKeyTyped(backToMainMenu);
-
-        map.changeSector(map.sectors.get(0), null);
-    }
-
-    @Override
-    public void onEnd() {
-        KeyboardController.removeKeyTyped(toggleInventory);
-        KeyboardController.removeKeyTyped(advanceDialogue);
-        KeyboardController.removeKeyTyped(backToMainMenu);
-    }
-
-    @Override
-    public void render(Graphics graphics) {
-        if (currentSubState != null) {
-            currentSubState.render(graphics);
+    public void render(GameContainer container, StateBasedGame game, Graphics graphics) throws SlickException {
+        if (Entities.PLAYER.isInBuilding) {
+            graphics.setColor(Color.black);
+            graphics.fillRect(0, 0, Game.WINDOW_WIDTH + 1, Game.WINDOW_HEIGHT + 1);
+            building.currentFloor.render(graphics);
+            Entities.PLAYER.render(graphics);
         } else {
             map.render(graphics);
         }
@@ -111,10 +101,12 @@ public class InGameState extends GameState {
     }
 
     @Override
-    public void tick() {
+    public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         // normal gamestate tick
-        if (currentSubState != null) {
-            currentSubState.tick();
+        if (Entities.PLAYER.isInBuilding) {
+            building.currentFloor.checkPlayerLimits();
+            building.currentFloor.tick();
+            Entities.PLAYER.tick();
         } else {
             map.tick();
         }
@@ -128,13 +120,8 @@ public class InGameState extends GameState {
     }
 
     @Override
-    public boolean hasSubStates() {
-        return true;
-    }
-
-    @Override
-    public boolean isSubState() {
-        return false;
+    public int getID() {
+        return 0;
     }
 
 }

@@ -3,6 +3,7 @@ package net.egartley.beyondorigins.entities;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.data.Images;
+import net.egartley.beyondorigins.gamestates.ingame.InGameState;
 import net.egartley.beyondorigins.ingame.Building;
 import net.egartley.beyondorigins.ui.PlayerInventory;
 import net.egartley.gamelib.abstracts.AnimatedEntity;
@@ -18,9 +19,9 @@ import net.egartley.gamelib.logic.interaction.BoundaryOffset;
 import net.egartley.gamelib.logic.interaction.BoundaryPadding;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
 import net.egartley.gamelib.logic.inventory.EntityInventory;
+import org.newdawn.slick.Image;
 
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Player extends AnimatedEntity implements Character {
@@ -35,6 +36,8 @@ public class Player extends AnimatedEntity implements Character {
     private int totalExperience = 0;
     private boolean frozen;
     private boolean isMovementInvalidated;
+
+    public boolean isInBuilding;
 
     public EntityBoundary boundary;
     public EntityBoundary headBoundary;
@@ -171,7 +174,8 @@ public class Player extends AnimatedEntity implements Character {
      * Called when the player enters a building
      */
     public void enteredBuilding() {
-        removeSectorSpecificCollisions(Game.in().map.sector);
+        isInBuilding = true;
+        removeSectorSpecificCollisions(InGameState.map.sector);
         deactivateBuildingCollisions();
         // invalidateAllMovement();
     }
@@ -182,9 +186,10 @@ public class Player extends AnimatedEntity implements Character {
      * @param building The building that was just left
      */
     public void leftBuilding(Building building) {
-        generateSectorSpecificCollisions(Game.in().map.sector);
+        generateSectorSpecificCollisions(InGameState.map.sector);
         setPosition(building.playerLeaveX, building.playerLeaveY);
         reactivateBuildingCollisions();
+        isInBuilding = false;
         // invalidateAllMovement();
     }
 
@@ -335,7 +340,7 @@ public class Player extends AnimatedEntity implements Character {
     }
 
     @Override
-    public BufferedImage getCharacterImage() {
+    public Image getCharacterImage() {
         return image;
     }
 }

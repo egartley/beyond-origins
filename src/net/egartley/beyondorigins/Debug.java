@@ -1,28 +1,23 @@
 package net.egartley.beyondorigins;
 
 import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.gamestates.ingame.InGameState;
 import net.egartley.gamelib.input.Mouse;
-
-import java.awt.*;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.TrueTypeFont;
 
 public class Debug {
 
     /**
      * Font to use while rendering debug lines
      */
-    private static final Font font = new Font("Consolas", Font.PLAIN, 12);
-    /**
-     * Used for calculating width of strings so that each line's background will be sized correctly
-     */
-    private static FontMetrics fontMetrics;
+    private static final Font font = new TrueTypeFont(new java.awt.Font("Consolas", java.awt.Font.PLAIN, 12), true);
     /**
      * Color for the background of debug lines
      */
-    private static final Color backgroundColor = Color.BLACK;
-    /**
-     * Whether or not font metrics have been set
-     */
-    private static boolean setFontMetrics;
+    private static final Color backgroundColor = Color.black;
     /**
      * Initial line x-coordinate
      */
@@ -88,17 +83,11 @@ public class Debug {
     }
 
     private static void drawLine(String s, Graphics graphics) {
-        if (!setFontMetrics) {
-            fontMetrics = graphics.getFontMetrics();
-            // don't do this every tick, only once
-            setFontMetrics = true;
-        }
         // background
         graphics.setColor(backgroundColor);
-        graphics.fillRect(lx - TEXT_PADDING, ly + (row * rowOffset) - font.getSize(), fontMetrics.stringWidth(s) +
-                (TEXT_PADDING * 2), font.getSize() + TEXT_PADDING);
+        graphics.fillRect(lx - TEXT_PADDING, ly + (row * rowOffset) - font.getLineHeight(), graphics.getFont().getWidth(s) + (TEXT_PADDING * 2), font.getLineHeight() + TEXT_PADDING);
         // draw line text
-        graphics.setColor(Color.WHITE);
+        graphics.setColor(Color.white);
         graphics.drawString(s, lx, ly + (row * rowOffset));
         row++;
     }
@@ -109,7 +98,7 @@ public class Debug {
     public static void render(Graphics graphics) {
         row = 0;
         graphics.setFont(font);
-        drawLine("Location: " + Game.in().map.sector + " (" + Entities.PLAYER.x() + ", " + Entities.PLAYER.y() + ")", graphics);
+        drawLine("Location: " + InGameState.map.sector + " (" + Entities.PLAYER.x() + ", " + Entities.PLAYER.y() + ")", graphics);
         drawLine("Mouse: " + Mouse.x + ", " + Mouse.y, graphics);
         drawLine("Threads: " + Thread.activeCount(), graphics);
         if (Entities.PLAYER.lastCollision != null) {

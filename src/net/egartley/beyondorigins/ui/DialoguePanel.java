@@ -4,12 +4,11 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.controllers.DialogueController;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.gamestates.ingame.InGameState;
 import net.egartley.gamelib.logic.dialogue.DialogueExchange;
 import net.egartley.gamelib.logic.math.Calculate;
 import net.egartley.gamelib.threads.DelayedEvent;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import org.newdawn.slick.*;
 
 public class DialoguePanel extends UIElement {
 
@@ -30,34 +29,22 @@ public class DialoguePanel extends UIElement {
     public boolean readyToAdvance;
 
     /**
-     * The width of the character's name when rendered
-     *
-     * @see #setFontMetrics
-     */
-    private int characterNameStringWidth = 0;
-    /**
      * An index, used as a multipler for the y-coordinate of each line of text
      */
     private short lineIndex = -1;
 
     /**
-     * Whether or not font metrics have been set
-     *
-     * @see #characterNameStringWidth
-     */
-    public boolean setFontMetrics;
-    /**
      * The font used when rendering the actual dialogue
      */
-    public static Font lineFont = new Font("Bookman Old Style", Font.PLAIN, 14);
+    public static Font lineFont = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 14), true);
     /**
      * The font used when rendering the character's name
      */
-    private static final Font characterNameFont = new Font("Arial", Font.PLAIN, 12);
+    private static final Font characterNameFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12), true);
     /**
      * The image displayed when there are more lines available
      */
-    private final BufferedImage moreLinesImage;
+    private final Image moreLinesImage;
 
     /**
      * The dialogue that is currently being used
@@ -103,19 +90,18 @@ public class DialoguePanel extends UIElement {
      */
     public void show() {
         isShowing = true;
-        Game.in().isDialogueVisible = true;
+        InGameState.isDialogueVisible = true;
         delay();
         Entities.PLAYER.freeze();
     }
 
     /**
-     * Makes the dialogue panel no longer visible, and sets {@link #setFontMetrics} to <code>false</code>
+     * Makes the dialogue panel no longer visible
      */
     public void hide() {
         isShowing = false;
-        setFontMetrics = false;
         readyToAdvance = false;
-        Game.in().isDialogueVisible = false;
+        InGameState.isDialogueVisible = false;
         Entities.PLAYER.thaw();
     }
 
@@ -136,18 +122,14 @@ public class DialoguePanel extends UIElement {
         if (!isShowing) {
             return;
         }
-        if (!setFontMetrics) {
-            characterNameStringWidth = graphics.getFontMetrics(characterNameFont).stringWidth(exchange.currentDialogue.character.getName());
-            setFontMetrics = true;
-        }
         // render background (panel)
         graphics.drawImage(image, x(), y(), null);
         // render character image and name
-        BufferedImage characterImage = exchange.currentDialogue.character.getCharacterImage();
+        Image characterImage = exchange.currentDialogue.character.getCharacterImage();
         graphics.drawImage(characterImage, 277 - characterImage.getWidth() / 2, 414 - (characterImage.getHeight() - 44), null);
-        graphics.setColor(Color.WHITE);
+        graphics.setColor(Color.white);
         graphics.setFont(characterNameFont);
-        graphics.drawString(exchange.currentDialogue.character.getName(), 277 - characterNameStringWidth / 2, 476);
+        graphics.drawString(exchange.currentDialogue.character.getName(), 277 - characterNameFont.getWidth(exchange.currentDialogue.character.getName()) / 2, 476);
         // render text
         graphics.setFont(lineFont);
         for (String line : exchange.displayedLines) {

@@ -3,22 +3,21 @@ package net.egartley.beyondorigins.ui;
 import net.egartley.beyondorigins.Util;
 import net.egartley.gamelib.abstracts.Renderable;
 import net.egartley.gamelib.interfaces.Tickable;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 
 public abstract class UIElement extends Renderable implements Tickable {
 
     public int width;
     public int height;
     public boolean isEnabled;
-    public BufferedImage image;
+    public Image image;
 
-    public UIElement(BufferedImage image) {
+    public UIElement(Image image) {
         this(image, true);
     }
 
-    public UIElement(BufferedImage image, boolean enabled) {
+    public UIElement(Image image, boolean enabled) {
         this(image.getWidth(), image.getHeight(), enabled);
         this.image = image;
     }
@@ -45,7 +44,7 @@ public abstract class UIElement extends Renderable implements Tickable {
     @Override
     public void render(Graphics graphics) {
         if (image != null) {
-            graphics.drawImage(image, x(), y(), null);
+            graphics.drawImage(image, x(), y());
         }
     }
 

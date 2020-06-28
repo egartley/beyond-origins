@@ -18,9 +18,9 @@ public class DefaultRock extends StaticEntity {
         isDualRendered = true;
         isTraversable = false;
         // top half
-        firstLayer = image.getSubimage(0, image.getHeight() / 2, image.getWidth(), image.getHeight() / 2);
+        firstLayer = image.getSubImage(0, image.getHeight() / 2, image.getWidth(), image.getHeight() / 2);
         // bottom half
-        secondLayer = image.getSubimage(0, 0, image.getWidth(), image.getHeight() / 2);
+        secondLayer = image.getSubImage(0, 0, image.getWidth(), image.getHeight() / 2);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package net.egartley.gamelib.logic.dialogue;
 
-import net.egartley.beyondorigins.Game;
+import net.egartley.beyondorigins.gamestates.ingame.InGameState;
 import net.egartley.beyondorigins.ui.DialoguePanel;
 
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class DialogueExchange {
     }
 
     public void advance() {
-        boolean advance = Game.in().dialogue.readyToAdvance;
+        boolean advance = InGameState.dialogue.readyToAdvance;
 
         isFinished = isCurrentDialogueFinished() && characterDialogueIndex + 1 == dialogues.size() && advance;
         if (isFinished) {
@@ -63,8 +63,7 @@ public class DialogueExchange {
 
         if (isCurrentDialogueFinished() && advance) {
             nextDialogue();
-            Game.in().dialogue.setFontMetrics = false;
-            Game.in().dialogue.delay();
+            InGameState.dialogue.delay();
         } else if (advance) {
             nextLine();
         }

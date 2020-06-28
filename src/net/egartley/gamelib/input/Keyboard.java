@@ -1,15 +1,13 @@
 package net.egartley.gamelib.input;
 
-import net.egartley.beyondorigins.controllers.KeyboardController;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 public class Keyboard implements KeyListener {
 
-    private static ArrayList<Integer> pressedKeyCodes = new ArrayList<>();
-    private static ArrayList<Integer> invalidatedKeys = new ArrayList<>();
+    private static final ArrayList<Integer> pressedKeyCodes = new ArrayList<>();
+    private static final ArrayList<Integer> invalidatedKeys = new ArrayList<>();
 
     /**
      * "Invalidate" the given key, which means that it will need to be "re-pressed" in order to appear in {@link #pressedKeyCodes} again
@@ -48,7 +46,7 @@ public class Keyboard implements KeyListener {
         int keyCode = e.getKeyCode();
         pressedKeyCodes.remove((Integer) keyCode);
         invalidatedKeys.remove((Integer) keyCode);
-        KeyboardController.onKeyTyped(keyCode);
+        // KeyboardController.onKeyTyped(keyCode);
     }
 
     @Override

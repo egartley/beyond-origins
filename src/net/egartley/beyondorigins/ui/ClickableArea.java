@@ -1,7 +1,6 @@
 package net.egartley.beyondorigins.ui;
 
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.controllers.MouseController;
 import net.egartley.gamelib.input.Mouse;
 import net.egartley.gamelib.input.MouseClicked;
 
@@ -10,7 +9,7 @@ import java.awt.event.MouseEvent;
 public class ClickableArea {
 
     private boolean didHover = false;
-    private MouseClicked clicked;
+    private final MouseClicked clicked;
 
     public int x, y, width, height;
     public boolean mouseWithinBounds = false;
@@ -46,11 +45,11 @@ public class ClickableArea {
     }
 
     public void removeClicked() {
-        MouseController.removeMouseClicked(clicked);
+        // TODO: add
     }
 
     public void registerClicked() {
-        MouseController.addMouseClicked(clicked);
+        // TODO: add
     }
 
     public void tick() {

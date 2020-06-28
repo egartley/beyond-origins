@@ -1,9 +1,9 @@
 package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Debug;
-import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.gamestates.ingame.InGameState;
 import net.egartley.gamelib.abstracts.StaticEntity;
 import net.egartley.gamelib.graphics.SpriteSheet;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
@@ -54,8 +54,6 @@ public class Building extends StaticEntity {
     public void onPlayerLeave() {
         currentFloor.onPlayerLeave();
         Entities.PLAYER.leftBuilding(this);
-
-        Game.in().setSubState(null);
     }
 
     public void leave() {
@@ -103,8 +101,7 @@ public class Building extends StaticEntity {
         playerCollision = new EntityEntityCollision(entryBoundary, Entities.PLAYER.boundary) {
             @Override
             public void start(EntityEntityCollisionEvent event) {
-                Game.in().setBuilding(me);
-                Game.in().setSubState(Game.in().subStates.get(0));
+                InGameState.building = me;
                 end();
             }
         };

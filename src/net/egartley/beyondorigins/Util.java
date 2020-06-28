@@ -1,87 +1,38 @@
 package net.egartley.beyondorigins;
 
 import net.egartley.beyondorigins.data.Images;
-import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.graphics.Animation;
 import net.egartley.gamelib.graphics.SpriteSheet;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
+import org.newdawn.slick.*;
 
-import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Util {
 
-    // https://stackoverflow.com/a/13605411
-    private static BufferedImage toBufferedImage(Image image) {
-        if (image instanceof BufferedImage) {
-            return (BufferedImage) image;
-        }
-        BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D bGr = bufferedImage.createGraphics();
-        bGr.drawImage(image, 0, 0, null);
-        bGr.dispose();
-        return bufferedImage;
-    }
-
-    /**
-     * Returns a re-sized image of the original, with the width and height multipled by the given percentage (e.x. an 8x8 image would be resized to 4x4 with a percentage of 0.5)
-     */
-    public static BufferedImage resize(BufferedImage image, double percent) {
-        return resize(image, (int) (image.getWidth() * percent), (int) (image.getHeight() * percent), Image.SCALE_SMOOTH);
-    }
-
-    /**
-     * Returns a re-sized image of the original, at the given width and height
-     */
-    public static BufferedImage resize(BufferedImage image, int width, int height) {
-        return resize(image, width, height, Image.SCALE_SMOOTH);
-    }
-
-    /**
-     * Returns a re-sized image of the original, at the given width and height
-     */
-    public static BufferedImage resize(BufferedImage image, int width, int height, int hints) {
-        return toBufferedImage(image.getScaledInstance(width, height, hints));
-    }
-
-    /**
-     * Rotates the image by the specified angle (clockwise, in radians)
-     */
-    public static BufferedImage rotateImage(BufferedImage image, double radians) {
-        AffineTransform t = new AffineTransform();
-        BufferedImage rotated = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        t.rotate(radians, image.getWidth() / 2.0, image.getHeight() / 2.0);
-        rotated = new AffineTransformOp(t, AffineTransformOp.TYPE_NEAREST_NEIGHBOR).filter(image, rotated);
-        return rotated;
-    }
-
-    /**
-     * Rotates the image by 90 degrees
-     */
-    public static BufferedImage rotateImage(BufferedImage image) {
-        return rotateImage(image, Math.PI / 2);
-    }
-
     /**
      * Stitches two images together, side by side
      */
-    public static BufferedImage stitchImage(BufferedImage base, BufferedImage toStitch) {
-        // Credit: http://www.java2s.com/Tutorials/Java/Graphics_How_to/Image/Copy_Join_two_buffered_image_into_one_image_side_by_side.htm
+    public static Image stitchImage(Image base, Image toStitch) {
         int width = base.getWidth() + toStitch.getWidth();
         int height = Math.max(base.getHeight(), toStitch.getHeight());
-        BufferedImage stitched = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D graphics = stitched.createGraphics();
-        graphics.drawImage(base, null, 0, 0);
-        graphics.drawImage(toStitch, null, base.getWidth(), 0);
-        graphics.dispose();
-        return stitched;
+        try {
+            // TODO: look at end of wiki page
+            Image stitched = new Image(width, height);
+            Graphics graphics = stitched.getGraphics();
+            graphics.setBackground(new Color(0, 0, 0, 0));
+            graphics.drawImage(base, 0, 0);
+            graphics.drawImage(toStitch, base.getWidth(), 0);
+            graphics.flush();
+            return stitched;
+        } catch (SlickException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static Animation getTemplateAnimation(byte imageStore, int width, int height, int rows, int frames, int frameDelay) {
@@ -237,13 +188,13 @@ public class Util {
         // lazy way to figure out how many characters fit within the specificed max line length
         int lineCheckSize = 0;
         String check = "";
-        while (stringWidth(check, font) < maxLineLength) {
+        while (font.getWidth(check) < maxLineLength) {
             check += "_";
         }
         lineCheckSize = check.length();
 
-        if (stringWidth(fullText, font) > maxLineLength) {
-            while (stringWidth(fullText, font) > maxLineLength) {
+        if (font.getWidth(fullText) > maxLineLength) {
+            while (font.getWidth(fullText) > maxLineLength) {
                 String line = fullText.substring(0, lineCheckSize);
                 if (line.startsWith(" ")) {
                     // starts with space, probably from a previous split from within a word
@@ -286,13 +237,6 @@ public class Util {
      */
     public static boolean isWithinBounds(int pointX, int pointY, int boundsX, int boundsY, int width, int height) {
         return pointX >= boundsX && pointX <= boundsX + width && pointY >= boundsY && pointY <= boundsY + height;
-    }
-
-    /**
-     * Returns the width of the string, in pixels, when rendered using the given font
-     */
-    public static int stringWidth(String text, Font font) {
-        return Entities.PLAYER.sprite.toBufferedImage().getGraphics().getFontMetrics(font).stringWidth(text);
     }
 
 }

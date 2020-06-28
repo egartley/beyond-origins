@@ -1,7 +1,5 @@
 package net.egartley.gamelib.input;
 
-import net.egartley.beyondorigins.controllers.MouseController;
-
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -23,7 +21,7 @@ public class Mouse implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        MouseController.onMouseClick(e);
+        // MouseController.onMouseClick(e);
         isDragging = false;
     }
 

@@ -1,7 +1,6 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.Util;
+import net.egartley.beyondorigins.gamestates.ingame.InGameState;
 import net.egartley.gamelib.abstracts.StaticEntity;
 import net.egartley.gamelib.graphics.Sprite;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
@@ -43,11 +42,11 @@ public class DroppedItem extends StaticEntity {
     public ItemStack itemStack;
 
     public DroppedItem(ItemStack stack, int x, int y) {
-        super("DroppedItem", new Sprite(Util.resize(stack.item.image, 0.5)));
+        super("DroppedItem", new Sprite(stack.item.image.getScaledCopy(0.5F)));
         isSectorSpecific = true;
         isDualRendered = false;
         isTraversable = true;
-        image = sprite.toBufferedImage();
+        image = sprite.asImage();
         setPosition(x, y);
 
         new DelayedEvent(PICKUP_DELAY) {
@@ -74,7 +73,7 @@ public class DroppedItem extends StaticEntity {
      * Removes the dropped item from the current sector's entities, and then kills it
      */
     private void destroy() {
-        Game.in().map.sector.removeEntity(this);
+        InGameState.map.sector.removeEntity(this);
     }
 
     /**

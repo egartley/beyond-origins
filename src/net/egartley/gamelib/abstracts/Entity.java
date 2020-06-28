@@ -11,9 +11,8 @@ import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 import net.egartley.gamelib.logic.interaction.EntityBoundary;
 import net.egartley.gamelib.logic.interaction.EntityEntityInteraction;
 import net.egartley.gamelib.logic.inventory.EntityInventory;
+import org.newdawn.slick.*;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
@@ -63,17 +62,17 @@ public abstract class Entity extends Renderable implements Tickable {
     /**
      * The buffered image to use when rendering (default)
      */
-    protected BufferedImage image;
+    protected Image image;
     /**
      * If {@link #isDualRendered} is true, render this before the player
      * ("below")
      */
-    protected BufferedImage firstLayer;
+    protected Image firstLayer;
     /**
      * If {@link #isDualRendered} is true, render this after the player
      * ("above")
      */
-    protected BufferedImage secondLayer;
+    protected Image secondLayer;
     /**
      * The most recent collision that has occurred for the entity. If no
      * collisions have occurred within the entity's lifetime, this will be
@@ -173,7 +172,7 @@ public abstract class Entity extends Renderable implements Tickable {
      */
     public String name;
 
-    private static final Font nameTagFont = new Font("Arial", Font.PLAIN, 11);
+    private static final Font nameTagFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 11), true);
     private static final Color nameTagBackgroundColor = new Color(0, 0, 0, 128);
 
     private int nameTagWidth;
@@ -252,7 +251,7 @@ public abstract class Entity extends Renderable implements Tickable {
      */
     private void drawNameTag(Graphics graphics) {
         if (!setFontMetrics) {
-            nameTagWidth = graphics.getFontMetrics(nameTagFont).stringWidth(toString()) + 8;
+            nameTagWidth = nameTagFont.getWidth(toString()) + 8;
             entityWidth = sprite.width;
             setFontMetrics = true;
         }
@@ -263,7 +262,7 @@ public abstract class Entity extends Renderable implements Tickable {
         graphics.setFont(nameTagFont);
 
         graphics.fillRect(nameX, nameY, nameTagWidth, 18);
-        graphics.setColor(Color.WHITE);
+        graphics.setColor(Color.white);
         graphics.drawString(toString(), nameX + 5, nameY + 13);
     }
 
@@ -477,7 +476,7 @@ public abstract class Entity extends Renderable implements Tickable {
     protected abstract void setInteractions();
 
     private void onSpriteChanged() {
-        image = sprite.toBufferedImage();
+        image = sprite.asImage();
         if (this instanceof AnimatedEntity) {
             ((AnimatedEntity) this).animations.clear();
             ((AnimatedEntity) this).setAnimations();
@@ -518,7 +517,7 @@ public abstract class Entity extends Renderable implements Tickable {
         this.sprite = sprite;
         sprites.clear();
         sprites.add(sprite);
-        image = sprite.toBufferedImage();
+        image = sprite.asImage();
     }
 
     /**

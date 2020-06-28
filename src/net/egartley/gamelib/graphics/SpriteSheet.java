@@ -1,6 +1,7 @@
 package net.egartley.gamelib.graphics;
 
-import java.awt.image.BufferedImage;
+import org.newdawn.slick.Image;
+
 import java.util.ArrayList;
 
 /**
@@ -10,21 +11,21 @@ import java.util.ArrayList;
  */
 public class SpriteSheet {
 
-    private int spriteWidth;
-    private int spriteHeight;
-    private int strips;
-    private int stripWidth;
-    private int frames;
+    private final int spriteWidth;
+    private final int spriteHeight;
+    private final int strips;
+    private final int stripWidth;
+    private final int frames;
 
-    private BufferedImage sheet;
+    private final Image sheet;
 
     public ArrayList<Sprite> sprites;
 
-    public SpriteSheet(BufferedImage sheet, int rows, int frames) {
+    public SpriteSheet(Image sheet, int rows, int frames) {
         this(sheet, sheet.getWidth(), sheet.getHeight(), rows, frames);
     }
 
-    public SpriteSheet(BufferedImage image, int width, int height, int rows, int frames) {
+    public SpriteSheet(Image image, int width, int height, int rows, int frames) {
         sheet = image;
         spriteWidth = width;
         spriteHeight = height;
@@ -48,11 +49,10 @@ public class SpriteSheet {
     /**
      * Returns the "strip" at the given index
      *
-     * @param index
-     *         The row number, or index, of the "strip" to return in the strip
+     * @param index The row number, or index, of the "strip" to return in the strip
      */
-    private BufferedImage getRow(int index) {
-        return sheet.getSubimage(0, index * spriteHeight, stripWidth, spriteHeight);
+    private Image getRow(int index) {
+        return sheet.getSubImage(0, index * spriteHeight, stripWidth, spriteHeight);
     }
 
     public Sprite getSprite(int index) {

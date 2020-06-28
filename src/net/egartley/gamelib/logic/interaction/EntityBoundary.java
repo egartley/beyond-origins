@@ -3,8 +3,7 @@ package net.egartley.gamelib.logic.interaction;
 import net.egartley.gamelib.abstracts.AnimatedEntity;
 import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.graphics.Sprite;
-
-import java.awt.*;
+import org.newdawn.slick.Color;
 
 /**
  * Represents a {@link Boundary} that is specifically tailored for use with an {@link Entity}
@@ -84,9 +83,9 @@ public class EntityBoundary extends Boundary {
 
     public void setColor() {
         if (!(parent instanceof AnimatedEntity)) {
-            drawColor = Color.BLACK;
+            drawColor = Color.black;
         } else {
-            drawColor = Color.ORANGE; // man bad!
+            drawColor = Color.orange; // man bad!
         }
     }
 
