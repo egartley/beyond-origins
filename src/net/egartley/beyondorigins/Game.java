@@ -3,7 +3,7 @@ package net.egartley.beyondorigins;
 import net.egartley.beyondorigins.controllers.KeyboardController;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.gamestates.InGameState;
-import net.egartley.beyondorigins.gamestates.MainMenuState;
+import net.egartley.gamelib.input.Keyboard;
 import net.egartley.gamelib.input.Mouse;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
@@ -57,8 +57,8 @@ public class Game extends StateBasedGame implements InputProviderListener {
         provider.addListener(this);
 
         Entities.initialize();
-        this.addState(new InGameState(container, this));
-        this.addState(new MainMenuState(container, this));
+        this.addState(new InGameState());
+        // this.addState(new MainMenuState());
     }
 
     public static void quit() {
@@ -80,6 +80,8 @@ public class Game extends StateBasedGame implements InputProviderListener {
 
     @Override
     public void mouseDragged(int oldx, int oldy, int newx, int newy) {
+        Mouse.x = newx;
+        Mouse.y = newy;
         Mouse.isDragging = true;
     }
 
@@ -90,12 +92,13 @@ public class Game extends StateBasedGame implements InputProviderListener {
 
     @Override
     public void keyPressed(int key, char c) {
-
+        Keyboard.keyPressed(key);
     }
 
     @Override
     public void keyReleased(int key, char c) {
         KeyboardController.onKeyTyped(key);
+        Keyboard.keyReleased(key);
     }
 
     @Override

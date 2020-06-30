@@ -1,10 +1,8 @@
 package net.egartley.gamelib.input;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
-public class Keyboard implements KeyListener {
+public class Keyboard {
 
     private static final ArrayList<Integer> pressedKeyCodes = new ArrayList<>();
     private static final ArrayList<Integer> invalidatedKeys = new ArrayList<>();
@@ -25,7 +23,7 @@ public class Keyboard implements KeyListener {
      * @param keyCode The key code from {@link java.awt.event.KeyEvent KeyEvent}
      * @return Whether or not the specified key is currently being pressed down
      */
-    public static boolean isKeyPressed(int keyCode) {
+    public static boolean isPressed(int keyCode) {
         return pressedKeyCodes.contains(keyCode);
     }
 
@@ -33,25 +31,16 @@ public class Keyboard implements KeyListener {
         return pressedKeyCodes;
     }
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-        int keycode = e.getKeyCode();
-        if (!pressedKeyCodes.contains(keycode) && !invalidatedKeys.contains(keycode)) {
-            pressedKeyCodes.add(keycode);
+    public static void keyPressed(int keyCode) {
+        if (!pressedKeyCodes.contains(keyCode) && !invalidatedKeys.contains(keyCode)) {
+            pressedKeyCodes.add(keyCode);
         }
     }
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-        int keyCode = e.getKeyCode();
+    public static void keyReleased(int keyCode) {
         pressedKeyCodes.remove((Integer) keyCode);
         invalidatedKeys.remove((Integer) keyCode);
         // KeyboardController.onKeyTyped(keyCode);
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
     }
 
 }

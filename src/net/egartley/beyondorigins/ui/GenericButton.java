@@ -1,10 +1,9 @@
 package net.egartley.beyondorigins.ui;
 
+import net.egartley.beyondorigins.controllers.MouseController;
 import net.egartley.gamelib.input.Mouse;
 import net.egartley.gamelib.input.MouseClicked;
 import org.newdawn.slick.Image;
-
-import java.awt.event.MouseEvent;
 
 public class GenericButton extends UIElement {
 
@@ -13,11 +12,10 @@ public class GenericButton extends UIElement {
 
     public GenericButton(int width, int height) {
         super(width, height);
-
         clicked = new MouseClicked() {
             @Override
             public void onClick(int button, int x, int y) {
-                // checkClick(e);
+                checkClick(button, x, y);
             }
         };
     }
@@ -38,20 +36,21 @@ public class GenericButton extends UIElement {
     }
 
     public void onClick() {
+
     }
 
-    public void checkClick(MouseEvent e) {
-        if (isClickInBounds(e.getX(), e.getY()) && isEnabled) {
+    public void checkClick(int button, int x, int y) {
+        if (isClickInBounds(x, y) && isEnabled) {
             onClick();
         }
     }
 
     public void registerClicked() {
-        // TODO: add
+        MouseController.addMouseClicked(clicked);
     }
 
     public void deregisterClicked() {
-        // TODO: add
+        MouseController.removeMouseClicked(clicked);
     }
 
     @Override

@@ -22,7 +22,6 @@ import net.egartley.gamelib.logic.inventory.EntityInventory;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 public class Player extends AnimatedEntity implements Character {
@@ -252,10 +251,9 @@ public class Player extends AnimatedEntity implements Character {
 
         // this makes it so that the user has to re-press any keys already being pressed in order to move the player again
         if (isMovementInvalidated) {
-            int[] codes = new int[]{KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S, KeyEvent.VK_D};
-            for (int keyCode : codes) {
+            for (int keyCode : new int[]{Input.KEY_W, Input.KEY_A, Input.KEY_S, Input.KEY_D}) {
                 // invalidate only the keys that are currently pressed down
-                if (Keyboard.isKeyPressed(keyCode)) {
+                if (Keyboard.isPressed(keyCode)) {
                     Keyboard.invalidateKey(keyCode);
                 }
             }

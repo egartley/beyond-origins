@@ -38,12 +38,8 @@ public class InGameState extends BasicGameState {
     public static boolean isInventoryVisible;
     public static boolean isDialogueVisible;
 
-    public InGameState(GameContainer container, StateBasedGame game) {
-        try {
-            init(container, game);
-        } catch (SlickException e) {
-            e.printStackTrace();
-        }
+    public InGameState() {
+
     }
 
     @Override
@@ -52,7 +48,6 @@ public class InGameState extends BasicGameState {
 
         maps.add(new DebugMap());
         map = maps.get(0);
-
         playerMenu = new PlayerMenu();
         dialogue = new DialoguePanel();
         quests = playerMenu.questsPanel;

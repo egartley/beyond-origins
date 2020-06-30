@@ -107,8 +107,10 @@ public class PlayerInventory extends UIElement {
     }
 
     public static void populate() {
-        for (PlayerInventorySlot slot : slots) {
-            ItemStack itemStack = Entities.PLAYER.inventory.get(slots.indexOf(slot));
+        for (int i = 0; i < slots.size(); i++) {
+            System.out.println(i);
+            PlayerInventorySlot slot = slots.get(i);
+            ItemStack itemStack = Entities.PLAYER.inventory.getStack(i);
             if (itemStack != null) {
                 slot.stack = new PlayerInventoryStack(itemStack, slot);
             } else {

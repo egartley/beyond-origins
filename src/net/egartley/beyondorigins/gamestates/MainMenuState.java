@@ -18,12 +18,8 @@ public class MainMenuState extends BasicGameState {
 
     public ArrayList<MenuButton> buttons = new ArrayList<>();
 
-    public MainMenuState(GameContainer container, StateBasedGame game) {
-        try {
-            init(container, game);
-        } catch (SlickException e) {
-            e.printStackTrace();
-        }
+    public MainMenuState() {
+
     }
 
     @Override

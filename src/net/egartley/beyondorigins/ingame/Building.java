@@ -47,6 +47,7 @@ public class Building extends StaticEntity {
     }
 
     public void onPlayerEnter() {
+        InGameState.building = this;
         Entities.PLAYER.enteredBuilding();
         entryFloor.onPlayerEnter(null);
     }
@@ -97,11 +98,10 @@ public class Building extends StaticEntity {
 
     @Override
     protected void setCollisions() {
-        Building me = this;
         playerCollision = new EntityEntityCollision(entryBoundary, Entities.PLAYER.boundary) {
             @Override
             public void start(EntityEntityCollisionEvent event) {
-                InGameState.building = me;
+                onPlayerEnter();
                 end();
             }
         };
@@ -110,6 +110,7 @@ public class Building extends StaticEntity {
 
     @Override
     protected void setInteractions() {
+
     }
 
 }

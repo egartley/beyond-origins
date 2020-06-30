@@ -11,7 +11,7 @@ public class EntityInventory {
 
     public static int DEFAULT_SLOTS = 3;
 
-    private ArrayList<ItemStack> slots;
+    private final ArrayList<ItemStack> slots;
 
     public Entity parent;
 
@@ -31,7 +31,7 @@ public class EntityInventory {
 
     }
 
-    public ItemStack get(int index) {
+    public ItemStack getStack(int index) {
         return slots.get(index);
     }
 
@@ -110,7 +110,7 @@ public class EntityInventory {
         if (isEmpty(index)) {
             return put(item, amount, index);
         } else {
-            ItemStack mergeStack = get(index);
+            ItemStack mergeStack = getStack(index);
             int mergeAmount = mergeStack.amount;
             boolean overflow = mergeAmount + amount > ItemStack.MAX_AMOUNT;
             if (!overflow) {
@@ -141,7 +141,7 @@ public class EntityInventory {
         int smallestIndex = -1, smallestAmount = ItemStack.MAX_AMOUNT + 1;
         for (int i = 0; i < slots.size(); i++) {
             if (!isEmpty(i)) {
-                ItemStack stack = get(i);
+                ItemStack stack = getStack(i);
                 if (stack.item.is(item)) {
                     if (stack.amount < smallestAmount) {
                         smallestAmount = stack.amount;
@@ -155,7 +155,7 @@ public class EntityInventory {
         }
         if (smallestAmount > amount) {
             // easy, just take away the amount and that's it
-            ItemStack stack = get(smallestIndex);
+            ItemStack stack = getStack(smallestIndex);
             stack.take(amount);
             set(stack, smallestIndex);
         } else {

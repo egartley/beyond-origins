@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins.ui;
 
 import net.egartley.beyondorigins.Util;
+import net.egartley.beyondorigins.controllers.MouseController;
 import net.egartley.gamelib.input.Mouse;
 import net.egartley.gamelib.input.MouseClicked;
 
@@ -43,11 +44,11 @@ public class ClickableArea {
     }
 
     public void removeClicked() {
-        // TODO: add
+        MouseController.removeMouseClicked(clicked);
     }
 
     public void registerClicked() {
-        // TODO: add
+        MouseController.addMouseClicked(clicked);
     }
 
     public void tick() {
