@@ -1,5 +1,11 @@
 package net.egartley.beyondorigins.ingame.maps.debug.sectors;
 
+import net.egartley.beyondorigins.core.abstracts.Map;
+import net.egartley.beyondorigins.core.abstracts.MapSector;
+import net.egartley.beyondorigins.core.graphics.Sprite;
+import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
+import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
+import net.egartley.beyondorigins.core.ui.NotificationBanner;
 import net.egartley.beyondorigins.data.Items;
 import net.egartley.beyondorigins.data.Quests;
 import net.egartley.beyondorigins.entities.DefaultTree;
@@ -9,12 +15,6 @@ import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.ingame.Quest;
 import net.egartley.beyondorigins.ingame.QuestObjective;
 import net.egartley.beyondorigins.ingame.buildings.House1;
-import net.egartley.beyondorigins.ui.NotificationBanner;
-import net.egartley.gamelib.abstracts.Map;
-import net.egartley.gamelib.abstracts.MapSector;
-import net.egartley.gamelib.graphics.Sprite;
-import net.egartley.gamelib.logic.collision.EntityEntityCollision;
-import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
 
 public class Sector1 extends MapSector {
 

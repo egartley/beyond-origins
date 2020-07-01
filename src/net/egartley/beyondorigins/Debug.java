@@ -1,8 +1,8 @@
 package net.egartley.beyondorigins;
 
+import net.egartley.beyondorigins.core.input.Mouse;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.gamestates.InGameState;
-import net.egartley.gamelib.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;

@@ -1,9 +1,9 @@
 package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Game;
+import net.egartley.beyondorigins.core.ui.PlayerInventory;
+import net.egartley.beyondorigins.core.ui.UIElement;
 import net.egartley.beyondorigins.data.Images;
-import net.egartley.beyondorigins.ui.PlayerInventory;
-import net.egartley.beyondorigins.ui.UIElement;
 import org.newdawn.slick.Graphics;
 
 public class PlayerInventorySlot extends UIElement {

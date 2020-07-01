@@ -1,13 +1,13 @@
 package net.egartley.beyondorigins.ingame.buildings;
 
+import net.egartley.beyondorigins.core.logic.Calculate;
+import net.egartley.beyondorigins.core.logic.interaction.BoundaryOffset;
+import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
+import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.entities.BuildingChanger;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.ingame.Building;
 import net.egartley.beyondorigins.ingame.BuildingFloor;
-import net.egartley.gamelib.logic.interaction.BoundaryOffset;
-import net.egartley.gamelib.logic.interaction.BoundaryPadding;
-import net.egartley.gamelib.logic.interaction.EntityBoundary;
-import net.egartley.gamelib.logic.math.Calculate;
 
 /**
  * Test building

@@ -1,8 +1,8 @@
 package net.egartley.beyondorigins.entities;
 
+import net.egartley.beyondorigins.core.graphics.Sprite;
+import net.egartley.beyondorigins.core.graphics.SpriteSheet;
 import net.egartley.beyondorigins.data.Images;
-import net.egartley.gamelib.graphics.Sprite;
-import net.egartley.gamelib.graphics.SpriteSheet;
 
 /**
  * Commonly referenced entities, such as the player

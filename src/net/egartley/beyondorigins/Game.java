@@ -1,11 +1,12 @@
 package net.egartley.beyondorigins;
 
-import net.egartley.beyondorigins.controllers.KeyboardController;
+import net.egartley.beyondorigins.core.controllers.KeyboardController;
+import net.egartley.beyondorigins.core.controllers.MouseController;
+import net.egartley.beyondorigins.core.input.Keyboard;
+import net.egartley.beyondorigins.core.input.Mouse;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.gamestates.MainMenuState;
-import net.egartley.gamelib.input.Keyboard;
-import net.egartley.gamelib.input.Mouse;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
@@ -72,6 +73,7 @@ public class Game extends StateBasedGame implements InputProviderListener {
 
     public void mouseReleased(int button, int x, int y) {
         Mouse.isDragging = false;
+        MouseController.onMouseClick(button, x, y);
     }
 
     public void mouseMoved(int oldx, int oldy, int newx, int newy) {

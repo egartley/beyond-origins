@@ -1,23 +1,22 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.beyondorigins.controllers.DialogueController;
+import net.egartley.beyondorigins.core.abstracts.AnimatedEntity;
+import net.egartley.beyondorigins.core.controllers.DialogueController;
+import net.egartley.beyondorigins.core.graphics.Animation;
+import net.egartley.beyondorigins.core.graphics.SpriteSheet;
+import net.egartley.beyondorigins.core.interfaces.Character;
+import net.egartley.beyondorigins.core.logic.dialogue.CharacterDialogue;
+import net.egartley.beyondorigins.core.logic.dialogue.DialogueExchange;
+import net.egartley.beyondorigins.core.logic.events.DialogueExchangeFinishedEvent;
+import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
+import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
+import net.egartley.beyondorigins.core.logic.interaction.EntityEntityInteraction;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.data.Items;
 import net.egartley.beyondorigins.data.Quests;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.ingame.Quest;
 import net.egartley.beyondorigins.ingame.QuestObjective;
-import net.egartley.gamelib.abstracts.AnimatedEntity;
-import net.egartley.gamelib.graphics.Animation;
-import net.egartley.gamelib.graphics.EntityExpression;
-import net.egartley.gamelib.graphics.SpriteSheet;
-import net.egartley.gamelib.interfaces.Character;
-import net.egartley.gamelib.logic.dialogue.CharacterDialogue;
-import net.egartley.gamelib.logic.dialogue.DialogueExchange;
-import net.egartley.gamelib.logic.events.DialogueExchangeFinishedEvent;
-import net.egartley.gamelib.logic.interaction.BoundaryPadding;
-import net.egartley.gamelib.logic.interaction.EntityBoundary;
-import net.egartley.gamelib.logic.interaction.EntityEntityInteraction;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 

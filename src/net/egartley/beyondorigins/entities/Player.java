@@ -2,23 +2,23 @@ package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
+import net.egartley.beyondorigins.core.abstracts.AnimatedEntity;
+import net.egartley.beyondorigins.core.abstracts.Entity;
+import net.egartley.beyondorigins.core.abstracts.MapSector;
+import net.egartley.beyondorigins.core.graphics.Animation;
+import net.egartley.beyondorigins.core.graphics.SpriteSheet;
+import net.egartley.beyondorigins.core.input.Keyboard;
+import net.egartley.beyondorigins.core.interfaces.Character;
+import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
+import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
+import net.egartley.beyondorigins.core.logic.interaction.BoundaryOffset;
+import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
+import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
+import net.egartley.beyondorigins.core.logic.inventory.EntityInventory;
+import net.egartley.beyondorigins.core.ui.PlayerInventory;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.ingame.Building;
-import net.egartley.beyondorigins.ui.PlayerInventory;
-import net.egartley.gamelib.abstracts.AnimatedEntity;
-import net.egartley.gamelib.abstracts.Entity;
-import net.egartley.gamelib.abstracts.MapSector;
-import net.egartley.gamelib.graphics.Animation;
-import net.egartley.gamelib.graphics.SpriteSheet;
-import net.egartley.gamelib.input.Keyboard;
-import net.egartley.gamelib.interfaces.Character;
-import net.egartley.gamelib.logic.collision.EntityEntityCollision;
-import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
-import net.egartley.gamelib.logic.interaction.BoundaryOffset;
-import net.egartley.gamelib.logic.interaction.BoundaryPadding;
-import net.egartley.gamelib.logic.interaction.EntityBoundary;
-import net.egartley.gamelib.logic.inventory.EntityInventory;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 
@@ -32,11 +32,11 @@ public class Player extends AnimatedEntity implements Character {
     private final int MAX_LEVEL = 100;
     private final int MAX_EXPERIENCE = 10390; // 100 + (100 * 98) + (5 * 98)
 
-    private int level = 1;
-    private int totalExperience = 0;
     private boolean frozen;
     private boolean isMovementInvalidated;
 
+    public int level = 1;
+    public int experience = 0;
     public boolean isInBuilding;
 
     public EntityBoundary boundary;
@@ -314,23 +314,15 @@ public class Player extends AnimatedEntity implements Character {
     }
 
     public void giveExperience(int amount) {
-        if (totalExperience < MAX_EXPERIENCE) {
-            totalExperience += amount;
+        if (experience < MAX_EXPERIENCE) {
+            experience += amount;
         }
-        if (totalExperience > MAX_EXPERIENCE) {
-            totalExperience = MAX_EXPERIENCE;
+        if (experience > MAX_EXPERIENCE) {
+            experience = MAX_EXPERIENCE;
         }
-        if (totalExperience >= getExperienceNeededForNextLevel()) {
+        if (experience >= getExperienceNeededForNextLevel()) {
             nextLevel();
         }
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public int getExperience() {
-        return totalExperience;
     }
 
     @Override

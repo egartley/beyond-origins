@@ -1,15 +1,15 @@
 package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Game;
+import net.egartley.beyondorigins.core.abstracts.Entity;
+import net.egartley.beyondorigins.core.abstracts.Renderable;
+import net.egartley.beyondorigins.core.interfaces.Tickable;
+import net.egartley.beyondorigins.core.logic.Calculate;
+import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
+import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.entities.BuildingChanger;
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.gamelib.abstracts.Entity;
-import net.egartley.gamelib.abstracts.Renderable;
-import net.egartley.gamelib.interfaces.Tickable;
-import net.egartley.gamelib.logic.collision.EntityEntityCollision;
-import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
-import net.egartley.gamelib.logic.math.Calculate;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 

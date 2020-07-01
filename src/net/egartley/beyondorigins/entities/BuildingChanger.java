@@ -1,8 +1,8 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.gamelib.abstracts.StaticEntity;
-import net.egartley.gamelib.logic.interaction.BoundaryPadding;
-import net.egartley.gamelib.logic.interaction.EntityBoundary;
+import net.egartley.beyondorigins.core.abstracts.StaticEntity;
+import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
+import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 
 /**
  * An area that will trigger a change in the player's location/floor within a building

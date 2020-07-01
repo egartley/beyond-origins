@@ -1,11 +1,11 @@
 package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.ui.ClickableArea;
-import net.egartley.beyondorigins.ui.PlayerInventory;
-import net.egartley.beyondorigins.ui.QuestsPanel;
-import net.egartley.beyondorigins.ui.UIElement;
-import net.egartley.gamelib.interfaces.Tickable;
+import net.egartley.beyondorigins.core.interfaces.Tickable;
+import net.egartley.beyondorigins.core.ui.ClickableArea;
+import net.egartley.beyondorigins.core.ui.PlayerInventory;
+import net.egartley.beyondorigins.core.ui.QuestsPanel;
+import net.egartley.beyondorigins.core.ui.UIElement;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 

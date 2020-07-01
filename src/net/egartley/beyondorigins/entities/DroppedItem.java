@@ -1,14 +1,14 @@
 package net.egartley.beyondorigins.entities;
 
+import net.egartley.beyondorigins.core.abstracts.StaticEntity;
+import net.egartley.beyondorigins.core.graphics.Sprite;
+import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
+import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
+import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
+import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
+import net.egartley.beyondorigins.core.logic.inventory.ItemStack;
+import net.egartley.beyondorigins.core.threads.DelayedEvent;
 import net.egartley.beyondorigins.gamestates.InGameState;
-import net.egartley.gamelib.abstracts.StaticEntity;
-import net.egartley.gamelib.graphics.Sprite;
-import net.egartley.gamelib.logic.collision.EntityEntityCollision;
-import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
-import net.egartley.gamelib.logic.interaction.BoundaryPadding;
-import net.egartley.gamelib.logic.interaction.EntityBoundary;
-import net.egartley.gamelib.logic.inventory.ItemStack;
-import net.egartley.gamelib.threads.DelayedEvent;
 
 /**
  * An item that was dropped from the player's inventory
