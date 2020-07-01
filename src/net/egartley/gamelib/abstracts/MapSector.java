@@ -247,25 +247,25 @@ public abstract class MapSector implements Tickable {
                 if (!didSetInverse) {
                     neighbor.setNeighborAt(this, BOTTOM, true);
                 }
-                changeBoundary = new MapSectorChangeBoundary(0, 0, Game.WINDOW_WIDTH, BOUNDARY_SIZE, neighbor);
+                changeBoundary = new MapSectorChangeBoundary(0, 0, Game.WINDOW_WIDTH - 1, BOUNDARY_SIZE, neighbor);
                 break;
             case RIGHT:
                 if (!didSetInverse) {
                     neighbor.setNeighborAt(this, LEFT, true);
                 }
-                changeBoundary = new MapSectorChangeBoundary(Game.WINDOW_WIDTH - BOUNDARY_SIZE, 0, BOUNDARY_SIZE, Game.WINDOW_HEIGHT, neighbor);
+                changeBoundary = new MapSectorChangeBoundary(Game.WINDOW_WIDTH - BOUNDARY_SIZE - 1, 0, BOUNDARY_SIZE, Game.WINDOW_HEIGHT - 1, neighbor);
                 break;
             case BOTTOM:
                 if (!didSetInverse) {
                     neighbor.setNeighborAt(this, TOP, true);
                 }
-                changeBoundary = new MapSectorChangeBoundary(0, Game.WINDOW_HEIGHT - BOUNDARY_SIZE, Game.WINDOW_WIDTH, BOUNDARY_SIZE, neighbor);
+                changeBoundary = new MapSectorChangeBoundary(0, Game.WINDOW_HEIGHT - BOUNDARY_SIZE - 1, Game.WINDOW_WIDTH - 1, BOUNDARY_SIZE, neighbor);
                 break;
             case LEFT:
                 if (!didSetInverse) {
                     neighbor.setNeighborAt(this, RIGHT, true);
                 }
-                changeBoundary = new MapSectorChangeBoundary(0, 0, BOUNDARY_SIZE, Game.WINDOW_HEIGHT, neighbor);
+                changeBoundary = new MapSectorChangeBoundary(0, 0, BOUNDARY_SIZE, Game.WINDOW_HEIGHT - 1, neighbor);
                 break;
             default:
                 Debug.warning("Unknown direction specified while attempting to set a sector neighbor! (" + direction + ")");

@@ -3,6 +3,7 @@ package net.egartley.beyondorigins;
 import net.egartley.beyondorigins.controllers.KeyboardController;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.gamestates.InGameState;
+import net.egartley.beyondorigins.gamestates.MainMenuState;
 import net.egartley.gamelib.input.Keyboard;
 import net.egartley.gamelib.input.Mouse;
 import org.newdawn.slick.AppGameContainer;
@@ -58,7 +59,7 @@ public class Game extends StateBasedGame implements InputProviderListener {
 
         Entities.initialize();
         this.addState(new InGameState());
-        // this.addState(new MainMenuState());
+        this.addState(new MainMenuState());
     }
 
     public static void quit() {

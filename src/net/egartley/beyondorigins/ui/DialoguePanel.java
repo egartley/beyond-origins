@@ -129,7 +129,7 @@ public class DialoguePanel extends UIElement {
         graphics.drawImage(characterImage, 277 - characterImage.getWidth() / 2, 414 - (characterImage.getHeight() - 44));
         graphics.setColor(Color.white);
         graphics.setFont(characterNameFont);
-        graphics.drawString(exchange.currentDialogue.character.getName(), 277 - characterNameFont.getWidth(exchange.currentDialogue.character.getName()) / 2, 476);
+        graphics.drawString(exchange.currentDialogue.character.getName(), 277 - characterNameFont.getWidth(exchange.currentDialogue.character.getName()) / 2, 466);
         // render text
         graphics.setFont(lineFont);
         for (String line : exchange.displayedLines) {
@@ -145,7 +145,7 @@ public class DialoguePanel extends UIElement {
     private void renderLine(String text, Graphics graphics) {
         // max width 380, or max str length 49
         lineIndex++;
-        graphics.drawString(text, x() + 106, y() + 18 + (22 * lineIndex));
+        graphics.drawString(text, x() + 106, y() + 3 + (22 * lineIndex));
     }
 
 }

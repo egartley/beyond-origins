@@ -1,18 +1,18 @@
 package net.egartley.gamelib.logic.interaction;
 
+import net.egartley.beyondorigins.controllers.KeyboardController;
 import net.egartley.gamelib.abstracts.Entity;
 import net.egartley.gamelib.input.KeyTyped;
 import net.egartley.gamelib.logic.collision.EntityEntityCollision;
 import net.egartley.gamelib.logic.events.EntityEntityCollisionEvent;
-
-import java.awt.event.KeyEvent;
+import org.newdawn.slick.Input;
 
 public class EntityEntityInteraction {
 
     public Entity[] entities;
     public EntityEntityCollision collision;
 
-    private static final int defaultKeyCode = KeyEvent.VK_ENTER;
+    private static final int defaultKeyCode = Input.KEY_ENTER;
 
     private boolean isActive;
     private boolean didInteract;
@@ -51,13 +51,13 @@ public class EntityEntityInteraction {
     public void activate() {
         isActive = true;
         collision.activate();
-        // KeyboardController.addKeyTyped(keyTyped);
+        KeyboardController.addKeyTyped(keyTyped);
     }
 
     public void deactivate() {
         isActive = false;
         collision.deactivate();
-        // KeyboardController.removeKeyTyped(keyTyped);
+        KeyboardController.removeKeyTyped(keyTyped);
     }
 
     public void interact() {

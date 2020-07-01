@@ -11,8 +11,6 @@ import java.nio.file.Files;
 
 public class CharacterDialogue {
 
-    private static final short MAX_LINE_LENGTH = 49;
-
     private int randomAmount;
 
     public Character character;
@@ -47,7 +45,7 @@ public class CharacterDialogue {
 
     private void setLines(String path) {
         try {
-            lines = Util.toLines(Files.readString(FileSystems.getDefault().getPath("resources", "dialogue", path)), DialoguePanel.lineFont, 376);
+            lines = Util.toLines(Files.readString(FileSystems.getDefault().getPath("resources", "dialogue", path)), DialoguePanel.lineFont, 370);
         } catch (IOException e) {
             Debug.error(e);
         }
