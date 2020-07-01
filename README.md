@@ -8,7 +8,7 @@ Demo video: <a href="https://youtu.be/VaZekWBDqTc">https:\/\/youtu.be\/VaZekWBDq
 
 More screenshots are available <a href="https://egartley.net/projects/beyond-origins/?via=gh">here</a>.
 
-An earlier iteration of the game from early 2013 can be found <a href="https://github.com/egartley/archive/tree/master/Java/Source/Beyond%20Origins/src/net/egartley/beyondorigins">here</a> as well.
+Earlier iterations of the game from 2013 through 2015 can be found <a href="https://github.com/egartley/archive/tree/master/Java/Beyond%20Origins/Source">here</a> as well.
 
 <h2>Additional Information</h2>
 
