@@ -12,6 +12,7 @@ import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.ingame.Building;
 import net.egartley.beyondorigins.ingame.PlayerMenu;
 import net.egartley.beyondorigins.ingame.maps.debug.DebugMap;
+import net.egartley.beyondorigins.ingame.maps.testbattle.TestBattleMap;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -27,13 +28,13 @@ public class InGameState extends BasicGameState {
     private KeyTyped backToMainMenu;
     private KeyTyped toggleDebug;
 
-    public ArrayList<Map> maps = new ArrayList<>();
 
     public static Map map;
     public static PlayerMenu playerMenu;
     public static QuestsPanel quests;
     public static DialoguePanel dialogue;
     public static Building building;
+    public static ArrayList<Map> maps = new ArrayList<>();
 
     public static boolean isInventoryVisible;
     public static boolean isDialogueVisible;
@@ -47,12 +48,11 @@ public class InGameState extends BasicGameState {
         Items.init();
 
         maps.add(new DebugMap());
-        map = maps.get(0);
+        maps.add(new TestBattleMap());
         playerMenu = new PlayerMenu();
         dialogue = new DialoguePanel();
         quests = playerMenu.questsPanel;
-
-        map.changeSector(map.sectors.get(0), null);
+        changeMap(0);
 
         toggleInventory = new KeyTyped(Input.KEY_E) {
             @Override
@@ -82,6 +82,11 @@ public class InGameState extends BasicGameState {
                 Game.debug = !Game.debug;
             }
         };
+    }
+
+    public static void changeMap(int i) {
+        map = maps.get(i);
+        map.onMapChange();
     }
 
     @Override

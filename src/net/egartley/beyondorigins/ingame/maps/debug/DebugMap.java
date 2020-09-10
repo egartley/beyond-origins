@@ -37,6 +37,11 @@ public class DebugMap extends Map {
     }
 
     @Override
+    public void onMapChange() {
+        changeSector(sectors.get(0), null);
+    }
+
+    @Override
     public void onSectorChange(MapSectorChangeEvent event) {
 
     }

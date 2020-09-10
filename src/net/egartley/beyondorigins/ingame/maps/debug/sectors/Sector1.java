@@ -10,6 +10,7 @@ import net.egartley.beyondorigins.data.Items;
 import net.egartley.beyondorigins.data.Quests;
 import net.egartley.beyondorigins.entities.DefaultTree;
 import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.entities.WarpPad;
 import net.egartley.beyondorigins.entities.WoodenFence;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.ingame.Quest;
@@ -53,6 +54,17 @@ public class Sector1 extends MapSector {
             // buildings
             house = new House1(280, 200, 334, 313);
             addEntity(house);
+
+            // warp portal
+            WarpPad pad = new WarpPad(Entities.getSpriteTemplate(Entities.TEMPLATE_WP), 500, 100);
+            pad.collisions.add(new EntityEntityCollision(Entities.PLAYER.boundary, pad.defaultBoundary) {
+                public void start(EntityEntityCollisionEvent e) {
+                    InGameState.changeMap(1);
+                    // TODO: end player collisions
+                    // TODO: get rid left over collisions
+                }
+            });
+            addEntity(pad);
 
             didInitialize = true;
             Entities.PLAYER.inventory.put(Items.HMM, 1);

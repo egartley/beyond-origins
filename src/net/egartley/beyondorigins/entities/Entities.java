@@ -9,7 +9,7 @@ import net.egartley.beyondorigins.data.Images;
  */
 public class Entities {
 
-    public static final byte TEMPLATE_TREE = 1, TEMPLATE_ROCK = 2;
+    public static final byte TEMPLATE_TREE = 1, TEMPLATE_ROCK = 2, TEMPLATE_WP = 3;
 
     public static Player PLAYER;
     public static Dummy DUMMY;
@@ -27,6 +27,8 @@ public class Entities {
                 return new SpriteSheet(Images.get(Images.TREE_DEFAULT), 1, 1).getSprite(0);
             case TEMPLATE_ROCK:
                 return new SpriteSheet(Images.get(Images.ROCK_DEFAULT), 1, 1).getSprite(0);
+            case TEMPLATE_WP:
+                return new SpriteSheet(Images.get(Images.WARP_PAD), 1, 1).getSprite(0);
             default:
                 return new Sprite(Images.get("resources/images/unknown.png"));
         }
