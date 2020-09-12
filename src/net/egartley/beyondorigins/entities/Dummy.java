@@ -23,9 +23,6 @@ import org.newdawn.slick.Image;
 
 import java.util.ArrayList;
 
-/**
- * Test dummy
- */
 public class Dummy extends AnimatedEntity implements Character {
 
     private final byte LEFT_ANIMATION = 0;
@@ -59,11 +56,12 @@ public class Dummy extends AnimatedEntity implements Character {
         });
     }
 
-    public void onSectorEnter(MapSector sector) {
-        sector.addEntity(this, true);
+    @Override
+    public void onSectorEnter(MapSector entering) {
+        entering.addEntity(this, true);
 
         // generate collisions with sector entities that aren't traversable
-        for (Entity e : sector.entities) {
+        for (Entity e : entering.entities) {
             if (!e.isTraversable && e.isSectorSpecific) {
                 EntityEntityCollision baseCollision = new EntityEntityCollision(boundaries.get(0), e.defaultBoundary) {
                     public void start(EntityEntityCollisionEvent event) {
@@ -83,13 +81,14 @@ public class Dummy extends AnimatedEntity implements Character {
         }
     }
 
-    public void onSectorLeave(MapSector sector) {
+    @Override
+    public void onSectorLeave(MapSector leaving) {
         // remove the generated collisions
 
         // prevents concurrent modification
         ArrayList<EntityEntityCollision> removeCollisions = new ArrayList<>();
 
-        for (Entity e : sector.entities) {
+        for (Entity e : leaving.entities) {
             if (!e.isTraversable && e.isSectorSpecific) {
                 for (EntityEntityCollision c : collisions) {
                     if (c.entities[0].equals(e) || c.entities[1].equals(e)) {
@@ -105,7 +104,7 @@ public class Dummy extends AnimatedEntity implements Character {
 
         removeCollisions.clear();
 
-        sector.removeEntity(this, true);
+        leaving.removeEntity(this, true);
     }
 
     @Override

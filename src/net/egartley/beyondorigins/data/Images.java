@@ -13,6 +13,7 @@ public class Images {
     public final static byte DUMMY = 1;
     public final static byte WIZARD_DEFAULT = 11;
     public final static byte WIZARD_WITH_HAT = 12;
+    public final static byte MONSTER = 23;
 
     public final static byte TILE_GRASS = 2;
     public final static byte TILE_SAND = 3;
@@ -54,6 +55,8 @@ public class Images {
                 return get(entityPath + "wizard-default.png");
             case WIZARD_WITH_HAT:
                 return get(entityPath + "wizard-with-hat.png");
+            case MONSTER:
+                return get(entityPath + "monster.png");
             case TREE_DEFAULT:
                 return get(entityPath + "tree-default.png");
             case ROCK_DEFAULT:

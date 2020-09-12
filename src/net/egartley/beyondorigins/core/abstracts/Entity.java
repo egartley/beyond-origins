@@ -325,6 +325,14 @@ public abstract class Entity extends Renderable implements Tickable {
         }
     }
 
+    public void onSectorEnter(MapSector entering) {
+
+    }
+
+    public void onSectorLeave(MapSector leaving) {
+
+    }
+
     /**
      * Updates the entity's location by {@link #speed}, unless the
      * specified boundary is outside of the game's window

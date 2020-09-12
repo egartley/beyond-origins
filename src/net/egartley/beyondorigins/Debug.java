@@ -104,6 +104,7 @@ public class Debug {
         if (Entities.PLAYER.lastCollision != null) {
             drawLine("Last collision: " + Entities.PLAYER.lastCollision, graphics);
         }
+        drawLine("Current Collisions: " + Entities.PLAYER.collisions.size(), graphics);
         drawLine("isCollided = " + Entities.PLAYER.isCollided, graphics);
     }
 

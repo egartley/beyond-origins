@@ -5,6 +5,7 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.core.abstracts.Map;
 import net.egartley.beyondorigins.core.controllers.KeyboardController;
 import net.egartley.beyondorigins.core.input.KeyTyped;
+import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.ui.DialoguePanel;
 import net.egartley.beyondorigins.core.ui.QuestsPanel;
 import net.egartley.beyondorigins.data.Items;
@@ -85,7 +86,15 @@ public class InGameState extends BasicGameState {
     }
 
     public static void changeMap(int i) {
+        // clear all player collisions
+        for (EntityEntityCollision collision : Entities.PLAYER.collisions) {
+            // end to make sure anything is cleaned up
+            collision.end();
+        }
+        Entities.PLAYER.collisions.clear();
+        // change map
         map = maps.get(i);
+        // call map's on change
         map.onMapChange();
     }
 

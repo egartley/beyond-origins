@@ -27,8 +27,7 @@ public abstract class Map implements Tickable {
     /**
      * Creates a new map, and initializes {@link #sectors}
      *
-     * @param id
-     *         Name or identifier for the map
+     * @param id Name or identifier for the map
      */
     public Map(String id) {
         sectors = new ArrayList<>();
@@ -47,11 +46,8 @@ public abstract class Map implements Tickable {
     /**
      * Moves from one sector to another (can also be used when initially entering the map)
      *
-     * @param to
-     *         Where the player is going
-     * @param from
-     *         Where the player is coming from (<code>null</code> if initially entering the map)
-     *
+     * @param to   Where the player is going
+     * @param from Where the player is coming from (<code>null</code> if initially entering the map)
      * @see #onSectorChange(MapSectorChangeEvent)
      * @see MapSector#onPlayerEnter(MapSector)
      * @see MapSector#onPlayerLeave(MapSector)

@@ -25,8 +25,7 @@ public class BoundaryPadding {
     /**
      * Creates new padding with each side having the same value ("square")
      *
-     * @param padding
-     *         Value to set each side of padding to
+     * @param padding Value to set each side of padding to
      */
     public BoundaryPadding(int padding) {
         top = padding;
@@ -38,14 +37,10 @@ public class BoundaryPadding {
     /**
      * Creates new padding with the specified values, in pixels, for each of the four sides
      *
-     * @param top
-     *         Value for {@link #top}
-     * @param left
-     *         Value for {@link #left}
-     * @param bottom
-     *         Value for {@link #bottom}
-     * @param right
-     *         Value for {@link #right}
+     * @param top    Value for {@link #top}
+     * @param left   Value for {@link #left}
+     * @param bottom Value for {@link #bottom}
+     * @param right  Value for {@link #right}
      */
     public BoundaryPadding(int top, int left, int bottom, int right) {
         this.top = top;

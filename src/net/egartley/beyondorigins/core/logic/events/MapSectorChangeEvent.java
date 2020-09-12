@@ -13,10 +13,8 @@ public class MapSectorChangeEvent {
     /**
      * Creates a new event that can be used for gathering information about a sector change
      *
-     * @param from
-     *         The sector that the player came from
-     * @param to
-     *         The sector that the player went to
+     * @param from The sector that the player came from
+     * @param to   The sector that the player went to
      */
     public MapSectorChangeEvent(MapSector from, MapSector to) {
         this.from = from;

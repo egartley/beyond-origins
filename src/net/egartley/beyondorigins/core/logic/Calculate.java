@@ -9,11 +9,8 @@ public class Calculate {
     /**
      * Returns the "center" of b from a
      *
-     * @param a
-     *         Base x-axis or y-axis coordinate
-     * @param b
-     *         Width or height
-     *
+     * @param a Base x-axis or y-axis coordinate
+     * @param b Width or height
      * @return a - (b / 2)
      */
     public static int getCenter(int a, int b) {

@@ -22,12 +22,9 @@ public class EntityBoundary extends Boundary {
     /**
      * Creates a new boundary for the given entity
      *
-     * @param entity
-     *         The entity to use
-     * @param sprite
-     *         Sprite to use for getting width and height
-     * @param padding
-     *         The padding to apply
+     * @param entity  The entity to use
+     * @param sprite  Sprite to use for getting width and height
+     * @param padding The padding to apply
      */
     public EntityBoundary(Entity entity, Sprite sprite, BoundaryPadding padding) {
         this(entity, sprite.width, sprite.height, padding);
@@ -36,15 +33,10 @@ public class EntityBoundary extends Boundary {
     /**
      * Creates a new boundary for the given entity
      *
-     * @param entity
-     *         The entity to use
-     * @param width
-     *         Width of the boundary (not including the left or right padding)
-     * @param height
-     *         Height of the boundary (not including the top or bottom padding)
-     * @param padding
-     *         The padding to apply
-     *
+     * @param entity  The entity to use
+     * @param width   Width of the boundary (not including the left or right padding)
+     * @param height  Height of the boundary (not including the top or bottom padding)
+     * @param padding The padding to apply
      * @see Boundary
      */
     public EntityBoundary(Entity entity, int width, int height, BoundaryPadding padding) {
@@ -54,17 +46,11 @@ public class EntityBoundary extends Boundary {
     /**
      * Creates a new boundary for the given entity
      *
-     * @param entity
-     *         The entity to use
-     * @param width
-     *         Width of the boundary (not including the left or right padding)
-     * @param height
-     *         Height of the boundary (not including the top or bottom padding)
-     * @param padding
-     *         The padding to apply
-     * @param offset
-     *         The offset to apply
-     *
+     * @param entity  The entity to use
+     * @param width   Width of the boundary (not including the left or right padding)
+     * @param height  Height of the boundary (not including the top or bottom padding)
+     * @param padding The padding to apply
+     * @param offset  The offset to apply
      * @see Boundary
      */
     public EntityBoundary(Entity entity, int width, int height, BoundaryPadding padding, BoundaryOffset offset) {

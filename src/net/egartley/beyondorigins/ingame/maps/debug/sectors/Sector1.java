@@ -60,8 +60,7 @@ public class Sector1 extends MapSector {
             pad.collisions.add(new EntityEntityCollision(Entities.PLAYER.boundary, pad.defaultBoundary) {
                 public void start(EntityEntityCollisionEvent e) {
                     InGameState.changeMap(1);
-                    // TODO: end player collisions
-                    // TODO: get rid left over collisions
+                    end();
                 }
             });
             addEntity(pad);

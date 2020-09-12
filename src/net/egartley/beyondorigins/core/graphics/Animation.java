@@ -136,6 +136,10 @@ public class Animation {
         }
     }
 
+    public boolean isRunning() {
+        return clock.isRunning;
+    }
+
     /**
      * Kills the clock's thread
      */
