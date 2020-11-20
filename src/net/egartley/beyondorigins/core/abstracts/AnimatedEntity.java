@@ -2,9 +2,9 @@ package net.egartley.beyondorigins.core.abstracts;
 
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.core.graphics.Animation;
 import net.egartley.beyondorigins.core.graphics.Sprite;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 
 import java.util.ArrayList;
@@ -56,17 +56,14 @@ public abstract class AnimatedEntity extends Entity {
         }
         if (animations.indexOf(animation) != i) {
             // this prevents the same animation being set again
-            animation.stop(false);
+            animation.stop();
             animation = animations.get(i);
         }
     }
 
-    /**
-     * Calls {@link Animation#render(Graphics, int, int)} for {@link #animation} and then {@link #drawDebug(Graphics)}
-     */
     @Override
     public void render(Graphics graphics) {
-        animation.render(graphics, x(), y());
+        animation.draw(x(), y());
         if (Game.debug) {
             drawDebug(graphics);
         }

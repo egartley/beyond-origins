@@ -4,7 +4,6 @@ import net.egartley.beyondorigins.Debug;
 
 public class DelayedEvent implements Runnable {
 
-    private boolean isRunning;
     private boolean naturalStop = true;
 
     /**
@@ -12,6 +11,7 @@ public class DelayedEvent implements Runnable {
      */
     public double duration;
     public Thread thread;
+    public boolean isRunning;
 
     /**
      * Create a new delayed event, which will call {@link #onFinish()} after the specified amount of time

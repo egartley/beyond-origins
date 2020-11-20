@@ -36,7 +36,9 @@ public abstract class Map implements Tickable {
 
     public abstract void render(Graphics graphics);
 
-    public abstract void onMapChange();
+    public abstract void onPlayerEnter();
+
+    public abstract void onPlayerLeave();
 
     /**
      * Called when the current sector changes ({@link #changeSector(MapSector, MapSector)})

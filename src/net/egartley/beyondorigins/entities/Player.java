@@ -5,10 +5,13 @@ import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.core.abstracts.AnimatedEntity;
 import net.egartley.beyondorigins.core.abstracts.Entity;
 import net.egartley.beyondorigins.core.abstracts.MapSector;
-import net.egartley.beyondorigins.core.graphics.Animation;
+import net.egartley.beyondorigins.core.controllers.KeyboardController;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
+import net.egartley.beyondorigins.core.input.KeyTyped;
 import net.egartley.beyondorigins.core.input.Keyboard;
+import net.egartley.beyondorigins.core.interfaces.Attacker;
 import net.egartley.beyondorigins.core.interfaces.Character;
+import net.egartley.beyondorigins.core.interfaces.Damageable;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryOffset;
@@ -19,18 +22,20 @@ import net.egartley.beyondorigins.core.ui.PlayerInventory;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.ingame.Building;
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 
 import java.util.ArrayList;
 
-public class Player extends AnimatedEntity implements Character {
+public class Player extends AnimatedEntity implements Character, Damageable, Attacker {
 
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
     private final int ANIMATION_THRESHOLD = 165;
     private final int MAX_LEVEL = 100;
     private final int MAX_EXPERIENCE = 10390; // 100 + (100 * 98) + (5 * 98)
+    private final int DAMAGE_AMOUNT = 100;
 
     private boolean frozen;
     private boolean isMovementInvalidated;
@@ -39,11 +44,13 @@ public class Player extends AnimatedEntity implements Character {
     public int experience = 0;
     public boolean isInBuilding;
 
+    public KeyTyped attack;
     public EntityBoundary boundary;
     public EntityBoundary headBoundary;
     public EntityBoundary bodyBoundary;
     public EntityBoundary feetBoundary;
     public EntityBoundary chatBoundary;
+    public EntityBoundary attackBoundary;
 
     public Player() {
         super("Player", new SpriteSheet(Images.get(Images.PLAYER), 30, 44, 2, 4));
@@ -54,11 +61,20 @@ public class Player extends AnimatedEntity implements Character {
         if (Game.debug) {
             speed = 1.8;
         }
+        health = 30;
+        healthCapacity = health;
 
         inventory = new EntityInventory(this, 20) {
             @Override
             public void onUpdate() {
                 PlayerInventory.populate();
+            }
+        };
+
+        attack = new KeyTyped(Input.KEY_ENTER) {
+            @Override
+            public void onType() {
+                attack();
             }
         };
     }
@@ -67,7 +83,7 @@ public class Player extends AnimatedEntity implements Character {
         // generate collisions with sector entities that aren't traversable
         for (Entity e : sector.entities) {
             if (!e.isTraversable && e.isSectorSpecific) {
-                generateMovementRestrictionCollisions(e.defaultBoundary, boundary, headBoundary, chatBoundary);
+                generateMovementRestrictionCollisions(e.defaultBoundary, boundary, headBoundary, chatBoundary, attackBoundary);
             }
         }
     }
@@ -148,6 +164,14 @@ public class Player extends AnimatedEntity implements Character {
         isMovementInvalidated = true;
     }
 
+    public void onInGameEnter() {
+        KeyboardController.addKeyTyped(attack);
+    }
+
+    public void onInGameLeave() {
+        KeyboardController.removeKeyTyped(attack);
+    }
+
     /**
      * Makes the player immovable
      */
@@ -195,8 +219,8 @@ public class Player extends AnimatedEntity implements Character {
 
     @Override
     public void setAnimations() {
-        animations.add(new Animation(sprites.get(0), ANIMATION_THRESHOLD));
-        animations.add(new Animation(sprites.get(1), ANIMATION_THRESHOLD));
+        animations.add(new Animation(Util.getAnimationFrames(sprites.get(0)), ANIMATION_THRESHOLD));
+        animations.add(new Animation(Util.getAnimationFrames(sprites.get(1)), ANIMATION_THRESHOLD));
         animation = animations.get(0);
     }
 
@@ -214,12 +238,15 @@ public class Player extends AnimatedEntity implements Character {
         chatBoundary = new EntityBoundary(this, sprite, new BoundaryPadding(36));
         chatBoundary.name = "Chat";
         chatBoundary.isVisible = false;
+        attackBoundary = new EntityBoundary(this, sprite, new BoundaryPadding(18));
+        attackBoundary.name = "Attack";
 
         boundaries.add(boundary);
         boundaries.add(headBoundary);
         boundaries.add(bodyBoundary);
         boundaries.add(feetBoundary);
         boundaries.add(chatBoundary);
+        boundaries.add(attackBoundary);
     }
 
     @Override
@@ -264,10 +291,12 @@ public class Player extends AnimatedEntity implements Character {
     }
 
     private void move(boolean up, boolean down, boolean left, boolean right) {
-        if (!animation.clock.isRunning && (up || down || left || right)) {
+        if (animation.isStopped() && (up || down || left || right)) {
             // animation was stopped, so restart it because we're moving
             animation.start();
-            animation.setFrame(1);
+            animation.setCurrentFrame(1);
+        } else if (animation.isStopped()) {
+            animation.setCurrentFrame(0);
         }
 
         isMovingUpwards = false;
@@ -325,6 +354,18 @@ public class Player extends AnimatedEntity implements Character {
         }
     }
 
+    public ArrayList<Entity> getCollidedEntities() {
+        ArrayList<Entity> collided = new ArrayList<>();
+        for (EntityEntityCollision collision : concurrentCollisions) {
+            if (collision.entities[0] == this) {
+                collided.add(collision.entities[1]);
+            } else {
+                collided.add(collision.entities[0]);
+            }
+        }
+        return collided;
+    }
+
     @Override
     public String getName() {
         return name;
@@ -334,4 +375,41 @@ public class Player extends AnimatedEntity implements Character {
     public Image getCharacterImage() {
         return image;
     }
+
+    @Override
+    public void attack() {
+        ArrayList<Entity> entities = getCollidedEntities();
+        for (Entity e : entities) {
+            if (e instanceof Damageable) {
+                ((Damageable) e).inflict(DAMAGE_AMOUNT);
+            }
+        }
+    }
+
+    @Override
+    public void inflict(int amount) {
+        health -= amount;
+        if (health < 0) {
+            health = 0;
+        }
+    }
+
+    @Override
+    public void heal(int amount) {
+        health += amount;
+        if (health > healthCapacity) {
+            health = healthCapacity;
+        }
+    }
+
+    @Override
+    public void onDeath() {
+
+    }
+
+    @Override
+    public void onColdDeath() {
+
+    }
+
 }

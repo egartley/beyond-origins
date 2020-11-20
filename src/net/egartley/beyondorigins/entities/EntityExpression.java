@@ -1,11 +1,12 @@
 package net.egartley.beyondorigins.entities;
 
+import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.core.abstracts.AnimatedEntity;
 import net.egartley.beyondorigins.core.abstracts.Entity;
-import net.egartley.beyondorigins.core.graphics.Animation;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
 import net.egartley.beyondorigins.core.logic.Calculate;
 import net.egartley.beyondorigins.data.Images;
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 
 public class EntityExpression extends AnimatedEntity {
@@ -29,9 +30,9 @@ public class EntityExpression extends AnimatedEntity {
         super("Expression");
         this.type = type;
         this.target = target;
+        sprite = getTemplateSpriteSheet(type).sprites.get(0);
         animations.add(getTemplateAnimation(type));
         animation = animations.get(0);
-        sprite = animation.sprite;
         image = sprite.asImage();
     }
 
@@ -51,14 +52,14 @@ public class EntityExpression extends AnimatedEntity {
     }
 
     private Animation getTemplateAnimation(byte type) {
-        return new Animation(getTemplateSpriteSheet(type).sprites.get(0), ANIMATIONSPEED_NORMAL);
+        return new Animation(Util.getAnimationFrames(sprite), ANIMATIONSPEED_NORMAL);
     }
 
     public void tick() {
         if (!isVisible) {
             return;
         }
-        if (!animation.clock.isRunning) {
+        if (animation.isStopped()) {
             animation.start();
         }
         setPosition(Calculate.getCenter(target.x() + (target.sprite.width / 2), sprite.width), target.y() - 24);

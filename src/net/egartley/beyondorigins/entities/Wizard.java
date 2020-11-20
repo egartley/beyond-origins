@@ -1,8 +1,8 @@
 package net.egartley.beyondorigins.entities;
 
+import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.core.abstracts.AnimatedEntity;
 import net.egartley.beyondorigins.core.controllers.DialogueController;
-import net.egartley.beyondorigins.core.graphics.Animation;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
 import net.egartley.beyondorigins.core.interfaces.Character;
 import net.egartley.beyondorigins.core.logic.dialogue.CharacterDialogue;
@@ -17,6 +17,7 @@ import net.egartley.beyondorigins.data.Quests;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.ingame.Quest;
 import net.egartley.beyondorigins.ingame.QuestObjective;
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
@@ -37,7 +38,7 @@ public class Wizard extends AnimatedEntity implements Character {
     public Wizard() {
         super("Wizard", new SpriteSheet(Images.get(Images.WIZARD_DEFAULT), 30, 44, 2, 4));
         speed = 0.8;
-        image = animations.get(0).sprite.asImage();
+        image = sprites.get(0).asImage();
         sheets.add(new SpriteSheet(Images.get(Images.WIZARD_WITH_HAT), 30, 56, 2, 4));
 
         meetPlayerExpression = new EntityExpression(EntityExpression.ATTENTION, this);
@@ -117,8 +118,8 @@ public class Wizard extends AnimatedEntity implements Character {
 
     @Override
     public void setAnimations() {
-        animations.add(new Animation(sprites.get(0), ANIMATION_THRESHOLD));
-        animations.add(new Animation(sprites.get(1), ANIMATION_THRESHOLD));
+        animations.add(new Animation(Util.getAnimationFrames(sprites.get(0)), ANIMATION_THRESHOLD));
+        animations.add(new Animation(Util.getAnimationFrames(sprites.get(1)), ANIMATION_THRESHOLD));
         animation = animations.get(0);
     }
 

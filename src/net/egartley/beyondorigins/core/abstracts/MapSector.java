@@ -4,7 +4,9 @@ import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.core.graphics.MapTile;
+import net.egartley.beyondorigins.core.interfaces.Damageable;
 import net.egartley.beyondorigins.core.interfaces.Tickable;
+import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.collision.MapSectorChangeCollision;
 import net.egartley.beyondorigins.core.logic.interaction.MapSectorChangeBoundary;
 import net.egartley.beyondorigins.core.ui.NotificationBanner;
@@ -91,8 +93,6 @@ public abstract class MapSector implements Tickable {
 
     protected ArrayList<ArrayList<MapTile>> tiles = new ArrayList<>();
 
-    public boolean didInitialize;
-
     /**
      * Creates a new map sector
      */
@@ -120,15 +120,22 @@ public abstract class MapSector implements Tickable {
      */
     public abstract void initialize();
 
-    void onPlayerEnter_internal() {
+    public void onPlayerEnter_internal() {
         addEntity(Entities.PLAYER, true);
         Util.fixCrossSectorCollisions(entities);
         initialize();
     }
 
-    void onPlayerLeave_internal() {
+    public void onPlayerLeave_internal() {
         Util.fixCrossSectorCollisions(entities);
-        removeEntity(Entities.PLAYER, true);
+        ArrayList<Entity> e = (ArrayList<Entity>) entities.clone();
+        for (Entity entity : e) {
+            removeEntity(entity);
+        }
+        e = (ArrayList<Entity>) primaryEntities.clone();
+        for (Entity entity : e) {
+            removeEntity(entity, true);
+        }
     }
 
     /**
@@ -157,7 +164,7 @@ public abstract class MapSector implements Tickable {
 
             renderables.forEach(r -> r.render(graphics));
         } catch (ConcurrentModificationException cme) {
-            Debug.warning("Concurrent modification! (" + cme.getMessage() + ")");
+            // Debug.warning("Concurrent modification! (" + cme.getMessage() + ")");
             cme.printStackTrace();
         } catch (Exception e) {
             Debug.error(e);
@@ -197,6 +204,14 @@ public abstract class MapSector implements Tickable {
     }
 
     public void removeEntity(Entity e, boolean primary) {
+        // resolve collisions
+        ArrayList<EntityEntityCollision> collisions = (ArrayList<EntityEntityCollision>) e.concurrentCollisions.clone();
+        for (EntityEntityCollision c : collisions) {
+            c.end();
+        }
+        if (e instanceof Damageable) {
+            ((Damageable) (e)).onColdDeath();
+        }
         if (primary) {
             primaryEntities.remove(e);
         } else {

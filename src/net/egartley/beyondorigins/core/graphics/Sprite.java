@@ -22,7 +22,7 @@ public class Sprite {
      * @see AnimatedEntity
      * @see StaticEntity
      */
-    ArrayList<Image> frames = new ArrayList<>();
+    public ArrayList<Image> frames = new ArrayList<>();
     /**
      * Width in pixels
      */

@@ -37,8 +37,14 @@ public class DebugMap extends Map {
     }
 
     @Override
-    public void onMapChange() {
+    public void onPlayerEnter() {
         changeSector(sectors.get(0), null);
+    }
+
+    @Override
+    public void onPlayerLeave() {
+        sector.onPlayerLeave_internal();
+        sector.onPlayerLeave(null);
     }
 
     @Override

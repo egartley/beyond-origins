@@ -2,8 +2,12 @@ package net.egartley.beyondorigins.ingame.maps.testbattle.sectors;
 
 import net.egartley.beyondorigins.core.abstracts.Map;
 import net.egartley.beyondorigins.core.abstracts.MapSector;
+import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
+import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.entities.Monster;
+import net.egartley.beyondorigins.entities.WarpPad;
+import net.egartley.beyondorigins.gamestates.InGameState;
+import net.egartley.beyondorigins.ingame.maps.testbattle.TestBattleMap;
 
 public class Sector1 extends MapSector {
 
@@ -13,11 +17,15 @@ public class Sector1 extends MapSector {
 
     @Override
     public void initialize() {
-        if (!didInitialize) {
-            Monster monster = new Monster();
-            monster.setPosition(200, 252);
-            addEntity(monster);
-        }
+        ((TestBattleMap) (parent)).spawnMonster(200, 252);
+        WarpPad pad = new WarpPad(Entities.getSpriteTemplate(Entities.TEMPLATE_WP), 600, 450);
+        pad.collisions.add(new EntityEntityCollision(Entities.PLAYER.boundary, pad.defaultBoundary) {
+            public void start(EntityEntityCollisionEvent e) {
+                InGameState.changeMap(0);
+                end();
+            }
+        });
+        addEntity(pad);
     }
 
     @Override

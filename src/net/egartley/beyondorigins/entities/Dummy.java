@@ -5,7 +5,6 @@ import net.egartley.beyondorigins.core.abstracts.AnimatedEntity;
 import net.egartley.beyondorigins.core.abstracts.Entity;
 import net.egartley.beyondorigins.core.abstracts.MapSector;
 import net.egartley.beyondorigins.core.controllers.DialogueController;
-import net.egartley.beyondorigins.core.graphics.Animation;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
 import net.egartley.beyondorigins.core.interfaces.Character;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
@@ -18,6 +17,7 @@ import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.core.logic.interaction.EntityEntityInteraction;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.gamestates.InGameState;
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
@@ -146,14 +146,14 @@ public class Dummy extends AnimatedEntity implements Character {
 
     @Override
     protected void onMove(byte direction) {
-        if (!animation.clock.isRunning) {
+        if (animation.isStopped()) {
             // animation was stopped, so restart it because we're moving
             animation.start();
         }
 
-        if (direction == DIRECTION_RIGHT && !animations.get(RIGHT_ANIMATION).clock.isRunning) {
+        if (direction == DIRECTION_RIGHT && !animations.get(RIGHT_ANIMATION).isStopped()) {
             switchAnimation(RIGHT_ANIMATION);
-        } else if (direction == DIRECTION_LEFT && !animations.get(LEFT_ANIMATION).clock.isRunning) {
+        } else if (direction == DIRECTION_LEFT && !animations.get(LEFT_ANIMATION).isStopped()) {
             switchAnimation(LEFT_ANIMATION);
         }
     }
@@ -166,8 +166,8 @@ public class Dummy extends AnimatedEntity implements Character {
 
     @Override
     public void setAnimations() {
-        animations.add(new Animation(sprites.get(0), ANIMATION_THRESHOLD));
-        animations.add(new Animation(sprites.get(1), ANIMATION_THRESHOLD));
+        animations.add(new Animation(Util.getAnimationFrames(sprites.get(0)), ANIMATION_THRESHOLD));
+        animations.add(new Animation(Util.getAnimationFrames(sprites.get(1)), ANIMATION_THRESHOLD));
         animation = animations.get(0);
     }
 

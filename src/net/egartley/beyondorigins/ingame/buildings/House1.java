@@ -67,9 +67,9 @@ public class House1 extends Building {
     @Override
     protected void setCollisions() {
         super.setCollisions();
-        Entities.PLAYER.generateMovementRestrictionCollisions(blockBoundary1, Entities.PLAYER.boundary, Entities.PLAYER.chatBoundary);
-        Entities.PLAYER.generateMovementRestrictionCollisions(blockBoundary2, Entities.PLAYER.boundary, Entities.PLAYER.chatBoundary);
-        Entities.PLAYER.generateMovementRestrictionCollisions(blockBoundary3, Entities.PLAYER.boundary, Entities.PLAYER.chatBoundary);
+        Entities.PLAYER.generateMovementRestrictionCollisions(blockBoundary1, Entities.PLAYER.boundary, Entities.PLAYER.chatBoundary, Entities.PLAYER.attackBoundary);
+        Entities.PLAYER.generateMovementRestrictionCollisions(blockBoundary2, Entities.PLAYER.boundary, Entities.PLAYER.chatBoundary, Entities.PLAYER.attackBoundary);
+        Entities.PLAYER.generateMovementRestrictionCollisions(blockBoundary3, Entities.PLAYER.boundary, Entities.PLAYER.chatBoundary, Entities.PLAYER.attackBoundary);
     }
 
 }

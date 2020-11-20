@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins;
 
 import net.egartley.beyondorigins.core.abstracts.Entity;
-import net.egartley.beyondorigins.core.graphics.Animation;
+import net.egartley.beyondorigins.core.graphics.Sprite;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
@@ -35,12 +35,21 @@ public class Util {
         }
     }
 
+    public static Image[] getAnimationFrames(Sprite sprite) {
+        Image[] frames = new Image[sprite.frames.size()];
+        Object[] a = sprite.frames.toArray();
+        for (int i = 0; i < sprite.frames.size(); i++) {
+            frames[i] = (Image) a[i];
+        }
+        return frames;
+    }
+
     public static Animation getTemplateAnimation(byte imageStore, int width, int height, int rows, int frames, int frameDelay) {
         return getTemplateAnimation(imageStore, width, height, rows, frames, frameDelay, 0);
     }
 
     public static Animation getTemplateAnimation(byte imageStore, int width, int height, int rows, int frames, int frameDelay, int rowOffset) {
-        return new Animation(new SpriteSheet(Images.get(imageStore), width, height, rows, frames).sprites.get(rowOffset), frameDelay);
+        return new Animation(getAnimationFrames(new SpriteSheet(Images.get(imageStore), width, height, rows, frames).sprites.get(rowOffset)), frameDelay);
     }
 
     /**

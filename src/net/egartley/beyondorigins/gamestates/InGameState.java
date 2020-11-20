@@ -88,14 +88,14 @@ public class InGameState extends BasicGameState {
     public static void changeMap(int i) {
         // clear all player collisions
         for (EntityEntityCollision collision : Entities.PLAYER.collisions) {
-            // end to make sure anything is cleaned up
             collision.end();
         }
         Entities.PLAYER.collisions.clear();
-        // change map
+        if (map != null) {
+            map.onPlayerLeave();
+        }
         map = maps.get(i);
-        // call map's on change
-        map.onMapChange();
+        map.onPlayerEnter();
     }
 
     @Override
@@ -104,10 +104,12 @@ public class InGameState extends BasicGameState {
         KeyboardController.addKeyTyped(advanceDialogue);
         KeyboardController.addKeyTyped(backToMainMenu);
         KeyboardController.addKeyTyped(toggleDebug);
+        Entities.PLAYER.onInGameEnter();
     }
 
     @Override
     public void leave(GameContainer container, StateBasedGame game) throws SlickException {
+        Entities.PLAYER.onInGameLeave();
         KeyboardController.removeKeyTyped(toggleInventory);
         KeyboardController.removeKeyTyped(advanceDialogue);
         KeyboardController.removeKeyTyped(backToMainMenu);

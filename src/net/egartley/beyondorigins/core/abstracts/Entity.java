@@ -106,6 +106,14 @@ public abstract class Entity extends Renderable implements Tickable {
      */
     public int uuid;
     /**
+     * Amount of damage the entity can take before dying
+     */
+    public int health;
+    /**
+     * Maximum amount of health the entity can have
+     */
+    public int healthCapacity;
+    /**
      * Whether or not the entity is animated
      */
     public boolean isAnimated;
@@ -201,6 +209,8 @@ public abstract class Entity extends Renderable implements Tickable {
             setBoundaries();
         }
         speed = 1.0;
+        health = 50;
+        healthCapacity = health;
         setCollisions();
         setInteractions();
     }
