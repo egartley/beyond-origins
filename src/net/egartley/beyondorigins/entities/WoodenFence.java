@@ -65,7 +65,7 @@ public class WoodenFence extends StaticEntity {
     }
 
     @Override
-    protected void setCollisions() {
+    public void setCollisions() {
 
     }
 

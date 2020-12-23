@@ -3,6 +3,7 @@ package net.egartley.beyondorigins.ingame;
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.core.abstracts.StaticEntity;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
+import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
@@ -97,7 +98,7 @@ public class Building extends StaticEntity {
     }
 
     @Override
-    protected void setCollisions() {
+    public void setCollisions() {
         playerCollision = new EntityEntityCollision(entryBoundary, Entities.PLAYER.boundary) {
             @Override
             public void start(EntityEntityCollisionEvent event) {
@@ -105,7 +106,7 @@ public class Building extends StaticEntity {
                 end();
             }
         };
-        collisions.add(playerCollision);
+        Collisions.add(playerCollision);
     }
 
     @Override

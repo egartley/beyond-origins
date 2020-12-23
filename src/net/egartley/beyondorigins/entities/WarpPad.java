@@ -24,7 +24,7 @@ public class WarpPad extends StaticEntity {
     }
 
     @Override
-    protected void setCollisions() {
+    public void setCollisions() {
 
     }
 

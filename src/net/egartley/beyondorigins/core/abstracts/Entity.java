@@ -42,10 +42,6 @@ public abstract class Entity extends Renderable implements Tickable {
      */
     public ArrayList<EntityBoundary> boundaries = new ArrayList<>();
     /**
-     * Collection of the entity's collisions
-     */
-    public ArrayList<EntityEntityCollision> collisions = new ArrayList<>();
-    /**
      * Collection of the entity's interactions
      */
     public ArrayList<EntityEntityInteraction> interactions = new ArrayList<>();
@@ -301,15 +297,13 @@ public abstract class Entity extends Renderable implements Tickable {
     }
 
     /**
-     * Ticks boundaries and collisions
+     * Ticks boundaries and interactions
      *
      * @see #boundaries
-     * @see #collisions
      */
     @Override
     public void tick() {
         boundaries.forEach(EntityBoundary::tick);
-        collisions.forEach(EntityEntityCollision::tick);
         interactions.forEach(EntityEntityInteraction::tick);
     }
 
@@ -501,7 +495,7 @@ public abstract class Entity extends Renderable implements Tickable {
      *
      * @see #boundaries
      */
-    protected abstract void setCollisions();
+    public abstract void setCollisions();
 
     /**
      * Sets the entity's interactions
@@ -519,8 +513,8 @@ public abstract class Entity extends Renderable implements Tickable {
         boundaries.clear();
         setBoundaries();
         // end all collisions because if they're not, both boundaries will never have isCollided updated
-        collisions.forEach(EntityEntityCollision::end);
-        collisions.clear();
+        concurrentCollisions.forEach(EntityEntityCollision::end);
+        concurrentCollisions.clear();
         setCollisions();
         interactions.forEach(i -> i.collision.end());
         interactions.clear();

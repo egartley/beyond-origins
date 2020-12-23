@@ -7,6 +7,7 @@ import net.egartley.beyondorigins.core.abstracts.MapSector;
 import net.egartley.beyondorigins.core.controllers.DialogueController;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
 import net.egartley.beyondorigins.core.interfaces.Character;
+import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.dialogue.CharacterDialogue;
 import net.egartley.beyondorigins.core.logic.dialogue.DialogueExchange;
@@ -20,8 +21,6 @@ import net.egartley.beyondorigins.gamestates.InGameState;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-
-import java.util.ArrayList;
 
 public class Dummy extends AnimatedEntity implements Character {
 
@@ -76,34 +75,14 @@ public class Dummy extends AnimatedEntity implements Character {
                         }
                     }
                 };
-                collisions.add(baseCollision);
+                Collisions.add(baseCollision);
             }
         }
     }
 
     @Override
     public void onSectorLeave(MapSector leaving) {
-        // remove the generated collisions
-
-        // prevents concurrent modification
-        ArrayList<EntityEntityCollision> removeCollisions = new ArrayList<>();
-
-        for (Entity e : leaving.entities) {
-            if (!e.isTraversable && e.isSectorSpecific) {
-                for (EntityEntityCollision c : collisions) {
-                    if (c.entities[0].equals(e) || c.entities[1].equals(e)) {
-                        removeCollisions.add(c);
-                    }
-                }
-            }
-        }
-
-        for (EntityEntityCollision c : removeCollisions) {
-            collisions.remove(c);
-        }
-
-        removeCollisions.clear();
-
+        Collisions.removeWith(this);
         leaving.removeEntity(this, true);
     }
 

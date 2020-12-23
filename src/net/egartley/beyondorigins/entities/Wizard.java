@@ -130,7 +130,7 @@ public class Wizard extends AnimatedEntity implements Character {
     }
 
     @Override
-    protected void setCollisions() {
+    public void setCollisions() {
 
     }
 

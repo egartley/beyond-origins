@@ -3,6 +3,7 @@ package net.egartley.beyondorigins.ingame.maps.debug.sectors;
 import net.egartley.beyondorigins.core.abstracts.Map;
 import net.egartley.beyondorigins.core.abstracts.MapSector;
 import net.egartley.beyondorigins.core.graphics.Sprite;
+import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.core.ui.NotificationBanner;
@@ -16,6 +17,9 @@ import net.egartley.beyondorigins.ingame.buildings.House1;
 
 public class Sector1 extends MapSector {
 
+    private WarpPad pad;
+    private DefaultTree hatTree;
+
     public House1 house;
 
     public Sector1(Map parent) {
@@ -27,17 +31,8 @@ public class Sector1 extends MapSector {
         // sector-specific entities
         Sprite s = Entities.getSpriteTemplate(Entities.TEMPLATE_TREE);
         addEntity(new DefaultTree(s, 36, 200));
-        DefaultTree tree = new DefaultTree(s, 100, 200);
-        tree.collisions.add(new EntityEntityCollision(Entities.PLAYER.boundary, tree.defaultBoundary) {
-            public void start(EntityEntityCollisionEvent e) {
-                if (!Entities.PLAYER.inventory.contains(Items.WIZARD_HAT) && Entities.WIZARD.metPlayer && !Entities.WIZARD.foundHat) {
-                    Entities.PLAYER.inventory.put(Items.WIZARD_HAT);
-                    pushNotification(new NotificationBanner("You have found the Wizard's hat!", "items/wizard-hat.png"));
-                    InGameState.quests.get(Quests.WIZARD_HAT).objectives.get(0).complete();
-                }
-            }
-        });
-        addEntity(tree);
+        hatTree = new DefaultTree(s, 100, 200);
+        addEntity(hatTree);
             /*s = Entities.getSpriteTemplate(Entities.TEMPLATE_ROCK);
             int off = 0;
             for (byte i = 0; i < 14; i++) {
@@ -52,13 +47,7 @@ public class Sector1 extends MapSector {
         addEntity(house);
 
         // warp pad
-        WarpPad pad = new WarpPad(Entities.getSpriteTemplate(Entities.TEMPLATE_WP), 500, 100);
-        pad.collisions.add(new EntityEntityCollision(Entities.PLAYER.boundary, pad.defaultBoundary) {
-            public void start(EntityEntityCollisionEvent e) {
-                InGameState.changeMap(1);
-                end();
-            }
-        });
+        pad = new WarpPad(Entities.getSpriteTemplate(Entities.TEMPLATE_WP), 500, 100);
         addEntity(pad);
 
         // Entities.PLAYER.inventory.put(Items.HMM, 1);
@@ -70,6 +59,7 @@ public class Sector1 extends MapSector {
         quest.objectives.add(new QuestObjective("Do this other thing", "Just do it, already."));
         quest.objectives.add(new QuestObjective("Final task", "Get it over with."));
         InGameState.quests.add(quest);*/
+        setSpecialCollisions();
     }
 
     @Override
@@ -85,8 +75,26 @@ public class Sector1 extends MapSector {
 
     @Override
     public void onPlayerLeave(MapSector to) {
-        // Entities.DUMMY.onSectorLeave(this);
-        Entities.PLAYER.removeAllCollisions();
+
+    }
+
+    @Override
+    public void setSpecialCollisions() {
+        Collisions.add(new EntityEntityCollision(Entities.PLAYER.boundary, hatTree.defaultBoundary) {
+            public void start(EntityEntityCollisionEvent e) {
+                if (!Entities.PLAYER.inventory.contains(Items.WIZARD_HAT) && Entities.WIZARD.metPlayer && !Entities.WIZARD.foundHat) {
+                    Entities.PLAYER.inventory.put(Items.WIZARD_HAT);
+                    pushNotification(new NotificationBanner("You have found the Wizard's hat!", "items/wizard-hat.png"));
+                    InGameState.quests.get(Quests.WIZARD_HAT).objectives.get(0).complete();
+                }
+            }
+        });
+        Collisions.add(new EntityEntityCollision(Entities.PLAYER.boundary, pad.defaultBoundary) {
+            public void start(EntityEntityCollisionEvent e) {
+                InGameState.changeMap(1);
+                end();
+            }
+        });
     }
 
 }

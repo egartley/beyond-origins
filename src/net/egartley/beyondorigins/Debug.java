@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins;
 
 import net.egartley.beyondorigins.core.input.Mouse;
+import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import org.newdawn.slick.Color;
@@ -83,10 +84,8 @@ public class Debug {
     }
 
     private static void drawLine(String s, Graphics graphics) {
-        // background
         graphics.setColor(backgroundColor);
         graphics.fillRect(lx - TEXT_PADDING, ly + (row * rowOffset) - font.getLineHeight(), graphics.getFont().getWidth(s) + (TEXT_PADDING * 2), font.getLineHeight() + TEXT_PADDING);
-        // draw line text
         graphics.setColor(Color.white);
         graphics.drawString(s, lx, ly + (row * rowOffset) - font.getLineHeight() + 4);
         row++;
@@ -100,12 +99,10 @@ public class Debug {
         graphics.setFont(font);
         drawLine("Location: " + InGameState.map.sector + " (" + Entities.PLAYER.x() + ", " + Entities.PLAYER.y() + ")", graphics);
         drawLine("Mouse: " + Mouse.x + ", " + Mouse.y, graphics);
-        drawLine("Threads: " + Thread.activeCount(), graphics);
         if (Entities.PLAYER.lastCollision != null) {
             drawLine("Last collision: " + Entities.PLAYER.lastCollision, graphics);
         }
-        drawLine("Current Collisions: " + Entities.PLAYER.collisions.size(), graphics);
-        drawLine("isCollided = " + Entities.PLAYER.isCollided, graphics);
+        drawLine("Collisions: " + Collisions.amount(), graphics);
     }
 
 }

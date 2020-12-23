@@ -2,6 +2,7 @@ package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.core.abstracts.Cutscene;
 import net.egartley.beyondorigins.core.abstracts.StaticEntity;
+import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
@@ -25,14 +26,14 @@ public class CutsceneTrigger extends StaticEntity {
     }
 
     @Override
-    protected void setCollisions() {
+    public void setCollisions() {
         EntityEntityCollision collision = new EntityEntityCollision(defaultBoundary, Entities.PLAYER.boundary) {
             @Override
             public void start(EntityEntityCollisionEvent event) {
                 cutscene.start();
             }
         };
-        collisions.add(collision);
+        Collisions.add(collision);
     }
 
     @Override

@@ -6,6 +6,7 @@ import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.core.graphics.MapTile;
 import net.egartley.beyondorigins.core.interfaces.Damageable;
 import net.egartley.beyondorigins.core.interfaces.Tickable;
+import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.collision.MapSectorChangeCollision;
 import net.egartley.beyondorigins.core.logic.interaction.MapSectorChangeBoundary;
@@ -115,6 +116,8 @@ public abstract class MapSector implements Tickable {
      */
     public abstract void onPlayerLeave(MapSector to);
 
+    public abstract void setSpecialCollisions();
+
     /**
      * Initialize things such as sector-specific entities
      */
@@ -122,12 +125,10 @@ public abstract class MapSector implements Tickable {
 
     public void onPlayerEnter_internal() {
         addEntity(Entities.PLAYER, true);
-        Util.fixCrossSectorCollisions(entities);
         initialize();
     }
 
     public void onPlayerLeave_internal() {
-        Util.fixCrossSectorCollisions(entities);
         ArrayList<Entity> e = (ArrayList<Entity>) entities.clone();
         for (Entity entity : e) {
             removeEntity(entity);
@@ -136,6 +137,7 @@ public abstract class MapSector implements Tickable {
         for (Entity entity : e) {
             removeEntity(entity, true);
         }
+        Collisions.clear();
     }
 
     /**

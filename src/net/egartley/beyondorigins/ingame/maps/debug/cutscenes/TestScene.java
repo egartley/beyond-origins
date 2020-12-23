@@ -28,4 +28,9 @@ public class TestScene extends Cutscene {
         Entities.PLAYER.onSectorLeave(this);
     }
 
+    @Override
+    public void setSpecialCollisions() {
+
+    }
+
 }

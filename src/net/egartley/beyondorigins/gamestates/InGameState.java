@@ -5,6 +5,7 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.core.abstracts.Map;
 import net.egartley.beyondorigins.core.controllers.KeyboardController;
 import net.egartley.beyondorigins.core.input.KeyTyped;
+import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.ui.DialoguePanel;
 import net.egartley.beyondorigins.core.ui.QuestsPanel;
@@ -86,11 +87,10 @@ public class InGameState extends BasicGameState {
     }
 
     public static void changeMap(int i) {
-        // clear all player collisions
-        for (EntityEntityCollision collision : Entities.PLAYER.collisions) {
+        for (EntityEntityCollision collision : Collisions.with(Entities.PLAYER)) {
             collision.end();
         }
-        Entities.PLAYER.collisions.clear();
+        Collisions.clear();
         if (map != null) {
             map.onPlayerLeave();
         }
@@ -153,6 +153,8 @@ public class InGameState extends BasicGameState {
         } else if (isDialogueVisible) {
             dialogue.tick();
         }
+
+        Collisions.tick();
     }
 
     @Override

@@ -24,4 +24,9 @@ public class Sector3 extends MapSector {
 
     }
 
+    @Override
+    public void setSpecialCollisions() {
+
+    }
+
 }

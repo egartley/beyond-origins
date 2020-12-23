@@ -12,6 +12,7 @@ import net.egartley.beyondorigins.core.input.Keyboard;
 import net.egartley.beyondorigins.core.interfaces.Attacker;
 import net.egartley.beyondorigins.core.interfaces.Character;
 import net.egartley.beyondorigins.core.interfaces.Damageable;
+import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryOffset;
@@ -86,7 +87,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
     }
 
     public void removeAllCollisions() {
-        collisions.clear();
+        Collisions.removeWith(this);
     }
 
     public void generateMovementRestrictionCollisions(EntityBoundary otherBoundary, EntityBoundary... exclusions) {
@@ -111,7 +112,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
             }
         };
         baseCollision.isMovementRestricting = true;
-        collisions.add(baseCollision);
+        Collisions.add(baseCollision);
 
         for (EntityEntityCollision collision : Util.getAllBoundaryCollisions(baseCollision, this, otherBoundary)) {
             boolean add = true;
@@ -122,13 +123,13 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
                 }
             }
             if (add) {
-                collisions.add(collision);
+                Collisions.add(collision);
             }
         }
     }
 
     public void deactivateBuildingCollisions() {
-        for (EntityEntityCollision c : collisions) {
+        for (EntityEntityCollision c : Collisions.with(this)) {
             if (c.boundaries[0].parent instanceof Building || c.boundaries[1].parent instanceof Building) {
                 c.deactivate();
             }
@@ -136,7 +137,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
     }
 
     public void reactivateBuildingCollisions() {
-        for (EntityEntityCollision c : collisions) {
+        for (EntityEntityCollision c : Collisions.with(this)) {
             if (c.boundaries[0].parent instanceof Building || c.boundaries[1].parent instanceof Building) {
                 c.activate();
             }
@@ -194,6 +195,8 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
      */
     public void leftBuilding(Building building) {
         generateSectorSpecificCollisions(InGameState.map.sector);
+        building.setCollisions();
+        InGameState.map.sector.setSpecialCollisions();
         setPosition(building.playerLeaveX, building.playerLeaveY);
         reactivateBuildingCollisions();
         isInBuilding = false;

@@ -116,22 +116,6 @@ public class Util {
         return collisions;
     }
 
-    public static void fixCrossSectorCollisions(ArrayList<Entity> entities) {
-        for (Entity e : entities) {
-            for (EntityEntityCollision c : e.collisions) {
-                if (c.isCollided) {
-                    for (EntityBoundary eb : c.boundaries) {
-                        if (!eb.parent.isSectorSpecific) {
-                            eb.isCollided = false;
-                            eb.parent.isCollided = false;
-                            eb.setColor();
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     /**
      * Annuls, or "cancels," the movement restrictions specified by the collision event
      */

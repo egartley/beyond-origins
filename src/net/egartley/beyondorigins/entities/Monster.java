@@ -5,6 +5,7 @@ import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.core.abstracts.AnimatedEntity;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
 import net.egartley.beyondorigins.core.interfaces.Damageable;
+import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
@@ -70,9 +71,8 @@ public class Monster extends AnimatedEntity implements Damageable {
     }
 
     @Override
-    protected void setCollisions() {
-        EntityEntityCollision c = new EntityEntityCollision(defaultBoundary, Entities.PLAYER.attackBoundary);
-        collisions.add(c);
+    public void setCollisions() {
+        Collisions.add(new EntityEntityCollision(defaultBoundary, Entities.PLAYER.attackBoundary));
     }
 
     @Override

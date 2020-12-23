@@ -2,6 +2,7 @@ package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.core.abstracts.StaticEntity;
 import net.egartley.beyondorigins.core.graphics.Sprite;
+import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
@@ -49,12 +50,13 @@ public class DroppedItem extends StaticEntity {
         image = sprite.asImage();
         setPosition(x, y);
 
+        StaticEntity me = this;
         new DelayedEvent(PICKUP_DELAY) {
             @Override
             public void onFinish() {
                 canPickup = true;
                 if (pickup()) {
-                    collisions.get(0).end();
+                    Collisions.endWith(me);
                 }
             }
         }.start();
@@ -104,7 +106,7 @@ public class DroppedItem extends StaticEntity {
 
     @Override
     public void setCollisions() {
-        collisions.add(new EntityEntityCollision(defaultBoundary, Entities.PLAYER.boundary) {
+        Collisions.add(new EntityEntityCollision(defaultBoundary, Entities.PLAYER.boundary) {
             @Override
             public void start(EntityEntityCollisionEvent event) {
                 over = true;
