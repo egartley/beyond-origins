@@ -35,7 +35,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
     private final int ANIMATION_THRESHOLD = 165;
     private final int MAX_LEVEL = 100;
     private final int MAX_EXPERIENCE = 10390; // 100 + (100 * 98) + (5 * 98)
-    private final int DAMAGE_AMOUNT = 100;
+    private final int DEFAULT_DAMAGE_DEALT = 4;
 
     private boolean frozen;
     private boolean isMovementInvalidated;
@@ -58,11 +58,8 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         isSectorSpecific = false;
         isDualRendered = false;
         speed = 1.1;
-        if (Game.debug) {
-            speed = 1.8;
-        }
         health = 30;
-        healthCapacity = health;
+        maximumHealth = health;
 
         inventory = new EntityInventory(this, 20) {
             @Override
@@ -88,22 +85,8 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         }
     }
 
-    public void removeSectorSpecificCollisions(MapSector sector) {
-        ArrayList<EntityEntityCollision> removeCollisions = new ArrayList<>();
-
-        for (Entity e : sector.entities) {
-            if (!e.isTraversable && e.isSectorSpecific) {
-                for (EntityEntityCollision c : collisions) {
-                    if (c.entities[0].equals(e) || c.entities[1].equals(e)) {
-                        removeCollisions.add(c);
-                    }
-                }
-            }
-        }
-
-        for (EntityEntityCollision c : removeCollisions) {
-            collisions.remove(c);
-        }
+    public void removeAllCollisions() {
+        collisions.clear();
     }
 
     public void generateMovementRestrictionCollisions(EntityBoundary otherBoundary, EntityBoundary... exclusions) {
@@ -199,7 +182,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
      */
     public void enteredBuilding() {
         isInBuilding = true;
-        removeSectorSpecificCollisions(InGameState.map.sector);
+        removeAllCollisions();
         deactivateBuildingCollisions();
         // invalidateAllMovement();
     }
@@ -381,7 +364,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         ArrayList<Entity> entities = getCollidedEntities();
         for (Entity e : entities) {
             if (e instanceof Damageable) {
-                ((Damageable) e).inflict(DAMAGE_AMOUNT);
+                ((Damageable) e).inflict(DEFAULT_DAMAGE_DEALT);
             }
         }
     }
@@ -397,8 +380,8 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
     @Override
     public void heal(int amount) {
         health += amount;
-        if (health > healthCapacity) {
-            health = healthCapacity;
+        if (health > maximumHealth) {
+            health = maximumHealth;
         }
     }
 

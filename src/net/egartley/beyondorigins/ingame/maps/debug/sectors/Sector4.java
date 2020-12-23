@@ -2,6 +2,8 @@ package net.egartley.beyondorigins.ingame.maps.debug.sectors;
 
 import net.egartley.beyondorigins.core.abstracts.Map;
 import net.egartley.beyondorigins.core.abstracts.MapSector;
+import net.egartley.beyondorigins.entities.CutsceneTrigger;
+import net.egartley.beyondorigins.ingame.maps.debug.cutscenes.TestScene;
 
 public class Sector4 extends MapSector {
 
@@ -11,7 +13,7 @@ public class Sector4 extends MapSector {
 
     @Override
     public void initialize() {
-
+        addEntity(new CutsceneTrigger(new TestScene(parent), 400, 200));
     }
 
     @Override

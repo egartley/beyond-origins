@@ -86,7 +86,7 @@ public class Sector1 extends MapSector {
     @Override
     public void onPlayerLeave(MapSector to) {
         // Entities.DUMMY.onSectorLeave(this);
-        Entities.PLAYER.removeSectorSpecificCollisions(this);
+        Entities.PLAYER.removeAllCollisions();
     }
 
 }

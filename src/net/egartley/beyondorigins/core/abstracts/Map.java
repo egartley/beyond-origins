@@ -24,6 +24,8 @@ public abstract class Map implements Tickable {
      */
     public MapSector sector;
 
+    public boolean isPlayingCutscene;
+
     /**
      * Creates a new map, and initializes {@link #sectors}
      *

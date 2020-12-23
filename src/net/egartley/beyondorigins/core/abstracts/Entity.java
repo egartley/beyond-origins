@@ -5,6 +5,7 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.core.graphics.Sprite;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
+import net.egartley.beyondorigins.core.interfaces.Damageable;
 import net.egartley.beyondorigins.core.interfaces.Tickable;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
@@ -112,7 +113,7 @@ public abstract class Entity extends Renderable implements Tickable {
     /**
      * Maximum amount of health the entity can have
      */
-    public int healthCapacity;
+    public int maximumHealth;
     /**
      * Whether or not the entity is animated
      */
@@ -180,13 +181,12 @@ public abstract class Entity extends Renderable implements Tickable {
      */
     public String name;
 
-    private static final Font nameTagFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 11), true);
+    private static final Font debugFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 11), true);
     private static final Color nameTagBackgroundColor = new Color(0, 0, 0, 128);
+    private static final Color healthBarColor = new Color(0, 179, 0);
 
+    private final int healthBarWidth = 64;
     private int nameTagWidth;
-    private int entityWidth;
-    private int nameX;
-    private int nameY;
     /**
      * Whether or not font metrics have been initialized. Since {@link
      * #render(Graphics)} is called about 60 times a second, and the
@@ -210,7 +210,7 @@ public abstract class Entity extends Renderable implements Tickable {
         }
         speed = 1.0;
         health = 50;
-        healthCapacity = health;
+        maximumHealth = health;
         setCollisions();
         setInteractions();
     }
@@ -254,26 +254,43 @@ public abstract class Entity extends Renderable implements Tickable {
     public void drawDebug(Graphics graphics) {
         drawBoundaries(graphics);
         drawNameTag(graphics);
+        if (this instanceof Damageable) {
+            drawHealthBar(graphics);
+        }
     }
 
     /**
-     * Draws the entity's "name tag", which is {@link #toString()} with a half-opaque black background
+     * Draws the entity's "name tag", which is {@link #toString()}
      */
     private void drawNameTag(Graphics graphics) {
         if (!setFontMetrics) {
-            nameTagWidth = nameTagFont.getWidth(toString()) + 8;
-            entityWidth = sprite.width;
+            nameTagWidth = debugFont.getWidth(toString()) + 8;
             setFontMetrics = true;
         }
-        nameX = (x() + (entityWidth / 2)) - nameTagWidth / 2;
-        nameY = y() - 18;
+        int nameX = (x() + (sprite.width / 2)) - nameTagWidth / 2;
+        int nameY = y() - 18;
 
         graphics.setColor(nameTagBackgroundColor);
-        graphics.setFont(nameTagFont);
+        graphics.setFont(debugFont);
 
         graphics.fillRect(nameX, nameY, nameTagWidth, 18);
         graphics.setColor(Color.white);
-        graphics.drawString(toString(), nameX + 5, nameY + 16 - nameTagFont.getLineHeight());
+        graphics.drawString(toString(), nameX + 5, nameY + 16 - debugFont.getLineHeight());
+    }
+
+    /**
+     * Shows the entity's health above them
+     */
+    private void drawHealthBar(Graphics graphics) {
+        int baseX = (x() + (sprite.width / 2)) - healthBarWidth / 2;
+        int baseY = y() - 30;
+
+        graphics.setColor(Color.black);
+        graphics.fillRect(baseX - 1, baseY - 1, healthBarWidth + 2, 8);
+        graphics.setColor(Color.red);
+        graphics.fillRect(baseX, baseY, healthBarWidth, 6);
+        graphics.setColor(healthBarColor);
+        graphics.fillRect(baseX, baseY, health * (healthBarWidth) / (maximumHealth), 6);
     }
 
     /**

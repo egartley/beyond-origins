@@ -22,6 +22,7 @@ public class Images {
     public final static byte ROCK_DEFAULT = 5;
     public final static byte WIZARD_HAT = 13;
     public final static byte WARP_PAD = 22;
+    public final static byte CUTSCENE = 24;
 
     public final static byte DIALOGUE_PANEL = 7;
     public final static byte INVENTORY_PANEL = 8;
@@ -65,6 +66,8 @@ public class Images {
                 return get(entityPath + "wizard-hat.png");
             case WARP_PAD:
                 return get(entityPath + "warp-pad.png");
+            case CUTSCENE:
+                return get(entityPath + "cutscene-trigger.png");
             case DIALOGUE_PANEL:
                 return get(uiPath + "dialogue-panel.png");
             case INVENTORY_PANEL:

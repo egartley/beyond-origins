@@ -16,7 +16,7 @@ import org.newdawn.slick.Animation;
 
 public class Monster extends AnimatedEntity implements Damageable {
 
-    private final int ANIMATION_THRESHOLD = 225;
+    private final int ANIMATION_THRESHOLD = 200;
     private final byte LEFT_NORMAL_ANIMATION = 1;
     private final byte RIGHT_NORMAL_ANIMATION = 0;
     private final byte LEFT_HURT_ANIMATION = 3;
@@ -33,7 +33,7 @@ public class Monster extends AnimatedEntity implements Damageable {
         isDualRendered = false;
         speed = 0.7;
         health = 35;
-        healthCapacity = health;
+        maximumHealth = health;
     }
 
     @Override
@@ -142,8 +142,8 @@ public class Monster extends AnimatedEntity implements Damageable {
     @Override
     public void heal(int amount) {
         health += amount;
-        if (health > healthCapacity) {
-            health = healthCapacity;
+        if (health > maximumHealth) {
+            health = maximumHealth;
         }
     }
 

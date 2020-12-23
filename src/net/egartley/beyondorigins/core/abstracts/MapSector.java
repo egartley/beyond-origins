@@ -209,7 +209,7 @@ public abstract class MapSector implements Tickable {
         for (EntityEntityCollision c : collisions) {
             c.end();
         }
-        if (e instanceof Damageable) {
+        if (e instanceof Damageable && !primary) {
             ((Damageable) (e)).onColdDeath();
         }
         if (primary) {

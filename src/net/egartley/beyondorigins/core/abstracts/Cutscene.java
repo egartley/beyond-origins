@@ -1,0 +1,51 @@
+package net.egartley.beyondorigins.core.abstracts;
+
+import net.egartley.beyondorigins.Game;
+import net.egartley.beyondorigins.core.interfaces.Tickable;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
+
+public abstract class Cutscene extends MapSector {
+
+    private final double TRANSITION_SPEED = 1.8;
+
+    private double transitionAlpha = 255;
+    private Color transitionColor = Color.black;
+    private MapSector returnSector;
+
+    public boolean isShowingTransition;
+
+    public Cutscene(Map parent, int sector) {
+        super(parent, sector);
+    }
+
+    public abstract void initialize();
+
+    public void start() {
+        returnSector = parent.sector;
+        parent.changeSector(this, parent.sector);
+        isShowingTransition = true;
+    }
+
+    public void end() {
+        parent.changeSector(returnSector, this);
+    }
+
+    public void render(Graphics graphics) {
+        super.render(graphics);
+        if (isShowingTransition) {
+            graphics.setColor(transitionColor);
+            graphics.fillRect(0, 0, Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT);
+            transitionColor = new Color(0, 0, 0, (int) (transitionAlpha -= TRANSITION_SPEED));
+            if (transitionAlpha <= 0) {
+                isShowingTransition = false;
+            }
+        }
+    }
+
+    @Override
+    public void tick() {
+        tickables.forEach(Tickable::tick);
+    }
+
+}
