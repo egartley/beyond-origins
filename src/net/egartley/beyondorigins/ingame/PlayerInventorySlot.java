@@ -21,7 +21,7 @@ public class PlayerInventorySlot extends UIElement {
         super(Images.get("resources/images/ui/inventory-slot.png"));
         this.stack = stack;
         x((column * (SIZE + MARGIN)) + ((Game.WINDOW_WIDTH / 2) - (Images.get(Images.INVENTORY_PANEL).getWidth() / 2)) + 24);
-        y((row * (SIZE + MARGIN)) + (((Game.WINDOW_HEIGHT / 2) + 12) - ((PlayerMenu.ROWS * (SIZE + MARGIN)) / 2)));
+        y((row * (SIZE + MARGIN)) + (((Game.WINDOW_HEIGHT / 2) + 12) - ((PlayerInventory.ROWS * (SIZE + MARGIN)) / 2)));
         baseItemX = x() + 2;
         baseItemY = y() + 2;
         index = indexi++;

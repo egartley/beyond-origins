@@ -4,6 +4,7 @@ import net.egartley.beyondorigins.core.abstracts.Cutscene;
 import net.egartley.beyondorigins.core.abstracts.Map;
 import net.egartley.beyondorigins.core.abstracts.MapSector;
 import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.gamestates.InGameState;
 
 public class TestScene extends Cutscene {
 
@@ -18,12 +19,14 @@ public class TestScene extends Cutscene {
 
     @Override
     public void onPlayerEnter(MapSector from) {
+        InGameState.canPlay = false;
         Entities.PLAYER.onSectorEnter(this);
         Entities.DUMMY.onSectorEnter(this);
     }
 
     @Override
     public void onPlayerLeave(MapSector to) {
+        InGameState.canPlay = true;
         Entities.DUMMY.onSectorLeave(this);
         Entities.PLAYER.onSectorLeave(this);
     }

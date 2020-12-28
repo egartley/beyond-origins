@@ -7,7 +7,6 @@ import net.egartley.beyondorigins.core.graphics.MapTile;
 import net.egartley.beyondorigins.core.interfaces.Damageable;
 import net.egartley.beyondorigins.core.interfaces.Tickable;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
-import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.collision.MapSectorChangeCollision;
 import net.egartley.beyondorigins.core.logic.interaction.MapSectorChangeBoundary;
 import net.egartley.beyondorigins.core.ui.NotificationBanner;
@@ -206,11 +205,8 @@ public abstract class MapSector implements Tickable {
     }
 
     public void removeEntity(Entity e, boolean primary) {
-        // resolve collisions
-        ArrayList<EntityEntityCollision> collisions = (ArrayList<EntityEntityCollision>) e.concurrentCollisions.clone();
-        for (EntityEntityCollision c : collisions) {
-            c.end();
-        }
+        Collisions.endWith(e);
+        Collisions.removeWith(e);
         if (e instanceof Damageable && !primary) {
             ((Damageable) (e)).onColdDeath();
         }
@@ -332,8 +328,7 @@ public abstract class MapSector implements Tickable {
     protected void drawTiles(Graphics graphics) {
         deltaX = 0;
         deltaY = 0;
-        for (int r = 0; r < tiles.size(); r++) {
-            ArrayList<MapTile> row = tiles.get(r);
+        for (ArrayList<MapTile> row : tiles) {
             for (MapTile tile : row) {
                 graphics.drawImage(tile.image, deltaX, deltaY);
                 deltaX += TILE_SIZE;

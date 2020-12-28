@@ -13,8 +13,6 @@ import java.util.ArrayList;
 
 public class PlayerMenu implements Tickable {
 
-    static final int ROWS = 5, COLUMNS = 4;
-
     public UIElement panel;
     public PlayerInventory inventoryPanel;
     public QuestsPanel questsPanel;

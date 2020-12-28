@@ -30,7 +30,6 @@ public class InGameState extends BasicGameState {
     private KeyTyped backToMainMenu;
     private KeyTyped toggleDebug;
 
-
     public static Map map;
     public static PlayerMenu playerMenu;
     public static QuestsPanel quests;
@@ -40,10 +39,7 @@ public class InGameState extends BasicGameState {
 
     public static boolean isInventoryVisible;
     public static boolean isDialogueVisible;
-
-    public InGameState() {
-
-    }
+    public static boolean canPlay = true;
 
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
@@ -126,10 +122,12 @@ public class InGameState extends BasicGameState {
         } else {
             map.render(graphics);
         }
-        if (isInventoryVisible) {
-            playerMenu.render(graphics);
-        } else if (isDialogueVisible) {
-            dialogue.render(graphics);
+        if (canPlay) {
+            if (isInventoryVisible) {
+                playerMenu.render(graphics);
+            } else if (isDialogueVisible) {
+                dialogue.render(graphics);
+            }
         }
         if (Game.debug) {
             Debug.render(graphics);
@@ -138,7 +136,6 @@ public class InGameState extends BasicGameState {
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-        // normal gamestate tick
         if (Entities.PLAYER.isInBuilding) {
             building.currentFloor.checkPlayerLimits();
             building.currentFloor.tick();
@@ -147,11 +144,12 @@ public class InGameState extends BasicGameState {
             map.tick();
         }
 
-        // tick regardless of gamestate
-        if (isInventoryVisible) {
-            playerMenu.tick();
-        } else if (isDialogueVisible) {
-            dialogue.tick();
+        if (canPlay) {
+            if (isInventoryVisible) {
+                playerMenu.tick();
+            } else if (isDialogueVisible) {
+                dialogue.tick();
+            }
         }
 
         Collisions.tick();
