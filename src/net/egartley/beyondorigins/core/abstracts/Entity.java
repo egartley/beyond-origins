@@ -7,6 +7,7 @@ import net.egartley.beyondorigins.core.graphics.Sprite;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
 import net.egartley.beyondorigins.core.interfaces.Damageable;
 import net.egartley.beyondorigins.core.interfaces.Tickable;
+import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
@@ -513,7 +514,9 @@ public abstract class Entity extends Renderable implements Tickable {
         boundaries.clear();
         setBoundaries();
         // end all collisions because if they're not, both boundaries will never have isCollided updated
-        concurrentCollisions.forEach(EntityEntityCollision::end);
+        for (EntityEntityCollision collision : Collisions.with(this)) {
+            collision.end();
+        }
         concurrentCollisions.clear();
         setCollisions();
         interactions.forEach(i -> i.collision.end());

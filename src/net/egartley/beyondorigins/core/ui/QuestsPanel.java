@@ -3,7 +3,6 @@ package net.egartley.beyondorigins.core.ui;
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.core.logic.Calculate;
 import net.egartley.beyondorigins.data.Images;
-import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.ingame.Quest;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -62,8 +61,6 @@ public class QuestsPanel extends UIElement {
             if (start) {
                 quest.start();
             }
-            // TODO: fix from within building
-            InGameState.map.sector.pushNotification(new NotificationBanner("New quest added!"));
         }
     }
 

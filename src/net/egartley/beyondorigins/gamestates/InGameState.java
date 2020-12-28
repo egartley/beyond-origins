@@ -8,11 +8,13 @@ import net.egartley.beyondorigins.core.input.KeyTyped;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.ui.DialoguePanel;
-import net.egartley.beyondorigins.core.ui.QuestsPanel;
+import net.egartley.beyondorigins.core.ui.NotificationBanner;
 import net.egartley.beyondorigins.data.Items;
+import net.egartley.beyondorigins.data.Quests;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.ingame.Building;
 import net.egartley.beyondorigins.ingame.PlayerMenu;
+import net.egartley.beyondorigins.ingame.Quest;
 import net.egartley.beyondorigins.ingame.maps.debug.DebugMap;
 import net.egartley.beyondorigins.ingame.maps.testbattle.TestBattleMap;
 import org.newdawn.slick.*;
@@ -30,9 +32,10 @@ public class InGameState extends BasicGameState {
     private KeyTyped backToMainMenu;
     private KeyTyped toggleDebug;
 
+    private static final ArrayList<NotificationBanner> notifications = new ArrayList<>();
+
     public static Map map;
     public static PlayerMenu playerMenu;
-    public static QuestsPanel quests;
     public static DialoguePanel dialogue;
     public static Building building;
     public static ArrayList<Map> maps = new ArrayList<>();
@@ -44,12 +47,12 @@ public class InGameState extends BasicGameState {
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         Items.init();
+        Quests.init();
 
         maps.add(new DebugMap());
         maps.add(new TestBattleMap());
         playerMenu = new PlayerMenu();
         dialogue = new DialoguePanel();
-        quests = playerMenu.questsPanel;
         changeMap(0);
 
         toggleInventory = new KeyTyped(Input.KEY_E) {
@@ -94,6 +97,23 @@ public class InGameState extends BasicGameState {
         map.onPlayerEnter();
     }
 
+    public static void giveQuest(Quest quest, boolean start) {
+        playerMenu.questsPanel.add(quest, start);
+        pushNotification(new NotificationBanner("New quest added!"));
+    }
+
+    public static void takeQuest(Quest quest) {
+        playerMenu.questsPanel.remove(quest);
+    }
+
+    public static void pushNotification(NotificationBanner notification) {
+        notifications.add(notification);
+    }
+
+    public static void onNotificationFinish(NotificationBanner notification) {
+        notifications.remove(notification);
+    }
+
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {
         KeyboardController.addKeyTyped(toggleInventory);
@@ -129,6 +149,10 @@ public class InGameState extends BasicGameState {
                 dialogue.render(graphics);
             }
         }
+        if (!notifications.isEmpty()) {
+            // treated as a queue, so only the first is rendered
+            notifications.get(0).render(graphics);
+        }
         if (Game.debug) {
             Debug.render(graphics);
         }
@@ -143,7 +167,6 @@ public class InGameState extends BasicGameState {
         } else {
             map.tick();
         }
-
         if (canPlay) {
             if (isInventoryVisible) {
                 playerMenu.tick();
@@ -151,8 +174,11 @@ public class InGameState extends BasicGameState {
                 dialogue.tick();
             }
         }
-
         Collisions.tick();
+        if (!notifications.isEmpty()) {
+            // treated as a queue, so only the first is ticked
+            notifications.get(0).tick();
+        }
     }
 
     @Override

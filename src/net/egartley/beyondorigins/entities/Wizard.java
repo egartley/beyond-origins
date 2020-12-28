@@ -15,8 +15,6 @@ import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.data.Items;
 import net.egartley.beyondorigins.data.Quests;
 import net.egartley.beyondorigins.gamestates.InGameState;
-import net.egartley.beyondorigins.ingame.Quest;
-import net.egartley.beyondorigins.ingame.QuestObjective;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -56,10 +54,7 @@ public class Wizard extends AnimatedEntity implements Character {
             @Override
             public void onFinish() {
                 metPlayer = true;
-                Quest quest = new Quest(Quests.WIZARD_HAT, "Missing hat", "The wizard's hat has gone missing! You must find it and ensure its safe return.");
-                quest.objectives.add(new QuestObjective("Locate the Wizard's hat", "It's in one of the trees, dummy!"));
-                quest.objectives.add(new QuestObjective("Return the hat", "Go back to the Wizard and give him back his magical hat."));
-                InGameState.quests.add(quest, true);
+                InGameState.giveQuest(Quests.WIZARD_HAT, true);
             }
         });
         DialogueController.addFinished(new DialogueExchangeFinishedEvent(dialogue_gotHat) {
@@ -72,11 +67,9 @@ public class Wizard extends AnimatedEntity implements Character {
                 wearingHat = true;
                 // update position so that it looks like he doesn't move (hat makes him "taller")
                 y(y() - 12);
-
                 interactions.get(0).collision.end();
-
-                InGameState.quests.get(Quests.WIZARD_HAT).objectives.get(1).complete();
-                InGameState.quests.get(Quests.WIZARD_HAT).complete();
+                Quests.WIZARD_HAT.objectives.get(1).complete();
+                Quests.WIZARD_HAT.complete();
             }
         });
     }

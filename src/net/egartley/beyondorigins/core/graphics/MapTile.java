@@ -29,6 +29,7 @@ public class MapTile {
     }
 
     public void rotate(float angle) {
+        image = image.copy();
         image.rotate(angle);
     }
 

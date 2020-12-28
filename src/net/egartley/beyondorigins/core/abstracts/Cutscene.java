@@ -7,8 +7,9 @@ import org.newdawn.slick.Graphics;
 
 public abstract class Cutscene extends MapSector {
 
-    private final double TRANSITION_SPEED = 1.8;
+    private final double TRANSITION_SPEED = 1.5;
 
+    private final int barHeight = 64;
     private double transitionAlpha = 255;
     private Color transitionColor = Color.black;
     private MapSector returnSector;
@@ -41,6 +42,9 @@ public abstract class Cutscene extends MapSector {
                 isShowingTransition = false;
             }
         }
+        graphics.setColor(Color.black);
+        graphics.fillRect(0, 0, Game.WINDOW_WIDTH, barHeight);
+        graphics.fillRect(0, Game.WINDOW_HEIGHT - barHeight, Game.WINDOW_WIDTH, barHeight);
     }
 
     @Override

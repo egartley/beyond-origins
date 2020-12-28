@@ -3,6 +3,7 @@ package net.egartley.beyondorigins.entities;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.core.abstracts.AnimatedEntity;
+import net.egartley.beyondorigins.core.abstracts.Cutscene;
 import net.egartley.beyondorigins.core.abstracts.Entity;
 import net.egartley.beyondorigins.core.abstracts.MapSector;
 import net.egartley.beyondorigins.core.controllers.KeyboardController;
@@ -58,7 +59,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
 
         isSectorSpecific = false;
         isDualRendered = false;
-        speed = 1.1;
+        speed = 2;
         health = 30;
         maximumHealth = health;
 
@@ -154,6 +155,20 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
 
     public void onInGameLeave() {
         KeyboardController.removeKeyTyped(attack);
+    }
+
+    @Override
+    public void onSectorEnter(MapSector sector) {
+        if (sector instanceof Cutscene) {
+            freeze();
+        }
+    }
+
+    @Override
+    public void onSectorLeave(MapSector sector) {
+        if (sector instanceof Cutscene) {
+            thaw();
+        }
     }
 
     /**

@@ -9,7 +9,6 @@ import net.egartley.beyondorigins.core.interfaces.Tickable;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.MapSectorChangeCollision;
 import net.egartley.beyondorigins.core.logic.interaction.MapSectorChangeBoundary;
-import net.egartley.beyondorigins.core.ui.NotificationBanner;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.entities.Entities;
 import org.json.JSONArray;
@@ -216,16 +215,6 @@ public abstract class MapSector implements Tickable {
             entities.remove(e);
         }
         removeTickable(e);
-    }
-
-    public void pushNotification(NotificationBanner notification) {
-        addTickable(notification);
-        addRenderable(notification);
-    }
-
-    public void onNotificationFinish(NotificationBanner notification) {
-        removeTickable(notification);
-        removeRenderable(notification);
     }
 
     public void addTickable(Tickable tickable) {
