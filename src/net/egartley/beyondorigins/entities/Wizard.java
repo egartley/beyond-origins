@@ -114,6 +114,7 @@ public class Wizard extends AnimatedEntity implements Character {
         animations.add(new Animation(Util.getAnimationFrames(sprites.get(0)), ANIMATION_THRESHOLD));
         animations.add(new Animation(Util.getAnimationFrames(sprites.get(1)), ANIMATION_THRESHOLD));
         animation = animations.get(0);
+        animation.stop();
     }
 
     @Override

@@ -11,6 +11,7 @@ import net.egartley.beyondorigins.core.ui.DialoguePanel;
 import net.egartley.beyondorigins.core.ui.NotificationBanner;
 import net.egartley.beyondorigins.data.Items;
 import net.egartley.beyondorigins.data.Quests;
+import net.egartley.beyondorigins.data.SaveLoad;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.ingame.Building;
 import net.egartley.beyondorigins.ingame.PlayerMenu;
@@ -27,11 +28,7 @@ public class InGameState extends BasicGameState {
 
     public static final int ID = 1;
 
-    private KeyTyped toggleInventory;
-    private KeyTyped advanceDialogue;
-    private KeyTyped backToMainMenu;
-    private KeyTyped toggleDebug;
-
+    private static final ArrayList<KeyTyped> keyTypeds = new ArrayList<>();
     private static final ArrayList<NotificationBanner> notifications = new ArrayList<>();
 
     public static Map map;
@@ -55,34 +52,42 @@ public class InGameState extends BasicGameState {
         dialogue = new DialoguePanel();
         changeMap(0);
 
-        toggleInventory = new KeyTyped(Input.KEY_E) {
+        keyTypeds.add(new KeyTyped(Input.KEY_E) {
             @Override
             public void onType() {
                 if (!isDialogueVisible) {
                     isInventoryVisible = !isInventoryVisible;
                 }
             }
-        };
-        advanceDialogue = new KeyTyped(Input.KEY_SPACE) {
+        });
+        keyTypeds.add(new KeyTyped(Input.KEY_SPACE) {
             @Override
             public void onType() {
                 dialogue.advance();
             }
-        };
-        backToMainMenu = new KeyTyped(Input.KEY_ESCAPE) {
+        });
+        keyTypeds.add(new KeyTyped(Input.KEY_ESCAPE) {
             @Override
             public void onType() {
                 if (!isInventoryVisible && !isDialogueVisible) {
                     game.enterState(MainMenuState.ID);
                 }
             }
-        };
-        toggleDebug = new KeyTyped(Input.KEY_F3) {
+        });
+        keyTypeds.add(new KeyTyped(Input.KEY_F3) {
             @Override
             public void onType() {
                 Game.debug = !Game.debug;
             }
-        };
+        });
+        keyTypeds.add(new KeyTyped(Input.KEY_O) {
+            @Override
+            public void onType() {
+                SaveLoad.setCurrentID(0);
+                SaveLoad.set("test", "teststring");
+                SaveLoad.save();
+            }
+        });
     }
 
     public static void changeMap(int i) {
@@ -116,20 +121,18 @@ public class InGameState extends BasicGameState {
 
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {
-        KeyboardController.addKeyTyped(toggleInventory);
-        KeyboardController.addKeyTyped(advanceDialogue);
-        KeyboardController.addKeyTyped(backToMainMenu);
-        KeyboardController.addKeyTyped(toggleDebug);
+        for (KeyTyped kt : keyTypeds) {
+            KeyboardController.addKeyTyped(kt);
+        }
         Entities.PLAYER.onInGameEnter();
     }
 
     @Override
     public void leave(GameContainer container, StateBasedGame game) throws SlickException {
         Entities.PLAYER.onInGameLeave();
-        KeyboardController.removeKeyTyped(toggleInventory);
-        KeyboardController.removeKeyTyped(advanceDialogue);
-        KeyboardController.removeKeyTyped(backToMainMenu);
-        KeyboardController.removeKeyTyped(toggleDebug);
+        for (KeyTyped kt : keyTypeds) {
+            KeyboardController.removeKeyTyped(kt);
+        }
     }
 
     @Override

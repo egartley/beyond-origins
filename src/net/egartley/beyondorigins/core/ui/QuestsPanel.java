@@ -1,6 +1,8 @@
 package net.egartley.beyondorigins.core.ui;
 
 import net.egartley.beyondorigins.Debug;
+import net.egartley.beyondorigins.core.interfaces.Loadable;
+import net.egartley.beyondorigins.core.interfaces.Saveable;
 import net.egartley.beyondorigins.core.logic.Calculate;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.ingame.Quest;
@@ -9,7 +11,7 @@ import org.newdawn.slick.Image;
 
 import java.util.ArrayList;
 
-public class QuestsPanel extends UIElement {
+public class QuestsPanel extends UIElement implements Saveable, Loadable {
 
     private final QuestsSidePanel sidePanel;
     private final ArrayList<QuestSlot> slots;
@@ -157,6 +159,16 @@ public class QuestsPanel extends UIElement {
 
         pageLeftButton.render(graphics);
         pageRightButton.render(graphics);
+    }
+
+    @Override
+    public void onLoad() {
+
+    }
+
+    @Override
+    public void onSave() {
+
     }
 
 }
