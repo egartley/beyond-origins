@@ -46,10 +46,6 @@ public abstract class Entity extends Renderable implements Tickable {
      * Collection of the entity's interactions
      */
     public ArrayList<EntityEntityInteraction> interactions = new ArrayList<>();
-    /**
-     * Collection of the entity's concurrent collisions
-     */
-    public ArrayList<EntityEntityCollision> concurrentCollisions = new ArrayList<>();
 
     public EntityInventory inventory;
 
@@ -513,11 +509,7 @@ public abstract class Entity extends Renderable implements Tickable {
         }
         boundaries.clear();
         setBoundaries();
-        // end all collisions because if they're not, both boundaries will never have isCollided updated
-        for (EntityEntityCollision collision : Collisions.with(this)) {
-            collision.end();
-        }
-        concurrentCollisions.clear();
+        Collisions.endWith(this);
         setCollisions();
         interactions.forEach(i -> i.collision.end());
         interactions.clear();

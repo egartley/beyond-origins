@@ -3,6 +3,7 @@ package net.egartley.beyondorigins;
 import net.egartley.beyondorigins.core.abstracts.Entity;
 import net.egartley.beyondorigins.core.graphics.Sprite;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
+import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
@@ -121,7 +122,10 @@ public class Util {
      */
     public static void annulCollisionEvent(EntityEntityCollisionEvent event, Entity e) {
         // check for other movement restrictions
-        for (EntityEntityCollision c : e.concurrentCollisions) {
+        for (EntityEntityCollision c : Collisions.concurrent(e)) {
+            if (c.lastEvent == null) {
+                continue;
+            }
             if (c.lastEvent.collidedSide == event.collidedSide && c.lastEvent.invoker != event.invoker) {
                 // there is another collision that has the same movement
                 // restriction, so don't annul it

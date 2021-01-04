@@ -18,12 +18,11 @@ public class BuildingChanger extends StaticEntity {
 
     public BuildingChanger(byte action, int x, int y, int width, int height) {
         super("BuildingChanger");
+        setBoundaries();
         setPosition(x, y);
         this.width = width;
         this.height = height;
         this.action = action;
-
-        defaultBoundary = new EntityBoundary(this, width, height, new BoundaryPadding(0));
     }
 
     public BuildingChanger(byte action, int jumpNumber, int x, int y, int width, int height) {
@@ -33,6 +32,8 @@ public class BuildingChanger extends StaticEntity {
 
     @Override
     protected void setBoundaries() {
+        defaultBoundary = new EntityBoundary(this, width, height, new BoundaryPadding(0));
+        boundaries.add(defaultBoundary);
     }
 
     @Override

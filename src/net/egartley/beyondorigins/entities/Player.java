@@ -28,16 +28,17 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 
-import java.util.ArrayList;
-
 public class Player extends AnimatedEntity implements Character, Damageable, Attacker {
 
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
     private final int ANIMATION_THRESHOLD = 165;
+
     private final int MAX_LEVEL = 100;
-    private final int MAX_EXPERIENCE = 10390; // 100 + (100 * 98) + (5 * 98)
-    private final int DEFAULT_DAMAGE_DEALT = 4;
+    private final int MAX_EXPERIENCE = 4900601;
+    private final int DEFAULT_DAMAGE = 4;
+    private final int DEFAULT_HEALTH = 30;
+    private final int DEFAULT_DEFENSE = 1;
 
     private boolean frozen;
     private boolean isMovementInvalidated;
@@ -78,20 +79,21 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         };
     }
 
+    /**
+     * Generate collisions with sector entities that aren't traversable
+     *
+     * @param sector The sector to generate collisions for its non-traversable entities
+     */
     public void generateSectorSpecificCollisions(MapSector sector) {
-        // generate collisions with sector entities that aren't traversable
         for (Entity e : sector.entities) {
             if (!e.isTraversable && e.isSectorSpecific) {
-                generateMovementRestrictionCollisions(e.defaultBoundary, boundary, headBoundary, chatBoundary, attackBoundary);
+                generateMovementRestrictionCollisions(e.defaultBoundary);
             }
         }
     }
 
-    public void removeAllCollisions() {
-        Collisions.removeWith(this);
-    }
-
-    public void generateMovementRestrictionCollisions(EntityBoundary otherBoundary, EntityBoundary... exclusions) {
+    public void generateMovementRestrictionCollisions(EntityBoundary otherBoundary) {
+        EntityBoundary[] exclusions = new EntityBoundary[]{boundary, headBoundary, chatBoundary, attackBoundary};
         EntityEntityCollision baseCollision = new EntityEntityCollision(headBoundary, otherBoundary) {
             public void start(EntityEntityCollisionEvent event) {
                 Util.onCollisionWithNonTraversableEntity(event, Entities.PLAYER);
@@ -99,13 +101,13 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
 
             public void end(EntityEntityCollisionEvent event) {
                 boolean noMovementRestrictions = true;
-                for (EntityEntityCollision c : Entities.PLAYER.concurrentCollisions) {
+                for (EntityEntityCollision c : Collisions.concurrent(Entities.PLAYER)) {
                     if (c.isMovementRestricting) {
                         noMovementRestrictions = false;
                         break;
                     }
                 }
-                if (!Entities.PLAYER.isCollided || noMovementRestrictions) {
+                if (noMovementRestrictions) {
                     allowAllMovement();
                 } else {
                     Util.annulCollisionEvent(event, Entities.PLAYER);
@@ -118,29 +120,13 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         for (EntityEntityCollision collision : Util.getAllBoundaryCollisions(baseCollision, this, otherBoundary)) {
             boolean add = true;
             for (EntityBoundary exclude : exclusions) {
-                if (collision.boundaries[0] == exclude) {
+                if (collision.boundaries[0] == exclude || collision.boundaries[1] == exclude) {
                     add = false;
                     break;
                 }
             }
             if (add) {
                 Collisions.add(collision);
-            }
-        }
-    }
-
-    public void deactivateBuildingCollisions() {
-        for (EntityEntityCollision c : Collisions.with(this)) {
-            if (c.boundaries[0].parent instanceof Building || c.boundaries[1].parent instanceof Building) {
-                c.deactivate();
-            }
-        }
-    }
-
-    public void reactivateBuildingCollisions() {
-        for (EntityEntityCollision c : Collisions.with(this)) {
-            if (c.boundaries[0].parent instanceof Building || c.boundaries[1].parent instanceof Building) {
-                c.activate();
             }
         }
     }
@@ -198,8 +184,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
      */
     public void enteredBuilding() {
         isInBuilding = true;
-        removeAllCollisions();
-        deactivateBuildingCollisions();
+        Collisions.nuke();
         // invalidateAllMovement();
     }
 
@@ -213,7 +198,6 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         building.setCollisions();
         InGameState.map.sector.setSpecialCollisions();
         setPosition(building.playerLeaveX, building.playerLeaveY);
-        reactivateBuildingCollisions();
         isInBuilding = false;
         // invalidateAllMovement();
     }
@@ -241,7 +225,6 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         chatBoundary.isVisible = false;
         attackBoundary = new EntityBoundary(this, sprite, new BoundaryPadding(18));
         attackBoundary.name = "Attack";
-
         boundaries.add(boundary);
         boundaries.add(headBoundary);
         boundaries.add(bodyBoundary);
@@ -272,7 +255,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
             move(up, down, left, right);
         }
 
-        if (!left && !right && !down && !up) {
+        if (!left && !right && !down && !up && !animation.isStopped()) {
             // not moving, so stop the animation if it's not already stopped
             animation.stop();
         }
@@ -334,7 +317,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         return 100 + (100 * n) + (5 * n);
     }
 
-    private void nextLevel() {
+    private void levelUp() {
         if (level < MAX_LEVEL) {
             level++;
         }
@@ -351,20 +334,8 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
             experience = MAX_EXPERIENCE;
         }
         if (experience >= getExperienceNeededForNextLevel()) {
-            nextLevel();
+            levelUp();
         }
-    }
-
-    public ArrayList<Entity> getCollidedEntities() {
-        ArrayList<Entity> collided = new ArrayList<>();
-        for (EntityEntityCollision collision : concurrentCollisions) {
-            if (collision.entities[0] == this) {
-                collided.add(collision.entities[1]);
-            } else {
-                collided.add(collision.entities[0]);
-            }
-        }
-        return collided;
     }
 
     @Override
@@ -379,10 +350,10 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
 
     @Override
     public void attack() {
-        ArrayList<Entity> entities = getCollidedEntities();
-        for (Entity e : entities) {
+        for (EntityEntityCollision c : Collisions.concurrent(this)) {
+            Entity e = c.entities[0] != this ? c.entities[0] : c.entities[1];
             if (e instanceof Damageable) {
-                ((Damageable) e).inflict(DEFAULT_DAMAGE_DEALT);
+                ((Damageable) e).inflict(DEFAULT_DAMAGE);
             }
         }
     }

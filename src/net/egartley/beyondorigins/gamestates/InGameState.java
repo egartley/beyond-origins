@@ -94,7 +94,7 @@ public class InGameState extends BasicGameState {
         for (EntityEntityCollision collision : Collisions.with(Entities.PLAYER)) {
             collision.end();
         }
-        Collisions.clear();
+        Collisions.nuke();
         if (map != null) {
             map.onPlayerLeave();
         }
@@ -107,7 +107,7 @@ public class InGameState extends BasicGameState {
         pushNotification(new NotificationBanner("New quest added!"));
     }
 
-    public static void takeQuest(Quest quest) {
+    public static void removeQuest(Quest quest) {
         playerMenu.questsPanel.remove(quest);
     }
 

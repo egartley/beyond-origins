@@ -135,7 +135,7 @@ public abstract class MapSector implements Tickable {
         for (Entity entity : e) {
             removeEntity(entity, true);
         }
-        Collisions.clear();
+        Collisions.nuke();
     }
 
     /**

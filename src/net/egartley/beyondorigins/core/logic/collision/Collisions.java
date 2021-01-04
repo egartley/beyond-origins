@@ -53,11 +53,21 @@ public class Collisions {
         return with;
     }
 
+    public static ArrayList<EntityEntityCollision> concurrent(Entity entity) {
+        ArrayList<EntityEntityCollision> concurrent = new ArrayList<>();
+        for (EntityEntityCollision c : collisions) {
+            if ((c.entities[0].equals(entity) || c.entities[1].equals(entity)) && c.isCollided) {
+                concurrent.add(c);
+            }
+        }
+        return concurrent;
+    }
+
     public static ArrayList<EntityEntityCollision> all() {
         return collisions;
     }
 
-    public static void clear() {
+    public static void nuke() {
         collisions.clear();
     }
 

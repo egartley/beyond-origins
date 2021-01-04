@@ -168,7 +168,6 @@ public class EntityEntityCollision {
         for (Entity e : entities) {
             // both entities are collided
             e.lastCollision = this;
-            e.concurrentCollisions.add(this);
             e.isCollided = true;
         }
         for (EntityBoundary b : boundaries) {
@@ -183,12 +182,12 @@ public class EntityEntityCollision {
     private void onCollisionEnd() {
         // determine boundary.isCollided
         for (EntityBoundary boundary : boundaries) {
-            // for both boundaries
-            if (boundary.parent.concurrentCollisions.size() == 0) {
+            ArrayList<EntityEntityCollision> concurrent = Collisions.concurrent(boundary.parent);
+            if (concurrent.size() == 0) {
                 boundary.isCollided = false;
                 continue;
             }
-            for (EntityEntityCollision c : boundary.parent.concurrentCollisions) {
+            for (EntityEntityCollision c : concurrent) {
                 // for each concurrent collision in the boundary's entity
                 if (c.isCollided) {
                     // ^ don't check for "c != this" because this will have isCollided as always false
@@ -205,7 +204,6 @@ public class EntityEntityCollision {
 
         // determine entity.isCollided
         for (Entity entity : entities) {
-            entity.concurrentCollisions.remove(this);
             for (EntityBoundary boundary : entity.boundaries) {
                 if (boundary.isCollided) {
                     // at least one boundary is collided, therefore the entity should be considered collided
