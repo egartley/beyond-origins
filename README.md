@@ -6,7 +6,7 @@ Demo video: [https://youtu.be/9yA8Gh5eoog](https://youtu.be/9yA8Gh5eoog)
 
 Documentation: [https://egartley.net/docs/beyond-origins](https://egartley.net/docs/beyond-origins)
 
-[](https://raw.githubusercontent.com/egartley/media/master/screenshots/beyond-origins.png)
+![screenshot](https://raw.githubusercontent.com/egartley/media/master/screenshots/beyond-origins.png)
 
 More screenshots are available at [egartley.net](https://egartley.net/projects/beyond-origins/?via=gh).
 
