@@ -10,7 +10,7 @@ public class Sector3 extends MapSector {
     }
 
     @Override
-    public void initialize() {
+    public void init() {
 
     }
 

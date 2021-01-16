@@ -15,6 +15,9 @@ import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.ingame.maps.testbattle.TestBattleMap;
 import org.newdawn.slick.Animation;
 
+/**
+ * Test enemy
+ */
 public class Monster extends AnimatedEntity implements Damageable {
 
     private final int ANIMATION_THRESHOLD = 200;
@@ -22,14 +25,11 @@ public class Monster extends AnimatedEntity implements Damageable {
     private final byte RIGHT_NORMAL_ANIMATION = 0;
     private final byte LEFT_HURT_ANIMATION = 3;
     private final byte RIGHT_HURT_ANIMATION = 2;
-
     private boolean isHurt;
-
     private DelayedEvent hurtEvent = null;
 
     public Monster() {
         super("Monster", new SpriteSheet(Images.get(Images.MONSTER), 36, 58, 4, 3));
-
         isSectorSpecific = true;
         isDualRendered = false;
         speed = 0.7;
@@ -42,8 +42,8 @@ public class Monster extends AnimatedEntity implements Damageable {
         onColdDeath();
         InGameState.map.sector.removeEntity(this);
         if (InGameState.map instanceof TestBattleMap) {
-            ((TestBattleMap) (InGameState.map)).spawnMonster(this.x() + Util.randomInt(25, -25), this.y() + Util.randomInt(50, 75));
-            ((TestBattleMap) (InGameState.map)).spawnMonster(this.x() + Util.randomInt(25, -25), this.y() - Util.randomInt(50, 75));
+            ((TestBattleMap) (InGameState.map)).spawnMonster(this.x() + Util.randomInt(-25, 25), this.y() + Util.randomInt(50, 75));
+            ((TestBattleMap) (InGameState.map)).spawnMonster(this.x() + Util.randomInt(-25, 25), this.y() - Util.randomInt(50, 75));
         }
     }
 

@@ -8,6 +8,9 @@ import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 
+/**
+ * An area that will trigger a cutscene to start playing
+ */
 public class CutsceneTrigger extends StaticEntity {
 
     public Cutscene cutscene;

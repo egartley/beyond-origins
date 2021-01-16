@@ -12,7 +12,8 @@ public class Sector4 extends MapSector {
     }
 
     @Override
-    public void initialize() {
+    public void init() {
+        // test cutscene
         addEntity(new CutsceneTrigger(new TestScene(parent), 400, 200));
     }
 

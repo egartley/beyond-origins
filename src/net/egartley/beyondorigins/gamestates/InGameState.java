@@ -43,6 +43,7 @@ public class InGameState extends BasicGameState {
 
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
+        Entities.initialize();
         Items.init();
         Quests.init();
 
@@ -55,6 +56,7 @@ public class InGameState extends BasicGameState {
         keyTypeds.add(new KeyTyped(Input.KEY_E) {
             @Override
             public void onType() {
+                // only open player menu when not talking to someone
                 if (!isDialogueVisible) {
                     isInventoryVisible = !isInventoryVisible;
                 }
@@ -90,6 +92,13 @@ public class InGameState extends BasicGameState {
         });
     }
 
+    /**
+     * Leaves the player from the current map, and enters them into the new one. All collisions are ended, then cleared.
+     *
+     * @param i The index of the map to move to
+     * @see Map#onPlayerLeave()
+     * @see Map#onPlayerEnter()
+     */
     public static void changeMap(int i) {
         for (EntityEntityCollision collision : Collisions.with(Entities.PLAYER)) {
             collision.end();
@@ -102,49 +111,71 @@ public class InGameState extends BasicGameState {
         map.onPlayerEnter();
     }
 
+    /**
+     * Give the player a quest
+     *
+     * @param quest The quest to give the player
+     * @param start Whether or not to "start" the quest after giving it
+     */
     public static void giveQuest(Quest quest, boolean start) {
         playerMenu.questsPanel.add(quest, start);
         pushNotification(new NotificationBanner("New quest added!"));
     }
 
+    /**
+     * Remove, or clear, a quest from the player
+     *
+     * @param quest The quest to remove
+     */
     public static void removeQuest(Quest quest) {
         playerMenu.questsPanel.remove(quest);
     }
 
+    /**
+     * Add a notification to the notification queue
+     *
+     * @param notification The notification to add
+     * @see #notifications
+     */
     public static void pushNotification(NotificationBanner notification) {
         notifications.add(notification);
     }
 
+    /**
+     * Remove the notification from the queue
+     *
+     * @param notification The notification to remove
+     * @see #notifications
+     */
     public static void onNotificationFinish(NotificationBanner notification) {
         notifications.remove(notification);
     }
 
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {
-        for (KeyTyped kt : keyTypeds) {
-            KeyboardController.addKeyTyped(kt);
-        }
+        keyTypeds.forEach(KeyboardController::addKeyTyped);
         Entities.PLAYER.onInGameEnter();
     }
 
     @Override
     public void leave(GameContainer container, StateBasedGame game) throws SlickException {
         Entities.PLAYER.onInGameLeave();
-        for (KeyTyped kt : keyTypeds) {
-            KeyboardController.removeKeyTyped(kt);
-        }
+        keyTypeds.forEach(KeyboardController::removeKeyTyped);
     }
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics graphics) throws SlickException {
+        // first, check if we're in a building
         if (Entities.PLAYER.isInBuilding) {
             graphics.setColor(Color.black);
-            graphics.fillRect(0, 0, Game.WINDOW_WIDTH + 1, Game.WINDOW_HEIGHT + 1);
+            graphics.fillRect(0, 0, Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT);
             building.currentFloor.render(graphics);
             Entities.PLAYER.render(graphics);
         } else {
+            // not in a building, so just render the map as normal
             map.render(graphics);
         }
+        // check if the user can interact at all
         if (canPlay) {
             if (isInventoryVisible) {
                 playerMenu.render(graphics);
@@ -152,6 +183,7 @@ public class InGameState extends BasicGameState {
                 dialogue.render(graphics);
             }
         }
+        // check for any pending notifications
         if (!notifications.isEmpty()) {
             // treated as a queue, so only the first is rendered
             notifications.get(0).render(graphics);
@@ -163,6 +195,7 @@ public class InGameState extends BasicGameState {
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+        // see render method for comments
         if (Entities.PLAYER.isInBuilding) {
             building.currentFloor.checkPlayerLimits();
             building.currentFloor.tick();
@@ -179,7 +212,6 @@ public class InGameState extends BasicGameState {
         }
         Collisions.tick();
         if (!notifications.isEmpty()) {
-            // treated as a queue, so only the first is ticked
             notifications.get(0).tick();
         }
     }

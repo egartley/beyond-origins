@@ -11,27 +11,35 @@ import org.newdawn.slick.Graphics;
 
 import java.util.ArrayList;
 
+/**
+ * What shows up when the user presses E in game
+ */
 public class PlayerMenu implements Tickable {
 
+    private final Color backgroundColor = new Color(0, 0, 0, 152);
+
+    /**
+     * The current panel being shown
+     */
     public UIElement panel;
     public PlayerInventory inventoryPanel;
     public QuestsPanel questsPanel;
     public ArrayList<ClickableArea> tabs = new ArrayList<>();
-    public ClickableArea inventoryPanelTab, questsPanelTab;
-
-    private final Color backgroundColor = new Color(0, 0, 0, 152);
+    public ClickableArea inventoryPanelTab;
+    public ClickableArea questsPanelTab;
 
     public PlayerMenu() {
+        // initialize panels
         inventoryPanel = new PlayerInventory();
         questsPanel = new QuestsPanel();
 
         // show inventory by default
         panel = inventoryPanel;
 
+        // set and add tabs
         inventoryPanelTab = new ClickableArea(panel.x() + 20, panel.y() + 1, 53, 25) {
             @Override
             public void onHover() {
-
             }
 
             @Override
@@ -42,7 +50,6 @@ public class PlayerMenu implements Tickable {
         questsPanelTab = new ClickableArea(panel.x() + 79, panel.y() + 1, 53, 25) {
             @Override
             public void onHover() {
-
             }
 
             @Override
@@ -54,6 +61,11 @@ public class PlayerMenu implements Tickable {
         tabs.add(questsPanelTab);
     }
 
+    /**
+     * Called when a tab (rather its clickable area) is clicked by the user
+     *
+     * @param clickedTab The tab that was clicked
+     */
     private void onTabClicked(ClickableArea clickedTab) {
         if (clickedTab.equals(questsPanelTab) && !panel.equals(questsPanel)) {
             questsPanel.onShow();
@@ -74,8 +86,10 @@ public class PlayerMenu implements Tickable {
     }
 
     public void render(Graphics graphics) {
+        // dim the game to make the menu easier to see
         graphics.setColor(backgroundColor);
-        graphics.fillRect(0, 0, Game.WINDOW_WIDTH + 1, Game.WINDOW_HEIGHT + 1);
+        graphics.fillRect(0, 0, Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT);
+        // actually show whatever panel is the current one
         panel.render(graphics);
     }
 

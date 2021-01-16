@@ -20,123 +20,53 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 
 /**
- * Specific part, or area, of a map
+ * Specific part, or area, of a map that fills the entire window
  *
  * @see Map
  */
 public abstract class MapSector implements Tickable {
 
-    /**
-     * Maximum number of neighbors one sector can have
-     */
+    private int deltaX;
+    private int deltaY;
     private final byte MAX_NEIGHBORS = 4;
-    /**
-     * Tile width and height in pixels
-     */
     private final short TILE_SIZE = 32;
-    /**
-     * Default width/height of a {@link MapSectorChangeBoundary}
-     */
     private final short BOUNDARY_SIZE = 18;
-    /**
-     * How much to offset one of the player's coordinates when entering from another sector, if applicable
-     */
     private final short PLAYER_ENTRANCE_OFFSET = BOUNDARY_SIZE + 4;
+    private final ArrayList<MapSector> neighbors = new ArrayList<>(MAX_NEIGHBORS);
+    private final ArrayList<MapSectorChangeCollision> changeCollisions = new ArrayList<>();
 
+    protected Map parent;
+    protected ArrayList<ArrayList<MapTile>> tiles = new ArrayList<>();
+    protected ArrayList<MapSectorChangeBoundary> changeBoundaries = new ArrayList<>();
+
+    public int number;
     public static final byte TOP = 0;
     public static final byte RIGHT = 1;
     public static final byte BOTTOM = 2;
     public static final byte LEFT = 3;
-    /**
-     * Number of rows of tiles in any sector
-     */
     public static final short TILE_ROWS = 17;
-    /**
-     * Number of columns of tiles in any sector
-     */
     public static final short TILE_COLUMNS = 30;
-
-    public int number;
-
-    private int deltaX;
-    private int deltaY;
-
-    /**
-     * The map this sector is a part of
-     */
-    protected Map parent;
-    /**
-     * The sector's neighbors
-     */
-    private final ArrayList<MapSector> neighbors = new ArrayList<>(MAX_NEIGHBORS);
-    /**
-     * Boundaries, or areas, of all of the possible sector changes
-     */
-    protected ArrayList<MapSectorChangeBoundary> changeBoundaries = new ArrayList<>();
-    /**
-     * All of the collisions for the sector changes
-     */
-    private final ArrayList<MapSectorChangeCollision> changeCollisions = new ArrayList<>();
-    /**
-     * Entities that only "exist" within the sector
-     *
-     * @see Entity#isSectorSpecific
-     */
     public ArrayList<Entity> entities = new ArrayList<>();
     public ArrayList<Entity> primaryEntities = new ArrayList<>();
     public ArrayList<Renderable> renderables = new ArrayList<>();
     public ArrayList<Tickable> tickables = new ArrayList<>();
 
-    protected ArrayList<ArrayList<MapTile>> tiles = new ArrayList<>();
 
     /**
-     * Creates a new map sector
+     * Creates a new map sector, then calls {@link #buildTiles()}
      */
-    public MapSector(Map parent, int sector) {
+    public MapSector(Map parent, int number) {
         this.parent = parent;
-        number = sector;
+        this.number = number;
         for (byte i = 0; i < MAX_NEIGHBORS; i++) {
             neighbors.add(null);
         }
         buildTiles();
     }
 
-    /**
-     * Called upon entering this sector
-     */
-    public abstract void onPlayerEnter(MapSector from);
-
-    /**
-     * Called when leaving the sector
-     */
-    public abstract void onPlayerLeave(MapSector to);
-
-    public abstract void setSpecialCollisions();
-
-    /**
-     * Initialize things such as sector-specific entities
-     */
-    public abstract void initialize();
-
-    public void onPlayerEnter_internal() {
-        addEntity(Entities.PLAYER, true);
-        initialize();
-    }
-
-    public void onPlayerLeave_internal() {
-        ArrayList<Entity> e = (ArrayList<Entity>) entities.clone();
-        for (Entity entity : e) {
-            removeEntity(entity);
-        }
-        e = (ArrayList<Entity>) primaryEntities.clone();
-        for (Entity entity : e) {
-            removeEntity(entity, true);
-        }
-        Collisions.nuke();
-    }
+    public abstract void init();
 
     /**
      * Minimum requirement for rendering, must be called first in any implementation
@@ -163,11 +93,117 @@ public abstract class MapSector implements Tickable {
             }
 
             renderables.forEach(r -> r.render(graphics));
-        } catch (ConcurrentModificationException cme) {
-            // Debug.warning("Concurrent modification! (" + cme.getMessage() + ")");
-            cme.printStackTrace();
         } catch (Exception e) {
             Debug.error(e);
+        }
+    }
+
+    /**
+     * Renders all of the sector's tiles
+     *
+     * @param graphics The graphics to use
+     */
+    protected void drawTiles(Graphics graphics) {
+        deltaX = 0;
+        deltaY = 0;
+        for (ArrayList<MapTile> row : tiles) {
+            for (MapTile tile : row) {
+                graphics.drawImage(tile.image, deltaX, deltaY);
+                deltaX += TILE_SIZE;
+            }
+            deltaX = 0;
+            deltaY += TILE_SIZE;
+        }
+    }
+
+    /**
+     * Populate {@link #tiles} with {@link MapTile} objects, defined in the sector's .def file
+     */
+    private void buildTiles() {
+        String entireJSONString = null;
+        try {
+            entireJSONString = Files.readString(FileSystems.getDefault().getPath("resources", "data", "maps", parent.id, "sector-" + number + ".def"));
+        } catch (IOException e) {
+            Debug.error(e);
+        }
+        if (entireJSONString == null) {
+            Debug.warning("There was a problem while building the tiles for \"" + this + "\"");
+            return;
+        }
+
+        JSONObject root = new JSONObject(entireJSONString);
+        JSONArray legend = root.getJSONArray("legend");
+        JSONObject tilesObject = root.getJSONObject("tiles");
+        ArrayList<String> tileKeys = new ArrayList<>();
+        ArrayList<String> tileIDs = new ArrayList<>();
+        String buildType = tilesObject.getString("type");
+
+        for (int i = 0; i < legend.length(); i++) {
+            JSONObject entry = legend.getJSONObject(i);
+            tileKeys.add(entry.getString("key"));
+            tileIDs.add(entry.getString("tile"));
+        }
+
+        switch (buildType.toLowerCase()) {
+            case "fill":
+                fill(tileIDs.get(tileKeys.indexOf(tilesObject.getString("data"))));
+                break;
+            case "mixed":
+                fill(tileIDs.get(tileKeys.indexOf(tilesObject.getJSONObject("data").getString("common"))));
+                mixed(tilesObject.getJSONObject("data").getJSONArray("custom"), tileIDs, tileKeys);
+                break;
+        }
+
+        if (root.has("random")) {
+            JSONArray keys = root.getJSONArray("random");
+            for (int i = 0; i < keys.length(); i++) {
+                String id = tileIDs.get(tileKeys.indexOf(keys.getString(i)));
+                for (int r = 0; r < TILE_ROWS; r++) {
+                    for (int c = 0; c < TILE_COLUMNS; c++) {
+                        MapTile tile = tiles.get(r).get(c);
+                        if (tile.id.equalsIgnoreCase(id)) {
+                            if (Util.fiftyFifty()) {
+                                switch (Util.randomInt(0, 2, true)) {
+                                    case 0:
+                                        tile.rotate();
+                                        break;
+                                    case 1:
+                                        tile.rotate(180);
+                                        break;
+                                    case 2:
+                                        tile.rotate(270);
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void fill(String id) {
+        Image image = Images.get(Images.mapTilePath + id + ".png");
+        for (int r = 0; r < TILE_ROWS; r++) {
+            ArrayList<MapTile> column = new ArrayList<>();
+            for (int c = 0; c < TILE_COLUMNS; c++) {
+                column.add(new MapTile(id, image));
+            }
+            tiles.add(column);
+        }
+    }
+
+    private void mixed(JSONArray custom, ArrayList<String> tileIDs, ArrayList<String> tileKeys) {
+        for (int i = 0; i < custom.length(); i++) {
+            JSONObject o = (JSONObject) custom.get(i);
+            int c = o.getInt("c");
+            int r = o.getInt("r");
+            String id = tileIDs.get(tileKeys.indexOf(o.getString("key")));
+            Image image = Images.get(Images.mapTilePath + id + ".png");
+            if (o.has("rotate")) {
+                image.rotate(o.getInt("rotate"));
+            }
+            tiles.get(r).set(c, new MapTile(id, image));
         }
     }
 
@@ -179,10 +215,67 @@ public abstract class MapSector implements Tickable {
         try {
             tickables.forEach(Tickable::tick);
             changeCollisions.forEach(MapSectorChangeCollision::tick);
-        } catch (ConcurrentModificationException cme) {
-            // ignore for now
         } catch (Exception e) {
             Debug.error(e);
+        }
+    }
+
+    public void onPlayerEnter_internal() {
+        addEntity(Entities.PLAYER, true);
+        init();
+    }
+
+    public void onPlayerLeave_internal() {
+        ArrayList<Entity> e = (ArrayList<Entity>) entities.clone();
+        e.forEach(this::removeEntity);
+        e = (ArrayList<Entity>) primaryEntities.clone();
+        e.forEach(entity -> removeEntity(entity, true));
+        Collisions.nuke();
+    }
+
+    /**
+     * Set sector-specific, or "special" collisions, such as ones that have to do with a quest
+     */
+    public abstract void setSpecialCollisions();
+
+    public abstract void onPlayerEnter(MapSector from);
+
+    public abstract void onPlayerLeave(MapSector to);
+
+    /**
+     * Updates the player's position in accordance with the sector they just came from
+     *
+     * @param from Where the player is coming from
+     */
+    protected void updatePlayerPosition(MapSector from) {
+        playerEnteredFrom(neighbors.indexOf(from));
+    }
+
+    /**
+     * Update, or "correct", the player's position based on what direction it came from
+     *
+     * @param direction The direction from where the player came into this sector
+     * @see #TOP
+     * @see #BOTTOM
+     * @see #LEFT
+     * @see #RIGHT
+     */
+    private void playerEnteredFrom(int direction) {
+        switch (direction) {
+            case TOP:
+                Entities.PLAYER.y(PLAYER_ENTRANCE_OFFSET);
+                break;
+            case LEFT:
+                Entities.PLAYER.x(PLAYER_ENTRANCE_OFFSET);
+                break;
+            case BOTTOM:
+                Entities.PLAYER.y(Game.WINDOW_HEIGHT - PLAYER_ENTRANCE_OFFSET - Entities.PLAYER.sprite.height);
+                break;
+            case RIGHT:
+                Entities.PLAYER.x(Game.WINDOW_WIDTH - PLAYER_ENTRANCE_OFFSET - Entities.PLAYER.sprite.width);
+                break;
+            default:
+                break;
         }
     }
 
@@ -283,136 +376,6 @@ public abstract class MapSector implements Tickable {
         }
 
         neighbors.set(direction, neighbor);
-    }
-
-    private void playerEnteredFrom(int direction) {
-        switch (direction) {
-            case TOP:
-                Entities.PLAYER.y(PLAYER_ENTRANCE_OFFSET);
-                break;
-            case LEFT:
-                Entities.PLAYER.x(PLAYER_ENTRANCE_OFFSET);
-                break;
-            case BOTTOM:
-                Entities.PLAYER.y(Game.WINDOW_HEIGHT - PLAYER_ENTRANCE_OFFSET - Entities.PLAYER.sprite.height);
-                break;
-            case RIGHT:
-                Entities.PLAYER.x(Game.WINDOW_WIDTH - PLAYER_ENTRANCE_OFFSET - Entities.PLAYER.sprite.width);
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     * Updates the player's position in accordance with the sector they just came from
-     */
-    protected void updatePlayerPosition(MapSector from) {
-        playerEnteredFrom(neighbors.indexOf(from));
-    }
-
-    /**
-     * Renders all of the sector's tiles
-     */
-    protected void drawTiles(Graphics graphics) {
-        deltaX = 0;
-        deltaY = 0;
-        for (ArrayList<MapTile> row : tiles) {
-            for (MapTile tile : row) {
-                graphics.drawImage(tile.image, deltaX, deltaY);
-                deltaX += TILE_SIZE;
-            }
-            deltaX = 0;
-            deltaY += TILE_SIZE;
-        }
-    }
-
-    private void buildTiles() {
-        String entireJSONString = null;
-        try {
-            entireJSONString = Files.readString(FileSystems.getDefault().getPath("resources", "data", "maps", parent.id, "sector-" + number + ".def"));
-        } catch (IOException e) {
-            Debug.error(e);
-        }
-        if (entireJSONString == null) {
-            Debug.warning("There was a problem while building the tiles for \"" + this + "\"");
-            return;
-        }
-
-        JSONObject root = new JSONObject(entireJSONString);
-        JSONArray legend = root.getJSONArray("legend");
-        JSONObject tilesObject = root.getJSONObject("tiles");
-        ArrayList<String> tileKeys = new ArrayList<>();
-        ArrayList<String> tileIDs = new ArrayList<>();
-        String buildType = tilesObject.getString("type");
-
-        for (int i = 0; i < legend.length(); i++) {
-            JSONObject entry = legend.getJSONObject(i);
-            tileKeys.add(entry.getString("key"));
-            tileIDs.add(entry.getString("tile"));
-        }
-
-        switch (buildType.toLowerCase()) {
-            case "fill":
-                fill(tileIDs.get(tileKeys.indexOf(tilesObject.getString("data"))));
-                break;
-            case "mixed":
-                fill(tileIDs.get(tileKeys.indexOf(tilesObject.getJSONObject("data").getString("common"))));
-                mixed(tilesObject.getJSONObject("data").getJSONArray("custom"), tileIDs, tileKeys);
-                break;
-        }
-
-        if (root.has("random")) {
-            JSONArray keys = root.getJSONArray("random");
-            for (int i = 0; i < keys.length(); i++) {
-                String id = tileIDs.get(tileKeys.indexOf(keys.getString(i)));
-                for (int r = 0; r < TILE_ROWS; r++) {
-                    for (int c = 0; c < TILE_COLUMNS; c++) {
-                        MapTile tile = tiles.get(r).get(c);
-                        if (tile.id.equalsIgnoreCase(id)) {
-                            if (Util.percentChance(0.5D)) {
-                                switch (Util.randomInt(2, 0, true)) {
-                                    case 0:
-                                        tile.rotate();
-                                        break;
-                                    case 1:
-                                        tile.rotate(180);
-                                        break;
-                                    case 2:
-                                        tile.rotate(270);
-                                        break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private void fill(String id) {
-        Image image = Images.get(Images.mapTilePath + id + ".png");
-        for (int r = 0; r < TILE_ROWS; r++) {
-            ArrayList<MapTile> column = new ArrayList<>();
-            for (int c = 0; c < TILE_COLUMNS; c++) {
-                column.add(new MapTile(id, image));
-            }
-            tiles.add(column);
-        }
-    }
-
-    private void mixed(JSONArray custom, ArrayList<String> tileIDs, ArrayList<String> tileKeys) {
-        for (int i = 0; i < custom.length(); i++) {
-            JSONObject o = (JSONObject) custom.get(i);
-            int c = o.getInt("c");
-            int r = o.getInt("r");
-            String id = tileIDs.get(tileKeys.indexOf(o.getString("key")));
-            Image image = Images.get(Images.mapTilePath + id + ".png");
-            if (o.has("rotate")) {
-                image.rotate(o.getInt("rotate"));
-            }
-            tiles.get(r).set(c, new MapTile(id, image));
-        }
     }
 
     /**

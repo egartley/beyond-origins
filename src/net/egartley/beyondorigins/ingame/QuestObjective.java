@@ -1,5 +1,8 @@
 package net.egartley.beyondorigins.ingame;
 
+/**
+ * Something the player must do to progress in a {@link Quest}
+ */
 public class QuestObjective {
 
     public String title;
@@ -20,9 +23,7 @@ public class QuestObjective {
         this.description = description;
     }
 
-    /*public void checkForCompletion() {
-
-    }*/
+    // public void checkForCompletion() { }
 
     public void onComplete() {
 

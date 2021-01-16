@@ -24,16 +24,14 @@ import org.newdawn.slick.Image;
 
 public class Dummy extends AnimatedEntity implements Character {
 
+    private short walktime = 0;
+    private boolean isTalkingToPlayer;
+    private byte dir = DIRECTION_RIGHT;
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
     private final int ANIMATION_THRESHOLD = 150;
-
-    private boolean isTalkingToPlayer;
-    private short walktime = 0;
-    private byte dir = DIRECTION_RIGHT;
+    private final EntityExpression exp;
     private final DialogueExchange dialogue_playerCollision;
-
-    EntityExpression exp;
 
     public Dummy() {
         super("Dummy", new SpriteSheet(Images.get(Images.DUMMY), 30, 44, 2, 4));

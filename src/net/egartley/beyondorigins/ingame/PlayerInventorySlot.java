@@ -6,17 +6,26 @@ import net.egartley.beyondorigins.core.ui.UIElement;
 import net.egartley.beyondorigins.data.Images;
 import org.newdawn.slick.Graphics;
 
+/**
+ * A graphical slot in the player's inventory that the user can interact with and manipulate
+ */
 public class PlayerInventorySlot extends UIElement {
 
-    private static int indexi = 0;
-
-    public static final int MARGIN = 3, SIZE = 36;
+    private static int overallIndex = 0;
 
     public int index;
     public int baseItemX;
     public int baseItemY;
+    public static final int MARGIN = 3, SIZE = 36;
     public PlayerInventoryStack stack;
 
+    /**
+     * Creates a new slot, and calculates its position based on the row and column
+     *
+     * @param stack The stack to display in the slot
+     * @param row The slot's row
+     * @param column The slot's column
+     */
     public PlayerInventorySlot(PlayerInventoryStack stack, int row, int column) {
         super(Images.get("resources/images/ui/inventory-slot.png"));
         this.stack = stack;
@@ -24,7 +33,7 @@ public class PlayerInventorySlot extends UIElement {
         y((row * (SIZE + MARGIN)) + (((Game.WINDOW_HEIGHT / 2) + 12) - ((PlayerInventory.ROWS * (SIZE + MARGIN)) / 2)));
         baseItemX = x() + 2;
         baseItemY = y() + 2;
-        index = indexi++;
+        index = overallIndex++;
     }
 
     @Override

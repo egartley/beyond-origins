@@ -33,20 +33,17 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
     private final int ANIMATION_THRESHOLD = 165;
-
     private final int MAX_LEVEL = 100;
     private final int MAX_EXPERIENCE = 4900601;
     private final int DEFAULT_DAMAGE = 4;
     private final int DEFAULT_HEALTH = 30;
     private final int DEFAULT_DEFENSE = 1;
-
     private boolean frozen;
     private boolean isMovementInvalidated;
 
     public int level = 1;
     public int experience = 0;
     public boolean isInBuilding;
-
     public KeyTyped attack;
     public EntityBoundary boundary;
     public EntityBoundary headBoundary;
@@ -57,20 +54,17 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
 
     public Player() {
         super("Player", new SpriteSheet(Images.get(Images.PLAYER), 30, 44, 2, 4));
-
         isSectorSpecific = false;
         isDualRendered = false;
         speed = 2;
         health = 30;
         maximumHealth = health;
-
         inventory = new EntityInventory(this, 20) {
             @Override
             public void onUpdate() {
                 PlayerInventory.populate();
             }
         };
-
         attack = new KeyTyped(Input.KEY_ENTER) {
             @Override
             public void onType() {
@@ -89,6 +83,12 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
             if (!e.isTraversable && e.isSectorSpecific) {
                 generateMovementRestrictionCollisions(e.defaultBoundary);
             }
+        }
+    }
+
+    public void generateMovementRestrictionCollisions(EntityBoundary... otherBoundaries) {
+        for (EntityBoundary b : otherBoundaries) {
+            generateMovementRestrictionCollisions(b);
         }
     }
 
@@ -179,20 +179,11 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         isAllowedToMoveRightwards = true;
     }
 
-    /**
-     * Called when the player enters a building
-     */
     public void enteredBuilding() {
         isInBuilding = true;
-        Collisions.nuke();
         // invalidateAllMovement();
     }
 
-    /**
-     * Called when a player leaves a building
-     *
-     * @param building The building that was just left
-     */
     public void leftBuilding(Building building) {
         generateSectorSpecificCollisions(InGameState.map.sector);
         building.setCollisions();
@@ -235,12 +226,10 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
 
     @Override
     public void setCollisions() {
-
     }
 
     @Override
     public void setInteractions() {
-
     }
 
     @Override
@@ -376,12 +365,10 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
 
     @Override
     public void onDeath() {
-
     }
 
     @Override
     public void onColdDeath() {
-
     }
 
 }

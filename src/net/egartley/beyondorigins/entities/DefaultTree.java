@@ -13,7 +13,6 @@ public class DefaultTree extends StaticEntity {
     public DefaultTree(Sprite sprite, int x, int y) {
         super("Tree", sprite);
         setPosition(x, y);
-
         isSectorSpecific = true;
         isDualRendered = true;
         isTraversable = false;
@@ -31,12 +30,10 @@ public class DefaultTree extends StaticEntity {
 
     @Override
     public void setCollisions() {
-
     }
 
     @Override
     protected void setInteractions() {
-
     }
 
 }

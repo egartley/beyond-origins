@@ -16,39 +16,56 @@ import org.newdawn.slick.TrueTypeFont;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * What's visible to the user in the player's inventory slots
+ */
 public class PlayerInventoryStack extends Renderable implements Tickable {
 
-    public static int MAX_AMOUNT = 99;
-
-    private static final Font amountFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12), true);
     private int tooltipWidth;
+    private static final Font amountFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12), true);
 
-    public boolean isBeingDragged, didStartDrag, mouseHover, setFontMetrics, isShowingTooltip;
-
+    public boolean isBeingDragged;
+    public boolean didStartDrag;
+    public boolean mouseHover;
+    public boolean setFontMetrics;
+    public boolean isShowingTooltip;
+    public static int MAX_AMOUNT = 99;
     public ItemStack itemStack;
     public PlayerInventorySlot slot;
 
+    /**
+     * Creates a new stack from the item stack and slot
+     *
+     * @param itemStack The item stack to base this on
+     * @param slot The slot where this stack will be
+     */
     public PlayerInventoryStack(ItemStack itemStack, PlayerInventorySlot slot) {
         this.itemStack = itemStack;
         this.slot = slot;
         setPosition(slot.baseItemX, slot.baseItemY);
     }
 
+    @Override
     public void tick() {
+        // check if the cursor is over this stack
         mouseHover = Util.isWithinBounds(Mouse.x, Mouse.y, x(), y(), PlayerInventorySlot.SIZE, PlayerInventorySlot.SIZE);
+        // whether or not to render the tooltip
         isShowingTooltip = isBeingDragged || (mouseHover && PlayerInventory.stackBeingDragged == null);
         if (isShowingTooltip) {
             PlayerInventory.tooltipWidth = tooltipWidth;
             PlayerInventory.tooltipText = itemStack.item.displayName;
         }
         if (Mouse.isDragging) {
+            // user is dragging, anchor to cursor position
             if ((mouseHover || didStartDrag) && (PlayerInventory.stackBeingDragged == this || PlayerInventory.stackBeingDragged == null)) {
                 PlayerInventory.stackBeingDragged = this;
+                // keep cursor centered
                 setPosition(Mouse.x - (PlayerInventorySlot.SIZE / 2), Mouse.y - (PlayerInventorySlot.SIZE / 2));
                 didStartDrag = true;
                 isBeingDragged = true;
             }
         } else if (isBeingDragged) {
+            // user stopped dragging, so now we need to stop as well
             onDragEnd();
             PlayerInventory.stackBeingDragged = null;
             isBeingDragged = false;
@@ -58,6 +75,7 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
         }
     }
 
+    @Override
     public void render(Graphics graphics) {
         graphics.drawImage(itemStack.item.image, x(), y());
         graphics.setColor(Color.white);

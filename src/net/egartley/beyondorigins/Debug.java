@@ -41,7 +41,7 @@ public class Debug {
     private static final byte TEXT_PADDING = 4;
 
     /**
-     * Prints the given object using {@link java.io.PrintStream#println(Object) System.out.println(object)}
+     * Prints the given object to the console, along with the current thread and time
      *
      * @param object The object to print out
      */
@@ -50,8 +50,7 @@ public class Debug {
     }
 
     /**
-     * Prints the given object using {@link java.io.PrintStream#println(Object) System.out.println(object)} with the tag
-     * "INFO"
+     * Prints the given object to the console with the tag "INFO"
      *
      * @param object The object to print out
      */
@@ -60,8 +59,7 @@ public class Debug {
     }
 
     /**
-     * Prints the given object using {@link java.io.PrintStream#println(Object) System.out.println(object)} with the tag
-     * "WARNING"
+     * Prints the given object to the console with the tag "WARNING"
      *
      * @param object The object to print out
      */
@@ -70,8 +68,7 @@ public class Debug {
     }
 
     /**
-     * Prints the given object using {@link java.io.PrintStream#println(Object) System.out.println(object)} with the tag
-     * "ERROR"
+     * Prints the given object to the console with the tag "ERROR"
      *
      * @param object The object to print out
      */
@@ -79,10 +76,22 @@ public class Debug {
         out("ERROR: " + object);
     }
 
+    /**
+     * Handles the exception, printing out its message
+     *
+     * @param e The exception to handle
+     * @see Exception#getMessage()
+     */
     public static void error(Exception e) {
         error(e.getMessage());
     }
 
+    /**
+     * Renders the string in the top left corner of the screen
+     *
+     * @param s The string to display
+     * @param graphics Graphics to use
+     */
     private static void drawLine(String s, Graphics graphics) {
         graphics.setColor(backgroundColor);
         graphics.fillRect(lx - TEXT_PADDING, ly + (row * rowOffset) - font.getLineHeight(), graphics.getFont().getWidth(s) + (TEXT_PADDING * 2), font.getLineHeight() + TEXT_PADDING);
@@ -92,7 +101,7 @@ public class Debug {
     }
 
     /**
-     * Render debug information, toggled with F3
+     * Display debug information, toggled with F3
      */
     public static void render(Graphics graphics) {
         row = 0;

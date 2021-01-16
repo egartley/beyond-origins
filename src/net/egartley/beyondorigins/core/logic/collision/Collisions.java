@@ -43,6 +43,11 @@ public class Collisions {
         }
     }
 
+    public static void endRemove(EntityEntityCollision collision) {
+        collision.end();
+        remove(collision);
+    }
+
     public static ArrayList<EntityEntityCollision> with(Entity entity) {
         ArrayList<EntityEntityCollision> with = new ArrayList<>();
         for (EntityEntityCollision c : collisions) {

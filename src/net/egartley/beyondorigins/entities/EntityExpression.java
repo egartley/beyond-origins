@@ -9,21 +9,26 @@ import net.egartley.beyondorigins.data.Images;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 
+/**
+ * An image that appears above an entity to convey an emotion
+ */
 public class EntityExpression extends AnimatedEntity {
 
-    public static final byte INTEREST = 0, DISGUST = 1, HAPPINESS = 2, ANGER = 3, SADDNESS = 4, CONFUSION = 5, THINKING = 6, SURPRISE = 7, ATTENTION = 8, HEART = 9;
-    public static final short ANIMATIONSPEED_NORMAL = 417, ANIMATIONSPEED_FAST = 626, ANIMATIONSPEED_SLOW = 313;
-
-    /**
-     * Whether or not the expression is currently being shown
-     */
-    public boolean isVisible = true;
-
+    public static final byte INTEREST = 0;
+    public static final byte DISGUST = 1;
+    public static final byte HAPPINESS = 2;
+    public static final byte ANGER = 3;
+    public static final byte SADDNESS = 4;
+    public static final byte CONFUSION = 5;
+    public static final byte THINKING = 6;
+    public static final byte SURPRISE = 7;
+    public static final byte ATTENTION = 8;
+    public static final byte HEART = 9;
+    public static final short ANIMATIONSPEED_NORMAL = 417;
+    public static final short ANIMATIONSPEED_FAST = 626;
+    public static final short ANIMATIONSPEED_SLOW = 313;
     public byte type;
-
-    /**
-     * The entity that the expression is rendered above
-     */
+    public boolean isVisible = true;
     public Entity target;
 
     public EntityExpression(byte type, Entity target) {
@@ -31,7 +36,7 @@ public class EntityExpression extends AnimatedEntity {
         this.type = type;
         this.target = target;
         sprite = getTemplateSpriteSheet(type).sprites.get(0);
-        animations.add(getTemplateAnimation(type));
+        animations.add(getTemplateAnimation());
         animation = animations.get(0);
         image = sprite.asImage();
     }
@@ -47,14 +52,15 @@ public class EntityExpression extends AnimatedEntity {
             case HEART:
                 return new SpriteSheet(Images.get(Images.expressionPath + "heart.png"), 18, 18, 1, 2);
             default:
-                return null;
+                return new SpriteSheet(Images.get(Images.path + "unknown.png"), 32, 32, 1, 1);
         }
     }
 
-    private Animation getTemplateAnimation(byte type) {
+    private Animation getTemplateAnimation() {
         return new Animation(Util.getAnimationFrames(sprite), ANIMATIONSPEED_NORMAL);
     }
 
+    @Override
     public void tick() {
         if (!isVisible) {
             return;
@@ -66,6 +72,7 @@ public class EntityExpression extends AnimatedEntity {
         super.tick();
     }
 
+    @Override
     public void render(Graphics graphics) {
         if (!isVisible) {
             return;
@@ -75,22 +82,18 @@ public class EntityExpression extends AnimatedEntity {
 
     @Override
     public void setAnimations() {
-
     }
 
     @Override
     protected void setBoundaries() {
-
     }
 
     @Override
     public void setCollisions() {
-
     }
 
     @Override
     protected void setInteractions() {
-
     }
 
 }

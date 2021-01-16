@@ -20,7 +20,7 @@ public abstract class Cutscene extends MapSector {
         super(parent, sector);
     }
 
-    public abstract void initialize();
+    public abstract void init();
 
     public void start() {
         returnSector = parent.sector;

@@ -9,6 +9,9 @@ import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.data.Images;
 import org.newdawn.slick.Image;
 
+/**
+ * Testing dynamic creation of sprites/images
+ */
 public class WoodenFence extends StaticEntity {
 
     private final int length;
@@ -23,7 +26,6 @@ public class WoodenFence extends StaticEntity {
         hasCorners = corners;
         setSprite(buildSprite());
         setBoundaries();
-
         isTraversable = false;
         isDualRendered = true;
         isSectorSpecific = true;
@@ -66,11 +68,10 @@ public class WoodenFence extends StaticEntity {
 
     @Override
     public void setCollisions() {
-
     }
 
     @Override
     protected void setInteractions() {
-
     }
+
 }

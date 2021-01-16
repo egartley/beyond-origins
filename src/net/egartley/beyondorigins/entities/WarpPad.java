@@ -5,14 +5,15 @@ import net.egartley.beyondorigins.core.graphics.Sprite;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 
+/**
+ * Testing for changing maps
+ */
 public class WarpPad extends StaticEntity {
 
     public WarpPad(Sprite sprite, int x, int y) {
         super("Warp Portal", sprite);
         setPosition(x, y);
-
         isSectorSpecific = true;
-        // TODO: dual render
         isDualRendered = false;
         isTraversable = false;
     }
@@ -25,11 +26,10 @@ public class WarpPad extends StaticEntity {
 
     @Override
     public void setCollisions() {
-
     }
 
     @Override
     protected void setInteractions() {
-
     }
+
 }

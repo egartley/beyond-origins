@@ -27,7 +27,7 @@ public class Sector1 extends MapSector {
     }
 
     @Override
-    public void initialize() {
+    public void init() {
         // sector-specific entities
         Sprite s = Entities.getSpriteTemplate(Entities.TEMPLATE_TREE);
         addEntity(new DefaultTree(s, 36, 200));
@@ -50,8 +50,9 @@ public class Sector1 extends MapSector {
         pad = new WarpPad(Entities.getSpriteTemplate(Entities.TEMPLATE_WP), 500, 100);
         addEntity(pad);
 
-        // Entities.PLAYER.inventory.put(Items.HMM, 1);
-        // Entities.PLAYER.inventory.put(Items.CURRENT_YEAR, 3);
+        // test items
+        Entities.PLAYER.inventory.put(Items.HMM, 1);
+        Entities.PLAYER.inventory.put(Items.CURRENT_YEAR, 3);
 
         // test quest
         /*Quest quest = new Quest(Quests.TEST_QUEST_2, "Test quest 2", "Here's another quest for testing, bud!");
@@ -69,7 +70,6 @@ public class Sector1 extends MapSector {
         } else {
             updatePlayerPosition(from);
         }
-        // Entities.DUMMY.onSectorEnter(this);
         Entities.PLAYER.generateSectorSpecificCollisions(this);
     }
 

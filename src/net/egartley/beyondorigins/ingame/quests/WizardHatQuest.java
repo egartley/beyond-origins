@@ -3,6 +3,9 @@ package net.egartley.beyondorigins.ingame.quests;
 import net.egartley.beyondorigins.ingame.Quest;
 import net.egartley.beyondorigins.ingame.QuestObjective;
 
+/**
+ * Test quest, where the player has to retrieve the wizard's lost hat
+ */
 public class WizardHatQuest extends Quest {
 
     public WizardHatQuest() {

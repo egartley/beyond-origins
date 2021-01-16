@@ -5,6 +5,7 @@ import net.egartley.beyondorigins.core.abstracts.Entity;
 import net.egartley.beyondorigins.core.abstracts.Renderable;
 import net.egartley.beyondorigins.core.interfaces.Tickable;
 import net.egartley.beyondorigins.core.logic.Calculate;
+import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.data.Images;
@@ -15,6 +16,9 @@ import org.newdawn.slick.Image;
 
 import java.util.ArrayList;
 
+/**
+ * A floor within a {@link Building} where the player can walk around
+ */
 public class BuildingFloor extends Renderable implements Tickable {
 
     private final ArrayList<Entity> entities = new ArrayList<>();
@@ -22,9 +26,12 @@ public class BuildingFloor extends Renderable implements Tickable {
     private final ArrayList<EntityEntityCollision> changerCollisions = new ArrayList<>();
 
     public int number;
-    public int upperYLimit, lowerYLimit, leftLimit, rightLimit;
-    public Building parent;
+    public int upperYLimit;
+    public int lowerYLimit;
+    public int leftLimit;
+    public int rightLimit;
     public Image image;
+    public Building parent;
 
     public BuildingFloor(int number, Building parent) {
         this.number = number;
@@ -38,11 +45,11 @@ public class BuildingFloor extends Renderable implements Tickable {
     }
 
     public void onPlayerEnter(BuildingFloor from) {
-
+        changerCollisions.forEach(Collisions::add);
     }
 
     public void onPlayerLeave() {
-
+        changerCollisions.forEach(Collisions::endRemove);
     }
 
     /**
@@ -70,7 +77,7 @@ public class BuildingFloor extends Renderable implements Tickable {
                         me.parent.downstairs();
                         break;
                     case BuildingChanger.LEAVE:
-                        me.parent.leave();
+                        me.parent.onPlayerLeave();
                         break;
                     case BuildingChanger.JUMP:
                         me.parent.changeFloor(me.parent.floors.get(changer.jumpNumber));
@@ -91,14 +98,15 @@ public class BuildingFloor extends Renderable implements Tickable {
     public void render(Graphics graphics) {
         graphics.drawImage(image, x(), y());
         entities.forEach(e -> e.render(graphics));
-
         if (Game.debug) {
+            // Debug.out(changers.get(0).width + ", " + changers.get(0).height);
             changers.forEach(c -> c.defaultBoundary.draw(graphics));
         }
     }
 
     @Override
     public void tick() {
+        // changers.forEach(BuildingChanger::tick);
         changerCollisions.forEach(EntityEntityCollision::tick);
         entities.forEach(Entity::tick);
     }

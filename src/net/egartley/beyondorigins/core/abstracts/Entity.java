@@ -551,21 +551,15 @@ public abstract class Entity extends Renderable implements Tickable {
      * @see #sheets
      * @see #sprites
      */
-    public void setSpriteSheet(int index) {
+    public void setSprites(int index) {
         if (index < sheets.size()) {
             sprites = sheets.get(index).sprites;
             setSprite(0, true);
         } else {
-            Debug.warning("Tried to get a sprite for \"" + this + "\" at an valid index, " + index + " (must be less than " + sprites.size() + ")");
+            Debug.warning("Tried to get a sprite for \"" + this + "\" at an invalid index, " + index + " (must be less than " + sprites.size() + ")");
         }
     }
 
-    /**
-     * Returns the entity as a string, in the format <code>id#uuid</code>
-     *
-     * @see #name
-     * @see #uuid
-     */
     public String toString() {
         return name + "#" + uuid;
     }

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public abstract class Map implements Tickable {
 
     /**
-     * Human-readable identifier
+     * Identifier for the map
      */
     public String id;
     /**
@@ -20,14 +20,12 @@ public abstract class Map implements Tickable {
      */
     public ArrayList<MapSector> sectors;
     /**
-     * The sector where the player is currently
+     * The current sector
      */
     public MapSector sector;
 
-    public boolean isPlayingCutscene;
-
     /**
-     * Creates a new map, and initializes {@link #sectors}
+     * Creates a new map
      *
      * @param id Name or identifier for the map
      */
@@ -36,22 +34,35 @@ public abstract class Map implements Tickable {
         this.id = id;
     }
 
+    /**
+     * Renders the map's contents
+     *
+     * @param graphics The graphics to use
+     */
     public abstract void render(Graphics graphics);
 
+    /**
+     * Called when the player enters the map
+     */
     public abstract void onPlayerEnter();
 
+    /**
+     * Called when the player leaves the map
+     */
     public abstract void onPlayerLeave();
 
     /**
-     * Called when the current sector changes ({@link #changeSector(MapSector, MapSector)})
+     * Called when the current sector changes
+     *
+     * @see #changeSector(MapSector, MapSector)
      */
     public abstract void onSectorChange(MapSectorChangeEvent event);
 
     /**
-     * Moves from one sector to another (can also be used when initially entering the map)
+     * Moves from one sector to another
      *
      * @param to   Where the player is going
-     * @param from Where the player is coming from (<code>null</code> if initially entering the map)
+     * @param from Where the player is coming from (null if initially entering the map)
      * @see #onSectorChange(MapSectorChangeEvent)
      * @see MapSector#onPlayerEnter(MapSector)
      * @see MapSector#onPlayerLeave(MapSector)
@@ -68,6 +79,7 @@ public abstract class Map implements Tickable {
         sector.onPlayerEnter(previous);
     }
 
+    @Override
     public String toString() {
         return id;
     }

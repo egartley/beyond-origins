@@ -47,37 +47,25 @@ public class MainMenuState extends BasicGameState {
 
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {
-        for (MenuButton mb : buttons) {
-            mb.registerClicked();
-        }
+        buttons.forEach(MenuButton::registerClicked);
     }
 
     @Override
     public void leave(GameContainer container, StateBasedGame game) throws SlickException {
-        for (MenuButton mb : buttons) {
-            mb.deregisterClicked();
-        }
+        buttons.forEach(MenuButton::deregisterClicked);
     }
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics graphics) throws SlickException {
-        // background
         graphics.setColor(backgroundColor);
-        graphics.fillRect(0, 0, Game.WINDOW_WIDTH + 1, Game.WINDOW_HEIGHT + 1);
-
-        // logo
+        graphics.fillRect(0, 0, Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT);
         graphics.drawImage(logo, Calculate.getCenter(Game.WINDOW_WIDTH / 2, logo.getWidth()), 130);
-
-        for (MenuButton b : buttons) {
-            b.render(graphics);
-        }
+        buttons.forEach(b -> b.render(graphics));
     }
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-        for (MenuButton b : buttons) {
-            b.tick();
-        }
+        buttons.forEach(MenuButton::tick);
     }
 
     @Override

@@ -13,7 +13,7 @@ public class TestScene extends Cutscene {
     }
 
     @Override
-    public void initialize() {
+    public void init() {
 
     }
 

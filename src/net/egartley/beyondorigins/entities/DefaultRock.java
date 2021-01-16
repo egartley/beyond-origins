@@ -13,7 +13,6 @@ public class DefaultRock extends StaticEntity {
     public DefaultRock(Sprite sprite, int x, int y) {
         super("Rock", sprite);
         setPosition(x, y);
-
         isSectorSpecific = true;
         isDualRendered = true;
         isTraversable = false;
@@ -31,12 +30,10 @@ public class DefaultRock extends StaticEntity {
 
     @Override
     public void setCollisions() {
-
     }
 
     @Override
     protected void setInteractions() {
-
     }
 
 }

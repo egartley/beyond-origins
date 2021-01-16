@@ -12,34 +12,23 @@ import net.egartley.beyondorigins.core.threads.DelayedEvent;
 import net.egartley.beyondorigins.gamestates.InGameState;
 
 /**
- * An item that was dropped from the player's inventory
+ * An item that was dropped from the player's inventory (by the user or programatically)
  */
 public class DroppedItem extends StaticEntity {
 
     /**
-     * How long it takes for a dropped item to be able to be picked up again after being dropped
+     * How long it takes for a dropped item to be able to be picked up again after being dropped. This prevents the
+     * item from going immediately back into the player's inventory if dropped on it
      */
     private static final double PICKUP_DELAY = 2.25D;
     /**
-     * How long it takes for a dropped item to "despawn" after being dropped and not picked up again
+     * How long it takes for a dropped item to "despawn" after being dropped
      */
     private static final double LIFETIME_DELAY = 120.0D;
-
     private final DelayedEvent lifetimeDelay;
 
-    /**
-     * Whether or not the dropped item can be picked up again
-     *
-     * @see #PICKUP_DELAY
-     */
     public boolean canPickup;
-    /**
-     * Whether or not the player is currently "over" the dropped item
-     */
-    public boolean over;
-    /**
-     * The item being represented
-     */
+    public boolean isPlayerOver;
     public ItemStack itemStack;
 
     public DroppedItem(ItemStack stack, int x, int y) {
@@ -50,6 +39,7 @@ public class DroppedItem extends StaticEntity {
         image = sprite.asImage();
         setPosition(x, y);
 
+        // start both pickup and lifetime delays
         StaticEntity me = this;
         new DelayedEvent(PICKUP_DELAY) {
             @Override
@@ -84,7 +74,7 @@ public class DroppedItem extends StaticEntity {
      * @return Whether or not the dropped item was successfully picked up by the player
      */
     private boolean pickup() {
-        if (!Entities.PLAYER.inventory.isFull() && canPickup && over) {
+        if (!Entities.PLAYER.inventory.isFull() && canPickup && isPlayerOver) {
             Entities.PLAYER.inventory.put(itemStack);
             lifetimeDelay.cancel();
             destroy();
@@ -109,21 +99,20 @@ public class DroppedItem extends StaticEntity {
         Collisions.add(new EntityEntityCollision(defaultBoundary, Entities.PLAYER.boundary) {
             @Override
             public void start(EntityEntityCollisionEvent event) {
-                over = true;
+                isPlayerOver = true;
                 if (pickup()) {
                     end();
                 }
             }
-
             @Override
             public void end(EntityEntityCollisionEvent event) {
-                over = false;
+                isPlayerOver = false;
             }
         });
     }
 
     @Override
     protected void setInteractions() {
-
     }
+
 }

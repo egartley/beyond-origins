@@ -9,6 +9,9 @@ import net.egartley.beyondorigins.ingame.maps.debug.sectors.Sector3;
 import net.egartley.beyondorigins.ingame.maps.debug.sectors.Sector4;
 import org.newdawn.slick.Graphics;
 
+/**
+ * Test map
+ */
 public class DebugMap extends Map {
 
     public DebugMap() {
@@ -24,7 +27,6 @@ public class DebugMap extends Map {
         MapSector sec3 = sectors.get(2);
         MapSector sec4 = sectors.get(3);
 
-        // stitch together all of the sectors
         sec1.setNeighborAt(sec2, MapSector.TOP);
         sec2.setNeighborAt(sec3, MapSector.RIGHT);
         sec3.setNeighborAt(sec4, MapSector.BOTTOM);

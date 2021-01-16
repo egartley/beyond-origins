@@ -17,7 +17,7 @@ public class Sector1 extends MapSector {
     }
 
     @Override
-    public void initialize() {
+    public void init() {
         ((TestBattleMap) (parent)).spawnMonster(200, 252);
         WarpPad pad = new WarpPad(Entities.getSpriteTemplate(Entities.TEMPLATE_WP), 600, 450);
         Collisions.add(new EntityEntityCollision(Entities.PLAYER.boundary, pad.defaultBoundary) {
