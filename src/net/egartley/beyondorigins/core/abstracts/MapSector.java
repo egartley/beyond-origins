@@ -26,7 +26,7 @@ import java.util.ArrayList;
  *
  * @see Map
  */
-public abstract class MapSector implements Tickable {
+public abstract class MapSector extends Renderable implements Tickable {
 
     private int deltaX;
     private int deltaY;
@@ -71,6 +71,7 @@ public abstract class MapSector implements Tickable {
     /**
      * Minimum requirement for rendering, must be called first in any implementation
      */
+    @Override
     public void render(Graphics graphics) {
         drawTiles(graphics);
         try {
@@ -87,11 +88,9 @@ public abstract class MapSector implements Tickable {
                     e.render(graphics);
                 }
             }
-
             if (Game.debug) {
-                changeBoundaries.forEach(boundary -> boundary.draw(graphics));
+                changeBoundaries.forEach(boundary -> boundary.render(graphics));
             }
-
             renderables.forEach(r -> r.render(graphics));
         } catch (Exception e) {
             Debug.error(e);
@@ -130,20 +129,17 @@ public abstract class MapSector implements Tickable {
             Debug.warning("There was a problem while building the tiles for \"" + this + "\"");
             return;
         }
-
         JSONObject root = new JSONObject(entireJSONString);
         JSONArray legend = root.getJSONArray("legend");
         JSONObject tilesObject = root.getJSONObject("tiles");
         ArrayList<String> tileKeys = new ArrayList<>();
         ArrayList<String> tileIDs = new ArrayList<>();
         String buildType = tilesObject.getString("type");
-
         for (int i = 0; i < legend.length(); i++) {
             JSONObject entry = legend.getJSONObject(i);
             tileKeys.add(entry.getString("key"));
             tileIDs.add(entry.getString("tile"));
         }
-
         switch (buildType.toLowerCase()) {
             case "fill":
                 fill(tileIDs.get(tileKeys.indexOf(tilesObject.getString("data"))));
@@ -153,7 +149,6 @@ public abstract class MapSector implements Tickable {
                 mixed(tilesObject.getJSONObject("data").getJSONArray("custom"), tileIDs, tileKeys);
                 break;
         }
-
         if (root.has("random")) {
             JSONArray keys = root.getJSONArray("random");
             for (int i = 0; i < keys.length(); i++) {
@@ -367,14 +362,12 @@ public abstract class MapSector implements Tickable {
                 Debug.warning("Unknown direction specified while attempting to set a sector neighbor! (" + direction + ")");
                 break;
         }
-
         if (changeBoundary != null) {
             changeBoundaries.add(changeBoundary);
             changeCollisions.add(new MapSectorChangeCollision(changeBoundary, Entities.PLAYER.boundary, changeBoundary.to, this, parent));
         } else {
             Debug.warning("Could not set a neighbor (\"" + neighbor + "\") for \"" + this + "\"!");
         }
-
         neighbors.set(direction, neighbor);
     }
 

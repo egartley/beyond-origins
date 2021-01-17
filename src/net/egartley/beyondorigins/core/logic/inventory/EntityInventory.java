@@ -9,18 +9,17 @@ import java.util.Arrays;
 
 public class EntityInventory {
 
-    public static int DEFAULT_SLOTS = 3;
-
     private final ArrayList<ItemStack> slots;
 
-    public Entity parent;
+    public static int DEFAULT_SLOTS = 3;
+    public Entity entity;
 
-    public EntityInventory(Entity parent) {
-        this(parent, DEFAULT_SLOTS);
+    public EntityInventory(Entity entity) {
+        this(entity, DEFAULT_SLOTS);
     }
 
-    public EntityInventory(Entity parent, int numberOfSlots) {
-        this.parent = parent;
+    public EntityInventory(Entity entity, int numberOfSlots) {
+        this.entity = entity;
         slots = new ArrayList<>(numberOfSlots);
         for (int i = 0; i < numberOfSlots; i++) {
             slots.add(null);
@@ -31,13 +30,23 @@ public class EntityInventory {
 
     }
 
-    public ItemStack getStack(int index) {
-        return slots.get(index);
-    }
-
     public void set(ItemStack stack, int index) {
         slots.set(index, stack);
         onUpdate();
+    }
+
+    public int amountOf(GameItem item) {
+        int amount = 0;
+        for (int i = 0; i < slots.size(); i++) {
+            if (isEmpty(i)) {
+                continue;
+            }
+            ItemStack stack = slots.get(i);
+            if (stack.item.is(item)) {
+                amount += stack.amount;
+            }
+        }
+        return amount;
     }
 
     public int nextEmptySlot() {
@@ -87,7 +96,7 @@ public class EntityInventory {
         if (index >= 0 && index < slots.size()) {
             return slots.get(index) == null;
         } else {
-            Debug.warning("Tried to get if slot " + index + " is empty in " + parent + "'s inventory, but it's out of bounds (size " + slots.size() + ")");
+            Debug.warning("Tried to get if slot " + index + " is empty in " + entity + "'s inventory, but it's out of bounds (size " + slots.size() + ")");
             return false;
         }
     }
@@ -175,25 +184,11 @@ public class EntityInventory {
     }
 
     public boolean contains(GameItem item, int amount, boolean exact) {
-        if (exact) {
-            return amountOf(item) == amount;
-        } else {
-            return amountOf(item) >= amount;
-        }
+        return exact ? amountOf(item) == amount : amountOf(item) >= amount;
     }
 
-    public int amountOf(GameItem item) {
-        int amount = 0;
-        for (int i = 0; i < slots.size(); i++) {
-            if (isEmpty(i)) {
-                continue;
-            }
-            ItemStack stack = slots.get(i);
-            if (stack.item.is(item)) {
-                amount += stack.amount;
-            }
-        }
-        return amount;
+    public ItemStack getStack(int index) {
+        return slots.get(index);
     }
 
     @Override

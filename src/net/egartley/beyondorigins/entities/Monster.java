@@ -20,13 +20,13 @@ import org.newdawn.slick.Animation;
  */
 public class Monster extends AnimatedEntity implements Damageable {
 
-    private final int ANIMATION_THRESHOLD = 200;
-    private final byte LEFT_NORMAL_ANIMATION = 1;
-    private final byte RIGHT_NORMAL_ANIMATION = 0;
-    private final byte LEFT_HURT_ANIMATION = 3;
-    private final byte RIGHT_HURT_ANIMATION = 2;
     private boolean isHurt;
     private DelayedEvent hurtEvent = null;
+    private final int ANIMATION_THRESHOLD = 200;
+    private final byte LEFT_HURT_ANIMATION = 3;
+    private final byte RIGHT_HURT_ANIMATION = 2;
+    private final byte LEFT_NORMAL_ANIMATION = 1;
+    private final byte RIGHT_NORMAL_ANIMATION = 0;
 
     public Monster() {
         super("Monster", new SpriteSheet(Images.get(Images.MONSTER), 36, 58, 4, 3));

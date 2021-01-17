@@ -4,9 +4,9 @@ import org.newdawn.slick.Image;
 
 public abstract class GameItem {
 
+    public Image image;
     public String id;
     public String displayName;
-    public Image image;
 
     public GameItem(String id, String displayName, Image image) {
         this.id = id;

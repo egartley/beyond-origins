@@ -1,11 +1,11 @@
 package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Game;
+import net.egartley.beyondorigins.core.abstracts.UIElement;
 import net.egartley.beyondorigins.core.interfaces.Tickable;
 import net.egartley.beyondorigins.core.ui.ClickableArea;
 import net.egartley.beyondorigins.core.ui.PlayerInventory;
 import net.egartley.beyondorigins.core.ui.QuestsPanel;
-import net.egartley.beyondorigins.core.ui.UIElement;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
@@ -18,24 +18,19 @@ public class PlayerMenu implements Tickable {
 
     private final Color backgroundColor = new Color(0, 0, 0, 152);
 
-    /**
-     * The current panel being shown
-     */
     public UIElement panel;
-    public PlayerInventory inventoryPanel;
     public QuestsPanel questsPanel;
-    public ArrayList<ClickableArea> tabs = new ArrayList<>();
-    public ClickableArea inventoryPanelTab;
     public ClickableArea questsPanelTab;
+    public PlayerInventory inventoryPanel;
+    public ClickableArea inventoryPanelTab;
+    public ArrayList<ClickableArea> tabs = new ArrayList<>();
 
     public PlayerMenu() {
         // initialize panels
         inventoryPanel = new PlayerInventory();
         questsPanel = new QuestsPanel();
-
         // show inventory by default
         panel = inventoryPanel;
-
         // set and add tabs
         inventoryPanelTab = new ClickableArea(panel.x() + 20, panel.y() + 1, 53, 25) {
             @Override

@@ -11,7 +11,7 @@ import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.dialogue.CharacterDialogue;
 import net.egartley.beyondorigins.core.logic.dialogue.DialogueExchange;
-import net.egartley.beyondorigins.core.logic.events.DialogueExchangeFinishedEvent;
+import net.egartley.beyondorigins.core.logic.events.DialogueFinishedEvent;
 import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
@@ -36,16 +36,12 @@ public class Dummy extends AnimatedEntity implements Character {
     public Dummy() {
         super("Dummy", new SpriteSheet(Images.get(Images.DUMMY), 30, 44, 2, 4));
         setPosition(470, 132);
-
         isSectorSpecific = false;
         isDualRendered = false;
         speed = 1.1;
-
         exp = new EntityExpression(EntityExpression.HEART, this);
-
         dialogue_playerCollision = new DialogueExchange(new CharacterDialogue(this, "dummy/player-collision.def"), new CharacterDialogue(Entities.PLAYER, "player/dummy-collision.def"));
-
-        DialogueController.addFinished(new DialogueExchangeFinishedEvent(dialogue_playerCollision) {
+        DialogueController.addFinished(new DialogueFinishedEvent(dialogue_playerCollision) {
             @Override
             public void onFinish() {
                 isTalkingToPlayer = false;
@@ -53,11 +49,8 @@ public class Dummy extends AnimatedEntity implements Character {
         });
     }
 
-    @Override
     public void onSectorEnter(MapSector entering) {
         entering.addEntity(this, true);
-
-        // generate collisions with sector entities that aren't traversable
         for (Entity e : entering.entities) {
             if (!e.isTraversable && e.isSectorSpecific) {
                 EntityEntityCollision baseCollision = new EntityEntityCollision(boundaries.get(0), e.defaultBoundary) {
@@ -78,7 +71,6 @@ public class Dummy extends AnimatedEntity implements Character {
         }
     }
 
-    @Override
     public void onSectorLeave(MapSector leaving) {
         Collisions.removeWith(this);
         leaving.removeEntity(this, true);
@@ -91,7 +83,6 @@ public class Dummy extends AnimatedEntity implements Character {
         isMovingLeftwards = false;
         isMovingRightwards = false;
         super.tick();
-
         walktime++;
         if (walktime >= 120) {
             walktime = 0;
@@ -103,11 +94,9 @@ public class Dummy extends AnimatedEntity implements Character {
         } else {
             move(dir);
         }
-
         if (!isMovingRightwards && !isMovingLeftwards && !isMovingUpwards && !isMovingDownwards) {
             animation.stop();
         }
-
         if (isTalkingToPlayer) {
             exp.tick();
         }
@@ -124,10 +113,8 @@ public class Dummy extends AnimatedEntity implements Character {
     @Override
     protected void onMove(byte direction) {
         if (animation.isStopped()) {
-            // animation was stopped, so restart it because we're moving
             animation.start();
         }
-
         if (direction == DIRECTION_RIGHT && !animations.get(RIGHT_ANIMATION).isStopped()) {
             switchAnimation(RIGHT_ANIMATION);
         } else if (direction == DIRECTION_LEFT && !animations.get(LEFT_ANIMATION).isStopped()) {

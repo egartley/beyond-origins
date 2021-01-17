@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.core.abstracts.Cutscene;
-import net.egartley.beyondorigins.core.abstracts.StaticEntity;
+import net.egartley.beyondorigins.core.abstracts.Entity;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
@@ -11,7 +11,7 @@ import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 /**
  * An area that will trigger a cutscene to start playing
  */
-public class CutsceneTrigger extends StaticEntity {
+public class CutsceneTrigger extends Entity {
 
     public Cutscene cutscene;
 

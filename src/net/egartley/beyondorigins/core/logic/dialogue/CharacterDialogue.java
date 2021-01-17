@@ -13,9 +13,9 @@ public class CharacterDialogue {
 
     private int randomAmount;
 
-    public Character character;
     public String path;
     public String[] lines;
+    public Character character;
 
     public CharacterDialogue(Character character, String path) {
         this(character, path, false, 0);

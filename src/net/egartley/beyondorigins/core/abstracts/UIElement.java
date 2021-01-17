@@ -1,7 +1,6 @@
-package net.egartley.beyondorigins.core.ui;
+package net.egartley.beyondorigins.core.abstracts;
 
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.core.abstracts.Renderable;
 import net.egartley.beyondorigins.core.interfaces.Tickable;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -34,11 +33,6 @@ public abstract class UIElement extends Renderable implements Tickable {
         this.width = width;
         this.height = height;
         this.isEnabled = enabled;
-    }
-
-    @Override
-    public void tick() {
-
     }
 
     @Override

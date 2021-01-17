@@ -1,83 +1,37 @@
 package net.egartley.beyondorigins.core.logic.interaction;
 
+import net.egartley.beyondorigins.core.abstracts.Renderable;
+import net.egartley.beyondorigins.core.interfaces.Tickable;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 import java.awt.*;
 
-/**
- * An imaginary boundary, or border, with a width, height and coordinates
- */
-public abstract class Boundary {
+public abstract class Boundary extends Renderable implements Tickable {
 
-    /**
-     * Absolute x-coordinate
-     */
+    protected int horizontalOffset;
+    protected int verticalOffset;
+    protected BoundaryPadding padding;
+    protected BoundaryOffset offset;
+
     public int x;
-    /**
-     * Absolute y-coordinate
-     */
     public int y;
-    int horizontalOffset;
-    int verticalOffset;
-    /**
-     * The boundary's width (includes padding)
-     */
-    public int width;
-    /**
-     * The boundary's height (includes padding)
-     */
-    public int height;
-    /**
-     * Top side of the boundary, which is the y-coordinate
-     */
-    public int top;
-    /**
-     * Right side of the boundary, which is the x-coordinate + width
-     */
-    public int right;
-    /**
-     * Bottom side of the boundary, which is the y-coordinate + height
-     */
-    public int bottom;
-    /**
-     * Left side of the boundary, which is the x-coordinate
-     */
-    public int left;
-    /**
-     * Whether or not the boundary is collided with another
-     */
+    public int top, bottom;
+    public int left, right;
+    public int width, height;
     public boolean isCollided;
     public boolean isVisible = true;
-
-    /**
-     * This boundary's padding (extra space added/subtracted from any or all of the four sides)
-     */
-    BoundaryPadding padding;
-    /**
-     * This boundary's offset (change in its coordinate)
-     */
-    BoundaryOffset offset;
-    /**
-     * The current color that is being used while rendering
-     */
     public Color drawColor;
 
-    /**
-     * Renders the boundary
-     *
-     * @param graphics Graphics object to use
-     */
-    public void draw(Graphics graphics) {
+    @Override
+    public void render(Graphics graphics) {
         if (isVisible) {
             graphics.setColor(drawColor);
             graphics.drawRect(x, y, width, height);
         }
     }
 
-    /**
-     * Updates {@link #x}, {@link #y}, {@link #top}, {@link #left}, {@link #bottom} and {@link #right}
-     */
+    @Override
     public void tick() {
         top = y;
         bottom = top + height;

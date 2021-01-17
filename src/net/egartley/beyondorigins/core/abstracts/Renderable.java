@@ -7,7 +7,7 @@ public abstract class Renderable {
     private int x;
     private int y;
 
-    protected abstract void render(Graphics graphics);
+    public abstract void render(Graphics graphics);
 
     public void setPosition(int x, int y) {
         x(x);

@@ -26,10 +26,10 @@ public class BuildingFloor extends Renderable implements Tickable {
     private final ArrayList<EntityEntityCollision> changerCollisions = new ArrayList<>();
 
     public int number;
-    public int upperYLimit;
-    public int lowerYLimit;
     public int leftLimit;
     public int rightLimit;
+    public int upperYLimit;
+    public int lowerYLimit;
     public Image image;
     public Building parent;
 
@@ -100,7 +100,7 @@ public class BuildingFloor extends Renderable implements Tickable {
         entities.forEach(e -> e.render(graphics));
         if (Game.debug) {
             // Debug.out(changers.get(0).width + ", " + changers.get(0).height);
-            changers.forEach(c -> c.defaultBoundary.draw(graphics));
+            changers.forEach(c -> c.defaultBoundary.render(graphics));
         }
     }
 

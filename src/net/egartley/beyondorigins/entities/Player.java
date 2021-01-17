@@ -30,16 +30,16 @@ import org.newdawn.slick.Input;
 
 public class Player extends AnimatedEntity implements Character, Damageable, Attacker {
 
+    private boolean frozen;
+    private boolean isMovementInvalidated;
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
-    private final int ANIMATION_THRESHOLD = 165;
     private final int MAX_LEVEL = 100;
-    private final int MAX_EXPERIENCE = 4900601;
     private final int DEFAULT_DAMAGE = 4;
     private final int DEFAULT_HEALTH = 30;
     private final int DEFAULT_DEFENSE = 1;
-    private boolean frozen;
-    private boolean isMovementInvalidated;
+    private final int MAX_EXPERIENCE = 4900601;
+    private final int ANIMATION_THRESHOLD = 165;
 
     public int level = 1;
     public int experience = 0;
@@ -51,6 +51,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
     public EntityBoundary feetBoundary;
     public EntityBoundary chatBoundary;
     public EntityBoundary attackBoundary;
+    public EntityInventory inventory;
 
     public Player() {
         super("Player", new SpriteSheet(Images.get(Images.PLAYER), 30, 44, 2, 4));
@@ -116,7 +117,6 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         };
         baseCollision.isMovementRestricting = true;
         Collisions.add(baseCollision);
-
         for (EntityEntityCollision collision : Util.getAllBoundaryCollisions(baseCollision, this, otherBoundary)) {
             boolean add = true;
             for (EntityBoundary exclude : exclusions) {
@@ -143,14 +143,12 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         KeyboardController.removeKeyTyped(attack);
     }
 
-    @Override
     public void onSectorEnter(MapSector sector) {
         if (sector instanceof Cutscene) {
             freeze();
         }
     }
 
-    @Override
     public void onSectorLeave(MapSector sector) {
         if (sector instanceof Cutscene) {
             thaw();
@@ -239,16 +237,13 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         boolean left = Game.input.isKeyDown(Input.KEY_A) && !isMovementInvalidated;
         boolean down = Game.input.isKeyDown(Input.KEY_S) && !isMovementInvalidated;
         boolean right = Game.input.isKeyDown(Input.KEY_D) && !isMovementInvalidated;
-
         if (!frozen) {
             move(up, down, left, right);
         }
-
         if (!left && !right && !down && !up && !animation.isStopped()) {
             // not moving, so stop the animation if it's not already stopped
             animation.stop();
         }
-
         // this makes it so that the user has to re-press any keys already being pressed in order to move the player again
         if (isMovementInvalidated) {
             for (int keyCode : new int[]{Input.KEY_W, Input.KEY_A, Input.KEY_S, Input.KEY_D}) {
@@ -259,7 +254,6 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
             }
             isMovementInvalidated = false;
         }
-
         super.tick();
     }
 
@@ -271,12 +265,10 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         } else if (animation.isStopped()) {
             animation.setCurrentFrame(0);
         }
-
         isMovingUpwards = false;
         isMovingDownwards = false;
         isMovingLeftwards = false;
         isMovingRightwards = false;
-
         if (up) {
             if (isAllowedToMoveUpwards) {
                 move(DIRECTION_UP);
@@ -286,7 +278,6 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
                 move(DIRECTION_DOWN);
             }
         }
-
         if (left) {
             if (isAllowedToMoveLeftwards) {
                 move(DIRECTION_LEFT);

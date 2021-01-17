@@ -1,6 +1,6 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.beyondorigins.core.abstracts.StaticEntity;
+import net.egartley.beyondorigins.core.abstracts.Entity;
 import net.egartley.beyondorigins.core.graphics.Sprite;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
@@ -14,18 +14,11 @@ import net.egartley.beyondorigins.gamestates.InGameState;
 /**
  * An item that was dropped from the player's inventory (by the user or programatically)
  */
-public class DroppedItem extends StaticEntity {
+public class DroppedItem extends Entity {
 
-    /**
-     * How long it takes for a dropped item to be able to be picked up again after being dropped. This prevents the
-     * item from going immediately back into the player's inventory if dropped on it
-     */
-    private static final double PICKUP_DELAY = 2.25D;
-    /**
-     * How long it takes for a dropped item to "despawn" after being dropped
-     */
-    private static final double LIFETIME_DELAY = 120.0D;
     private final DelayedEvent lifetimeDelay;
+    private static final double PICKUP_DELAY = 2.25D;
+    private static final double LIFETIME_DELAY = 120.0D;
 
     public boolean canPickup;
     public boolean isPlayerOver;
@@ -33,14 +26,13 @@ public class DroppedItem extends StaticEntity {
 
     public DroppedItem(ItemStack stack, int x, int y) {
         super("DroppedItem", new Sprite(stack.item.image.getScaledCopy(0.5F)));
+        itemStack = stack;
         isSectorSpecific = true;
         isDualRendered = false;
         isTraversable = true;
         image = sprite.asImage();
         setPosition(x, y);
-
-        // start both pickup and lifetime delays
-        StaticEntity me = this;
+        Entity me = this;
         new DelayedEvent(PICKUP_DELAY) {
             @Override
             public void onFinish() {
@@ -57,8 +49,6 @@ public class DroppedItem extends StaticEntity {
             }
         };
         lifetimeDelay.start();
-
-        itemStack = stack;
     }
 
     /**
@@ -104,6 +94,7 @@ public class DroppedItem extends StaticEntity {
                     end();
                 }
             }
+
             @Override
             public void end(EntityEntityCollisionEvent event) {
                 isPlayerOver = false;

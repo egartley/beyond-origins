@@ -1,84 +1,43 @@
 package net.egartley.beyondorigins.core.logic.interaction;
 
-import net.egartley.beyondorigins.core.abstracts.AnimatedEntity;
 import net.egartley.beyondorigins.core.abstracts.Entity;
 import net.egartley.beyondorigins.core.graphics.Sprite;
 import org.newdawn.slick.Color;
 
 /**
- * Represents a {@link Boundary} that is specifically tailored for use with an {@link Entity}
+ * A {@link Boundary} that is meant for an {@link Entity}
  */
 public class EntityBoundary extends Boundary {
 
-    /**
-     * The entity in which to base the boundary
-     */
-    public Entity parent;
-    /**
-     * Human-readable identification for this entity boundary
-     */
     public String name;
+    public Entity entity;
 
-    /**
-     * Creates a new boundary for the given entity
-     *
-     * @param entity  The entity to use
-     * @param sprite  Sprite to use for getting width and height
-     * @param padding The padding to apply
-     */
     public EntityBoundary(Entity entity, Sprite sprite, BoundaryPadding padding) {
         this(entity, sprite.width, sprite.height, padding);
     }
 
-    /**
-     * Creates a new boundary for the given entity
-     *
-     * @param entity  The entity to use
-     * @param width   Width of the boundary (not including the left or right padding)
-     * @param height  Height of the boundary (not including the top or bottom padding)
-     * @param padding The padding to apply
-     * @see Boundary
-     */
     public EntityBoundary(Entity entity, int width, int height, BoundaryPadding padding) {
         this(entity, width, height, padding, new BoundaryOffset(0, 0, 0, 0));
     }
 
-    /**
-     * Creates a new boundary for the given entity
-     *
-     * @param entity  The entity to use
-     * @param width   Width of the boundary (not including the left or right padding)
-     * @param height  Height of the boundary (not including the top or bottom padding)
-     * @param padding The padding to apply
-     * @param offset  The offset to apply
-     * @see Boundary
-     */
     public EntityBoundary(Entity entity, int width, int height, BoundaryPadding padding, BoundaryOffset offset) {
-        parent = entity;
+        this.entity = entity;
         this.padding = padding;
         this.width = width + padding.left + padding.right;
         this.height = height + padding.top + padding.bottom;
         this.offset = offset;
-        horizontalOffset = padding.left + offset.left - offset.right;
-        verticalOffset = padding.top + offset.top - offset.bottom;
+        drawColor = Color.orange;
         name = entity + "/Boundary";
+        verticalOffset = padding.top + offset.top - offset.bottom;
+        horizontalOffset = padding.left + offset.left - offset.right;
         // call tick so that x and y are actually set
         tick();
-        setColor();
-    }
-
-    public void setColor() {
-        if (!(parent instanceof AnimatedEntity)) {
-            drawColor = Color.black;
-        } else {
-            drawColor = Color.orange; // man bad!
-        }
     }
 
     @Override
     public void tick() {
-        x = parent.x() - horizontalOffset;
-        y = parent.y() - verticalOffset;
+        x = entity.x() - horizontalOffset;
+        y = entity.y() - verticalOffset;
         super.tick();
     }
 

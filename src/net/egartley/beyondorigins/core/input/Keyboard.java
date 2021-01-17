@@ -40,7 +40,6 @@ public class Keyboard {
     public static void keyReleased(int keyCode) {
         pressedKeyCodes.remove((Integer) keyCode);
         invalidatedKeys.remove((Integer) keyCode);
-        // KeyboardController.onKeyTyped(keyCode);
     }
 
 }

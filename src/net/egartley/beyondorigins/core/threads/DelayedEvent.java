@@ -6,12 +6,9 @@ public class DelayedEvent implements Runnable {
 
     private boolean naturalStop = true;
 
-    /**
-     * The amount of time to wait (in seconds)
-     */
     public double duration;
-    public Thread thread;
     public boolean isRunning;
+    public Thread thread;
 
     /**
      * Create a new delayed event, which will call {@link #onFinish()} after the specified amount of time

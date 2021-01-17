@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Debug;
-import net.egartley.beyondorigins.core.abstracts.StaticEntity;
+import net.egartley.beyondorigins.core.abstracts.Entity;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
@@ -16,24 +16,15 @@ import java.util.ArrayList;
 /**
  * A place that the player can enter, treated seperately from the current map
  */
-public class Building extends StaticEntity {
+public class Building extends Entity {
 
     public int playerLeaveX;
     public int playerLeaveY;
-    public EntityBoundary entryBoundary;
     public BuildingFloor entryFloor;
     public BuildingFloor currentFloor;
+    public EntityBoundary entryBoundary;
     public ArrayList<BuildingFloor> floors = new ArrayList<>();
 
-    /**
-     * Creates a new building
-     *
-     * @param id           Identifier for the building
-     * @param x            The x-coordinate of where to render it
-     * @param y            The y-coordinate of where to render it
-     * @param playerLeaveX The x-coordinate of where to put the player when they leave
-     * @param playerLeaveY The y-coordinate of where to put the player when they leave
-     */
     public Building(String id, int x, int y, int playerLeaveX, int playerLeaveY) {
         super(id, new SpriteSheet(Images.get("resources/images/buildings/" + id + ".png"), 1, 1).sprites.get(0));
         isSectorSpecific = true;

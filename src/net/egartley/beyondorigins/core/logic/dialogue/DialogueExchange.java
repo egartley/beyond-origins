@@ -10,16 +10,13 @@ public class DialogueExchange {
 
     public int characterDialogueIndex = -1;
     public boolean isFinished;
-
     public String[] allLines;
-    public String[] displayedLines;
     public String[] queuedLines;
-
+    public String[] displayedLines;
     public CharacterDialogue currentDialogue;
-    public ArrayList<CharacterDialogue> dialogues;
+    public ArrayList<CharacterDialogue> dialogues = new ArrayList<>();
 
     public DialogueExchange(CharacterDialogue... dialogues) {
-        this.dialogues = new ArrayList<>();
         this.dialogues.addAll(Arrays.asList(dialogues));
         nextDialogue();
     }
@@ -28,15 +25,8 @@ public class DialogueExchange {
         currentDialogue.onStart();
         this.currentDialogue = currentDialogue;
         allLines = this.currentDialogue.lines;
-        if (allLines.length <= DialoguePanel.MAX_LINES) {
-            // max number or less lines, will always display all of them
-            displayedLines = allLines;
-            queuedLines = null;
-        } else {
-            // (max number + 1) or more lines, queue up remaining
-            displayedLines = Arrays.copyOfRange(allLines, 0, DialoguePanel.MAX_LINES);
-            queuedLines = Arrays.copyOfRange(allLines, DialoguePanel.MAX_LINES, allLines.length);
-        }
+        displayedLines = allLines.length <= DialoguePanel.MAX_LINES ? allLines : Arrays.copyOfRange(allLines, 0, DialoguePanel.MAX_LINES);
+        queuedLines = allLines.length <= DialoguePanel.MAX_LINES ? null : Arrays.copyOfRange(allLines, DialoguePanel.MAX_LINES, allLines.length);
     }
 
     private void nextLine() {
@@ -54,7 +44,7 @@ public class DialogueExchange {
     }
 
     public void advance() {
-        boolean advance = InGameState.dialogue.readyToAdvance;
+        boolean advance = InGameState.dialogue.isReadyToAdvance;
 
         isFinished = isCurrentDialogueFinished() && characterDialogueIndex + 1 == dialogues.size() && advance;
         if (isFinished) {

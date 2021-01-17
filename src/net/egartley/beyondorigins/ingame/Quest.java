@@ -8,8 +8,8 @@ import java.util.ArrayList;
 public class Quest {
 
     public byte id;
-    public boolean isComplete;
     public boolean didStart;
+    public boolean isComplete;
     public String title;
     public String description;
     public ArrayList<QuestObjective> objectives;

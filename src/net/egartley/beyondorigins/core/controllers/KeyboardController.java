@@ -9,8 +9,7 @@ public class KeyboardController {
     private static final ArrayList<KeyTyped> typeds = new ArrayList<>();
 
     public static void onKeyTyped(int keyCode) {
-        ArrayList<KeyTyped> copy = (ArrayList<KeyTyped>) typeds.clone();
-        for (KeyTyped kt : copy) {
+        for (KeyTyped kt : typeds) {
             if (kt.keyCode == keyCode) {
                 kt.onType();
             }

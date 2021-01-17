@@ -7,7 +7,7 @@ import net.egartley.beyondorigins.core.graphics.SpriteSheet;
 import net.egartley.beyondorigins.core.interfaces.Character;
 import net.egartley.beyondorigins.core.logic.dialogue.CharacterDialogue;
 import net.egartley.beyondorigins.core.logic.dialogue.DialogueExchange;
-import net.egartley.beyondorigins.core.logic.events.DialogueExchangeFinishedEvent;
+import net.egartley.beyondorigins.core.logic.events.DialogueFinishedEvent;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.core.logic.interaction.EntityEntityInteraction;
@@ -25,14 +25,14 @@ import org.newdawn.slick.Image;
 public class Wizard extends AnimatedEntity implements Character {
 
     private final int ANIMATION_THRESHOLD = 210;
-    private final EntityExpression meetPlayerExpression;
+    private final DialogueExchange dialogue_gotHat;
     private final EntityExpression foundHatExpression;
     private final DialogueExchange dialogue_meetPlayer;
-    private final DialogueExchange dialogue_gotHat;
+    private final EntityExpression meetPlayerExpression;
     private final DialogueExchange dialogue_playerGeneric;
 
-    public boolean metPlayer = false;
     public boolean foundHat = false;
+    public boolean metPlayer = false;
     public boolean wearingHat = false;
 
     public Wizard() {
@@ -49,14 +49,14 @@ public class Wizard extends AnimatedEntity implements Character {
         dialogue_gotHat = new DialogueExchange(new CharacterDialogue(this, "wizard/player-found-hat-1.def"),
                 new CharacterDialogue(this, "wizard/player-found-hat-2.def"));
         dialogue_playerGeneric = new DialogueExchange(new CharacterDialogue(this, "wizard/generic", true, 3));
-        DialogueController.addFinished(new DialogueExchangeFinishedEvent(dialogue_meetPlayer) {
+        DialogueController.addFinished(new DialogueFinishedEvent(dialogue_meetPlayer) {
             @Override
             public void onFinish() {
                 metPlayer = true;
                 InGameState.giveQuest(Quests.WIZARD_HAT, true);
             }
         });
-        DialogueController.addFinished(new DialogueExchangeFinishedEvent(dialogue_gotHat) {
+        DialogueController.addFinished(new DialogueFinishedEvent(dialogue_gotHat) {
             @Override
             public void onFinish() {
                 Entities.PLAYER.inventory.remove(Items.WIZARD_HAT);

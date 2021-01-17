@@ -2,20 +2,11 @@ package net.egartley.beyondorigins.core.logic.events;
 
 import net.egartley.beyondorigins.core.abstracts.MapSector;
 
-/**
- * A custom "event" that can be used for gathering information about a sector change
- */
 public class MapSectorChangeEvent {
 
-    public MapSector from;
     public MapSector to;
+    public MapSector from;
 
-    /**
-     * Creates a new event that can be used for gathering information about a sector change
-     *
-     * @param from The sector that the player came from
-     * @param to   The sector that the player went to
-     */
     public MapSectorChangeEvent(MapSector from, MapSector to) {
         this.from = from;
         this.to = to;

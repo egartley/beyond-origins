@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins.core.ui;
 
 import net.egartley.beyondorigins.Util;
+import net.egartley.beyondorigins.core.abstracts.UIElement;
 import net.egartley.beyondorigins.core.logic.Calculate;
 import net.egartley.beyondorigins.core.threads.DelayedEvent;
 import net.egartley.beyondorigins.data.Images;
@@ -9,18 +10,20 @@ import org.newdawn.slick.*;
 
 public class NotificationBanner extends UIElement {
 
-    public String[] lines;
-    public Image icon;
+    private int offset = 0;
+    private boolean didStart = false;
+    private boolean didShow = false;
+    private boolean didReachTargetY = false;
+    private boolean isReadyToMoveAgain = true;
+    private final int SPEED = 2;
+    private static int startY;
+    private static final int TARGET_Y = 8;
+    private static final double SLIDE_DELAY = 0.001D, SHOW_DELAY = 3.5D;
+    private static final Font FONT = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 14), true);
 
     public boolean done = false;
-    private int offset = 0;
-    private final int move = 2;
-    private boolean startedAnimation = false, readyToMoveAgain = true, reachedTargetY = false, shown = false;
-
-    private static int startY;
-    private static final int targetY = 8;
-    private static final double SLIDE_DELAY = 0.001D, SHOW_DELAY = 3.5D;
-    private static final Font font = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 14), true);
+    public Image icon;
+    public String[] lines;
 
     public NotificationBanner(String text) {
         this(text, "ui/notification-icon-default.png");
@@ -30,20 +33,79 @@ public class NotificationBanner extends UIElement {
         super(Images.get(Images.uiPath + "notification-banner.png"));
         icon = Images.get(Images.path + iconFile);
         startY = -8 - image.getHeight();
-        lines = Util.toLines(text, font, 260);
+        lines = Util.toLines(text, FONT, 260);
         setPosition(Calculate.getCenteredX(width), startY);
     }
 
-    public void drawLine(String line, Graphics graphics) {
-        graphics.drawString(line, x() + 64, y() + 24 + (offset++ * 18));
+    private void slideUp() {
+        y(y() - SPEED);
     }
 
     private void slideDown() {
-        y(y() + move);
+        y(y() + SPEED);
     }
 
-    private void slideUp() {
-        y(y() - move);
+    private void drawLine(String line, Graphics graphics) {
+        graphics.drawString(line, x() + 64, y() + 24 + (offset * 18));
+        offset++;
+    }
+
+    private void show() {
+        isReadyToMoveAgain = false;
+        new DelayedEvent(SHOW_DELAY) {
+            @Override
+            public void onFinish() {
+                didShow = true;
+                isReadyToMoveAgain = true;
+            }
+        }.start();
+    }
+
+    private void start() {
+        isReadyToMoveAgain = false;
+        didStart = true;
+        new DelayedEvent(SLIDE_DELAY) {
+            @Override
+            public void onFinish() {
+                slideDown();
+                isReadyToMoveAgain = true;
+            }
+        }.start();
+    }
+
+    private void moveUp() {
+        isReadyToMoveAgain = false;
+        new DelayedEvent(SLIDE_DELAY) {
+            @Override
+            public void onFinish() {
+                slideUp();
+                isReadyToMoveAgain = true;
+                done = y() <= startY;
+            }
+        }.start();
+    }
+
+    private void moveDown() {
+        isReadyToMoveAgain = false;
+        new DelayedEvent(SLIDE_DELAY) {
+            @Override
+            public void onFinish() {
+                slideDown();
+                isReadyToMoveAgain = true;
+            }
+        }.start();
+    }
+
+    @Override
+    public void render(Graphics graphics) {
+        graphics.drawImage(image, x(), y());
+        graphics.drawImage(icon, x() + 8 + (48 - icon.getWidth()) / 2, y() + 8 + (48 - icon.getHeight()) / 2);
+        graphics.setColor(Color.white);
+        graphics.setFont(FONT);
+        for (String line : lines) {
+            drawLine(line, graphics);
+        }
+        offset = 0;
     }
 
     @Override
@@ -52,59 +114,16 @@ public class NotificationBanner extends UIElement {
             InGameState.onNotificationFinish(this);
             return;
         }
-
-        reachedTargetY = y() >= targetY || reachedTargetY;
-        if (!startedAnimation) {
-            readyToMoveAgain = false;
-            startedAnimation = true;
-            new DelayedEvent(SLIDE_DELAY) {
-                @Override
-                public void onFinish() {
-                    slideDown();
-                    readyToMoveAgain = true;
-                }
-            }.start();
-        } else if (readyToMoveAgain && !reachedTargetY && !shown) {
-            readyToMoveAgain = false;
-            new DelayedEvent(SLIDE_DELAY) {
-                @Override
-                public void onFinish() {
-                    slideDown();
-                    readyToMoveAgain = true;
-                }
-            }.start();
-        } else if (readyToMoveAgain && !shown) {
-            readyToMoveAgain = false;
-            new DelayedEvent(SHOW_DELAY) {
-                @Override
-                public void onFinish() {
-                    shown = true;
-                    readyToMoveAgain = true;
-                }
-            }.start();
-        } else if (readyToMoveAgain && y() >= startY) {
-            readyToMoveAgain = false;
-            new DelayedEvent(SLIDE_DELAY) {
-                @Override
-                public void onFinish() {
-                    slideUp();
-                    readyToMoveAgain = true;
-                    done = y() <= startY;
-                }
-            }.start();
+        didReachTargetY = y() >= TARGET_Y || didReachTargetY;
+        if (!didStart) {
+            start();
+        } else if (isReadyToMoveAgain && !didReachTargetY && !didShow) {
+            moveDown();
+        } else if (isReadyToMoveAgain && !didShow) {
+            show();
+        } else if (isReadyToMoveAgain && y() >= startY) {
+            moveUp();
         }
-    }
-
-    @Override
-    public void render(Graphics graphics) {
-        graphics.drawImage(image, x(), y());
-        graphics.drawImage(icon, x() + 8 + (48 - icon.getWidth()) / 2, y() + 8 + (48 - icon.getHeight()) / 2);
-        graphics.setColor(Color.white);
-        graphics.setFont(font);
-        for (String line : lines) {
-            drawLine(line, graphics);
-        }
-        offset = 0;
     }
 
 }

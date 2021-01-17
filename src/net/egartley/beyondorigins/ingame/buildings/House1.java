@@ -26,7 +26,6 @@ public class House1 extends Building {
         isDualRendered = true;
         firstLayer = image.getSubImage(0, 64, image.getWidth(), 58);
         secondLayer = image.getSubImage(0, 0, image.getWidth(), 64);
-
         // first floor
         BuildingFloor floor = new BuildingFloor(0, this) {
             @Override
@@ -45,7 +44,6 @@ public class House1 extends Building {
         floor.addChanger(new BuildingChanger(BuildingChanger.UPSTAIRS, 208, 311, 55, 49));
         floor.addChanger(new BuildingChanger(BuildingChanger.LEAVE, 447, 406, 58, 12));
         addFloor(floor);
-
         // second floor
         floor = new BuildingFloor(1, this) {
             @Override

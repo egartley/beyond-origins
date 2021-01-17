@@ -28,32 +28,27 @@ public class Sector1 extends MapSector {
 
     @Override
     public void init() {
-        // sector-specific entities
         Sprite s = Entities.getSpriteTemplate(Entities.TEMPLATE_TREE);
         addEntity(new DefaultTree(s, 36, 200));
         hatTree = new DefaultTree(s, 100, 200);
         addEntity(hatTree);
-            /*s = Entities.getSpriteTemplate(Entities.TEMPLATE_ROCK);
+        /*s = Entities.getSpriteTemplate(Entities.TEMPLATE_ROCK);
             int off = 0;
             for (byte i = 0; i < 14; i++) {
                 addEntity(new DefaultRock(s, (s.width * 2) * off++ + 48, 400));
-            }*/
+        }*/
         // WoodenFence fence = new WoodenFence(8, true);
         // fence.setPosition(534, 268);
         // addEntity(fence);
-
         // buildings
         house = new House1(280, 200, 334, 313);
         addEntity(house);
-
         // warp pad
         pad = new WarpPad(Entities.getSpriteTemplate(Entities.TEMPLATE_WP), 500, 100);
         addEntity(pad);
-
         // test items
         Entities.PLAYER.inventory.put(Items.HMM, 1);
         Entities.PLAYER.inventory.put(Items.CURRENT_YEAR, 3);
-
         // test quest
         /*Quest quest = new Quest(Quests.TEST_QUEST_2, "Test quest 2", "Here's another quest for testing, bud!");
         quest.objectives.add(new QuestObjective("Do this thing", "Because you HAVE TO. That's why."));

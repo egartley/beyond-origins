@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins.core.ui;
 
 import net.egartley.beyondorigins.Debug;
+import net.egartley.beyondorigins.core.abstracts.UIElement;
 import net.egartley.beyondorigins.core.interfaces.Loadable;
 import net.egartley.beyondorigins.core.interfaces.Saveable;
 import net.egartley.beyondorigins.core.logic.Calculate;
@@ -14,31 +15,29 @@ import java.util.ArrayList;
 public class QuestsPanel extends UIElement implements Saveable, Loadable {
 
     private final QuestsSidePanel sidePanel;
-    private final ArrayList<QuestSlot> slots;
     private final ImageButton pageLeftButton;
     private final ImageButton pageRightButton;
+    private final ArrayList<QuestSlot> slots = new ArrayList<>();
 
     public QuestsPanel() {
         super(Images.get(Images.QUESTS_PANEL));
         setPosition(Calculate.getCenteredX(width), Calculate.getCenteredY(height));
-
-        slots = new ArrayList<>();
         sidePanel = new QuestsSidePanel();
-        Image e = Images.get(Images.PAGE_BUTTON_ENABLED);
-        Image d = Images.get(Images.PAGE_BUTTON_DISABLED);
-        Image h = Images.get(Images.PAGE_BUTTON_HOVER);
-        pageLeftButton = new ImageButton(e, d, h, 324, 359) {
+        Image enabled = Images.get(Images.PAGE_BUTTON_ENABLED);
+        Image disabled = Images.get(Images.PAGE_BUTTON_DISABLED);
+        Image hover = Images.get(Images.PAGE_BUTTON_HOVER);
+        pageLeftButton = new ImageButton(enabled, disabled, hover, 324, 359) {
             public void onClick() {
                 pageLeftButtonClick();
             }
         };
-        e = e.copy();
-        d = d.copy();
-        h = h.copy();
-        e.rotate(180);
-        d.rotate(180);
-        h.rotate(180);
-        pageRightButton = new ImageButton(e, d, h, 362, 359) {
+        enabled = enabled.copy();
+        disabled = disabled.copy();
+        hover = hover.copy();
+        enabled.rotate(180);
+        disabled.rotate(180);
+        hover.rotate(180);
+        pageRightButton = new ImageButton(enabled, disabled, hover, 362, 359) {
             public void onClick() {
                 pageRightButtonClick();
             }
@@ -59,7 +58,7 @@ public class QuestsPanel extends UIElement implements Saveable, Loadable {
         }
         // contains = false;
         if (!contains) {
-            slots.add(new QuestSlot(quest, getSlotX(slots.size()), getSlotY(slots.size())));
+            slots.add(new QuestSlot(quest, getSlotX(), getSlotY(slots.size())));
             if (start) {
                 quest.start();
             }
@@ -129,8 +128,7 @@ public class QuestsPanel extends UIElement implements Saveable, Loadable {
         return null;
     }
 
-    private int getSlotX(int i) {
-        // keep the index argument in case of future use with resizable window
+    private int getSlotX() {
         return x() + 13;
     }
 
@@ -149,14 +147,11 @@ public class QuestsPanel extends UIElement implements Saveable, Loadable {
     @Override
     public void render(Graphics graphics) {
         graphics.drawImage(image, x(), y());
-
         // assume, at least for now, that there's no need for scrolling (more than 5 at a time)
         for (QuestSlot slot : slots) {
             slot.render(graphics);
         }
-
         sidePanel.render(graphics);
-
         pageLeftButton.render(graphics);
         pageRightButton.render(graphics);
     }

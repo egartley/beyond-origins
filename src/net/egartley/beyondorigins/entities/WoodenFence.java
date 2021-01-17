@@ -2,7 +2,7 @@ package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.core.abstracts.StaticEntity;
+import net.egartley.beyondorigins.core.abstracts.Entity;
 import net.egartley.beyondorigins.core.graphics.Sprite;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
@@ -12,7 +12,7 @@ import org.newdawn.slick.Image;
 /**
  * Testing dynamic creation of sprites/images
  */
-public class WoodenFence extends StaticEntity {
+public class WoodenFence extends Entity {
 
     private final int length;
     private final boolean hasCorners;
@@ -24,8 +24,7 @@ public class WoodenFence extends StaticEntity {
         }
         this.length = length;
         hasCorners = corners;
-        setSprite(buildSprite());
-        setBoundaries();
+        setSprite(buildSprite(), true);
         isTraversable = false;
         isDualRendered = true;
         isSectorSpecific = true;
@@ -41,22 +40,18 @@ public class WoodenFence extends StaticEntity {
         } else {
             build = full;
         }
-
         if (build == null) {
             Debug.warning("There was a problem while buiilding the sprite for a wooden fence");
             return null;
         }
-
         if (length > 1) {
             for (int i = 0; i < length - 1; i++) {
                 build = Util.stitchImage(build, full);
             }
         }
-
         if (hasCorners) {
             build = Util.stitchImage(build, Images.get(Images.entityPath + "wooden-fence-right-end.png"));
         }
-
         return new Sprite(build);
     }
 

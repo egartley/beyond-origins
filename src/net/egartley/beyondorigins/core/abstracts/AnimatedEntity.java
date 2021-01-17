@@ -9,39 +9,21 @@ import org.newdawn.slick.Graphics;
 
 import java.util.ArrayList;
 
-/**
- * An {@link Entity Entity} with animations
- *
- * @see Animation
- */
 public abstract class AnimatedEntity extends Entity {
 
-    /**
-     * The animation that is currently being used
-     */
     protected Animation animation;
-    /**
-     * All of the animations that available to use
-     */
     protected ArrayList<Animation> animations = new ArrayList<>();
 
     public AnimatedEntity(String id) {
         super(id, (Sprite) null);
-        isAnimated = true;
         setAnimations();
     }
 
     public AnimatedEntity(String id, SpriteSheet sheet) {
         super(id, sheet);
-        isAnimated = true;
         setAnimations();
     }
 
-    /**
-     * Sets the entity's animations
-     *
-     * @see #animations
-     */
     public abstract void setAnimations();
 
     /**
@@ -68,4 +50,5 @@ public abstract class AnimatedEntity extends Entity {
             drawDebug(graphics);
         }
     }
+
 }

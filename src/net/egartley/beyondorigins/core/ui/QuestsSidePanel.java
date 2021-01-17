@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins.core.ui;
 
 import net.egartley.beyondorigins.Util;
+import net.egartley.beyondorigins.core.abstracts.UIElement;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.ingame.Quest;
 import net.egartley.beyondorigins.ingame.QuestObjective;
@@ -12,18 +13,15 @@ public class QuestsSidePanel extends UIElement {
 
     private Quest quest = null;
     private String[] descriptionLines;
-    private ArrayList<String[]> objectiveLines;
-
-    private static final Font titleFont = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.BOLD, 16), true);
-    private static final Font descriptionFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 11), true);
-    private static final Font objectiveTitleFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 11), true);
-    private static final Font objectiveDescriptionFont = descriptionFont;
-    private static final Color titleColor = new Color(65, 53, 37);
-    private static final Color descriptionColor = titleColor;
-    private static final Color objectiveTitleColor = titleColor;
-    private static final Color objectiveDescriptionColor = titleColor;
+    private final ArrayList<String[]> objectiveLines = new ArrayList<>();
     private static Image checkboxImage;
     private static Image checkboxCheckedImage;
+    private static final Font descriptionFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 11), true);
+    private static final Font objectiveDescriptionFont = descriptionFont;
+    private static final Font objectiveTitleFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 11), true);
+    private static final Font titleFont = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.BOLD, 16), true);
+    private static final Color titleColor = new Color(65, 53, 37);
+    private static final Color descriptionColor = titleColor, objectiveTitleColor = titleColor, objectiveDescriptionColor = titleColor;
 
     public QuestsSidePanel() {
         super(412, 277);
@@ -36,7 +34,6 @@ public class QuestsSidePanel extends UIElement {
         this.quest = quest;
         if (quest != null) {
             descriptionLines = Util.toLines(quest.description, descriptionFont, 216);
-            objectiveLines = new ArrayList<>();
             for (QuestObjective objective : quest.objectives) {
                 objectiveLines.add(Util.toLines(objective.description, objectiveDescriptionFont, 216));
             }
@@ -60,7 +57,6 @@ public class QuestsSidePanel extends UIElement {
             graphics.setFont(titleFont);
             graphics.setColor(titleColor);
             graphics.drawString(quest.title, x() + 8, y() + 2);
-
             // description
             graphics.setFont(descriptionFont);
             graphics.setColor(descriptionColor);
@@ -69,7 +65,6 @@ public class QuestsSidePanel extends UIElement {
                 graphics.drawString(line, x() + 8, y() + 24 + (offset * 14));
                 offset++;
             }
-
             // objective(s)
             int baseY = y() + 36 + (offset * 14);
             for (int i = 0; i < quest.objectives.size(); i++) {

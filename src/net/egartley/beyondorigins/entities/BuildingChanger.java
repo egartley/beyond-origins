@@ -1,25 +1,22 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.beyondorigins.core.abstracts.StaticEntity;
+import net.egartley.beyondorigins.core.abstracts.Entity;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 
 /**
  * An area that will trigger a change in the player's location and floor within a building
  */
-public class BuildingChanger extends StaticEntity {
+public class BuildingChanger extends Entity {
 
     public int width;
     public int height;
-    public int jumpNumber;
     public byte action;
+    public int jumpNumber;
+    public static final byte JUMP = 3;
+    public static final byte LEAVE = 2;
     public static final byte UPSTAIRS = 0;
     public static final byte DOWNSTAIRS = 1;
-    public static final byte LEAVE = 2;
-    /**
-     * Same as up or down, but doesn't mean the change is directly the floor above or below
-     */
-    public static final byte JUMP = 3;
 
     public BuildingChanger(byte action, int x, int y, int width, int height) {
         super("BuildingChanger");

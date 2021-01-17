@@ -14,22 +14,22 @@ import org.newdawn.slick.Graphics;
  */
 public class EntityExpression extends AnimatedEntity {
 
-    public static final byte INTEREST = 0;
-    public static final byte DISGUST = 1;
-    public static final byte HAPPINESS = 2;
-    public static final byte ANGER = 3;
-    public static final byte SADDNESS = 4;
-    public static final byte CONFUSION = 5;
-    public static final byte THINKING = 6;
-    public static final byte SURPRISE = 7;
-    public static final byte ATTENTION = 8;
-    public static final byte HEART = 9;
-    public static final short ANIMATIONSPEED_NORMAL = 417;
-    public static final short ANIMATIONSPEED_FAST = 626;
-    public static final short ANIMATIONSPEED_SLOW = 313;
     public byte type;
     public boolean isVisible = true;
     public Entity target;
+    public static final byte ANGER = 3;
+    public static final byte HEART = 9;
+    public static final byte DISGUST = 1;
+    public static final byte INTEREST = 0;
+    public static final byte SADDNESS = 4;
+    public static final byte THINKING = 6;
+    public static final byte SURPRISE = 7;
+    public static final byte HAPPINESS = 2;
+    public static final byte CONFUSION = 5;
+    public static final byte ATTENTION = 8;
+    public static final short ANIMATIONSPEED_FAST = 626;
+    public static final short ANIMATIONSPEED_SLOW = 313;
+    public static final short ANIMATIONSPEED_NORMAL = 417;
 
     public EntityExpression(byte type, Entity target) {
         super("Expression");

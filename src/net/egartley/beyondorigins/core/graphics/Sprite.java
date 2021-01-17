@@ -1,9 +1,7 @@
 package net.egartley.beyondorigins.core.graphics;
 
 import net.egartley.beyondorigins.Debug;
-import net.egartley.beyondorigins.core.abstracts.AnimatedEntity;
 import net.egartley.beyondorigins.core.abstracts.Entity;
-import net.egartley.beyondorigins.core.abstracts.StaticEntity;
 import org.newdawn.slick.Image;
 
 import java.util.ArrayList;
@@ -16,21 +14,9 @@ import java.util.ArrayList;
  */
 public class Sprite {
 
-    /**
-     * All of the possible frames that the sprite could use
-     *
-     * @see AnimatedEntity
-     * @see StaticEntity
-     */
-    public ArrayList<Image> frames = new ArrayList<>();
-    /**
-     * Width in pixels
-     */
     public int width;
-    /**
-     * Height in pixels
-     */
     public int height;
+    public ArrayList<Image> frames = new ArrayList<>();
 
     public Sprite(Image image) {
         this(image, 1);
@@ -56,7 +42,11 @@ public class Sprite {
     }
 
     public Image asImage() {
-        return frames.get(0);
+        return asImage(0);
+    }
+
+    public Image asImage(int frameIndex) {
+        return frames.get(frameIndex);
     }
 
 }

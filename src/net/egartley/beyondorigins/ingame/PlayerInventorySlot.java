@@ -1,8 +1,8 @@
 package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Game;
+import net.egartley.beyondorigins.core.abstracts.UIElement;
 import net.egartley.beyondorigins.core.ui.PlayerInventory;
-import net.egartley.beyondorigins.core.ui.UIElement;
 import net.egartley.beyondorigins.data.Images;
 import org.newdawn.slick.Graphics;
 
@@ -16,8 +16,8 @@ public class PlayerInventorySlot extends UIElement {
     public int index;
     public int baseItemX;
     public int baseItemY;
-    public static final int MARGIN = 3, SIZE = 36;
     public PlayerInventoryStack stack;
+    public static final int MARGIN = 3, SIZE = 36;
 
     /**
      * Creates a new slot, and calculates its position based on the row and column

@@ -10,25 +10,15 @@ public class MenuButton extends GenericButton {
     private int stringX;
     private int stringY;
     private boolean didSetStringCoords;
-
-    public static Font font = new TrueTypeFont(new java.awt.Font("Georgia", java.awt.Font.PLAIN, 24), true);
-
-    /**
-     * String that is displayed on the button
-     */
     private final String text;
+    private final Color textColor = Color.black;
     private final Color disabledColor = Color.darkGray;
+    private final Color hoverTextColor = Color.darkGray;
     private final Color enabledColor = Color.red.darker();
     private final Color hoverColor = enabledColor.brighter();
-    private final Color textColor = Color.black;
-    private final Color hoverTextColor = Color.darkGray;
-    /**
-     * The color that is currently being used for the button
-     */
-    private Color currentColor;
-    /**
-     * The color that is currently being used for the text
-     */
+
+    public static Font font = new TrueTypeFont(new java.awt.Font("Georgia", java.awt.Font.PLAIN, 24), true);
+    private Color color;
     private Color currentTextColor;
 
     public MenuButton(String text, boolean isEnabledByDefault, int x, int y, int width, int height) {
@@ -39,27 +29,12 @@ public class MenuButton extends GenericButton {
         this.text = text;
     }
 
-    private void setStringCoords(Font font) {
-        stringX = x() + (width / 2) - (font.getWidth(text) / 2);
-        stringY = y() + (height / 2) - (font.getHeight(text) / 2);
-        didSetStringCoords = true;
-    }
-
     @Override
     public void render(Graphics graphics) {
         if (!didSetStringCoords) {
             setStringCoords(font);
         }
-
-        // background
-        if (isEnabled) {
-            graphics.setColor(currentColor);
-        } else {
-            graphics.setColor(disabledColor);
-        }
-        // graphics.fillRect(x(), y(), width, height);
-
-        // text
+        graphics.setColor(isEnabled ? color : disabledColor);
         graphics.setFont(font);
         graphics.setColor(currentTextColor);
         graphics.drawString(text, stringX, stringY);
@@ -68,14 +43,14 @@ public class MenuButton extends GenericButton {
     @Override
     public void tick() {
         super.tick();
-        // emulate hover effect
-        if (isBeingHovered) {
-            currentColor = hoverColor;
-            currentTextColor = hoverTextColor;
-        } else {
-            currentColor = enabledColor;
-            currentTextColor = textColor;
-        }
+        color = isBeingHovered ? hoverColor : enabledColor;
+        currentTextColor = isBeingHovered ? hoverTextColor : textColor;
+    }
+
+    private void setStringCoords(Font font) {
+        stringX = x() + (width / 2) - (font.getWidth(text) / 2);
+        stringY = y() + (height / 2) - (font.getHeight(text) / 2);
+        didSetStringCoords = true;
     }
 
 }

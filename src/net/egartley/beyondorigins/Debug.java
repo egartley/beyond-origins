@@ -11,34 +11,13 @@ import org.newdawn.slick.TrueTypeFont;
 
 public class Debug {
 
-    /**
-     * Font to use while rendering debug lines
-     */
-    private static final Font font = new TrueTypeFont(new java.awt.Font("Consolas", java.awt.Font.PLAIN, 12), true);
-    /**
-     * Color for the background of debug lines
-     */
-    private static final Color backgroundColor = Color.black;
-    /**
-     * Initial line x-coordinate
-     */
-    private static final int lx = 24;
-    /**
-     * Initial line y-coordinate
-     */
-    private static final int ly = 42;
-    /**
-     * Offset for each line
-     */
-    private static final int rowOffset = 18;
-    /**
-     * What row to render the line on, for {@link #drawLine(String, Graphics)}
-     */
     private static int row = 0;
-    /**
-     * Number of pixels to add as padding around each line of text
-     */
+    private static final int lx = 24;
+    private static final int ly = 42;
+    private static final int rowOffset = 18;
     private static final byte TEXT_PADDING = 4;
+    private static final Color backgroundColor = Color.black;
+    private static final Font font = new TrueTypeFont(new java.awt.Font("Consolas", java.awt.Font.PLAIN, 12), true);
 
     /**
      * Prints the given object to the console, along with the current thread and time
@@ -86,12 +65,6 @@ public class Debug {
         error(e.getMessage());
     }
 
-    /**
-     * Renders the string in the top left corner of the screen
-     *
-     * @param s The string to display
-     * @param graphics Graphics to use
-     */
     private static void drawLine(String s, Graphics graphics) {
         graphics.setColor(backgroundColor);
         graphics.fillRect(lx - TEXT_PADDING, ly + (row * rowOffset) - font.getLineHeight(), graphics.getFont().getWidth(s) + (TEXT_PADDING * 2), font.getLineHeight() + TEXT_PADDING);

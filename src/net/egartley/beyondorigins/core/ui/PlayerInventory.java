@@ -1,5 +1,6 @@
 package net.egartley.beyondorigins.core.ui;
 
+import net.egartley.beyondorigins.core.abstracts.UIElement;
 import net.egartley.beyondorigins.core.input.Mouse;
 import net.egartley.beyondorigins.core.logic.Calculate;
 import net.egartley.beyondorigins.core.logic.inventory.ItemStack;
@@ -13,23 +14,20 @@ import java.util.ArrayList;
 
 public class PlayerInventory extends UIElement {
 
-    public static final int ROWS = 5, COLUMNS = 4;
-
     private int detailsLineIndex = 0;
-
+    private static final Color detailsColor = new Color(111, 88, 61);
+    private static final Color playerNameColor = new Color(65, 53, 37);
     private static final Color tooltipBorderColor = new Color(65, 11, 67);
+    private static final Font detailsFont = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 11), true);
+    private static final Font playerNameFont = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.BOLD, 14), true);
 
     public static int tooltipWidth;
     public static boolean isShowingTooltip;
     public static String tooltipText;
-    public static Font tooltipFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14), true);
     public static PlayerInventoryStack stackBeingDragged;
     public static ArrayList<PlayerInventorySlot> slots = new ArrayList<>();
-
-    private static final Font detailsFont = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 11), true);
-    private static final Font playerNameFont = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.BOLD, 14), true);
-    private static final Color playerNameColor = new Color(65, 53, 37);
-    private static final Color detailsColor = new Color(111, 88, 61);
+    public static Font tooltipFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14), true);
+    public static final int ROWS = 5, COLUMNS = 4;
 
     public PlayerInventory() {
         super(Images.get(Images.INVENTORY_PANEL));
@@ -63,17 +61,12 @@ public class PlayerInventory extends UIElement {
 
     @Override
     public void render(Graphics graphics) {
-        // panel (background)
         graphics.drawImage(image, x(), y());
-
-        // slots
         slots.forEach(slot -> slot.render(graphics));
         slots.forEach(slot -> slot.renderStack(graphics));
-
         // player display
         Image playerImage = Entities.PLAYER.sprite.asImage();
         graphics.drawImage(playerImage, Calculate.getCenter(x() + 243, playerImage.getWidth()), Calculate.getCenter(y() + 96, playerImage.getHeight()));
-
         // details text
         graphics.setColor(playerNameColor);
         graphics.setFont(playerNameFont);
@@ -83,7 +76,6 @@ public class PlayerInventory extends UIElement {
         renderLine("Level " + Entities.PLAYER.level, graphics);
         renderLine("Experience: " + Entities.PLAYER.experience, graphics);
         detailsLineIndex = 0;
-
         if (stackBeingDragged != null) {
             stackBeingDragged.render(graphics);
         }
@@ -102,19 +94,14 @@ public class PlayerInventory extends UIElement {
         graphics.drawString(tooltipText, Mouse.x + 5, Mouse.y - 23);
     }
 
-    public static void stackHover() {
-        isShowingTooltip = true;
-    }
-
+    /**
+     * Updates {@link #slots} from the player's actual inventory
+     */
     public static void populate() {
         for (int i = 0; i < slots.size(); i++) {
             PlayerInventorySlot slot = slots.get(i);
             ItemStack itemStack = Entities.PLAYER.inventory.getStack(i);
-            if (itemStack != null) {
-                slot.stack = new PlayerInventoryStack(itemStack, slot);
-            } else {
-                slot.stack = null;
-            }
+            slot.stack = itemStack != null ? new PlayerInventoryStack(itemStack, slot) : null;
         }
     }
 

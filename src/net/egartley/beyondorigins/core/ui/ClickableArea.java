@@ -11,14 +11,13 @@ public class ClickableArea {
     private final MouseClicked clicked;
 
     public int x, y, width, height;
-    public boolean mouseWithinBounds = false;
+    public boolean isCursorInBounds = false;
 
     public ClickableArea(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-
         ClickableArea me = this;
         clicked = new MouseClicked() {
             @Override
@@ -30,7 +29,7 @@ public class ClickableArea {
     }
 
     private void checkClick() {
-        if (mouseWithinBounds) {
+        if (isCursorInBounds) {
             onClick();
         }
     }
@@ -52,11 +51,11 @@ public class ClickableArea {
     }
 
     public void tick() {
-        mouseWithinBounds = Util.isWithinBounds(Mouse.x, Mouse.y, x, y, width, height);
-        if (mouseWithinBounds && !didHover) {
+        isCursorInBounds = Util.isWithinBounds(Mouse.x, Mouse.y, x, y, width, height);
+        if (isCursorInBounds && !didHover) {
             onHover();
             didHover = true;
-        } else if (!mouseWithinBounds && didHover) {
+        } else if (!isCursorInBounds && didHover) {
             didHover = false;
         }
     }

@@ -9,13 +9,13 @@ import net.egartley.beyondorigins.data.Images;
  */
 public class Entities {
 
-    public static Player PLAYER;
     public static Dummy DUMMY;
+    public static Player PLAYER;
     public static Wizard WIZARD;
-    public static final byte TEMPLATE_TREE = 1;
-    public static final byte TEMPLATE_ROCK = 2;
     public static final byte TEMPLATE_WP = 3;
     public static final byte TEMPLATE_CT = 4;
+    public static final byte TEMPLATE_TREE = 1;
+    public static final byte TEMPLATE_ROCK = 2;
 
     public static void initialize() {
         PLAYER = new Player();

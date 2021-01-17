@@ -21,7 +21,6 @@ class SaveFile {
 public class SaveLoad {
 
     private static int currentID = -1;
-
     private static JSONObject currentData;
 
     public static void setCurrentID(int id) {

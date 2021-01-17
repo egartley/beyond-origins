@@ -21,48 +21,27 @@ import org.newdawn.slick.state.StateBasedGame;
 public class Game extends StateBasedGame implements InputProviderListener {
 
     // TODO: Look into http://slick.ninjacave.com/wiki/index.php?title=Deferred_Resource_Loading
-    // TODO: Look into more entity types other than just static or animated
+    // TODO: Look into more entity types other than just animated
     // TODO: New game state for selecting a save file
     // TODO: New game state when pressing esc in game (pause)
     // TODO: Make quest definition files
     // TODO: Make it so that cutscene trigger doesn't need an image to work
-    // TODO: Make it so that entities don't have an empty inventory by default
+    // TODO: Make map tile class abstract, seperate grass/sand/path etc tile classes
     // TODO: Fix/redo Util.toLines(String, Font, int)
     // TODO: Fix end of PlayerInventoryStack's tick
     // TODO: Possibly redo items, at least improve
     // TODO: Warp pad dual render and better boundary
+    // TODO: Change dialogue finished events management
 
-    /**
-     * The "actual" width of the window (minus 1px borders)
-     */
+    public static boolean debug = true;
+    public static Input input;
     public static final int WINDOW_WIDTH = 959;
-    /**
-     * The "actual" height of the window (minus 1px borders)
-     */
     public static final int WINDOW_HEIGHT = 543;
 
-    /**
-     * Whether or not to perform debug related operations
-     */
-    public static boolean debug = true;
-
-    /**
-     * Allows for keyboard, mouse and controller input to be read
-     */
-    public static Input input;
-
-    /**
-     * Calls the constructor for {@link StateBasedGame} with a custom title
-     */
     public Game() {
         super("Beyond Origins");
     }
 
-    /**
-     * Creates a new {@link AppGameContainer} and starts it
-     *
-     * @param args Arguments supplied through command line/execution
-     */
     public static void main(String[] args) {
         try {
             AppGameContainer app = new AppGameContainer(new Game());
@@ -79,24 +58,18 @@ public class Game extends StateBasedGame implements InputProviderListener {
     @Override
     public void initStatesList(GameContainer container) throws SlickException {
         input = container.getInput();
-
         InputProvider provider = new InputProvider(input);
         provider.addListener(this);
-
         this.addState(new InGameState());
         this.addState(new MainMenuState());
     }
 
-    /**
-     * Quits the game
-     */
     public static void quit() {
         System.exit(0);
     }
 
     @Override
     public void mousePressed(int button, int x, int y) {
-
     }
 
     @Override
@@ -120,7 +93,6 @@ public class Game extends StateBasedGame implements InputProviderListener {
 
     @Override
     public void mouseWheelMoved(int change) {
-
     }
 
     @Override
@@ -136,17 +108,14 @@ public class Game extends StateBasedGame implements InputProviderListener {
 
     @Override
     public void mouseClicked(int button, int x, int y, int clickCount) {
-
     }
 
     @Override
     public void controlPressed(Command command) {
-
     }
 
     @Override
     public void controlReleased(Command command) {
-
     }
 
 }

@@ -5,10 +5,9 @@ package net.egartley.beyondorigins.ingame;
  */
 public class QuestObjective {
 
+    public boolean isComplete;
     public String title;
     public String description;
-
-    public boolean isComplete;
 
     public QuestObjective() {
         this("Objective");
@@ -22,8 +21,6 @@ public class QuestObjective {
         this.title = title;
         this.description = description;
     }
-
-    // public void checkForCompletion() { }
 
     public void onComplete() {
 

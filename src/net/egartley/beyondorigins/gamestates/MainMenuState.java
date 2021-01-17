@@ -12,12 +12,11 @@ import java.util.ArrayList;
 
 public class MainMenuState extends BasicGameState {
 
-    public static final int ID = 0;
-
     private final Image logo;
     private final Color backgroundColor = Color.lightGray;
 
     public ArrayList<MenuButton> buttons = new ArrayList<>();
+    public static final int ID = 0;
 
     public MainMenuState() {
         logo = Images.get("resources/images/logo.png");

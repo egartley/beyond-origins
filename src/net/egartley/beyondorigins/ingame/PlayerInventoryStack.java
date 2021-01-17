@@ -81,11 +81,8 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
         graphics.setColor(Color.white);
         graphics.setFont(amountFont);
         if (itemStack.amount > 1) {
-            if (itemStack.amount < 10) {
-                graphics.drawString(String.valueOf(itemStack.amount), x() + PlayerInventorySlot.SIZE - 12, y() + PlayerInventorySlot.SIZE - 17);
-            } else {
-                graphics.drawString(String.valueOf(itemStack.amount), x() + PlayerInventorySlot.SIZE - 18, y() + PlayerInventorySlot.SIZE - 17);
-            }
+            int offset = itemStack.amount < 10 ? 12 : 18;
+            graphics.drawString(String.valueOf(itemStack.amount), x() + PlayerInventorySlot.SIZE - offset, y() + PlayerInventorySlot.SIZE - 17);
         }
         if (!setFontMetrics) {
             tooltipWidth = PlayerInventory.tooltipFont.getWidth(itemStack.item.displayName);
@@ -96,7 +93,6 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
     private void onDragEnd() {
         ArrayList<Rectangle> intersectionRectangles = new ArrayList<>();
         ArrayList<PlayerInventorySlot> intersectedSlots = new ArrayList<>();
-
         for (PlayerInventorySlot slot : PlayerInventory.slots) {
             Rectangle r1 = new Rectangle(slot.x(), slot.y(), PlayerInventorySlot.SIZE, PlayerInventorySlot.SIZE);
             Rectangle r2 = new Rectangle(x(), y(), PlayerInventorySlot.SIZE, PlayerInventorySlot.SIZE);
@@ -109,7 +105,6 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
                 }
             }
         }
-
         if (!intersectionRectangles.isEmpty()) {
             // at least one slot
             int i = 0, n = 0;

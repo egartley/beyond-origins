@@ -1,6 +1,6 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.beyondorigins.core.abstracts.StaticEntity;
+import net.egartley.beyondorigins.core.abstracts.Entity;
 import net.egartley.beyondorigins.core.graphics.Sprite;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
@@ -8,7 +8,7 @@ import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 /**
  * Testing for changing maps
  */
-public class WarpPad extends StaticEntity {
+public class WarpPad extends Entity {
 
     public WarpPad(Sprite sprite, int x, int y) {
         super("Warp Portal", sprite);

@@ -12,10 +12,9 @@ public class MapSectorChangeCollision {
 
     private boolean isCollided;
     private boolean firedEvent;
-
     private final Map map;
-    private final MapSector from;
     private final MapSector to;
+    private final MapSector from;
     private final Boundary[] boundaries = new Boundary[2];
     private final Rectangle[] rectangles = new Rectangle[2];
 
@@ -39,14 +38,13 @@ public class MapSectorChangeCollision {
         rectangles[0].y = boundaries[0].y - 1;
         rectangles[1].y = boundaries[1].y - 1;
         isCollided = rectangles[0].intersects(rectangles[1]);
-
         if (isCollided && !firedEvent) {
             onCollide();
             firedEvent = true;
         }
-
-        if (!isCollided && firedEvent)
+        if (!isCollided && firedEvent) {
             firedEvent = false;
+        }
     }
 
     /**

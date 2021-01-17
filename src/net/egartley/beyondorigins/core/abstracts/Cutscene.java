@@ -7,12 +7,11 @@ import org.newdawn.slick.Graphics;
 
 public abstract class Cutscene extends MapSector {
 
-    private final double TRANSITION_SPEED = 1.5;
-
-    private final int barHeight = 64;
     private double transitionAlpha = 255;
     private Color transitionColor = Color.black;
     private MapSector returnSector;
+    private final int barHeight = 64;
+    private final double TRANSITION_SPEED = 1.5;
 
     public boolean isShowingTransition;
 
@@ -32,6 +31,7 @@ public abstract class Cutscene extends MapSector {
         parent.changeSector(returnSector, this);
     }
 
+    @Override
     public void render(Graphics graphics) {
         super.render(graphics);
         if (isShowingTransition) {

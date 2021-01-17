@@ -16,17 +16,14 @@ public class DebugMap extends Map {
 
     public DebugMap() {
         super("debug");
-
         sectors.add(new Sector1(this));
         sectors.add(new Sector2(this));
         sectors.add(new Sector3(this));
         sectors.add(new Sector4(this));
-
         MapSector sec1 = sectors.get(0);
         MapSector sec2 = sectors.get(1);
         MapSector sec3 = sectors.get(2);
         MapSector sec4 = sectors.get(3);
-
         sec1.setNeighborAt(sec2, MapSector.TOP);
         sec2.setNeighborAt(sec3, MapSector.RIGHT);
         sec3.setNeighborAt(sec4, MapSector.BOTTOM);

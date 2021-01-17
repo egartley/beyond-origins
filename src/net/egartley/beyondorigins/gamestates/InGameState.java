@@ -26,33 +26,29 @@ import java.util.ArrayList;
 
 public class InGameState extends BasicGameState {
 
-    public static final int ID = 1;
-
     private static final ArrayList<KeyTyped> keyTypeds = new ArrayList<>();
     private static final ArrayList<NotificationBanner> notifications = new ArrayList<>();
 
     public static Map map;
+    public static Building building;
     public static PlayerMenu playerMenu;
     public static DialoguePanel dialogue;
-    public static Building building;
     public static ArrayList<Map> maps = new ArrayList<>();
-
-    public static boolean isInventoryVisible;
-    public static boolean isDialogueVisible;
     public static boolean canPlay = true;
+    public static boolean isDialogueVisible;
+    public static boolean isInventoryVisible;
+    public static final int ID = 1;
 
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         Entities.initialize();
         Items.init();
         Quests.init();
-
         maps.add(new DebugMap());
         maps.add(new TestBattleMap());
         playerMenu = new PlayerMenu();
         dialogue = new DialoguePanel();
         changeMap(0);
-
         keyTypeds.add(new KeyTyped(Input.KEY_E) {
             @Override
             public void onType() {

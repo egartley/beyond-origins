@@ -23,7 +23,7 @@ public class EntityEntityInteraction {
     }
 
     public EntityEntityInteraction(EntityBoundary b1, EntityBoundary b2) {
-        entities = new Entity[]{b1.parent, b2.parent};
+        entities = new Entity[]{b1.entity, b2.entity};
         collision = new EntityEntityCollision(b1, b2) {
             @Override
             public void end(EntityEntityCollisionEvent event) {
@@ -50,13 +50,13 @@ public class EntityEntityInteraction {
 
     public void activate() {
         isActive = true;
-        collision.activate();
+        collision.isActive = true;
         KeyboardController.addKeyTyped(keyTyped);
     }
 
     public void deactivate() {
         isActive = false;
-        collision.deactivate();
+        collision.isActive = false;
         KeyboardController.removeKeyTyped(keyTyped);
     }
 

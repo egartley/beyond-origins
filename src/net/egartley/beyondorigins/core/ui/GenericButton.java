@@ -1,5 +1,6 @@
 package net.egartley.beyondorigins.core.ui;
 
+import net.egartley.beyondorigins.core.abstracts.UIElement;
 import net.egartley.beyondorigins.core.controllers.MouseController;
 import net.egartley.beyondorigins.core.input.Mouse;
 import net.egartley.beyondorigins.core.input.MouseClicked;
