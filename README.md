@@ -13,7 +13,7 @@ More screenshots are available at [egartley.net](https://egartley.net/projects/b
 Earlier iterations of the game from 2013 through 2015 can be found [here](https://github.com/egartley/archive/tree/master/Java/Beyond%20Origins/Source) as well.
 
 ## Status
-These are the features or game mechanics that have been implemented so far as of commit [4303e75](https://github.com/egartley/beyond-origins/commit/4303e753c032fe5f990ac8aa04fda08eee88d607). A more technical outline may be added in the future, but the one below is meant for anyone to be able to understand.
+These are the features or game mechanics that have been implemented so far as of commit [fd39801](https://github.com/egartley/beyond-origins/commit/fd398016d82eeaf00bb2de16c7fcfeb0ec4a6ff4). A more technical outline may be added in the future, but the one below is meant for anyone to be able to understand.
 - Core
   - Entities, either animated or static (non-animated)
     - Includes the player, other characters and objects
