@@ -118,7 +118,7 @@ public class Monster extends AnimatedEntity implements Damageable {
     }
 
     @Override
-    public void inflict(int amount) {
+    public void takeDamage(int amount) {
         health -= amount;
         if (health < 0) {
             health = 0;

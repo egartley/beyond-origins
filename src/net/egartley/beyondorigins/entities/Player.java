@@ -333,13 +333,13 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         for (EntityEntityCollision c : Collisions.concurrent(this)) {
             Entity e = c.entities[0] != this ? c.entities[0] : c.entities[1];
             if (e instanceof Damageable) {
-                ((Damageable) e).inflict(DEFAULT_DAMAGE);
+                ((Damageable) e).takeDamage(DEFAULT_DAMAGE);
             }
         }
     }
 
     @Override
-    public void inflict(int amount) {
+    public void takeDamage(int amount) {
         health -= amount;
         if (health < 0) {
             health = 0;
