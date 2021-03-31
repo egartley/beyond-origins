@@ -31,7 +31,9 @@ public class Sector1 extends MapSector {
 
     @Override
     public void onPlayerEnter(MapSector from) {
-        Entities.PLAYER.setPosition(300, 300);
+        if (from == null) {
+            Entities.PLAYER.setPosition(300, 300);
+        }
     }
 
     @Override
