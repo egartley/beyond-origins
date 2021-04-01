@@ -48,7 +48,7 @@ public class InGameState extends BasicGameState {
         maps.add(new TestBattleMap());
         playerMenu = new PlayerMenu();
         dialogue = new DialoguePanel();
-        changeMap(0);
+        changeMap(1);
         keyTypeds.add(new KeyTyped(Input.KEY_E) {
             @Override
             public void onType() {

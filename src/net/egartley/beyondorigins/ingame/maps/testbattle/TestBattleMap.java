@@ -2,9 +2,11 @@ package net.egartley.beyondorigins.ingame.maps.testbattle;
 
 import net.egartley.beyondorigins.core.abstracts.Map;
 import net.egartley.beyondorigins.core.abstracts.MapSector;
+import net.egartley.beyondorigins.core.logic.Calculate;
 import net.egartley.beyondorigins.core.logic.events.MapSectorChangeEvent;
 import net.egartley.beyondorigins.entities.FH;
 import net.egartley.beyondorigins.entities.Monster;
+import net.egartley.beyondorigins.entities.WindChimes;
 import net.egartley.beyondorigins.ingame.maps.testbattle.sectors.Sector1;
 import net.egartley.beyondorigins.ingame.maps.testbattle.sectors.Sector2;
 import org.newdawn.slick.Graphics;
@@ -28,8 +30,12 @@ public class TestBattleMap extends Map {
 
     public void spawnFHBoss() {
         FH fh = new FH();
-        fh.setPosition(100, 100);
+        fh.setPosition(Calculate.getCenteredX(fh.sprite.width), Calculate.getCenteredY(fh.sprite.height));
         sector.addEntity(fh);
+        sector.addEntity(new WindChimes(100, 150));
+        sector.addEntity(new WindChimes(100, 450));
+        sector.addEntity(new WindChimes(600, 150));
+        sector.addEntity(new WindChimes(600, 450));
     }
 
     @Override

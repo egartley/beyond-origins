@@ -23,6 +23,7 @@ public class Sector2 extends MapSector {
     @Override
     public void onPlayerEnter(MapSector from) {
         ((TestBattleMap) parent).spawnFHBoss();
+        updatePlayerPosition(from);
     }
 
     @Override

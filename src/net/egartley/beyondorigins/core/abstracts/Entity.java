@@ -273,11 +273,13 @@ public abstract class Entity extends Renderable implements Tickable {
      * Updates the entity's location by {@link #speed}, unless the
      * specified boundary is outside of the game's window
      */
-    private void move(byte direction, EntityBoundary boundary) {
-        isMovingUpwards = false;
-        isMovingDownwards = false;
-        isMovingLeftwards = false;
-        isMovingRightwards = false;
+    protected void move(byte direction, EntityBoundary boundary, boolean reset) {
+        if (reset) {
+            isMovingUpwards = false;
+            isMovingDownwards = false;
+            isMovingLeftwards = false;
+            isMovingRightwards = false;
+        }
         if (direction == DIRECTION_UP && !isAllowedToMoveUpwards)
             return;
         if (direction == DIRECTION_DOWN && !isAllowedToMoveDownwards)
@@ -336,7 +338,11 @@ public abstract class Entity extends Renderable implements Tickable {
      * the entity's {@link #defaultBoundary} will be used in calculating where it is
      */
     protected void move(byte direction) {
-        move(direction, defaultBoundary);
+        move(direction, defaultBoundary, true);
+    }
+
+    protected void move(byte direction, boolean reset) {
+        move(direction, defaultBoundary, reset);
     }
 
     /**

@@ -33,6 +33,8 @@ public class Sector1 extends MapSector {
     public void onPlayerEnter(MapSector from) {
         if (from == null) {
             Entities.PLAYER.setPosition(300, 300);
+        } else {
+            updatePlayerPosition(from);
         }
     }
 
