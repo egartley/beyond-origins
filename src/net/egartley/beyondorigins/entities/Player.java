@@ -80,9 +80,22 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
      * @param sector The sector to generate collisions for its non-traversable entities
      */
     public void generateSectorSpecificCollisions(MapSector sector) {
+        generateSectorSpecificCollisions(sector, false);
+    }
+
+    /**
+     * Generate collisions with sector entities that aren't traversable
+     *
+     * @param sector The sector to generate collisions for its non-traversable entities
+     */
+    public void generateSectorSpecificCollisions(MapSector sector, boolean allBoundaries) {
         for (Entity e : sector.entities) {
             if (!e.isTraversable && e.isSectorSpecific) {
-                generateMovementRestrictionCollisions(e.defaultBoundary);
+                if (!allBoundaries) {
+                    generateMovementRestrictionCollisions(e.defaultBoundary);
+                } else {
+                    e.boundaries.forEach(this::generateMovementRestrictionCollisions);
+                }
             }
         }
     }

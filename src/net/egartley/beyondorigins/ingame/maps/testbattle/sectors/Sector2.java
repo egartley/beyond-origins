@@ -2,6 +2,7 @@ package net.egartley.beyondorigins.ingame.maps.testbattle.sectors;
 
 import net.egartley.beyondorigins.core.abstracts.Map;
 import net.egartley.beyondorigins.core.abstracts.MapSector;
+import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.ingame.maps.testbattle.TestBattleMap;
 
 public class Sector2 extends MapSector {
@@ -24,6 +25,7 @@ public class Sector2 extends MapSector {
     public void onPlayerEnter(MapSector from) {
         ((TestBattleMap) parent).spawnFHBoss();
         updatePlayerPosition(from);
+        Entities.PLAYER.generateSectorSpecificCollisions(this, true);
     }
 
     @Override

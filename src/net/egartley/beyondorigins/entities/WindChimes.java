@@ -16,13 +16,16 @@ public class WindChimes extends AnimatedEntity {
     // private boolean isIdle = true;
     private boolean swingAgain = true;
 
+    private EntityBoundary mastBoundary, overheadBoundary, chimeBoundary;
+
     private final int ANIMATION_THRESHOLD = 200;
     private final byte LEFT_SWING_ANIMATION = 0, RIGHT_SWING_ANIMATION = 1;
 
     public WindChimes(int x, int y) {
-        super("WindChimes", new SpriteSheet(Images.get(Images.WIND_CHIMES), 42, 54, 2, 5));
+        super("WindChimes", new SpriteSheet(Images.get(Images.WIND_CHIMES), 31, 54, 2, 5));
         isSectorSpecific = true;
         isDualRendered = false;
+        isTraversable = false;
         setPosition(x, y);
     }
 
@@ -61,8 +64,13 @@ public class WindChimes extends AnimatedEntity {
 
     @Override
     protected void setBoundaries() {
-        boundaries.add(new EntityBoundary(this, sprite, new BoundaryPadding(0)));
-        defaultBoundary = boundaries.get(0);
+        mastBoundary = new EntityBoundary(this, sprite, new BoundaryPadding(-4, 0, -19, -27));
+        overheadBoundary = new EntityBoundary(this, sprite, new BoundaryPadding(0, -4, -42, -4));
+        chimeBoundary = new EntityBoundary(this, sprite, new BoundaryPadding(-12, -12, -29, 0));
+        boundaries.add(mastBoundary);
+        boundaries.add(overheadBoundary);
+        boundaries.add(chimeBoundary);
+        defaultBoundary = boundaries.get(2);
     }
 
     @Override
