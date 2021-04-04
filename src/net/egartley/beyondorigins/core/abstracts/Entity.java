@@ -270,10 +270,27 @@ public abstract class Entity extends Renderable implements Tickable {
     }
 
     /**
+     * Changes the entity's location ({@link #x()} and {@link #y()}) at a rate
+     * of {@link #speed} per call. Since there is no boundary parameter,
+     * the entity's {@link #defaultBoundary} will be used in calculating where it is
+     */
+    protected void move(byte direction) {
+        move(direction, defaultBoundary, true, false);
+    }
+
+    protected void move(byte direction, boolean reset) {
+        move(direction, defaultBoundary, reset, false);
+    }
+
+    /**
      * Updates the entity's location by {@link #speed}, unless the
      * specified boundary is outside of the game's window
      */
     protected void move(byte direction, EntityBoundary boundary, boolean reset) {
+        move(direction, boundary, reset, false);
+    }
+
+    protected void move(byte direction, EntityBoundary boundary, boolean reset, boolean contain) {
         if (reset) {
             isMovingUpwards = false;
             isMovingDownwards = false;
@@ -292,7 +309,7 @@ public abstract class Entity extends Renderable implements Tickable {
             return;
         switch (direction) {
             case DIRECTION_UP:
-                if (boundary.top <= 0) {
+                if (contain && boundary.top <= 0) {
                     break; // top of window
                 }
                 isMovingUpwards = true;
@@ -301,7 +318,7 @@ public abstract class Entity extends Renderable implements Tickable {
                 onMove(DIRECTION_UP);
                 break;
             case DIRECTION_DOWN:
-                if (boundary.bottom >= Game.WINDOW_HEIGHT) {
+                if (contain && boundary.bottom >= Game.WINDOW_HEIGHT) {
                     break; // bottom of window
                 }
                 isMovingDownwards = true;
@@ -310,7 +327,7 @@ public abstract class Entity extends Renderable implements Tickable {
                 onMove(DIRECTION_DOWN);
                 break;
             case DIRECTION_LEFT:
-                if (boundary.left <= 0) {
+                if (contain && boundary.left <= 0) {
                     break; // left side of window
                 }
                 isMovingLeftwards = true;
@@ -319,7 +336,7 @@ public abstract class Entity extends Renderable implements Tickable {
                 onMove(DIRECTION_LEFT);
                 break;
             case DIRECTION_RIGHT:
-                if (boundary.right >= Game.WINDOW_WIDTH) {
+                if (contain && boundary.right >= Game.WINDOW_WIDTH) {
                     break; // right side of window
                 }
                 isMovingRightwards = true;
@@ -330,19 +347,6 @@ public abstract class Entity extends Renderable implements Tickable {
             default:
                 break;
         }
-    }
-
-    /**
-     * Changes the entity's location ({@link #x()} and {@link #y()}) at a rate
-     * of {@link #speed} per call. Since there is no boundary parameter,
-     * the entity's {@link #defaultBoundary} will be used in calculating where it is
-     */
-    protected void move(byte direction) {
-        move(direction, defaultBoundary, true);
-    }
-
-    protected void move(byte direction, boolean reset) {
-        move(direction, defaultBoundary, reset);
     }
 
     /**

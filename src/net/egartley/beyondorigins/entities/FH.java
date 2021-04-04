@@ -8,6 +8,7 @@ import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
+import net.egartley.beyondorigins.core.threads.DelayedEvent;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import org.newdawn.slick.Animation;
@@ -17,9 +18,13 @@ import org.newdawn.slick.Animation;
  */
 public class FH extends AnimatedEntity implements Damageable {
 
+    private boolean readyToHeal = true;
+
     private final int ANIMATION_THRESHOLD = 390;
+    private final int REGEN_AMOUNT = 2;
     private final byte LEFT_NORMAL_ANIMATION = 0;
     private final byte RIGHT_NORMAL_ANIMATION = 1;
+    private final double REGEN_DELAY = 1.25D;
 
     public FH() {
         super("FH", new SpriteSheet(Images.get(Images.FH), 30, 44, 2, 4));
@@ -33,38 +38,26 @@ public class FH extends AnimatedEntity implements Damageable {
     @Override
     public void tick() {
         super.tick();
+
+        // regenerate health
+        if (health < maximumHealth && readyToHeal) {
+            readyToHeal = false;
+            new DelayedEvent(REGEN_DELAY) {
+                @Override
+                public void onFinish() {
+                    heal(REGEN_AMOUNT);
+                    readyToHeal = true;
+                }
+            }.start();
+        }
+
+        // follow/catch up with player
         if (!isMovingLeftwards && !isMovingRightwards) {
             isMovingRightwards = true;
             animation = animations.get(RIGHT_NORMAL_ANIMATION);
         }
-        if (isMovingRightwards && this.isRightOf(Entities.PLAYER)) {
-            animation.stop();
-            animation = animations.get(LEFT_NORMAL_ANIMATION);
-            isMovingRightwards = false;
-            isMovingLeftwards = true;
-        } else if (isMovingLeftwards && this.isLeftOf(Entities.PLAYER)) {
-            animation.stop();
-            animation = animations.get(RIGHT_NORMAL_ANIMATION);
-            isMovingLeftwards = false;
-            isMovingRightwards = true;
-        }
-        if (this.isBelow(Entities.PLAYER)) {
-            isMovingDownwards = false;
-            isMovingUpwards = true;
-        } else if (this.isAbove(Entities.PLAYER)) {
-            isMovingDownwards = true;
-            isMovingUpwards = false;
-        }
-        if (isMovingRightwards) {
-            move(DIRECTION_RIGHT, defaultBoundary, false);
-        } else if (isMovingLeftwards) {
-            move(DIRECTION_LEFT, defaultBoundary, false);
-        }
-        if (isMovingDownwards) {
-            move(DIRECTION_DOWN, defaultBoundary, false);
-        } else if (isMovingUpwards) {
-            move(DIRECTION_UP, defaultBoundary, false);
-        }
+        follow(Entities.PLAYER, LEFT_NORMAL_ANIMATION, RIGHT_NORMAL_ANIMATION, defaultBoundary, (int) Math.ceil(speed));
+
         if (animation.isStopped()) {
             animation.start();
         }

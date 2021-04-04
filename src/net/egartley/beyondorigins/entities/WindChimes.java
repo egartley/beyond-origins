@@ -28,6 +28,9 @@ public class WindChimes extends AnimatedEntity {
 
     @Override
     public void tick() {
+        super.tick();
+
+        // simulate wind with random animation delays and lengths
         if (animation.isStopped() && swingAgain) {
             swingAgain = false;
             new DelayedEvent(0.1D * Util.randomInt(4, 8, true)) {

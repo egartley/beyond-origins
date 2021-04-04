@@ -271,21 +271,21 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         isMovingRightwards = false;
         if (up) {
             if (isAllowedToMoveUpwards) {
-                move(DIRECTION_UP);
+                move(DIRECTION_UP, defaultBoundary, true, true);
             }
         } else if (down) {
             if (isAllowedToMoveDownwards) {
-                move(DIRECTION_DOWN);
+                move(DIRECTION_DOWN, defaultBoundary, true, true);
             }
         }
         if (left) {
             if (isAllowedToMoveLeftwards) {
-                move(DIRECTION_LEFT);
+                move(DIRECTION_LEFT, defaultBoundary, true, true);
             }
             switchAnimation(LEFT_ANIMATION);
         } else if (right) {
             if (isAllowedToMoveRightwards) {
-                move(DIRECTION_RIGHT);
+                move(DIRECTION_RIGHT, defaultBoundary, true, true);
             }
             switchAnimation(RIGHT_ANIMATION);
         }
