@@ -15,8 +15,8 @@ public class MainMenuState extends BasicGameState {
     private final Image logo;
     private final Color backgroundColor = Color.lightGray;
 
-    public ArrayList<MenuButton> buttons = new ArrayList<>();
     public static final int ID = 0;
+    public ArrayList<MenuButton> buttons = new ArrayList<>();
 
     public MainMenuState() {
         logo = Images.get("resources/images/logo.png");

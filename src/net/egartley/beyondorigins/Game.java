@@ -34,9 +34,9 @@ public class Game extends StateBasedGame implements InputProviderListener {
     // TODO: Change dialogue finished events management
 
     public static boolean debug = true;
-    public static Input input;
     public static final int WINDOW_WIDTH = 959;
     public static final int WINDOW_HEIGHT = 543;
+    public static Input input;
 
     public Game() {
         super("Beyond Origins");

@@ -8,10 +8,10 @@ import org.newdawn.slick.Graphics;
 public abstract class Cutscene extends MapSector {
 
     private double transitionAlpha = 255;
-    private Color transitionColor = Color.black;
-    private MapSector returnSector;
     private final int barHeight = 64;
     private final double TRANSITION_SPEED = 1.5;
+    private MapSector returnSector;
+    private Color transitionColor = Color.black;
 
     public boolean isShowingTransition;
 

@@ -10,6 +10,8 @@ public class MenuButton extends GenericButton {
     private int stringX;
     private int stringY;
     private boolean didSetStringCoords;
+    private Color color;
+    private Color currentTextColor;
     private final String text;
     private final Color textColor = Color.black;
     private final Color disabledColor = Color.darkGray;
@@ -18,8 +20,6 @@ public class MenuButton extends GenericButton {
     private final Color hoverColor = enabledColor.brighter();
 
     public static Font font = new TrueTypeFont(new java.awt.Font("Georgia", java.awt.Font.PLAIN, 24), true);
-    private Color color;
-    private Color currentTextColor;
 
     public MenuButton(String text, boolean isEnabledByDefault, int x, int y, int width, int height) {
         super(width, height, x, y);

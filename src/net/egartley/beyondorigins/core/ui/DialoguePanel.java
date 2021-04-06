@@ -14,15 +14,15 @@ import org.newdawn.slick.*;
 public class DialoguePanel extends UIElement {
 
     private short lineIndex = -1;
+    private static final double DELAY = 1.225D;
     private DialogueExchange exchange;
     private final Image moreLinesImage;
-    private static final double DELAY = 1.225D;
     private static final Font characterNameFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12), true);
 
     public boolean isShowing;
     public boolean isReadyToAdvance;
-    public static Font lineFont = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 14), true);
     public static final short MAX_LINES = 5;
+    public static Font lineFont = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 14), true);
 
     public DialoguePanel() {
         super(Images.get(Images.DIALOGUE_PANEL), true);

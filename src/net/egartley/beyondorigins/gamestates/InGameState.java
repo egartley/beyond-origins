@@ -29,15 +29,15 @@ public class InGameState extends BasicGameState {
     private static final ArrayList<KeyTyped> keyTypeds = new ArrayList<>();
     private static final ArrayList<NotificationBanner> notifications = new ArrayList<>();
 
+    public static boolean canPlay = true;
+    public static boolean isDialogueVisible;
+    public static boolean isInventoryVisible;
+    public static final int ID = 1;
     public static Map map;
     public static Building building;
     public static PlayerMenu playerMenu;
     public static DialoguePanel dialogue;
     public static ArrayList<Map> maps = new ArrayList<>();
-    public static boolean canPlay = true;
-    public static boolean isDialogueVisible;
-    public static boolean isInventoryVisible;
-    public static final int ID = 1;
 
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {

@@ -13,7 +13,6 @@ public class DamageNumber extends Entity {
     private final int amount;
     private final int initalY;
     private final int FLOAT_DISTANCE = 26;
-
     private final Color TEXT_COLOR = Color.yellow;
     private final Font FONT = new TrueTypeFont(new java.awt.Font("Consolas", java.awt.Font.PLAIN, 10), true);
 

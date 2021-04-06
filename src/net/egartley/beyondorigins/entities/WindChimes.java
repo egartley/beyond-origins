@@ -15,11 +15,12 @@ public class WindChimes extends AnimatedEntity {
 
     // private boolean isIdle = true;
     private boolean swingAgain = true;
-
-    private EntityBoundary mastBoundary, overheadBoundary, chimeBoundary;
-
     private final int ANIMATION_THRESHOLD = 200;
-    private final byte LEFT_SWING_ANIMATION = 0, RIGHT_SWING_ANIMATION = 1;
+    private final byte LEFT_SWING_ANIMATION = 0;
+    private final byte RIGHT_SWING_ANIMATION = 1;
+    private EntityBoundary mastBoundary;
+    private EntityBoundary chimeBoundary;
+    private EntityBoundary overheadBoundary;
 
     public WindChimes(int x, int y) {
         super("WindChimes", new SpriteSheet(Images.get(Images.WIND_CHIMES), 31, 54, 2, 5));

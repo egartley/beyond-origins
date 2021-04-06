@@ -10,7 +10,10 @@ public class ClickableArea {
     private boolean didHover = false;
     private final MouseClicked clicked;
 
-    public int x, y, width, height;
+    public int x;
+    public int y;
+    public int width;
+    public int height;
     public boolean isCursorInBounds = false;
 
     public ClickableArea(int x, int y, int width, int height) {

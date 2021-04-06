@@ -23,11 +23,12 @@ public class PlayerInventory extends UIElement {
 
     public static int tooltipWidth;
     public static boolean isShowingTooltip;
+    public static final int ROWS = 5;
+    public static final int COLUMNS = 4;
     public static String tooltipText;
     public static PlayerInventoryStack stackBeingDragged;
     public static ArrayList<PlayerInventorySlot> slots = new ArrayList<>();
     public static Font tooltipFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14), true);
-    public static final int ROWS = 5, COLUMNS = 4;
 
     public PlayerInventory() {
         super(Images.get(Images.INVENTORY_PANEL));

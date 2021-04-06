@@ -11,8 +11,8 @@ import org.newdawn.slick.*;
 public class NotificationBanner extends UIElement {
 
     private int offset = 0;
-    private boolean didStart = false;
     private boolean didShow = false;
+    private boolean didStart = false;
     private boolean didReachTargetY = false;
     private boolean isReadyToMoveAgain = true;
     private final int SPEED = 2;

@@ -19,7 +19,6 @@ import org.newdawn.slick.Animation;
 public class FH extends AnimatedEntity implements Damageable {
 
     private boolean readyToHeal = true;
-
     private final int ANIMATION_THRESHOLD = 390;
     private final int REGEN_AMOUNT = 2;
     private final byte LEFT_NORMAL_ANIMATION = 0;

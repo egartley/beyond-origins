@@ -9,11 +9,11 @@ import net.egartley.beyondorigins.entities.Entities;
 public class EntityEntityCollisionEvent {
 
     public byte collidedSide = -1;
-    public EntityEntityCollision invoker;
     public static final byte TOP_SIDE = 0;
     public static final byte LEFT_SIDE = 1;
     public static final byte RIGHT_SIDE = 3;
     public static final byte BOTTOM_SIDE = 2;
+    public EntityEntityCollision invoker;
 
     public EntityEntityCollisionEvent(EntityEntityCollision invoker) {
         this.invoker = invoker;

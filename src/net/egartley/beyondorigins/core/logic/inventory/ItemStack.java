@@ -5,8 +5,8 @@ import net.egartley.beyondorigins.core.abstracts.GameItem;
 public class ItemStack {
 
     public int amount;
-    public GameItem item;
     public static final int MAX_AMOUNT = 99;
+    public GameItem item;
 
     public ItemStack(GameItem item) {
         this(item, 1);

@@ -7,8 +7,8 @@ import org.newdawn.slick.*;
 
 public class QuestSlot extends ClickableArea {
 
-    private Image slotImage;
     private static boolean loadedImages;
+    private Image slotImage;
     private static Image slotHoverImage, slotNormalImage;
     private static final Color slotSelectedTitleColor = Color.white, slotTitleColor = new Color(65, 53, 37);
     private static final Font slotTitleFont = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 14), true);

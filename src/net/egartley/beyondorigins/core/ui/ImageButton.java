@@ -5,9 +5,9 @@ import org.newdawn.slick.Image;
 
 public class ImageButton extends GenericButton {
 
+    public Image hoverImage;
     public Image enabledImage;
     public Image disabledImage;
-    public Image hoverImage;
 
     public ImageButton(Image image) {
         this(image, 0, 0);

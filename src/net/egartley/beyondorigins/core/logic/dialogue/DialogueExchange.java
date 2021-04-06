@@ -8,8 +8,8 @@ import java.util.Arrays;
 
 public class DialogueExchange {
 
-    public int characterDialogueIndex = -1;
     public boolean isFinished;
+    public int characterDialogueIndex = -1;
     public String[] allLines;
     public String[] queuedLines;
     public String[] displayedLines;

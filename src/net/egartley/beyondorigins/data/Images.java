@@ -9,38 +9,37 @@ import java.io.File;
 
 public class Images {
 
-    public final static byte PLAYER = 0;
-    public final static byte DUMMY = 1;
-    public final static byte TILE_GRASS = 2;
-    public final static byte TILE_SAND = 3;
-    public final static byte TREE_DEFAULT = 4;
-    public final static byte ROCK_DEFAULT = 5;
-    public final static byte FH = 6;
-    public final static byte DIALOGUE_PANEL = 7;
-    public final static byte INVENTORY_PANEL = 8;
-    public final static byte MORE_LINES = 9;
-    public final static byte INVENTORY_SLOT = 10;
-    public final static byte WIZARD_DEFAULT = 11;
-    public final static byte WIZARD_WITH_HAT = 12;
-    public final static byte WIZARD_HAT = 13;
-    public final static byte QUESTS_PANEL = 14;
-    public final static byte QUEST_SLOT = 15;
-    public final static byte QUEST_SLOT_HOVER = 16;
-    public final static byte QUEST_CHECKBOX = 17;
-    public final static byte QUEST_CHECKBOX_CHECKED = 18;
-    public final static byte PAGE_BUTTON_ENABLED = 19;
-    public final static byte PAGE_BUTTON_DISABLED = 20;
-    public final static byte PAGE_BUTTON_HOVER = 21;
-    public final static byte WARP_PAD = 22;
-    public final static byte MONSTER = 23;
-    public final static byte CUTSCENE = 24;
-    public final static byte WIND_CHIMES = 25;
-
     public static String path = "resources/images/";
     public static String uiPath = path + "ui/";
     public static String entityPath = path + "entities/";
     public static String mapTilePath = path + "map-tiles/";
     public static String expressionPath = entityPath + "expressions/";
+    public final static byte FH = 6;
+    public final static byte DUMMY = 1;
+    public final static byte PLAYER = 0;
+    public final static byte MONSTER = 23;
+    public final static byte TILE_SAND = 3;
+    public final static byte WARP_PAD = 22;
+    public final static byte CUTSCENE = 24;
+    public final static byte TILE_GRASS = 2;
+    public final static byte MORE_LINES = 9;
+    public final static byte WIZARD_HAT = 13;
+    public final static byte QUEST_SLOT = 15;
+    public final static byte TREE_DEFAULT = 4;
+    public final static byte ROCK_DEFAULT = 5;
+    public final static byte WIND_CHIMES = 25;
+    public final static byte QUESTS_PANEL = 14;
+    public final static byte DIALOGUE_PANEL = 7;
+    public final static byte INVENTORY_PANEL = 8;
+    public final static byte INVENTORY_SLOT = 10;
+    public final static byte WIZARD_DEFAULT = 11;
+    public final static byte QUEST_CHECKBOX = 17;
+    public final static byte WIZARD_WITH_HAT = 12;
+    public final static byte QUEST_SLOT_HOVER = 16;
+    public final static byte PAGE_BUTTON_HOVER = 21;
+    public final static byte PAGE_BUTTON_ENABLED = 19;
+    public final static byte PAGE_BUTTON_DISABLED = 20;
+    public final static byte QUEST_CHECKBOX_CHECKED = 18;
 
     /**
      * Returns the specified image

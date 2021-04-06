@@ -9,16 +9,19 @@ import java.awt.*;
 
 public abstract class Boundary extends Renderable implements Tickable {
 
-    protected int horizontalOffset;
     protected int verticalOffset;
-    protected BoundaryPadding padding;
+    protected int horizontalOffset;
     protected BoundaryOffset offset;
+    protected BoundaryPadding padding;
 
     public int x;
     public int y;
-    public int top, bottom;
-    public int left, right;
-    public int width, height;
+    public int top;
+    public int left;
+    public int right;
+    public int width;
+    public int bottom;
+    public int height;
     public boolean isCollided;
     public boolean isVisible = true;
     public Color drawColor;

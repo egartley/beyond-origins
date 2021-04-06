@@ -16,8 +16,9 @@ public class PlayerInventorySlot extends UIElement {
     public int index;
     public int baseItemX;
     public int baseItemY;
+    public static final int SIZE = 36;
+    public static final int MARGIN = 3;
     public PlayerInventoryStack stack;
-    public static final int MARGIN = 3, SIZE = 36;
 
     /**
      * Creates a new slot, and calculates its position based on the row and column

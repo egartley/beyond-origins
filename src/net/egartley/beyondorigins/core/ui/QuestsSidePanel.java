@@ -16,12 +16,12 @@ public class QuestsSidePanel extends UIElement {
     private final ArrayList<String[]> objectiveLines = new ArrayList<>();
     private static Image checkboxImage;
     private static Image checkboxCheckedImage;
+    private static final Color titleColor = new Color(65, 53, 37);
+    private static final Color descriptionColor = titleColor, objectiveTitleColor = titleColor, objectiveDescriptionColor = titleColor;
     private static final Font descriptionFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 11), true);
     private static final Font objectiveDescriptionFont = descriptionFont;
     private static final Font objectiveTitleFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 11), true);
     private static final Font titleFont = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.BOLD, 16), true);
-    private static final Color titleColor = new Color(65, 53, 37);
-    private static final Color descriptionColor = titleColor, objectiveTitleColor = titleColor, objectiveDescriptionColor = titleColor;
 
     public QuestsSidePanel() {
         super(412, 277);

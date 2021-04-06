@@ -7,7 +7,6 @@ import net.egartley.beyondorigins.core.graphics.SpriteSheet;
 import net.egartley.beyondorigins.core.interfaces.Damageable;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
-import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.core.threads.DelayedEvent;
 import net.egartley.beyondorigins.data.Images;
@@ -21,12 +20,12 @@ import org.newdawn.slick.Animation;
 public class Monster extends AnimatedEntity implements Damageable {
 
     private boolean isHurt;
-    private DelayedEvent hurtEvent = null;
     private final int ANIMATION_THRESHOLD = 200;
     private final byte LEFT_HURT_ANIMATION = 3;
     private final byte RIGHT_HURT_ANIMATION = 2;
     private final byte LEFT_NORMAL_ANIMATION = 1;
     private final byte RIGHT_NORMAL_ANIMATION = 0;
+    private DelayedEvent hurtEvent = null;
 
     public Monster() {
         super("Monster", new SpriteSheet(Images.get(Images.MONSTER), 36, 58, 4, 3));

@@ -23,29 +23,22 @@ public abstract class Entity extends Renderable implements Tickable {
     private static final Color nameTagBackgroundColor = new Color(0, 0, 0, 128);
     private static final Font debugFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 11), true);
 
+    protected boolean isMovingUpwards;
+    protected boolean isMovingDownwards;
+    protected boolean isMovingLeftwards;
+    protected boolean isMovingRightwards;
     protected Image image;
     protected Image firstLayer;
     protected Image secondLayer;
     protected ArrayList<Sprite> sprites = new ArrayList<>();
     protected ArrayList<SpriteSheet> sheets = new ArrayList<>();
-    protected boolean isMovingUpwards;
-    protected boolean isMovingDownwards;
-    protected boolean isMovingLeftwards;
-    protected boolean isMovingRightwards;
 
-    public String name;
-    public Sprite sprite;
-    public EntityBoundary defaultBoundary = null;
-    public EntityEntityCollision lastCollision = null;
-    public EntityEntityCollisionEvent lastCollisionEvent = null;
-    public ArrayList<EntityBoundary> boundaries = new ArrayList<>();
-    public ArrayList<EntityEntityInteraction> interactions = new ArrayList<>();
     public int uuid;
     public int health;
+    public int maximumHealth;
+    public double speed;
     public double deltaX;
     public double deltaY;
-    public double speed;
-    public int maximumHealth;
     public boolean isCollided;
     public boolean isTraversable;
     public boolean isDualRendered;
@@ -59,6 +52,13 @@ public abstract class Entity extends Renderable implements Tickable {
     public static final byte DIRECTION_DOWN = 2;
     public static final byte DIRECTION_LEFT = 3;
     public static final byte DIRECTION_RIGHT = 4;
+    public String name;
+    public Sprite sprite;
+    public EntityBoundary defaultBoundary = null;
+    public EntityEntityCollision lastCollision = null;
+    public EntityEntityCollisionEvent lastCollisionEvent = null;
+    public ArrayList<EntityBoundary> boundaries = new ArrayList<>();
+    public ArrayList<EntityEntityInteraction> interactions = new ArrayList<>();
 
     public Entity(String name) {
         this(name, (Sprite) null);

@@ -24,10 +24,10 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
     private int tooltipWidth;
     private static final Font amountFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12), true);
 
-    public boolean isBeingDragged;
-    public boolean didStartDrag;
     public boolean mouseHover;
+    public boolean didStartDrag;
     public boolean setFontMetrics;
+    public boolean isBeingDragged;
     public boolean isShowingTooltip;
     public static int MAX_AMOUNT = 99;
     public ItemStack itemStack;

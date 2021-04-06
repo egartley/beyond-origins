@@ -32,12 +32,12 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
 
     private boolean frozen;
     private boolean isMovementInvalidated;
-    private final byte LEFT_ANIMATION = 0;
-    private final byte RIGHT_ANIMATION = 1;
     private final int MAX_LEVEL = 100;
     private final int DEFAULT_DAMAGE = 4;
     private final int DEFAULT_HEALTH = 30;
     private final int DEFAULT_DEFENSE = 1;
+    private final byte LEFT_ANIMATION = 0;
+    private final byte RIGHT_ANIMATION = 1;
     private final int MAX_EXPERIENCE = 4900601;
     private final int ANIMATION_THRESHOLD = 165;
 
@@ -46,12 +46,12 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
     public boolean isInBuilding;
     public KeyTyped attack;
     public EntityBoundary boundary;
+    public EntityInventory inventory;
     public EntityBoundary headBoundary;
     public EntityBoundary bodyBoundary;
     public EntityBoundary feetBoundary;
     public EntityBoundary chatBoundary;
     public EntityBoundary attackBoundary;
-    public EntityInventory inventory;
 
     public Player() {
         super("Player", new SpriteSheet(Images.get(Images.PLAYER), 30, 44, 2, 4));

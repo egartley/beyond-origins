@@ -50,9 +50,9 @@ public abstract class MapSector extends Renderable implements Tickable {
     public static final short TILE_ROWS = 17;
     public static final short TILE_COLUMNS = 30;
     public ArrayList<Entity> entities = new ArrayList<>();
+    public ArrayList<Tickable> tickables = new ArrayList<>();
     public ArrayList<Entity> primaryEntities = new ArrayList<>();
     public ArrayList<Renderable> renderables = new ArrayList<>();
-    public ArrayList<Tickable> tickables = new ArrayList<>();
 
 
     /**

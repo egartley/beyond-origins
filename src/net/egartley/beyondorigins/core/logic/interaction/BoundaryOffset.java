@@ -6,9 +6,9 @@ package net.egartley.beyondorigins.core.logic.interaction;
 public class BoundaryOffset {
 
     public int top;
-    public int bottom;
     public int left;
     public int right;
+    public int bottom;
 
     public BoundaryOffset(int top, int bottom, int left, int right) {
         this.top = top;

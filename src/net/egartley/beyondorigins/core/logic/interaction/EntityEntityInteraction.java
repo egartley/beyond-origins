@@ -12,10 +12,9 @@ public class EntityEntityInteraction {
     public Entity[] entities;
     public EntityEntityCollision collision;
 
-    private static final int defaultKeyCode = Input.KEY_ENTER;
-
     private boolean isActive;
     private boolean didInteract;
+    private static final int defaultKeyCode = Input.KEY_ENTER;
     private final KeyTyped keyTyped;
 
     public EntityEntityInteraction(Entity e1, Entity e2) {

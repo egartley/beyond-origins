@@ -7,8 +7,8 @@ public class BoundaryPadding {
 
     public int top;
     public int left;
-    public int bottom;
     public int right;
+    public int bottom;
 
     public BoundaryPadding(int padding) {
         top = padding;
