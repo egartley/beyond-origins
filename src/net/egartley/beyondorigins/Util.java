@@ -16,140 +16,6 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Util {
 
     /**
-     * Stitches two images together, side by side
-     *
-     * @param base     The image on the left
-     * @param toStitch The image on the right
-     * @return The resulting combination of both images
-     */
-    public static Image stitchImage(Image base, Image toStitch) {
-        int width = base.getWidth() + toStitch.getWidth();
-        int height = Math.max(base.getHeight(), toStitch.getHeight());
-        try {
-            Image stitched = new Image(width, height);
-            Graphics graphics = stitched.getGraphics();
-            graphics.setBackground(new Color(0, 0, 0, 0));
-            graphics.drawImage(base, 0, 0);
-            graphics.drawImage(toStitch, base.getWidth(), 0);
-            graphics.flush();
-            return stitched;
-        } catch (SlickException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
-     * Builds an array of images to use for the frames of an animation
-     *
-     * @param sprite The sprite to get frames from
-     * @return An array of images, each representing a single frame
-     */
-    public static Image[] getAnimationFrames(Sprite sprite) {
-        Image[] frames = new Image[sprite.frames.size()];
-        Object[] a = sprite.frames.toArray();
-        for (int i = 0; i < sprite.frames.size(); i++) {
-            frames[i] = (Image) a[i];
-        }
-        return frames;
-    }
-
-    /**
-     * Builds an animation from the given image and supplied parameters
-     *
-     * @param imageStore The number representing the image to retrieve
-     * @param width      Width of the animation
-     * @param height     Height of the animation
-     * @param rows       Number of rows in the image
-     * @param frames     Number of frames
-     * @param frameDelay How long to wait between frames
-     * @param rowOffset  The row to get from the resulting image
-     * @return An animation built from the image
-     */
-    public static Animation getTemplateAnimation(byte imageStore, int width, int height, int rows, int frames, int frameDelay, int rowOffset) {
-        return new Animation(getAnimationFrames(new SpriteSheet(Images.get(imageStore), width, height, rows, frames).sprites.get(rowOffset)), frameDelay);
-    }
-
-    /**
-     * Returns a random integer between the minimum and maximum
-     *
-     * @param min The smallest value (inclusive)
-     * @param max The largest value (exclusive)
-     * @return An integer between the minimum and maximum
-     */
-    public static int randomInt(int min, int max) {
-        if (max < min) {
-            // if max/min were mixed up, switch them
-            int actualmin = max;
-            max = min;
-            min = actualmin;
-        }
-        return ThreadLocalRandom.current().nextInt(min, max);
-    }
-
-    /**
-     * Returns a random integer between the minimum and maximum
-     *
-     * @param min       The smallest value (inclusive)
-     * @param max       The largest value
-     * @param inclusive Whether or not the maximum value could be returned
-     * @return An integer between the minimum and maximum
-     */
-    public static int randomInt(int min, int max, boolean inclusive) {
-        if (inclusive) {
-            return randomInt(min, max + 1);
-        } else {
-            return randomInt(min, max);
-        }
-    }
-
-    /**
-     * Returns true the given percentage of the time
-     *
-     * @param percent The percent chance that true will be returned
-     * @return True the given percentage of the time, false otherwise
-     */
-    public static boolean percentChance(double percent) {
-        // assert percent <= 1.0D;
-        return randomInt(100, 1, true) <= percent * 100;
-    }
-
-    /**
-     * Calls {@link #percentChance(double)} with an equal chance of either true or false
-     *
-     * @return True 50% of the time, false the other 50%
-     */
-    public static boolean fiftyFifty() {
-        return percentChance(0.5D);
-    }
-
-    /**
-     * Generates an array list of collisions between the base boundary and all of the entity's boundaries
-     *
-     * @param baseEvent    The collision to use for {@link EntityEntityCollision#start(EntityEntityCollisionEvent)} and {@link EntityEntityCollision#start(EntityEntityCollisionEvent)}
-     * @param entity       The entity to generate collisions for all its boundaries
-     * @param baseBoundary The other boundary to use for the generated collisions
-     * @return Collisions based on the given collision and boundary, and all of the entity's boundaries
-     */
-    public static ArrayList<EntityEntityCollision> getAllBoundaryCollisions(EntityEntityCollision baseEvent, Entity entity, EntityBoundary baseBoundary) {
-        ArrayList<EntityEntityCollision> collisions = new ArrayList<>();
-        for (EntityBoundary boundary : entity.boundaries) {
-            EntityEntityCollision c = new EntityEntityCollision(boundary, baseBoundary) {
-                public void start(EntityEntityCollisionEvent event) {
-                    baseEvent.start(event);
-                }
-
-                public void end(EntityEntityCollisionEvent event) {
-                    baseEvent.end(event);
-                }
-            };
-            c.isMovementRestricting = baseEvent.isMovementRestricting;
-            collisions.add(c);
-        }
-        return collisions;
-    }
-
-    /**
      * Annuls, or "cancels," the movement restrictions specified by the collision event
      *
      * @param event  The collision event to annul
@@ -215,6 +81,113 @@ public class Util {
     }
 
     /**
+     * Returns a random integer between the minimum and maximum
+     *
+     * @param min The smallest value (inclusive)
+     * @param max The largest value (exclusive)
+     * @return An integer between the minimum and maximum
+     */
+    public static int randomInt(int min, int max) {
+        if (max < min) {
+            // if max/min were mixed up, switch them
+            int actualmin = max;
+            max = min;
+            min = actualmin;
+        }
+        return ThreadLocalRandom.current().nextInt(min, max);
+    }
+
+    /**
+     * Returns a random integer between the minimum and maximum
+     *
+     * @param min       The smallest value (inclusive)
+     * @param max       The largest value
+     * @param inclusive Whether or not the maximum value could be returned
+     * @return An integer between the minimum and maximum
+     */
+    public static int randomInt(int min, int max, boolean inclusive) {
+        if (inclusive) {
+            return randomInt(min, max + 1);
+        } else {
+            return randomInt(min, max);
+        }
+    }
+
+    /**
+     * Calls {@link #percentChance(double)} with an equal chance of either true or false
+     *
+     * @return True 50% of the time, false the other 50%
+     */
+    public static boolean fiftyFifty() {
+        return percentChance(0.5D);
+    }
+
+    /**
+     * Returns true the given percentage of the time
+     *
+     * @param percent The percent chance that true will be returned
+     * @return True the given percentage of the time, false otherwise
+     */
+    public static boolean percentChance(double percent) {
+        // assert percent <= 1.0D;
+        return randomInt(100, 1, true) <= percent * 100;
+    }
+
+    /**
+     * Returns whether or not the specified point is "within bounds," or overlapping, the specified area
+     *
+     * @param pointX  The x-coordinate of the point
+     * @param pointY  The y-coordinate of the point
+     * @param boundsX The x-coordinate of the bounds
+     * @param boundsY The y-coordinate of the bounds
+     * @param width   The width of the bounds
+     * @param height  The height of the bounds
+     * @return Whether or not the point is located in the bounds
+     */
+    public static boolean isWithinBounds(int pointX, int pointY, int boundsX, int boundsY, int width, int height) {
+        return pointX >= boundsX && pointX <= boundsX + width && pointY >= boundsY && pointY <= boundsY + height;
+    }
+
+    /**
+     * Stitches two images together, side by side
+     *
+     * @param base     The image on the left
+     * @param toStitch The image on the right
+     * @return The resulting combination of both images
+     */
+    public static Image stitchImage(Image base, Image toStitch) {
+        int width = base.getWidth() + toStitch.getWidth();
+        int height = Math.max(base.getHeight(), toStitch.getHeight());
+        try {
+            Image stitched = new Image(width, height);
+            Graphics graphics = stitched.getGraphics();
+            graphics.setBackground(new Color(0, 0, 0, 0));
+            graphics.drawImage(base, 0, 0);
+            graphics.drawImage(toStitch, base.getWidth(), 0);
+            graphics.flush();
+            return stitched;
+        } catch (SlickException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Builds an array of images to use for the frames of an animation
+     *
+     * @param sprite The sprite to get frames from
+     * @return An array of images, each representing a single frame
+     */
+    public static Image[] getAnimationFrames(Sprite sprite) {
+        Image[] frames = new Image[sprite.frames.size()];
+        Object[] a = sprite.frames.toArray();
+        for (int i = 0; i < sprite.frames.size(); i++) {
+            frames[i] = (Image) a[i];
+        }
+        return frames;
+    }
+
+    /**
      * Returns an array containing the given dialogue split into seperate lines, wrapped at words
      *
      * @param dialogue      The entire dialogue to split into lines
@@ -273,18 +246,45 @@ public class Util {
     }
 
     /**
-     * Returns whether or not the specified point is "within bounds," or overlapping, the specified area
+     * Builds an animation from the given image and supplied parameters
      *
-     * @param pointX  The x-coordinate of the point
-     * @param pointY  The y-coordinate of the point
-     * @param boundsX The x-coordinate of the bounds
-     * @param boundsY The y-coordinate of the bounds
-     * @param width   The width of the bounds
-     * @param height  The height of the bounds
-     * @return Whether or not the point is located in the bounds
+     * @param imageStore The number representing the image to retrieve
+     * @param width      Width of the animation
+     * @param height     Height of the animation
+     * @param rows       Number of rows in the image
+     * @param frames     Number of frames
+     * @param frameDelay How long to wait between frames
+     * @param rowOffset  The row to get from the resulting image
+     * @return An animation built from the image
      */
-    public static boolean isWithinBounds(int pointX, int pointY, int boundsX, int boundsY, int width, int height) {
-        return pointX >= boundsX && pointX <= boundsX + width && pointY >= boundsY && pointY <= boundsY + height;
+    public static Animation getTemplateAnimation(byte imageStore, int width, int height, int rows, int frames, int frameDelay, int rowOffset) {
+        return new Animation(getAnimationFrames(new SpriteSheet(Images.get(imageStore), width, height, rows, frames).sprites.get(rowOffset)), frameDelay);
+    }
+
+    /**
+     * Generates an array list of collisions between the base boundary and all of the entity's boundaries
+     *
+     * @param baseEvent    The collision to use for {@link EntityEntityCollision#start(EntityEntityCollisionEvent)} and {@link EntityEntityCollision#start(EntityEntityCollisionEvent)}
+     * @param entity       The entity to generate collisions for all its boundaries
+     * @param baseBoundary The other boundary to use for the generated collisions
+     * @return Collisions based on the given collision and boundary, and all of the entity's boundaries
+     */
+    public static ArrayList<EntityEntityCollision> getAllBoundaryCollisions(EntityEntityCollision baseEvent, Entity entity, EntityBoundary baseBoundary) {
+        ArrayList<EntityEntityCollision> collisions = new ArrayList<>();
+        for (EntityBoundary boundary : entity.boundaries) {
+            EntityEntityCollision c = new EntityEntityCollision(boundary, baseBoundary) {
+                public void start(EntityEntityCollisionEvent event) {
+                    baseEvent.start(event);
+                }
+
+                public void end(EntityEntityCollisionEvent event) {
+                    baseEvent.end(event);
+                }
+            };
+            c.isMovementRestricting = baseEvent.isMovementRestricting;
+            collisions.add(c);
+        }
+        return collisions;
     }
 
 }

@@ -19,6 +19,14 @@ public class Debug {
     private static final Color backgroundColor = Color.black;
     private static final Font font = new TrueTypeFont(new java.awt.Font("Consolas", java.awt.Font.PLAIN, 12), true);
 
+    private static void drawLine(String s, Graphics graphics) {
+        graphics.setColor(backgroundColor);
+        graphics.fillRect(lx - TEXT_PADDING, ly + (row * rowOffset) - font.getLineHeight(), graphics.getFont().getWidth(s) + (TEXT_PADDING * 2), font.getLineHeight() + TEXT_PADDING);
+        graphics.setColor(Color.white);
+        graphics.drawString(s, lx, ly + (row * rowOffset) - font.getLineHeight() + 4);
+        row++;
+    }
+
     /**
      * Prints the given object to the console, along with the current thread and time
      *
@@ -35,15 +43,6 @@ public class Debug {
      */
     public static void info(Object object) {
         out("INFO: " + object);
-    }
-
-    /**
-     * Prints the given object to the console with the tag "WARNING"
-     *
-     * @param object The object to print out
-     */
-    public static void warning(Object object) {
-        out("WARNING: " + object);
     }
 
     /**
@@ -65,12 +64,13 @@ public class Debug {
         error(e.getMessage());
     }
 
-    private static void drawLine(String s, Graphics graphics) {
-        graphics.setColor(backgroundColor);
-        graphics.fillRect(lx - TEXT_PADDING, ly + (row * rowOffset) - font.getLineHeight(), graphics.getFont().getWidth(s) + (TEXT_PADDING * 2), font.getLineHeight() + TEXT_PADDING);
-        graphics.setColor(Color.white);
-        graphics.drawString(s, lx, ly + (row * rowOffset) - font.getLineHeight() + 4);
-        row++;
+    /**
+     * Prints the given object to the console with the tag "WARNING"
+     *
+     * @param object The object to print out
+     */
+    public static void warning(Object object) {
+        out("WARNING: " + object);
     }
 
     /**

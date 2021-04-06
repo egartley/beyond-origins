@@ -35,15 +35,15 @@ public abstract class UIElement extends Renderable implements Tickable {
         this.isEnabled = enabled;
     }
 
+    public boolean isClickInBounds(int cx, int cy) {
+        return Util.isWithinBounds(cx, cy, x(), y(), width, height);
+    }
+
     @Override
     public void render(Graphics graphics) {
         if (image != null) {
             graphics.drawImage(image, x(), y());
         }
-    }
-
-    public boolean isClickInBounds(int cx, int cy) {
-        return Util.isWithinBounds(cx, cy, x(), y(), width, height);
     }
 
 }

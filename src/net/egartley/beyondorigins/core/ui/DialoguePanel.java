@@ -31,34 +31,6 @@ public class DialoguePanel extends UIElement {
     }
 
     /**
-     * Called when the space bar is pressed
-     */
-    public void advance() {
-        if (!isShowing) {
-            return;
-        }
-        exchange.advance();
-        if (exchange.isFinished) {
-            DialogueController.onFinished(exchange);
-            exchange.reset();
-            hide();
-        }
-    }
-
-    /**
-     * Disable advancing the dialogue for {@link #DELAY} amount of time
-     */
-    public void delay() {
-        isReadyToAdvance = false;
-        new DelayedEvent(DELAY) {
-            @Override
-            public void onFinish() {
-                isReadyToAdvance = true;
-            }
-        }.start();
-    }
-
-    /**
      * Makes the dialogue panel visible
      */
     public void show() {
@@ -79,6 +51,34 @@ public class DialoguePanel extends UIElement {
     }
 
     /**
+     * Disable advancing the dialogue for {@link #DELAY} amount of time
+     */
+    public void delay() {
+        isReadyToAdvance = false;
+        new DelayedEvent(DELAY) {
+            @Override
+            public void onFinish() {
+                isReadyToAdvance = true;
+            }
+        }.start();
+    }
+
+    /**
+     * Called when the space bar is pressed
+     */
+    public void advance() {
+        if (!isShowing) {
+            return;
+        }
+        exchange.advance();
+        if (exchange.isFinished) {
+            DialogueController.onFinished(exchange);
+            exchange.reset();
+            hide();
+        }
+    }
+
+    /**
      * Sets {@link #exchange} and calls {@link #show()}
      *
      * @param exchange The exchange to start
@@ -88,6 +88,17 @@ public class DialoguePanel extends UIElement {
         if (!isShowing) {
             show();
         }
+    }
+
+    private void renderLine(String text, Graphics graphics) {
+        // max width 380, or max str length 49
+        lineIndex++;
+        graphics.drawString(text, x() + 106, y() + 3 + (22 * lineIndex));
+    }
+
+    @Override
+    public void tick() {
+
     }
 
     @Override
@@ -109,17 +120,6 @@ public class DialoguePanel extends UIElement {
         if (isReadyToAdvance) {
             graphics.drawImage(moreLinesImage, 700, 500);
         }
-    }
-
-    private void renderLine(String text, Graphics graphics) {
-        // max width 380, or max str length 49
-        lineIndex++;
-        graphics.drawString(text, x() + 106, y() + 3 + (22 * lineIndex));
-    }
-
-    @Override
-    public void tick() {
-
     }
 
 }

@@ -37,13 +37,6 @@ public class PlayerInventorySlot extends UIElement {
         index = overallIndex++;
     }
 
-    @Override
-    public void tick() {
-        if (!isEmpty()) {
-            stack.tick();
-        }
-    }
-
     public void renderStack(Graphics graphics) {
         if (!isEmpty()) {
             stack.render(graphics);
@@ -57,6 +50,13 @@ public class PlayerInventorySlot extends UIElement {
 
     public boolean isEmpty() {
         return stack == null;
+    }
+
+    @Override
+    public void tick() {
+        if (!isEmpty()) {
+            stack.tick();
+        }
     }
 
 }

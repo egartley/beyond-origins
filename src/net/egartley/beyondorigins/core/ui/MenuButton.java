@@ -29,15 +29,10 @@ public class MenuButton extends GenericButton {
         this.text = text;
     }
 
-    @Override
-    public void render(Graphics graphics) {
-        if (!didSetStringCoords) {
-            setStringCoords(font);
-        }
-        graphics.setColor(isEnabled ? color : disabledColor);
-        graphics.setFont(font);
-        graphics.setColor(currentTextColor);
-        graphics.drawString(text, stringX, stringY);
+    private void setStringCoords(Font font) {
+        stringX = x() + (width / 2) - (font.getWidth(text) / 2);
+        stringY = y() + (height / 2) - (font.getHeight(text) / 2);
+        didSetStringCoords = true;
     }
 
     @Override
@@ -47,10 +42,15 @@ public class MenuButton extends GenericButton {
         currentTextColor = isBeingHovered ? hoverTextColor : textColor;
     }
 
-    private void setStringCoords(Font font) {
-        stringX = x() + (width / 2) - (font.getWidth(text) / 2);
-        stringY = y() + (height / 2) - (font.getHeight(text) / 2);
-        didSetStringCoords = true;
+    @Override
+    public void render(Graphics graphics) {
+        if (!didSetStringCoords) {
+            setStringCoords(font);
+        }
+        graphics.setColor(isEnabled ? color : disabledColor);
+        graphics.setFont(font);
+        graphics.setColor(currentTextColor);
+        graphics.drawString(text, stringX, stringY);
     }
 
 }

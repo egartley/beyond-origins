@@ -55,6 +55,10 @@ public class Game extends StateBasedGame implements InputProviderListener {
         }
     }
 
+    public static void quit() {
+        System.exit(0);
+    }
+
     @Override
     public void initStatesList(GameContainer container) throws SlickException {
         input = container.getInput();
@@ -62,10 +66,6 @@ public class Game extends StateBasedGame implements InputProviderListener {
         provider.addListener(this);
         this.addState(new InGameState());
         this.addState(new MainMenuState());
-    }
-
-    public static void quit() {
-        System.exit(0);
     }
 
     @Override

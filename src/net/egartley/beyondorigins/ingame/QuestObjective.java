@@ -22,10 +22,6 @@ public class QuestObjective {
         this.description = description;
     }
 
-    public void onComplete() {
-
-    }
-
     public void complete() {
         boolean first = !isComplete;
         isComplete = true;
@@ -33,6 +29,10 @@ public class QuestObjective {
             // only call onComplete() once, so that if complete() is called more than once, onComplete() is not
             onComplete();
         }
+    }
+
+    public void onComplete() {
+
     }
 
     @Override

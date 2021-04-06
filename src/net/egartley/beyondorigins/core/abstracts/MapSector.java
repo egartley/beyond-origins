@@ -70,33 +70,13 @@ public abstract class MapSector extends Renderable implements Tickable {
     public abstract void init();
 
     /**
-     * Minimum requirement for rendering, must be called first in any implementation
+     * Set sector-specific, or "special" collisions, such as ones that have to do with a quest
      */
-    @Override
-    public void render(Graphics graphics) {
-        drawTiles(graphics);
-        try {
-            for (Entity e : entities) {
-                if (e.isDualRendered) {
-                    e.drawFirstLayer(graphics);
-                }
-            }
-            primaryEntities.forEach(r -> r.render(graphics));
-            for (Entity e : entities) {
-                if (e.isDualRendered) {
-                    e.drawSecondLayer(graphics);
-                } else {
-                    e.render(graphics);
-                }
-            }
-            if (Game.debug) {
-                changeBoundaries.forEach(boundary -> boundary.render(graphics));
-            }
-            renderables.forEach(r -> r.render(graphics));
-        } catch (Exception e) {
-            Debug.error(e);
-        }
-    }
+    public abstract void setSpecialCollisions();
+
+    public abstract void onPlayerEnter(MapSector from);
+
+    public abstract void onPlayerLeave(MapSector to);
 
     /**
      * Renders all of the sector's tiles
@@ -204,52 +184,6 @@ public abstract class MapSector extends Renderable implements Tickable {
     }
 
     /**
-     * Minimum requirement for each tick, must be called first in any implementation
-     */
-    @Override
-    public void tick() {
-        try {
-            tickables.forEach(Tickable::tick);
-            changeCollisions.forEach(MapSectorChangeCollision::tick);
-        } catch (ConcurrentModificationException cme) {
-            // ignore for now
-        } catch (Exception e) {
-            Debug.error(e);
-        }
-    }
-
-    public void onPlayerEnter_internal() {
-        addEntity(Entities.PLAYER, true);
-        init();
-    }
-
-    public void onPlayerLeave_internal() {
-        ArrayList<Entity> e = (ArrayList<Entity>) entities.clone();
-        e.forEach(this::removeEntity);
-        e = (ArrayList<Entity>) primaryEntities.clone();
-        e.forEach(entity -> removeEntity(entity, true));
-        Collisions.nuke();
-    }
-
-    /**
-     * Set sector-specific, or "special" collisions, such as ones that have to do with a quest
-     */
-    public abstract void setSpecialCollisions();
-
-    public abstract void onPlayerEnter(MapSector from);
-
-    public abstract void onPlayerLeave(MapSector to);
-
-    /**
-     * Updates the player's position in accordance with the sector they just came from
-     *
-     * @param from Where the player is coming from
-     */
-    protected void updatePlayerPosition(MapSector from) {
-        playerEnteredFrom(neighbors.indexOf(from));
-    }
-
-    /**
      * Update, or "correct", the player's position based on what direction it came from
      *
      * @param direction The direction from where the player came into this sector
@@ -275,6 +209,28 @@ public abstract class MapSector extends Renderable implements Tickable {
             default:
                 break;
         }
+    }
+
+    public void onPlayerEnter_internal() {
+        addEntity(Entities.PLAYER, true);
+        init();
+    }
+
+    public void onPlayerLeave_internal() {
+        ArrayList<Entity> e = (ArrayList<Entity>) entities.clone();
+        e.forEach(this::removeEntity);
+        e = (ArrayList<Entity>) primaryEntities.clone();
+        e.forEach(entity -> removeEntity(entity, true));
+        Collisions.nuke();
+    }
+
+    /**
+     * Updates the player's position in accordance with the sector they just came from
+     *
+     * @param from Where the player is coming from
+     */
+    protected void updatePlayerPosition(MapSector from) {
+        playerEnteredFrom(neighbors.indexOf(from));
     }
 
     public void addEntity(Entity e) {
@@ -372,6 +328,50 @@ public abstract class MapSector extends Renderable implements Tickable {
             Debug.warning("Could not set a neighbor (\"" + neighbor + "\") for \"" + this + "\"!");
         }
         neighbors.set(direction, neighbor);
+    }
+
+    /**
+     * Minimum requirement for rendering, must be called first in any implementation
+     */
+    @Override
+    public void render(Graphics graphics) {
+        drawTiles(graphics);
+        try {
+            for (Entity e : entities) {
+                if (e.isDualRendered) {
+                    e.drawFirstLayer(graphics);
+                }
+            }
+            primaryEntities.forEach(r -> r.render(graphics));
+            for (Entity e : entities) {
+                if (e.isDualRendered) {
+                    e.drawSecondLayer(graphics);
+                } else {
+                    e.render(graphics);
+                }
+            }
+            if (Game.debug) {
+                changeBoundaries.forEach(boundary -> boundary.render(graphics));
+            }
+            renderables.forEach(r -> r.render(graphics));
+        } catch (Exception e) {
+            Debug.error(e);
+        }
+    }
+
+    /**
+     * Minimum requirement for each tick, must be called first in any implementation
+     */
+    @Override
+    public void tick() {
+        try {
+            tickables.forEach(Tickable::tick);
+            changeCollisions.forEach(MapSectorChangeCollision::tick);
+        } catch (ConcurrentModificationException cme) {
+            // ignore for now
+        } catch (Exception e) {
+            Debug.error(e);
+        }
     }
 
     /**

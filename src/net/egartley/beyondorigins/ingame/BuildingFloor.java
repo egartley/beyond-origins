@@ -44,24 +44,6 @@ public class BuildingFloor extends Renderable implements Tickable {
         rightLimit = x() + image.getWidth() - Entities.PLAYER.sprite.width;
     }
 
-    public void onPlayerEnter(BuildingFloor from) {
-        changerCollisions.forEach(Collisions::add);
-    }
-
-    public void onPlayerLeave() {
-        changerCollisions.forEach(Collisions::endRemove);
-    }
-
-    /**
-     * Ensures the player doesn't move beyond the limits of this floor (into the black)
-     */
-    public void checkPlayerLimits() {
-        Entities.PLAYER.isAllowedToMoveUpwards = Entities.PLAYER.y() > upperYLimit;
-        Entities.PLAYER.isAllowedToMoveDownwards = Entities.PLAYER.y() < lowerYLimit;
-        Entities.PLAYER.isAllowedToMoveLeftwards = Entities.PLAYER.x() > leftLimit;
-        Entities.PLAYER.isAllowedToMoveRightwards = Entities.PLAYER.x() < rightLimit;
-    }
-
     public void addChanger(BuildingChanger changer) {
         changers.add(changer);
         BuildingFloor me = this;
@@ -94,6 +76,31 @@ public class BuildingFloor extends Renderable implements Tickable {
         entities.add(e);
     }
 
+    public void onPlayerLeave() {
+        changerCollisions.forEach(Collisions::endRemove);
+    }
+
+    public void onPlayerEnter(BuildingFloor from) {
+        changerCollisions.forEach(Collisions::add);
+    }
+
+    /**
+     * Ensures the player doesn't move beyond the limits of this floor (into the black)
+     */
+    public void checkPlayerLimits() {
+        Entities.PLAYER.isAllowedToMoveUpwards = Entities.PLAYER.y() > upperYLimit;
+        Entities.PLAYER.isAllowedToMoveDownwards = Entities.PLAYER.y() < lowerYLimit;
+        Entities.PLAYER.isAllowedToMoveLeftwards = Entities.PLAYER.x() > leftLimit;
+        Entities.PLAYER.isAllowedToMoveRightwards = Entities.PLAYER.x() < rightLimit;
+    }
+
+    @Override
+    public void tick() {
+        // changers.forEach(BuildingChanger::tick);
+        changerCollisions.forEach(EntityEntityCollision::tick);
+        entities.forEach(Entity::tick);
+    }
+
     @Override
     public void render(Graphics graphics) {
         graphics.drawImage(image, x(), y());
@@ -102,13 +109,6 @@ public class BuildingFloor extends Renderable implements Tickable {
             // Debug.out(changers.get(0).width + ", " + changers.get(0).height);
             changers.forEach(c -> c.defaultBoundary.render(graphics));
         }
-    }
-
-    @Override
-    public void tick() {
-        // changers.forEach(BuildingChanger::tick);
-        changerCollisions.forEach(EntityEntityCollision::tick);
-        entities.forEach(Entity::tick);
     }
 
 }

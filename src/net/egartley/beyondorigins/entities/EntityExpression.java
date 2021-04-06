@@ -41,6 +41,10 @@ public class EntityExpression extends AnimatedEntity {
         image = sprite.asImage();
     }
 
+    private Animation getTemplateAnimation() {
+        return new Animation(Util.getAnimationFrames(sprite), ANIMATIONSPEED_NORMAL);
+    }
+
     private SpriteSheet getTemplateSpriteSheet(byte type) {
         switch (type) {
             case CONFUSION:
@@ -54,10 +58,6 @@ public class EntityExpression extends AnimatedEntity {
             default:
                 return new SpriteSheet(Images.get(Images.path + "unknown.png"), 32, 32, 1, 1);
         }
-    }
-
-    private Animation getTemplateAnimation() {
-        return new Animation(Util.getAnimationFrames(sprite), ANIMATIONSPEED_NORMAL);
     }
 
     @Override

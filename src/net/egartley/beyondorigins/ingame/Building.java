@@ -36,32 +36,31 @@ public class Building extends Entity {
     }
 
     /**
-     * Add a floor to the building. Sets {@link #entryFloor} and {@link #currentFloor} if this is the first one to be
-     * added
-     *
-     * @param floor The floor to add
+     * Change the floor to the one above it (warning if already at top floor)
      */
-    public void addFloor(BuildingFloor floor) {
-        floors.add(floor);
-        if (floors.size() == 1) {
-            entryFloor = floor;
-            currentFloor = entryFloor;
+    public void upstairs() {
+        BuildingFloor up;
+        try {
+            up = floors.get(floors.indexOf(currentFloor) + 1);
+        } catch (IndexOutOfBoundsException e) {
+            Debug.warning("Tried to go up a floor in \"" + name + "\", but already at the top floor!");
+            return;
         }
+        changeFloor(up);
     }
 
     /**
-     * Move the player from the current floor to another, setting {@link #currentFloor} to that new one
-     *
-     * @param floor The floor to move to
-     * @see BuildingFloor#onPlayerLeave()
-     * @see BuildingFloor#onPlayerEnter(BuildingFloor)
+     * Change the floor to the one below it (warning if already at bottom floor)
      */
-    public void changeFloor(BuildingFloor floor) {
-        currentFloor.onPlayerLeave();
-        floor.onPlayerEnter(currentFloor);
-        currentFloor = floor;
-        // require the user to re-press WASD keys after changing floors??
-        // Entities.PLAYER.invalidateAllMovement();
+    public void downstairs() {
+        BuildingFloor down;
+        try {
+            down = floors.get(floors.indexOf(currentFloor) - 1);
+        } catch (IndexOutOfBoundsException e) {
+            Debug.warning("Tried to go down a floor in \"" + name + "\", but already at the bottom floor!");
+            return;
+        }
+        changeFloor(down);
     }
 
     /**
@@ -91,31 +90,32 @@ public class Building extends Entity {
     }
 
     /**
-     * Change the floor to the one above it (warning if already at top floor)
+     * Add a floor to the building. Sets {@link #entryFloor} and {@link #currentFloor} if this is the first one to be
+     * added
+     *
+     * @param floor The floor to add
      */
-    public void upstairs() {
-        BuildingFloor up;
-        try {
-            up = floors.get(floors.indexOf(currentFloor) + 1);
-        } catch (IndexOutOfBoundsException e) {
-            Debug.warning("Tried to go up a floor in \"" + name + "\", but already at the top floor!");
-            return;
+    public void addFloor(BuildingFloor floor) {
+        floors.add(floor);
+        if (floors.size() == 1) {
+            entryFloor = floor;
+            currentFloor = entryFloor;
         }
-        changeFloor(up);
     }
 
     /**
-     * Change the floor to the one below it (warning if already at bottom floor)
+     * Move the player from the current floor to another, setting {@link #currentFloor} to that new one
+     *
+     * @param floor The floor to move to
+     * @see BuildingFloor#onPlayerLeave()
+     * @see BuildingFloor#onPlayerEnter(BuildingFloor)
      */
-    public void downstairs() {
-        BuildingFloor down;
-        try {
-            down = floors.get(floors.indexOf(currentFloor) - 1);
-        } catch (IndexOutOfBoundsException e) {
-            Debug.warning("Tried to go down a floor in \"" + name + "\", but already at the bottom floor!");
-            return;
-        }
-        changeFloor(down);
+    public void changeFloor(BuildingFloor floor) {
+        currentFloor.onPlayerLeave();
+        floor.onPlayerEnter(currentFloor);
+        currentFloor = floor;
+        // require the user to re-press WASD keys after changing floors??
+        // Entities.PLAYER.invalidateAllMovement();
     }
 
     @Override

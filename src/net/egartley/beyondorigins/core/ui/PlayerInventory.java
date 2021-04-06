@@ -45,46 +45,6 @@ public class PlayerInventory extends UIElement {
         detailsLineIndex++;
     }
 
-    @Override
-    public void tick() {
-        boolean nohover = true;
-        for (PlayerInventorySlot slot : slots) {
-            slot.tick();
-            if (!slot.isEmpty() && slot.stack.mouseHover) {
-                isShowingTooltip = true;
-                nohover = false;
-            }
-        }
-        if (nohover) {
-            isShowingTooltip = false;
-        }
-    }
-
-    @Override
-    public void render(Graphics graphics) {
-        graphics.drawImage(image, x(), y());
-        slots.forEach(slot -> slot.render(graphics));
-        slots.forEach(slot -> slot.renderStack(graphics));
-        // player display
-        Image playerImage = Entities.PLAYER.sprite.asImage();
-        graphics.drawImage(playerImage, Calculate.getCenter(x() + 243, playerImage.getWidth()), Calculate.getCenter(y() + 96, playerImage.getHeight()));
-        // details text
-        graphics.setColor(playerNameColor);
-        graphics.setFont(playerNameFont);
-        graphics.drawString("Player's Name", x() + 282, y() + 58);
-        graphics.setColor(detailsColor);
-        graphics.setFont(detailsFont);
-        renderLine("Level " + Entities.PLAYER.level, graphics);
-        renderLine("Experience: " + Entities.PLAYER.experience, graphics);
-        detailsLineIndex = 0;
-        if (stackBeingDragged != null) {
-            stackBeingDragged.render(graphics);
-        }
-        if (isShowingTooltip) {
-            drawToolTip(graphics);
-        }
-    }
-
     private void drawToolTip(Graphics graphics) {
         graphics.setColor(tooltipBorderColor);
         graphics.fillRoundRect(Mouse.x - 2, Mouse.y - 28, tooltipWidth + 14, 26, 8);
@@ -123,6 +83,46 @@ public class PlayerInventory extends UIElement {
         clearSlot(stack.slot.index);
         Entities.PLAYER.inventory.set(stack.itemStack, emptySlotIndex);
         stack.slot.clear();
+    }
+
+    @Override
+    public void tick() {
+        boolean nohover = true;
+        for (PlayerInventorySlot slot : slots) {
+            slot.tick();
+            if (!slot.isEmpty() && slot.stack.mouseHover) {
+                isShowingTooltip = true;
+                nohover = false;
+            }
+        }
+        if (nohover) {
+            isShowingTooltip = false;
+        }
+    }
+
+    @Override
+    public void render(Graphics graphics) {
+        graphics.drawImage(image, x(), y());
+        slots.forEach(slot -> slot.render(graphics));
+        slots.forEach(slot -> slot.renderStack(graphics));
+        // player display
+        Image playerImage = Entities.PLAYER.sprite.asImage();
+        graphics.drawImage(playerImage, Calculate.getCenter(x() + 243, playerImage.getWidth()), Calculate.getCenter(y() + 96, playerImage.getHeight()));
+        // details text
+        graphics.setColor(playerNameColor);
+        graphics.setFont(playerNameFont);
+        graphics.drawString("Player's Name", x() + 282, y() + 58);
+        graphics.setColor(detailsColor);
+        graphics.setFont(detailsFont);
+        renderLine("Level " + Entities.PLAYER.level, graphics);
+        renderLine("Experience: " + Entities.PLAYER.experience, graphics);
+        detailsLineIndex = 0;
+        if (stackBeingDragged != null) {
+            stackBeingDragged.render(graphics);
+        }
+        if (isShowingTooltip) {
+            drawToolTip(graphics);
+        }
     }
 
 }

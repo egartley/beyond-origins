@@ -37,6 +37,17 @@ public class NotificationBanner extends UIElement {
         setPosition(Calculate.getCenteredX(width), startY);
     }
 
+    private void show() {
+        isReadyToMoveAgain = false;
+        new DelayedEvent(SHOW_DELAY) {
+            @Override
+            public void onFinish() {
+                didShow = true;
+                isReadyToMoveAgain = true;
+            }
+        }.start();
+    }
+
     private void slideUp() {
         y(y() - SPEED);
     }
@@ -48,17 +59,6 @@ public class NotificationBanner extends UIElement {
     private void drawLine(String line, Graphics graphics) {
         graphics.drawString(line, x() + 64, y() + 24 + (offset * 18));
         offset++;
-    }
-
-    private void show() {
-        isReadyToMoveAgain = false;
-        new DelayedEvent(SHOW_DELAY) {
-            @Override
-            public void onFinish() {
-                didShow = true;
-                isReadyToMoveAgain = true;
-            }
-        }.start();
     }
 
     private void start() {
@@ -97,18 +97,6 @@ public class NotificationBanner extends UIElement {
     }
 
     @Override
-    public void render(Graphics graphics) {
-        graphics.drawImage(image, x(), y());
-        graphics.drawImage(icon, x() + 8 + (48 - icon.getWidth()) / 2, y() + 8 + (48 - icon.getHeight()) / 2);
-        graphics.setColor(Color.white);
-        graphics.setFont(FONT);
-        for (String line : lines) {
-            drawLine(line, graphics);
-        }
-        offset = 0;
-    }
-
-    @Override
     public void tick() {
         if (done) {
             InGameState.onNotificationFinish(this);
@@ -124,6 +112,18 @@ public class NotificationBanner extends UIElement {
         } else if (isReadyToMoveAgain && y() >= startY) {
             moveUp();
         }
+    }
+
+    @Override
+    public void render(Graphics graphics) {
+        graphics.drawImage(image, x(), y());
+        graphics.drawImage(icon, x() + 8 + (48 - icon.getWidth()) / 2, y() + 8 + (48 - icon.getHeight()) / 2);
+        graphics.setColor(Color.white);
+        graphics.setFont(FONT);
+        for (String line : lines) {
+            drawLine(line, graphics);
+        }
+        offset = 0;
     }
 
 }

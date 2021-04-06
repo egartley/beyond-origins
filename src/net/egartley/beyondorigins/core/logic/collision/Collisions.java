@@ -48,6 +48,24 @@ public class Collisions {
         remove(collision);
     }
 
+    public static void nuke() {
+        collisions.clear();
+    }
+
+    public static void tick() {
+        try {
+            for (EntityEntityCollision c : collisions) {
+                c.tick();
+            }
+        } catch (ConcurrentModificationException e) {
+            // ignore
+        }
+    }
+
+    public static int amount() {
+        return collisions.size();
+    }
+
     public static ArrayList<EntityEntityCollision> with(Entity entity) {
         ArrayList<EntityEntityCollision> with = new ArrayList<>();
         for (EntityEntityCollision c : collisions) {
@@ -70,24 +88,6 @@ public class Collisions {
 
     public static ArrayList<EntityEntityCollision> all() {
         return collisions;
-    }
-
-    public static void nuke() {
-        collisions.clear();
-    }
-
-    public static void tick() {
-        try {
-            for (EntityEntityCollision c : collisions) {
-                c.tick();
-            }
-        } catch (ConcurrentModificationException e) {
-            // ignore
-        }
-    }
-
-    public static int amount() {
-        return collisions.size();
     }
 
 }

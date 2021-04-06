@@ -84,28 +84,11 @@ public abstract class Entity extends Renderable implements Tickable {
         sheets.add(sheet);
     }
 
-    /**
-     * Renders the entity, using {@link #image}, at ({@link #x()}, {@link #y()})
-     */
-    @Override
-    public void render(Graphics graphics) {
-        graphics.drawImage(image, x(), y());
-        if (Game.debug) {
-            drawDebug(graphics);
-        }
-    }
+    protected abstract void setCollisions();
 
-    /**
-     * Calls {@link EntityBoundary#tick()} and {@link EntityEntityInteraction#tick()}
-     *
-     * @see #boundaries
-     * @see #interactions
-     */
-    @Override
-    public void tick() {
-        boundaries.forEach(EntityBoundary::tick);
-        interactions.forEach(EntityEntityInteraction::tick);
-    }
+    protected abstract void setBoundaries();
+
+    protected abstract void setInteractions();
 
     /**
      * Renders debug information, such as the entity's boundaries, name and health if applicable
@@ -158,19 +141,6 @@ public abstract class Entity extends Renderable implements Tickable {
         boundaries.forEach(boundary -> boundary.render(graphics));
     }
 
-    protected abstract void setCollisions();
-
-    protected abstract void setBoundaries();
-
-    protected abstract void setInteractions();
-
-    @Override
-    public void setPosition(int x, int y) {
-        super.setPosition(x, y);
-        deltaX = x;
-        deltaY = y;
-    }
-
     /**
      * Sets {@link #sprites} to {@link SpriteSheet#sprites} from {@link #sheets} at the given index
      *
@@ -214,16 +184,6 @@ public abstract class Entity extends Renderable implements Tickable {
         }
     }
 
-    @Override
-    public void x(int x) {
-        x(x, true);
-    }
-
-    @Override
-    public void y(int y) {
-        y(y, true);
-    }
-
     private void x(int x, boolean setDelta) {
         super.x(x);
         if (setDelta) {
@@ -236,6 +196,46 @@ public abstract class Entity extends Renderable implements Tickable {
         if (setDelta) {
             deltaY = y;
         }
+    }
+
+    /**
+     * Renders the entity, using {@link #image}, at ({@link #x()}, {@link #y()})
+     */
+    @Override
+    public void render(Graphics graphics) {
+        graphics.drawImage(image, x(), y());
+        if (Game.debug) {
+            drawDebug(graphics);
+        }
+    }
+
+    /**
+     * Calls {@link EntityBoundary#tick()} and {@link EntityEntityInteraction#tick()}
+     *
+     * @see #boundaries
+     * @see #interactions
+     */
+    @Override
+    public void tick() {
+        boundaries.forEach(EntityBoundary::tick);
+        interactions.forEach(EntityEntityInteraction::tick);
+    }
+
+    @Override
+    public void setPosition(int x, int y) {
+        super.setPosition(x, y);
+        deltaX = x;
+        deltaY = y;
+    }
+
+    @Override
+    public void x(int x) {
+        x(x, true);
+    }
+
+    @Override
+    public void y(int y) {
+        y(y, true);
     }
 
     /**

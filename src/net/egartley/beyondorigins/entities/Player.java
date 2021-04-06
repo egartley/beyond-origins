@@ -74,36 +74,113 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         };
     }
 
-    /**
-     * Generate collisions with sector entities that aren't traversable
-     *
-     * @param sector The sector to generate collisions for its non-traversable entities
-     */
-    public void generateSectorSpecificCollisions(MapSector sector) {
-        generateSectorSpecificCollisions(sector, false);
-    }
-
-    /**
-     * Generate collisions with sector entities that aren't traversable
-     *
-     * @param sector The sector to generate collisions for its non-traversable entities
-     */
-    public void generateSectorSpecificCollisions(MapSector sector, boolean allBoundaries) {
-        for (Entity e : sector.entities) {
-            if (!e.isTraversable && e.isSectorSpecific) {
-                if (!allBoundaries) {
-                    generateMovementRestrictionCollisions(e.defaultBoundary);
-                } else {
-                    e.boundaries.forEach(this::generateMovementRestrictionCollisions);
-                }
+    private void move(boolean up, boolean down, boolean left, boolean right) {
+        if (animation.isStopped() && (up || down || left || right)) {
+            // animation was stopped, so restart it because we're moving
+            animation.start();
+            animation.setCurrentFrame(1);
+        } else if (animation.isStopped()) {
+            animation.setCurrentFrame(0);
+        }
+        isMovingUpwards = false;
+        isMovingDownwards = false;
+        isMovingLeftwards = false;
+        isMovingRightwards = false;
+        if (up) {
+            if (isAllowedToMoveUpwards) {
+                move(DIRECTION_UP, defaultBoundary, true, true);
+            }
+        } else if (down) {
+            if (isAllowedToMoveDownwards) {
+                move(DIRECTION_DOWN, defaultBoundary, true, true);
             }
         }
+        if (left) {
+            if (isAllowedToMoveLeftwards) {
+                move(DIRECTION_LEFT, defaultBoundary, true, true);
+            }
+            switchAnimation(LEFT_ANIMATION);
+        } else if (right) {
+            if (isAllowedToMoveRightwards) {
+                move(DIRECTION_RIGHT, defaultBoundary, true, true);
+            }
+            switchAnimation(RIGHT_ANIMATION);
+        }
     }
 
-    public void generateMovementRestrictionCollisions(EntityBoundary... otherBoundaries) {
-        for (EntityBoundary b : otherBoundaries) {
-            generateMovementRestrictionCollisions(b);
+    private int getExperienceNeededForNextLevel() {
+        // 100 needed to get level 2, 205 needed for level 3, 310 needed for 4, and so on
+        int n = level - 1;
+        return 100 + (100 * n) + (5 * n);
+    }
+
+    private void levelUp() {
+        if (level < MAX_LEVEL) {
+            level++;
         }
+        if (level > MAX_LEVEL) {
+            level = MAX_LEVEL;
+        }
+    }
+
+    /**
+     * Restores the player's ability to move
+     */
+    public void thaw() {
+        frozen = false;
+        isAllowedToMoveUpwards = true;
+        isAllowedToMoveDownwards = true;
+        isAllowedToMoveLeftwards = true;
+        isAllowedToMoveRightwards = true;
+    }
+
+    /**
+     * Makes the player immovable
+     */
+    public void freeze() {
+        frozen = true;
+        isAllowedToMoveUpwards = false;
+        isAllowedToMoveDownwards = false;
+        isAllowedToMoveLeftwards = false;
+        isAllowedToMoveRightwards = false;
+    }
+
+    public void enteredBuilding() {
+        isInBuilding = true;
+        // invalidateAllMovement();
+    }
+
+    public void onInGameEnter() {
+        KeyboardController.addKeyTyped(attack);
+    }
+
+    public void onInGameLeave() {
+        KeyboardController.removeKeyTyped(attack);
+    }
+
+    public void onSectorEnter(MapSector sector) {
+        if (sector instanceof Cutscene) {
+            freeze();
+        }
+    }
+
+    public void onSectorLeave(MapSector sector) {
+        if (sector instanceof Cutscene) {
+            thaw();
+        }
+    }
+
+    public void leftBuilding(Building building) {
+        generateSectorSpecificCollisions(InGameState.map.sector);
+        building.setCollisions();
+        InGameState.map.sector.setSpecialCollisions();
+        setPosition(building.playerLeaveX, building.playerLeaveY);
+        isInBuilding = false;
+        // invalidateAllMovement();
+    }
+
+    public void invalidateAllMovement() {
+        isMovementInvalidated = true;
     }
 
     public void generateMovementRestrictionCollisions(EntityBoundary otherBoundary) {
@@ -144,64 +221,48 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         }
     }
 
-    public void invalidateAllMovement() {
-        isMovementInvalidated = true;
-    }
-
-    public void onInGameEnter() {
-        KeyboardController.addKeyTyped(attack);
-    }
-
-    public void onInGameLeave() {
-        KeyboardController.removeKeyTyped(attack);
-    }
-
-    public void onSectorEnter(MapSector sector) {
-        if (sector instanceof Cutscene) {
-            freeze();
-        }
-    }
-
-    public void onSectorLeave(MapSector sector) {
-        if (sector instanceof Cutscene) {
-            thaw();
+    public void generateMovementRestrictionCollisions(EntityBoundary... otherBoundaries) {
+        for (EntityBoundary b : otherBoundaries) {
+            generateMovementRestrictionCollisions(b);
         }
     }
 
     /**
-     * Makes the player immovable
+     * Generate collisions with sector entities that aren't traversable
+     *
+     * @param sector The sector to generate collisions for its non-traversable entities
      */
-    public void freeze() {
-        frozen = true;
-        isAllowedToMoveUpwards = false;
-        isAllowedToMoveDownwards = false;
-        isAllowedToMoveLeftwards = false;
-        isAllowedToMoveRightwards = false;
+    public void generateSectorSpecificCollisions(MapSector sector) {
+        generateSectorSpecificCollisions(sector, false);
     }
 
     /**
-     * Restores the player's ability to move
+     * Generate collisions with sector entities that aren't traversable
+     *
+     * @param sector The sector to generate collisions for its non-traversable entities
      */
-    public void thaw() {
-        frozen = false;
-        isAllowedToMoveUpwards = true;
-        isAllowedToMoveDownwards = true;
-        isAllowedToMoveLeftwards = true;
-        isAllowedToMoveRightwards = true;
+    public void generateSectorSpecificCollisions(MapSector sector, boolean allBoundaries) {
+        for (Entity e : sector.entities) {
+            if (!e.isTraversable && e.isSectorSpecific) {
+                if (!allBoundaries) {
+                    generateMovementRestrictionCollisions(e.defaultBoundary);
+                } else {
+                    e.boundaries.forEach(this::generateMovementRestrictionCollisions);
+                }
+            }
+        }
     }
 
-    public void enteredBuilding() {
-        isInBuilding = true;
-        // invalidateAllMovement();
-    }
-
-    public void leftBuilding(Building building) {
-        generateSectorSpecificCollisions(InGameState.map.sector);
-        building.setCollisions();
-        InGameState.map.sector.setSpecialCollisions();
-        setPosition(building.playerLeaveX, building.playerLeaveY);
-        isInBuilding = false;
-        // invalidateAllMovement();
+    public void giveExperience(int amount) {
+        if (experience < MAX_EXPERIENCE) {
+            experience += amount;
+        }
+        if (experience > MAX_EXPERIENCE) {
+            experience = MAX_EXPERIENCE;
+        }
+        if (experience >= getExperienceNeededForNextLevel()) {
+            levelUp();
+        }
     }
 
     @Override
@@ -270,77 +331,6 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         super.tick();
     }
 
-    private void move(boolean up, boolean down, boolean left, boolean right) {
-        if (animation.isStopped() && (up || down || left || right)) {
-            // animation was stopped, so restart it because we're moving
-            animation.start();
-            animation.setCurrentFrame(1);
-        } else if (animation.isStopped()) {
-            animation.setCurrentFrame(0);
-        }
-        isMovingUpwards = false;
-        isMovingDownwards = false;
-        isMovingLeftwards = false;
-        isMovingRightwards = false;
-        if (up) {
-            if (isAllowedToMoveUpwards) {
-                move(DIRECTION_UP, defaultBoundary, true, true);
-            }
-        } else if (down) {
-            if (isAllowedToMoveDownwards) {
-                move(DIRECTION_DOWN, defaultBoundary, true, true);
-            }
-        }
-        if (left) {
-            if (isAllowedToMoveLeftwards) {
-                move(DIRECTION_LEFT, defaultBoundary, true, true);
-            }
-            switchAnimation(LEFT_ANIMATION);
-        } else if (right) {
-            if (isAllowedToMoveRightwards) {
-                move(DIRECTION_RIGHT, defaultBoundary, true, true);
-            }
-            switchAnimation(RIGHT_ANIMATION);
-        }
-    }
-
-    private int getExperienceNeededForNextLevel() {
-        // 100 needed to get level 2, 205 needed for level 3, 310 needed for 4, and so on
-        int n = level - 1;
-        return 100 + (100 * n) + (5 * n);
-    }
-
-    private void levelUp() {
-        if (level < MAX_LEVEL) {
-            level++;
-        }
-        if (level > MAX_LEVEL) {
-            level = MAX_LEVEL;
-        }
-    }
-
-    public void giveExperience(int amount) {
-        if (experience < MAX_EXPERIENCE) {
-            experience += amount;
-        }
-        if (experience > MAX_EXPERIENCE) {
-            experience = MAX_EXPERIENCE;
-        }
-        if (experience >= getExperienceNeededForNextLevel()) {
-            levelUp();
-        }
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public Image getCharacterImage() {
-        return image;
-    }
-
     @Override
     public void attack() {
         for (EntityEntityCollision c : Collisions.concurrent(this)) {
@@ -374,6 +364,16 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
 
     @Override
     public void onColdDeath() {
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public Image getCharacterImage() {
+        return image;
     }
 
 }

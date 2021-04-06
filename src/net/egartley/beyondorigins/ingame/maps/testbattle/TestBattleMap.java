@@ -22,12 +22,6 @@ public class TestBattleMap extends Map {
         sec1.setNeighborAt(sec2, MapSector.RIGHT);
     }
 
-    public void spawnMonster(int x, int y) {
-        Monster monster = new Monster();
-        monster.setPosition(x, y);
-        sector.addEntity(monster);
-    }
-
     public void spawnFHBoss() {
         FH fh = new FH();
         fh.setPosition(Calculate.getCenteredX(fh.sprite.width), Calculate.getCenteredY(fh.sprite.height));
@@ -38,9 +32,10 @@ public class TestBattleMap extends Map {
         sector.addEntity(new WindChimes(600, 450));
     }
 
-    @Override
-    public void render(Graphics graphics) {
-        sector.render(graphics);
+    public void spawnMonster(int x, int y) {
+        Monster monster = new Monster();
+        monster.setPosition(x, y);
+        sector.addEntity(monster);
     }
 
     @Override
@@ -61,5 +56,10 @@ public class TestBattleMap extends Map {
     @Override
     public void tick() {
         sector.tick();
+    }
+
+    @Override
+    public void render(Graphics graphics) {
+        sector.render(graphics);
     }
 }

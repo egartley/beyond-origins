@@ -64,13 +64,6 @@ public class EntityEntityCollision {
     }
 
     /**
-     * This is called <em>once</em> after the collision ends
-     */
-    public void end(EntityEntityCollisionEvent event) {
-
-    }
-
-    /**
      * End the collision, regardless of whether or not there is still
      * an actual collision between the entities
      */
@@ -82,19 +75,18 @@ public class EntityEntityCollision {
     }
 
     /**
-     * Sets or updates the colors for both boundaries
+     * This is called <em>once</em> after the collision ends
      */
-    private void setBoundaryColors() {
-        determineBoundaryColors(entities[0].boundaries);
-        determineBoundaryColors(entities[1].boundaries);
-    }
+    public void end(EntityEntityCollisionEvent event) {
 
-    private void determineBoundaryColors(ArrayList<EntityBoundary> boundaries) {
-        boundaries.forEach(this::determineBoundaryColor);
     }
 
     private void determineBoundaryColor(EntityBoundary boundary) {
         boundary.drawColor = boundary.isCollided ? Color.red : Color.orange;
+    }
+
+    private void determineBoundaryColors(ArrayList<EntityBoundary> boundaries) {
+        boundaries.forEach(this::determineBoundaryColor);
     }
 
     /**
@@ -145,6 +137,14 @@ public class EntityEntityCollision {
             }
         }
         setBoundaryColors();
+    }
+
+    /**
+     * Sets or updates the colors for both boundaries
+     */
+    private void setBoundaryColors() {
+        determineBoundaryColors(entities[0].boundaries);
+        determineBoundaryColors(entities[1].boundaries);
     }
 
     @Override

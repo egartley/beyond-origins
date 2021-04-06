@@ -55,14 +55,6 @@ public class SaveLoad {
         }
     }
 
-    public static JSONObject get(String key) {
-        if (currentData != null) {
-            return currentData.getJSONObject(key);
-        }
-        Debug.warning("Must load first!");
-        return null;
-    }
-
     public static void set(String key, Object value) {
         if (currentData == null) {
             currentData = new JSONObject();
@@ -71,6 +63,14 @@ public class SaveLoad {
             currentData.remove(key);
         }
         currentData.put(key, value);
+    }
+
+    public static JSONObject get(String key) {
+        if (currentData != null) {
+            return currentData.getJSONObject(key);
+        }
+        Debug.warning("Must load first!");
+        return null;
     }
 
     private static String getSaveFilePath(int id) {

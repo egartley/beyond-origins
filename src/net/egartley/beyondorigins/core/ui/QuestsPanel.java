@@ -119,6 +119,14 @@ public class QuestsPanel extends UIElement implements Saveable, Loadable {
         // Debug.out("right");
     }
 
+    private int getSlotX() {
+        return x() + 13;
+    }
+
+    private int getSlotY(int i) {
+        return y() + (53 + (i) * 34);
+    }
+
     public Quest get(byte id) {
         for (QuestSlot slot : slots) {
             if (slot.quest.id == id) {
@@ -126,14 +134,6 @@ public class QuestsPanel extends UIElement implements Saveable, Loadable {
             }
         }
         return null;
-    }
-
-    private int getSlotX() {
-        return x() + 13;
-    }
-
-    private int getSlotY(int i) {
-        return y() + (53 + (i) * 34);
     }
 
     @Override
