@@ -34,7 +34,7 @@ public class BuildingChanger extends Entity {
 
     @Override
     protected void setBoundaries() {
-        defaultBoundary = new EntityBoundary(this, width, height, new BoundaryPadding(0));
+        defaultBoundary = new EntityBoundary(this);
         boundaries.add(defaultBoundary);
     }
 

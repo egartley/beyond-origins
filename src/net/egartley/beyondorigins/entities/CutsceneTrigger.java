@@ -24,7 +24,7 @@ public class CutsceneTrigger extends Entity {
 
     @Override
     protected void setBoundaries() {
-        defaultBoundary = new EntityBoundary(this, sprite.width, sprite.height, new BoundaryPadding(0));
+        defaultBoundary = new EntityBoundary(this);
         boundaries.add(defaultBoundary);
     }
 

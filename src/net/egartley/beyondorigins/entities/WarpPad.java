@@ -20,7 +20,7 @@ public class WarpPad extends Entity {
 
     @Override
     protected void setBoundaries() {
-        boundaries.add(new EntityBoundary(this, sprite, new BoundaryPadding(0)));
+        boundaries.add(new EntityBoundary(this));
         defaultBoundary = boundaries.get(0);
     }
 

@@ -66,7 +66,7 @@ public class Monster extends AnimatedEntity implements Damageable {
 
     @Override
     protected void setBoundaries() {
-        boundaries.add(new EntityBoundary(this, sprite, new BoundaryPadding(0, 2, 0, 2)));
+        boundaries.add(new EntityBoundary(this));
         defaultBoundary = boundaries.get(0);
     }
 

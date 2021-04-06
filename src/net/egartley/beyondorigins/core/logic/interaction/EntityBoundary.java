@@ -12,6 +12,14 @@ public class EntityBoundary extends Boundary {
     public String name;
     public Entity entity;
 
+    public EntityBoundary(Entity entity) {
+        this(entity, entity.sprite);
+    }
+
+    public EntityBoundary(Entity entity, Sprite sprite) {
+        this(entity, sprite, new BoundaryPadding(0));
+    }
+
     public EntityBoundary(Entity entity, Sprite sprite, BoundaryPadding padding) {
         this(entity, sprite.width, sprite.height, padding);
     }
