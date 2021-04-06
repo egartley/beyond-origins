@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 /**
  * Specific part, or area, of a map that fills the entire window
@@ -210,6 +211,8 @@ public abstract class MapSector extends Renderable implements Tickable {
         try {
             tickables.forEach(Tickable::tick);
             changeCollisions.forEach(MapSectorChangeCollision::tick);
+        } catch (ConcurrentModificationException cme) {
+            // ignore for now
         } catch (Exception e) {
             Debug.error(e);
         }

@@ -20,6 +20,10 @@ public class EntityBoundary extends Boundary {
         this(entity, sprite, new BoundaryPadding(0));
     }
 
+    public EntityBoundary(Entity entity, int width, int height) {
+        this(entity, width, height, new BoundaryPadding(0));
+    }
+
     public EntityBoundary(Entity entity, Sprite sprite, BoundaryPadding padding) {
         this(entity, sprite.width, sprite.height, padding);
     }

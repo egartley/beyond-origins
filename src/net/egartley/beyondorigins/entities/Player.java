@@ -347,6 +347,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
             Entity e = c.entities[0] != this ? c.entities[0] : c.entities[1];
             if (e instanceof Damageable) {
                 ((Damageable) e).takeDamage(DEFAULT_DAMAGE);
+                InGameState.map.sector.addEntity(new DamageNumber(DEFAULT_DAMAGE, e));
             }
         }
     }

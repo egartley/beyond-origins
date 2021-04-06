@@ -1,7 +1,6 @@
 package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.core.abstracts.Entity;
-import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 
 /**
@@ -34,7 +33,7 @@ public class BuildingChanger extends Entity {
 
     @Override
     protected void setBoundaries() {
-        defaultBoundary = new EntityBoundary(this);
+        defaultBoundary = new EntityBoundary(this, width, height);
         boundaries.add(defaultBoundary);
     }
 
