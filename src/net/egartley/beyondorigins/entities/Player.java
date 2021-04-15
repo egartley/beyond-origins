@@ -274,7 +274,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
 
     @Override
     public void setBoundaries() {
-        boundary = new EntityBoundary(this, sprite, new BoundaryPadding(4, 3, 2, 3));
+        boundary = new EntityBoundary(this, sprite.width, sprite.height, new BoundaryPadding(4, 3, 2, 3));
         boundary.name = "Base";
         defaultBoundary = boundary;
         headBoundary = new EntityBoundary(this, 19, 18, new BoundaryPadding(0), new BoundaryOffset(0, 0, 0, 5));
@@ -283,10 +283,10 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         bodyBoundary.name = "Body";
         feetBoundary = new EntityBoundary(this, 17, 16, new BoundaryPadding(0), new BoundaryOffset(0, 29, 0, 6));
         feetBoundary.name = "Feet";
-        chatBoundary = new EntityBoundary(this, sprite, new BoundaryPadding(36));
+        chatBoundary = new EntityBoundary(this, sprite.width, sprite.height, new BoundaryPadding(36));
         chatBoundary.name = "Chat";
         chatBoundary.isVisible = false;
-        attackBoundary = new EntityBoundary(this, sprite, new BoundaryPadding(18));
+        attackBoundary = new EntityBoundary(this, sprite.width, sprite.height, new BoundaryPadding(18));
         attackBoundary.name = "Attack";
         boundaries.add(boundary);
         boundaries.add(headBoundary);

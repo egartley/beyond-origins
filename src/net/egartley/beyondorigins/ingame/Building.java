@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Debug;
-import net.egartley.beyondorigins.core.abstracts.Entity;
+import net.egartley.beyondorigins.core.abstracts.VisibleEntity;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 /**
  * A place that the player can enter, treated seperately from the current map
  */
-public class Building extends Entity {
+public class Building extends VisibleEntity {
 
     public int playerLeaveX;
     public int playerLeaveY;

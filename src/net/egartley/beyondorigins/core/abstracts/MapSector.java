@@ -338,16 +338,22 @@ public abstract class MapSector extends Renderable implements Tickable {
         drawTiles(graphics);
         try {
             for (Entity e : entities) {
-                if (e.isDualRendered) {
-                    e.drawFirstLayer(graphics);
+                if (e instanceof VisibleEntity) {
+                    VisibleEntity ve = (VisibleEntity) e;
+                    if (ve.isDualRendered) {
+                        ve.drawFirstLayer(graphics);
+                    }
                 }
             }
             primaryEntities.forEach(r -> r.render(graphics));
             for (Entity e : entities) {
-                if (e.isDualRendered) {
-                    e.drawSecondLayer(graphics);
-                } else {
-                    e.render(graphics);
+                if (e instanceof VisibleEntity) {
+                    VisibleEntity ve = (VisibleEntity) e;
+                    if (ve.isDualRendered) {
+                        ve.drawSecondLayer(graphics);
+                    } else {
+                        e.render(graphics);
+                    }
                 }
             }
             if (Game.debug) {

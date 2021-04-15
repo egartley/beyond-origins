@@ -2,78 +2,40 @@ package net.egartley.beyondorigins.core.abstracts;
 
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.core.graphics.Sprite;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
-import net.egartley.beyondorigins.core.logic.Calculate;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
+import net.egartley.beyondorigins.data.Images;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 
 import java.util.ArrayList;
 
-public abstract class AnimatedEntity extends Entity {
+public abstract class AnimatedEntity extends VisibleEntity {
 
+    protected int leftAnimationIndex;
+    protected int rightAnimationIndex;
     protected Animation animation;
     protected ArrayList<Animation> animations = new ArrayList<>();
 
-    public AnimatedEntity(String id) {
-        super(id, (Sprite) null);
-        setAnimations();
+    public AnimatedEntity(String name) {
+        this(name, new SpriteSheet(Images.get(Images.UNKNOWN)));
     }
 
-    public AnimatedEntity(String id, SpriteSheet sheet) {
-        super(id, sheet);
+    public AnimatedEntity(String name, SpriteSheet sheet) {
+        super(name, sheet);
         setAnimations();
     }
 
     public abstract void setAnimations();
 
-    protected void follow(Entity toFollow, int leftIndex, int rightIndex) {
-        follow(toFollow, leftIndex, rightIndex, defaultBoundary);
-    }
-
-    protected void follow(Entity toFollow, int leftIndex, int rightIndex, EntityBoundary boundary) {
-        follow(toFollow, leftIndex, rightIndex, boundary, 1);
-    }
-
-    protected void follow(Entity toFollow, int leftIndex, int rightIndex, EntityBoundary boundary, int tolerance) {
-        if (!Calculate.isWithinToleranceOf(this.x(), toFollow.x(), tolerance)) {
-            if (isMovingRightwards && this.isRightOf(toFollow)) {
-                animation.stop();
-                animation = animations.get(leftIndex);
-                isMovingRightwards = false;
-                isMovingLeftwards = true;
-            } else if (isMovingLeftwards && this.isLeftOf(toFollow)) {
-                animation.stop();
-                animation = animations.get(rightIndex);
-                isMovingLeftwards = false;
-                isMovingRightwards = true;
-            }
-        } else {
-            isMovingLeftwards = false;
-            isMovingRightwards = false;
-        }
-        if (!Calculate.isWithinToleranceOf(this.y(), toFollow.y(), tolerance)) {
-            if (this.isBelow(toFollow)) {
-                isMovingDownwards = false;
-                isMovingUpwards = true;
-            } else if (this.isAbove(toFollow)) {
-                isMovingDownwards = true;
-                isMovingUpwards = false;
-            }
-        } else {
-            isMovingUpwards = false;
-            isMovingDownwards = false;
-        }
-        if (isMovingRightwards) {
-            move(DIRECTION_RIGHT, boundary, false);
-        } else if (isMovingLeftwards) {
-            move(DIRECTION_LEFT, boundary, false);
-        }
-        if (isMovingDownwards) {
-            move(DIRECTION_DOWN, boundary, false);
-        } else if (isMovingUpwards) {
-            move(DIRECTION_UP, boundary, false);
+    @Override
+    public void follow(Entity toFollow, EntityBoundary boundary, int tolerance) {
+        super.follow(toFollow, boundary, tolerance);
+        int animationIndex = animations.indexOf(animation);
+        if (isMovingRightwards && animationIndex == leftAnimationIndex) {
+            switchAnimation(rightAnimationIndex);
+        } else if (isMovingLeftwards && animationIndex == rightAnimationIndex) {
+            switchAnimation(leftAnimationIndex);
         }
     }
 

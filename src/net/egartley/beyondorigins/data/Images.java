@@ -21,6 +21,7 @@ public class Images {
     public final static byte TILE_SAND = 3;
     public final static byte WARP_PAD = 22;
     public final static byte CUTSCENE = 24;
+    public final static byte UNKNOWN = 100;
     public final static byte TILE_GRASS = 2;
     public final static byte MORE_LINES = 9;
     public final static byte WIZARD_HAT = 13;

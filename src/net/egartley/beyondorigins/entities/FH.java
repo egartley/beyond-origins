@@ -55,7 +55,7 @@ public class FH extends AnimatedEntity implements Damageable {
             isMovingRightwards = true;
             animation = animations.get(RIGHT_NORMAL_ANIMATION);
         }
-        follow(Entities.PLAYER, LEFT_NORMAL_ANIMATION, RIGHT_NORMAL_ANIMATION, defaultBoundary, (int) Math.ceil(speed));
+        follow(Entities.PLAYER, defaultBoundary, (int) Math.ceil(speed));
 
         if (animation.isStopped()) {
             animation.start();
@@ -67,6 +67,8 @@ public class FH extends AnimatedEntity implements Damageable {
         animations.add(new Animation(Util.getAnimationFrames(sprites.get(LEFT_NORMAL_ANIMATION)), ANIMATION_THRESHOLD));
         animations.add(new Animation(Util.getAnimationFrames(sprites.get(RIGHT_NORMAL_ANIMATION)), ANIMATION_THRESHOLD));
         animation = animations.get(RIGHT_NORMAL_ANIMATION);
+        leftAnimationIndex = 0;
+        rightAnimationIndex = 1;
     }
 
     @Override
@@ -76,7 +78,7 @@ public class FH extends AnimatedEntity implements Damageable {
 
     @Override
     protected void setBoundaries() {
-        boundaries.add(new EntityBoundary(this, sprite, new BoundaryPadding(0, 2, 0, 2)));
+        boundaries.add(new EntityBoundary(this, sprite.width, sprite.height, new BoundaryPadding(0, 2, 0, 2)));
         defaultBoundary = boundaries.get(0);
     }
 

@@ -19,6 +19,10 @@ public class SpriteSheet {
 
     public ArrayList<Sprite> sprites;
 
+    public SpriteSheet(Image sheet) {
+        this(sheet, sheet.getWidth());
+    }
+
     public SpriteSheet(Image sheet, int width) {
         this(sheet, 1, sheet.getWidth() / width);
     }

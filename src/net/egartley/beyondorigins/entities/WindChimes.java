@@ -65,9 +65,9 @@ public class WindChimes extends AnimatedEntity {
 
     @Override
     protected void setBoundaries() {
-        mastBoundary = new EntityBoundary(this, sprite, new BoundaryPadding(-4, 0, -19, -27));
-        overheadBoundary = new EntityBoundary(this, sprite, new BoundaryPadding(0, -4, -42, -4));
-        chimeBoundary = new EntityBoundary(this, sprite, new BoundaryPadding(-12, -12, -29, 0));
+        mastBoundary = new EntityBoundary(this, sprite.width, sprite.height, new BoundaryPadding(-4, 0, -19, -27));
+        overheadBoundary = new EntityBoundary(this, sprite.width, sprite.height, new BoundaryPadding(0, -4, -42, -4));
+        chimeBoundary = new EntityBoundary(this, sprite.width, sprite.height, new BoundaryPadding(-12, -12, -29, 0));
         boundaries.add(mastBoundary);
         boundaries.add(overheadBoundary);
         boundaries.add(chimeBoundary);

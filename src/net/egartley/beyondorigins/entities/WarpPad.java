@@ -1,14 +1,13 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.beyondorigins.core.abstracts.Entity;
+import net.egartley.beyondorigins.core.abstracts.VisibleEntity;
 import net.egartley.beyondorigins.core.graphics.Sprite;
-import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 
 /**
  * Testing for changing maps
  */
-public class WarpPad extends Entity {
+public class WarpPad extends VisibleEntity {
 
     public WarpPad(Sprite sprite, int x, int y) {
         super("Warp Portal", sprite);

@@ -35,7 +35,11 @@ public class EntityExpression extends AnimatedEntity {
         super("Expression");
         this.type = type;
         this.target = target;
-        sprite = getTemplateSpriteSheet(type).sprites.get(0);
+        SpriteSheet sheet = getTemplateSpriteSheet(type);
+        sheets.clear();
+        sheets.add(sheet);
+        sprites = sheet.sprites;
+        sprite = sprites.get(0);
         animations.add(getTemplateAnimation());
         animation = animations.get(0);
         image = sprite.asImage();
@@ -68,7 +72,7 @@ public class EntityExpression extends AnimatedEntity {
         if (animation.isStopped()) {
             animation.start();
         }
-        setPosition(Calculate.getCenter(target.x() + (target.sprite.width / 2), sprite.width), target.y() - 24);
+        setPosition(Calculate.getCenter(target.x() + (target.width / 2), sprite.width), target.y() - 24);
         super.tick();
     }
 

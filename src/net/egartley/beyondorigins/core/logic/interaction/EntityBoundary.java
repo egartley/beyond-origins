@@ -1,7 +1,6 @@
 package net.egartley.beyondorigins.core.logic.interaction;
 
 import net.egartley.beyondorigins.core.abstracts.Entity;
-import net.egartley.beyondorigins.core.graphics.Sprite;
 import org.newdawn.slick.Color;
 
 /**
@@ -13,19 +12,11 @@ public class EntityBoundary extends Boundary {
     public Entity entity;
 
     public EntityBoundary(Entity entity) {
-        this(entity, entity.sprite);
-    }
-
-    public EntityBoundary(Entity entity, Sprite sprite) {
-        this(entity, sprite, new BoundaryPadding(0));
+        this(entity, entity.width, entity.height);
     }
 
     public EntityBoundary(Entity entity, int width, int height) {
         this(entity, width, height, new BoundaryPadding(0));
-    }
-
-    public EntityBoundary(Entity entity, Sprite sprite, BoundaryPadding padding) {
-        this(entity, sprite.width, sprite.height, padding);
     }
 
     public EntityBoundary(Entity entity, int width, int height, BoundaryPadding padding) {

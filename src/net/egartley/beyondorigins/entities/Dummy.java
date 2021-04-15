@@ -124,7 +124,7 @@ public class Dummy extends AnimatedEntity implements Character {
 
     @Override
     public void setBoundaries() {
-        boundaries.add(new EntityBoundary(this, sprite, new BoundaryPadding(0, 2, 0, 2)));
+        boundaries.add(new EntityBoundary(this, sprite.width, sprite.height, new BoundaryPadding(0, 2, 0, 2)));
         defaultBoundary = boundaries.get(0);
     }
 

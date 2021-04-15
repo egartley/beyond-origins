@@ -2,13 +2,14 @@ package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.core.abstracts.Entity;
+import net.egartley.beyondorigins.core.abstracts.VisibleEntity;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.TrueTypeFont;
 
-public class DamageNumber extends Entity {
+public class DamageNumber extends VisibleEntity {
 
     private final int amount;
     private final int initalY;
@@ -18,12 +19,10 @@ public class DamageNumber extends Entity {
 
     public DamageNumber(int amount, Entity damaged) {
         super("Damage");
-        setPosition(damaged.x() + Util.randomInt(2, damaged.sprite.width - 2), damaged.y());
-        setBoundaries();
+        this.amount = amount;
         isSectorSpecific = true;
         speed = 0.8;
-
-        this.amount = amount;
+        setPosition(damaged.x() + Util.randomInt(2, damaged.width - 2), damaged.y());
         initalY = y();
     }
 

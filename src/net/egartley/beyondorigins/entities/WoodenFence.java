@@ -2,7 +2,7 @@ package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.core.abstracts.Entity;
+import net.egartley.beyondorigins.core.abstracts.VisibleEntity;
 import net.egartley.beyondorigins.core.graphics.Sprite;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
@@ -12,7 +12,7 @@ import org.newdawn.slick.Image;
 /**
  * Testing dynamic creation of sprites/images
  */
-public class WoodenFence extends Entity {
+public class WoodenFence extends VisibleEntity {
 
     private final int length;
     private final boolean hasCorners;
