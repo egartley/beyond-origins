@@ -7,6 +7,7 @@ import net.egartley.beyondorigins.core.abstracts.Cutscene;
 import net.egartley.beyondorigins.core.abstracts.Entity;
 import net.egartley.beyondorigins.core.abstracts.MapSector;
 import net.egartley.beyondorigins.core.controllers.KeyboardController;
+import net.egartley.beyondorigins.core.enums.Direction;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
 import net.egartley.beyondorigins.core.input.KeyTyped;
 import net.egartley.beyondorigins.core.input.Keyboard;
@@ -88,21 +89,21 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         isMovingRightwards = false;
         if (up) {
             if (isAllowedToMoveUpwards) {
-                move(DIRECTION_UP, defaultBoundary, true, true);
+                move(Direction.UP, defaultBoundary, true, true);
             }
         } else if (down) {
             if (isAllowedToMoveDownwards) {
-                move(DIRECTION_DOWN, defaultBoundary, true, true);
+                move(Direction.DOWN, defaultBoundary, true, true);
             }
         }
         if (left) {
             if (isAllowedToMoveLeftwards) {
-                move(DIRECTION_LEFT, defaultBoundary, true, true);
+                move(Direction.LEFT, defaultBoundary, true, true);
             }
             switchAnimation(LEFT_ANIMATION);
         } else if (right) {
             if (isAllowedToMoveRightwards) {
-                move(DIRECTION_RIGHT, defaultBoundary, true, true);
+                move(Direction.RIGHT, defaultBoundary, true, true);
             }
             switchAnimation(RIGHT_ANIMATION);
         }

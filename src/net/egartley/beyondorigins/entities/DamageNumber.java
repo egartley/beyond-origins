@@ -3,6 +3,7 @@ package net.egartley.beyondorigins.entities;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.core.abstracts.Entity;
 import net.egartley.beyondorigins.core.abstracts.VisibleEntity;
+import net.egartley.beyondorigins.core.enums.Direction;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
@@ -32,7 +33,7 @@ public class DamageNumber extends VisibleEntity {
 
     @Override
     public void tick() {
-        move(DIRECTION_UP);
+        move(Direction.UP);
         if (y() <= initalY - FLOAT_DISTANCE) {
             destroy();
         }

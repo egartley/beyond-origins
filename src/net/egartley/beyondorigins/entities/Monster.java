@@ -3,6 +3,7 @@ package net.egartley.beyondorigins.entities;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.core.abstracts.AnimatedEntity;
+import net.egartley.beyondorigins.core.enums.Direction;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
 import net.egartley.beyondorigins.core.interfaces.Damageable;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
@@ -98,9 +99,9 @@ public class Monster extends AnimatedEntity implements Damageable {
             isMovingRightwards = true;
         }
         if (isMovingRightwards) {
-            move(DIRECTION_RIGHT);
+            move(Direction.RIGHT);
         } else if (isMovingLeftwards) {
-            move(DIRECTION_LEFT);
+            move(Direction.LEFT);
         }
         if (isHurt && (animations.indexOf(animation) == RIGHT_NORMAL_ANIMATION || animations.indexOf(animation) == LEFT_NORMAL_ANIMATION)) {
             int oldFrameIndex = animation.getFrame();

@@ -5,6 +5,7 @@ import net.egartley.beyondorigins.core.abstracts.AnimatedEntity;
 import net.egartley.beyondorigins.core.abstracts.Entity;
 import net.egartley.beyondorigins.core.abstracts.MapSector;
 import net.egartley.beyondorigins.core.controllers.DialogueController;
+import net.egartley.beyondorigins.core.enums.Direction;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
 import net.egartley.beyondorigins.core.interfaces.Character;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
@@ -26,7 +27,7 @@ public class Dummy extends AnimatedEntity implements Character {
 
     private short walktime = 0;
     private boolean isTalkingToPlayer;
-    private byte dir = DIRECTION_RIGHT;
+    private Direction dir = Direction.RIGHT;
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
     private final int ANIMATION_THRESHOLD = 150;
@@ -86,10 +87,10 @@ public class Dummy extends AnimatedEntity implements Character {
         walktime++;
         if (walktime >= 120) {
             walktime = 0;
-            if (dir == DIRECTION_RIGHT) {
-                dir = DIRECTION_LEFT;
+            if (dir == Direction.RIGHT) {
+                dir = Direction.LEFT;
             } else {
-                dir = DIRECTION_RIGHT;
+                dir = Direction.RIGHT;
             }
         } else {
             move(dir);
@@ -111,13 +112,13 @@ public class Dummy extends AnimatedEntity implements Character {
     }
 
     @Override
-    protected void onMove(byte direction) {
+    protected void onMove(Direction direction) {
         if (animation.isStopped()) {
             animation.start();
         }
-        if (direction == DIRECTION_RIGHT && !animations.get(RIGHT_ANIMATION).isStopped()) {
+        if (direction == Direction.RIGHT && !animations.get(RIGHT_ANIMATION).isStopped()) {
             switchAnimation(RIGHT_ANIMATION);
-        } else if (direction == DIRECTION_LEFT && !animations.get(LEFT_ANIMATION).isStopped()) {
+        } else if (direction == Direction.LEFT && !animations.get(LEFT_ANIMATION).isStopped()) {
             switchAnimation(LEFT_ANIMATION);
         }
     }

@@ -34,16 +34,16 @@ public class Util {
             }
         }
         switch (event.collidedSide) {
-            case EntityEntityCollisionEvent.TOP_SIDE:
+            case TOP:
                 entity.isAllowedToMoveDownwards = true;
                 break;
-            case EntityEntityCollisionEvent.BOTTOM_SIDE:
+            case BOTTOM:
                 entity.isAllowedToMoveUpwards = true;
                 break;
-            case EntityEntityCollisionEvent.LEFT_SIDE:
+            case LEFT:
                 entity.isAllowedToMoveRightwards = true;
                 break;
-            case EntityEntityCollisionEvent.RIGHT_SIDE:
+            case RIGHT:
                 entity.isAllowedToMoveLeftwards = true;
                 break;
             default:
@@ -63,16 +63,16 @@ public class Util {
     public static void onCollisionWithNonTraversableEntity(EntityEntityCollisionEvent event, Entity entity) {
         entity.lastCollisionEvent = event;
         switch (event.collidedSide) {
-            case EntityEntityCollisionEvent.RIGHT_SIDE:
+            case RIGHT:
                 entity.isAllowedToMoveLeftwards = false;
                 break;
-            case EntityEntityCollisionEvent.LEFT_SIDE:
+            case LEFT:
                 entity.isAllowedToMoveRightwards = false;
                 break;
-            case EntityEntityCollisionEvent.TOP_SIDE:
+            case TOP:
                 entity.isAllowedToMoveDownwards = false;
                 break;
-            case EntityEntityCollisionEvent.BOTTOM_SIDE:
+            case BOTTOM:
                 entity.isAllowedToMoveUpwards = false;
                 break;
             default:
