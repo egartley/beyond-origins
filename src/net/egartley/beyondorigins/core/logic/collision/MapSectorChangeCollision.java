@@ -8,6 +8,9 @@ import net.egartley.beyondorigins.core.logic.interaction.MapSectorChangeBoundary
 
 import java.awt.*;
 
+/**
+ * A collisions that occurs when the player goes from one sector to another
+ */
 public class MapSectorChangeCollision {
 
     private boolean isCollided;

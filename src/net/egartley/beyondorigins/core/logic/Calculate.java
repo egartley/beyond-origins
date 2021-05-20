@@ -10,18 +10,22 @@ public class Calculate {
     /**
      * Returns the "center" of b from a
      *
-     * @param a Base x-axis or y-axis coordinate
-     * @param b Width or height
      * @return a - (b / 2)
      */
     public static int getCenter(int a, int b) {
         return a - (b / 2);
     }
 
+    /**
+     * Returns the x position for the given width to appear centered on the screen
+     */
     public static int getCenteredX(int width) {
         return getCenter(Game.WINDOW_WIDTH / 2, width);
     }
 
+    /**
+     * Returns the y position for the given height to appear centered on the screen
+     */
     public static int getCenteredY(int height) {
         return getCenter(Game.WINDOW_HEIGHT / 2, height);
     }
@@ -47,7 +51,7 @@ public class Calculate {
 
     /**
      * Returns whether or not the first entity is within "tolerance", or distance of, the second entity, in the
-     * specified direction (uses each entity's {@link Entity#defaultBoundary})
+     * specified direction, using the entities' default boundaries
      */
     public static boolean isEntityWithinToleranceOf(Entity baseEntity, Entity targetEntity, Direction direction, int tolerance) {
         return isEntityWithinToleranceOf(baseEntity.defaultBoundary, targetEntity.defaultBoundary, direction, tolerance);

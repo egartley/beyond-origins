@@ -16,9 +16,6 @@ import org.newdawn.slick.Image;
 
 import java.util.ArrayList;
 
-/**
- * A floor within a {@link Building} where the player can walk around
- */
 public class BuildingFloor extends Renderable implements Tickable {
 
     private final ArrayList<Entity> entities = new ArrayList<>();
@@ -85,7 +82,7 @@ public class BuildingFloor extends Renderable implements Tickable {
     }
 
     /**
-     * Ensures the player doesn't move beyond the limits of this floor (into the black)
+     * Ensures the player doesn't move beyond the limits of this floor (into the background)
      */
     public void checkPlayerLimits() {
         Entities.PLAYER.isAllowedToMoveUpwards = Entities.PLAYER.y() > upperYLimit;
@@ -96,7 +93,6 @@ public class BuildingFloor extends Renderable implements Tickable {
 
     @Override
     public void tick() {
-        // changers.forEach(BuildingChanger::tick);
         changerCollisions.forEach(EntityEntityCollision::tick);
         entities.forEach(Entity::tick);
     }
@@ -106,7 +102,6 @@ public class BuildingFloor extends Renderable implements Tickable {
         graphics.drawImage(image, x(), y());
         entities.forEach(e -> e.render(graphics));
         if (Game.debug) {
-            // Debug.out(changers.get(0).width + ", " + changers.get(0).height);
             changers.forEach(c -> c.defaultBoundary.render(graphics));
         }
     }

@@ -5,7 +5,7 @@ import net.egartley.beyondorigins.core.graphics.Sprite;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 
 /**
- * Testing for changing maps
+ * Test object for switching between maps
  */
 public class WarpPad extends VisibleEntity {
 

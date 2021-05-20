@@ -80,8 +80,6 @@ public class DialoguePanel extends UIElement {
 
     /**
      * Sets {@link #exchange} and calls {@link #show()}
-     *
-     * @param exchange The exchange to start
      */
     public void startExchange(DialogueExchange exchange) {
         this.exchange = exchange;

@@ -109,9 +109,6 @@ public class InGameState extends BasicGameState {
 
     /**
      * Give the player a quest
-     *
-     * @param quest The quest to give the player
-     * @param start Whether or not to "start" the quest after giving it
      */
     public static void giveQuest(Quest quest, boolean start) {
         playerMenu.questsPanel.add(quest, start);
@@ -120,8 +117,6 @@ public class InGameState extends BasicGameState {
 
     /**
      * Remove, or clear, a quest from the player
-     *
-     * @param quest The quest to remove
      */
     public static void removeQuest(Quest quest) {
         playerMenu.questsPanel.remove(quest);
@@ -129,9 +124,6 @@ public class InGameState extends BasicGameState {
 
     /**
      * Add a notification to the notification queue
-     *
-     * @param notification The notification to add
-     * @see #notifications
      */
     public static void pushNotification(NotificationBanner notification) {
         notifications.add(notification);
@@ -139,9 +131,6 @@ public class InGameState extends BasicGameState {
 
     /**
      * Remove the notification from the queue
-     *
-     * @param notification The notification to remove
-     * @see #notifications
      */
     public static void onNotificationFinish(NotificationBanner notification) {
         notifications.remove(notification);
@@ -161,17 +150,14 @@ public class InGameState extends BasicGameState {
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics graphics) throws SlickException {
-        // first, check if we're in a building
         if (Entities.PLAYER.isInBuilding) {
             graphics.setColor(Color.black);
             graphics.fillRect(0, 0, Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT);
             building.currentFloor.render(graphics);
             Entities.PLAYER.render(graphics);
         } else {
-            // not in a building, so just render the map as normal
             map.render(graphics);
         }
-        // check if the user can interact at all
         if (canPlay) {
             if (isInventoryVisible) {
                 playerMenu.render(graphics);
@@ -179,9 +165,8 @@ public class InGameState extends BasicGameState {
                 dialogue.render(graphics);
             }
         }
-        // check for any pending notifications
         if (!notifications.isEmpty()) {
-            // treated as a queue, so only the first is rendered
+            // treated as a queue, so only the first is rendered (bad?)
             notifications.get(0).render(graphics);
         }
         if (Game.debug) {
@@ -191,7 +176,6 @@ public class InGameState extends BasicGameState {
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-        // see render method for comments
         if (Entities.PLAYER.isInBuilding) {
             building.currentFloor.checkPlayerLimits();
             building.currentFloor.tick();

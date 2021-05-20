@@ -4,21 +4,30 @@ import net.egartley.beyondorigins.core.abstracts.Entity;
 import org.newdawn.slick.Color;
 
 /**
- * A {@link Boundary} that is meant for an {@link Entity}
+ * A boundary specifically for entities
  */
 public class EntityBoundary extends Boundary {
 
     public String name;
     public Entity entity;
 
+    /**
+     * Creates a new entity boundary using the entity's width and height, with no padding or offset
+     */
     public EntityBoundary(Entity entity) {
         this(entity, entity.width, entity.height);
     }
 
+    /**
+     * Creates a new entity boundary with no padding or offset
+     */
     public EntityBoundary(Entity entity, int width, int height) {
         this(entity, width, height, new BoundaryPadding(0));
     }
 
+    /**
+     * Creates a new entity boundary with no offset
+     */
     public EntityBoundary(Entity entity, int width, int height, BoundaryPadding padding) {
         this(entity, width, height, padding, new BoundaryOffset(0, 0, 0, 0));
     }

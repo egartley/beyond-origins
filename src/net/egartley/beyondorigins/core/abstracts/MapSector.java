@@ -80,8 +80,6 @@ public abstract class MapSector extends Renderable implements Tickable {
 
     /**
      * Renders all of the sector's tiles
-     *
-     * @param graphics The graphics to use
      */
     protected void drawTiles(Graphics graphics) {
         deltaX = 0;
@@ -185,12 +183,6 @@ public abstract class MapSector extends Renderable implements Tickable {
 
     /**
      * Update, or "correct", the player's position based on what direction it came from
-     *
-     * @param direction The direction from where the player came into this sector
-     * @see #TOP
-     * @see #BOTTOM
-     * @see #LEFT
-     * @see #RIGHT
      */
     private void playerEnteredFrom(int direction) {
         switch (direction) {
@@ -226,8 +218,6 @@ public abstract class MapSector extends Renderable implements Tickable {
 
     /**
      * Updates the player's position in accordance with the sector they just came from
-     *
-     * @param from Where the player is coming from
      */
     protected void updatePlayerPosition(MapSector from) {
         playerEnteredFrom(neighbors.indexOf(from));
@@ -282,9 +272,6 @@ public abstract class MapSector extends Renderable implements Tickable {
 
     /**
      * Sets a neighboring sector in the direction, as well as reciprocating it
-     *
-     * @param neighbor  The sector to set as a neighbor
-     * @param direction {@link #TOP}, {@link #LEFT}, {@link #BOTTOM}, or {@link #RIGHT}
      */
     public void setNeighborAt(MapSector neighbor, byte direction) {
         setNeighborAt(neighbor, direction, false);
@@ -380,10 +367,6 @@ public abstract class MapSector extends Renderable implements Tickable {
         }
     }
 
-    /**
-     * @return parent, sector index
-     * @see #parent
-     */
     public String toString() {
         return parent.toString() + ", Sector " + (parent.sectors.indexOf(this) + 1);
     }

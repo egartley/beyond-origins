@@ -7,6 +7,9 @@ import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
 import org.newdawn.slick.Input;
 
+/**
+ * An interaction between two entities, usually with the player as one of them
+ */
 public class EntityEntityInteraction {
 
     public Entity[] entities;
@@ -17,6 +20,9 @@ public class EntityEntityInteraction {
     private static final int defaultKeyCode = Input.KEY_ENTER;
     private final KeyTyped keyTyped;
 
+    /**
+     * Creates a new entity-to-entity interaction based on both of their default boundaries
+     */
     public EntityEntityInteraction(Entity e1, Entity e2) {
         this(e1.defaultBoundary, e2.defaultBoundary);
     }

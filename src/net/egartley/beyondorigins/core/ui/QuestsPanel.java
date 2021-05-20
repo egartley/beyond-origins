@@ -56,7 +56,6 @@ public class QuestsPanel extends UIElement implements Saveable, Loadable {
                 break;
             }
         }
-        // contains = false;
         if (!contains) {
             slots.add(new QuestSlot(quest, getSlotX(), getSlotY(slots.size())));
             if (start) {
@@ -112,11 +111,11 @@ public class QuestsPanel extends UIElement implements Saveable, Loadable {
     }
 
     private void pageLeftButtonClick() {
-        // Debug.out("left");
+
     }
 
     private void pageRightButtonClick() {
-        // Debug.out("right");
+
     }
 
     private int getSlotX() {

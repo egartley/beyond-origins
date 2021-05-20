@@ -2,6 +2,9 @@ package net.egartley.beyondorigins.core.threads;
 
 import net.egartley.beyondorigins.Debug;
 
+/**
+ * An event that is executed after a delay
+ */
 public class DelayedEvent implements Runnable {
 
     private boolean naturalStop = true;
@@ -11,9 +14,7 @@ public class DelayedEvent implements Runnable {
     public Thread thread;
 
     /**
-     * Create a new delayed event, which will call {@link #onFinish()} after the specified amount of time
-     *
-     * @param duration How long to wait, in seconds
+     * Create a new delayed event, which will execute after the amount of time (seconds)
      */
     public DelayedEvent(double duration) {
         this.duration = duration;
@@ -37,7 +38,7 @@ public class DelayedEvent implements Runnable {
     }
 
     /**
-     * Call {@link #onFinish()} now ("fast forward" through the delay)
+     * Executes the event now, regardless of delay
      */
     public void fastForward() {
         naturalStop = true;
@@ -45,7 +46,7 @@ public class DelayedEvent implements Runnable {
     }
 
     /**
-     * Called after {@link #duration} has passed (after calling {@link #start()})
+     * Actually execute the event (either by fast-forward or delay)
      */
     public void onFinish() {
 

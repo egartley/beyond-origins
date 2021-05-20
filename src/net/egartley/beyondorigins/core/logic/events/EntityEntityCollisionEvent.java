@@ -7,6 +7,9 @@ import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.entities.Entities;
 
+/**
+ * An event that occurs when two different entities collide with one another
+ */
 public class EntityEntityCollisionEvent {
 
     public Side collidedSide;

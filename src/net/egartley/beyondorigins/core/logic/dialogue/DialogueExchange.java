@@ -6,6 +6,9 @@ import net.egartley.beyondorigins.gamestates.InGameState;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * A collection of dialogues between characters
+ */
 public class DialogueExchange {
 
     public boolean isFinished;

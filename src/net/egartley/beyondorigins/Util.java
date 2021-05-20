@@ -16,10 +16,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Util {
 
     /**
-     * Annuls, or "cancels," the movement restrictions specified by the collision event
-     *
-     * @param event  The collision event to annul
-     * @param entity The entity to modify movement restrictions on
+     * Cancels the movement restrictions specified by the collision event
      */
     public static void annulCollisionEvent(EntityEntityCollisionEvent event, Entity entity) {
         // check for other movement restrictions
@@ -56,9 +53,6 @@ public class Util {
      * example, if the player collided with a tree on its top side,
      * downward movement would no longer be allowed until that collision
      * is no longer active
-     *
-     * @param event  The collision event that occured
-     * @param entity The entity to modify movement "allowing" for
      */
     public static void onCollisionWithNonTraversableEntity(EntityEntityCollisionEvent event, Entity entity) {
         entity.lastCollisionEvent = event;
@@ -82,10 +76,6 @@ public class Util {
 
     /**
      * Returns a random integer between the minimum and maximum
-     *
-     * @param min The smallest value (inclusive)
-     * @param max The largest value (exclusive)
-     * @return An integer between the minimum and maximum
      */
     public static int randomInt(int min, int max) {
         if (max < min) {
@@ -99,11 +89,6 @@ public class Util {
 
     /**
      * Returns a random integer between the minimum and maximum
-     *
-     * @param min       The smallest value (inclusive)
-     * @param max       The largest value
-     * @param inclusive Whether or not the maximum value could be returned
-     * @return An integer between the minimum and maximum
      */
     public static int randomInt(int min, int max, boolean inclusive) {
         if (inclusive) {
@@ -115,8 +100,6 @@ public class Util {
 
     /**
      * Calls {@link #percentChance(double)} with an equal chance of either true or false
-     *
-     * @return True 50% of the time, false the other 50%
      */
     public static boolean fiftyFifty() {
         return percentChance(0.5D);
@@ -124,25 +107,16 @@ public class Util {
 
     /**
      * Returns true the given percentage of the time
-     *
-     * @param percent The percent chance that true will be returned
-     * @return True the given percentage of the time, false otherwise
      */
     public static boolean percentChance(double percent) {
-        // assert percent <= 1.0D;
+        if (percent > 1.0D) {
+            percent = 1.0D;
+        }
         return randomInt(100, 1, true) <= percent * 100;
     }
 
     /**
-     * Returns whether or not the specified point is "within bounds," or overlapping, the specified area
-     *
-     * @param pointX  The x-coordinate of the point
-     * @param pointY  The y-coordinate of the point
-     * @param boundsX The x-coordinate of the bounds
-     * @param boundsY The y-coordinate of the bounds
-     * @param width   The width of the bounds
-     * @param height  The height of the bounds
-     * @return Whether or not the point is located in the bounds
+     * Returns whether or not the specified point is overlapping the specified area
      */
     public static boolean isWithinBounds(int pointX, int pointY, int boundsX, int boundsY, int width, int height) {
         return pointX >= boundsX && pointX <= boundsX + width && pointY >= boundsY && pointY <= boundsY + height;
@@ -150,10 +124,6 @@ public class Util {
 
     /**
      * Stitches two images together, side by side
-     *
-     * @param base     The image on the left
-     * @param toStitch The image on the right
-     * @return The resulting combination of both images
      */
     public static Image stitchImage(Image base, Image toStitch) {
         int width = base.getWidth() + toStitch.getWidth();
@@ -174,9 +144,6 @@ public class Util {
 
     /**
      * Builds an array of images to use for the frames of an animation
-     *
-     * @param sprite The sprite to get frames from
-     * @return An array of images, each representing a single frame
      */
     public static Image[] getAnimationFrames(Sprite sprite) {
         Image[] frames = new Image[sprite.frames.size()];
@@ -189,11 +156,6 @@ public class Util {
 
     /**
      * Returns an array containing the given dialogue split into seperate lines, wrapped at words
-     *
-     * @param dialogue      The entire dialogue to split into lines
-     * @param font          The font being used to render these lines
-     * @param maxLineLength The maximum length, in pixels (not characters), that a line can be before being wrapped
-     * @return An array of strings, each containing a line split from the full dialogue
      */
     public static String[] toLines(String dialogue, Font font, int maxLineLength) {
         ArrayList<String> splits = new ArrayList<>();
@@ -247,15 +209,6 @@ public class Util {
 
     /**
      * Builds an animation from the given image and supplied parameters
-     *
-     * @param imageStore The number representing the image to retrieve
-     * @param width      Width of the animation
-     * @param height     Height of the animation
-     * @param rows       Number of rows in the image
-     * @param frames     Number of frames
-     * @param frameDelay How long to wait between frames
-     * @param rowOffset  The row to get from the resulting image
-     * @return An animation built from the image
      */
     public static Animation getTemplateAnimation(byte imageStore, int width, int height, int rows, int frames, int frameDelay, int rowOffset) {
         return new Animation(getAnimationFrames(new SpriteSheet(Images.get(imageStore), width, height, rows, frames).sprites.get(rowOffset)), frameDelay);
@@ -263,11 +216,6 @@ public class Util {
 
     /**
      * Generates an array list of collisions between the base boundary and all of the entity's boundaries
-     *
-     * @param baseEvent    The collision to use for {@link EntityEntityCollision#start(EntityEntityCollisionEvent)} and {@link EntityEntityCollision#start(EntityEntityCollisionEvent)}
-     * @param entity       The entity to generate collisions for all its boundaries
-     * @param baseBoundary The other boundary to use for the generated collisions
-     * @return Collisions based on the given collision and boundary, and all of the entity's boundaries
      */
     public static ArrayList<EntityEntityCollision> getAllBoundaryCollisions(EntityEntityCollision baseEvent, Entity entity, EntityBoundary baseBoundary) {
         ArrayList<EntityEntityCollision> collisions = new ArrayList<>();

@@ -5,6 +5,9 @@ import net.egartley.beyondorigins.core.controllers.MouseController;
 import net.egartley.beyondorigins.core.input.Mouse;
 import net.egartley.beyondorigins.core.input.MouseClicked;
 
+/**
+ * An area on the screen that reacts to mouse interaction
+ */
 public class ClickableArea {
 
     private boolean didHover = false;
@@ -37,10 +40,16 @@ public class ClickableArea {
         }
     }
 
+    /**
+     * The mouse was clicked when the cursor was in the area
+     */
     public void onClick() {
 
     }
 
+    /**
+     * The cursor is in the area (cursor entered, called again if left and came back)
+     */
     public void onHover() {
 
     }

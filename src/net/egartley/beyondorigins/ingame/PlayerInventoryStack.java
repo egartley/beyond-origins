@@ -16,9 +16,6 @@ import org.newdawn.slick.TrueTypeFont;
 import java.awt.*;
 import java.util.ArrayList;
 
-/**
- * What's visible to the user in the player's inventory slots
- */
 public class PlayerInventoryStack extends Renderable implements Tickable {
 
     private int tooltipWidth;
@@ -33,12 +30,6 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
     public ItemStack itemStack;
     public PlayerInventorySlot slot;
 
-    /**
-     * Creates a new stack from the item stack and slot
-     *
-     * @param itemStack The item stack to base this on
-     * @param slot The slot where this stack will be
-     */
     public PlayerInventoryStack(ItemStack itemStack, PlayerInventorySlot slot) {
         this.itemStack = itemStack;
         this.slot = slot;

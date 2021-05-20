@@ -15,9 +15,6 @@ import org.newdawn.slick.command.InputProvider;
 import org.newdawn.slick.command.InputProviderListener;
 import org.newdawn.slick.state.StateBasedGame;
 
-/**
- * The "main" class, mostly for interacting with the Slick2D library
- */
 public class Game extends StateBasedGame implements InputProviderListener {
 
     // TODO: Look into http://slick.ninjacave.com/wiki/index.php?title=Deferred_Resource_Loading

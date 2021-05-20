@@ -1,16 +1,12 @@
 package net.egartley.beyondorigins.core.graphics;
 
 import net.egartley.beyondorigins.Debug;
-import net.egartley.beyondorigins.core.abstracts.Entity;
 import org.newdawn.slick.Image;
 
 import java.util.ArrayList;
 
 /**
  * A row, or "strip", of individual frames for an entity (they are all the same height and width)
- *
- * @see SpriteSheet
- * @see Entity
  */
 public class Sprite {
 

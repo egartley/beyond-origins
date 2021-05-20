@@ -6,8 +6,6 @@ import java.util.ArrayList;
 
 /**
  * An image that contains multiple sprites, each represented by a row, or "strip" that is specified in the constructor
- *
- * @see Sprite
  */
 public class SpriteSheet {
 

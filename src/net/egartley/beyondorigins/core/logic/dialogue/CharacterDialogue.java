@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 
+/**
+ * A piece of dialogue for a specific character
+ */
 public class CharacterDialogue {
 
     private int randomAmount;

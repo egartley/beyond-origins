@@ -14,7 +14,7 @@ import net.egartley.beyondorigins.gamestates.InGameState;
 import org.newdawn.slick.Animation;
 
 /**
- * Test boss
+ * Test boss. Inspired by a real person
  */
 public class FH extends AnimatedEntity implements Damageable {
 

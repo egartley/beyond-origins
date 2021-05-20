@@ -8,7 +8,6 @@ import net.egartley.beyondorigins.core.interfaces.Character;
 import net.egartley.beyondorigins.core.logic.dialogue.CharacterDialogue;
 import net.egartley.beyondorigins.core.logic.dialogue.DialogueExchange;
 import net.egartley.beyondorigins.core.logic.events.DialogueFinishedEvent;
-import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.core.logic.interaction.EntityEntityInteraction;
 import net.egartley.beyondorigins.data.Images;
@@ -20,7 +19,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 /**
- * An NPC for testing dialogue and quests. The sprite was also fun to make!
+ * An NPC for testing dialogue and quests
  */
 public class Wizard extends AnimatedEntity implements Character {
 
@@ -91,9 +90,6 @@ public class Wizard extends AnimatedEntity implements Character {
         super.render(graphics);
     }
 
-    /**
-     * Called whenever the player interacts with the wizard
-     */
     private void onPlayerInteraction() {
         boolean playerHasHat = Entities.PLAYER.inventory.contains(Items.WIZARD_HAT);
         if (!metPlayer) {

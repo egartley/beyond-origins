@@ -7,6 +7,9 @@ import org.newdawn.slick.Graphics;
 
 import java.awt.*;
 
+/**
+ * A specified area on the screen
+ */
 public abstract class Boundary extends Renderable implements Tickable {
 
     protected int verticalOffset;

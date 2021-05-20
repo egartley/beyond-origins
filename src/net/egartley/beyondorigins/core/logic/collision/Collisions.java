@@ -5,6 +5,9 @@ import net.egartley.beyondorigins.core.abstracts.Entity;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
+/**
+ * A collection of all the collisions that can be checked (may not be active)
+ */
 public class Collisions {
 
     private static final ArrayList<EntityEntityCollision> collisions = new ArrayList<>();

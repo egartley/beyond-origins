@@ -13,7 +13,7 @@ import net.egartley.beyondorigins.core.threads.DelayedEvent;
 import net.egartley.beyondorigins.gamestates.InGameState;
 
 /**
- * An item that was dropped from the player's inventory (by the user or programatically)
+ * An item that was dropped from the player's inventory (by the user dragging it out, or programatically)
  */
 public class DroppedItem extends VisibleEntity {
 

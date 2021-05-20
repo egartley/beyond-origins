@@ -29,8 +29,6 @@ public class Debug {
 
     /**
      * Prints the given object to the console, along with the current thread and time
-     *
-     * @param object The object to print out
      */
     public static void out(Object object) {
         System.out.println("[" + Thread.currentThread().getName() + " " + System.currentTimeMillis() + "] " + object);
@@ -38,8 +36,6 @@ public class Debug {
 
     /**
      * Prints the given object to the console with the tag "INFO"
-     *
-     * @param object The object to print out
      */
     public static void info(Object object) {
         out("INFO: " + object);
@@ -47,8 +43,6 @@ public class Debug {
 
     /**
      * Prints the given object to the console with the tag "ERROR"
-     *
-     * @param object The object to print out
      */
     public static void error(Object object) {
         out("ERROR: " + object);
@@ -56,9 +50,6 @@ public class Debug {
 
     /**
      * Handles the exception, printing out its message
-     *
-     * @param e The exception to handle
-     * @see Exception#getMessage()
      */
     public static void error(Exception e) {
         error(e.getMessage());
@@ -66,8 +57,6 @@ public class Debug {
 
     /**
      * Prints the given object to the console with the tag "WARNING"
-     *
-     * @param object The object to print out
      */
     public static void warning(Object object) {
         out("WARNING: " + object);

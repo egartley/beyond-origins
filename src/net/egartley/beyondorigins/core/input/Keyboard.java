@@ -9,20 +9,12 @@ public class Keyboard {
 
     /**
      * "Invalidate" the given key, which means that it will need to be "re-pressed" in order to appear in {@link #pressedKeyCodes} again
-     *
-     * @param keyCode The key code of the key to invalidate
      */
     public static void invalidateKey(int keyCode) {
         invalidatedKeys.add(keyCode);
         pressedKeyCodes.remove((Integer) keyCode);
     }
 
-    /**
-     * Returns whether or not the specified key is currently being pressed down
-     *
-     * @param keyCode The key code from {@link java.awt.event.KeyEvent KeyEvent}
-     * @return Whether or not the specified key is currently being pressed down
-     */
     public static boolean isPressed(int keyCode) {
         return pressedKeyCodes.contains(keyCode);
     }

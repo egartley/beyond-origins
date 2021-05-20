@@ -110,11 +110,14 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
     }
 
     private int getExperienceNeededForNextLevel() {
-        // 100 needed to get level 2, 205 needed for level 3, 310 needed for 4, and so on
+        // 100 for level 2, 205 for level 3, 310 for 4, etc
         int n = level - 1;
         return 100 + (100 * n) + (5 * n);
     }
 
+    /**
+     * Increase the level by one, capping at the max
+     */
     private void levelUp() {
         if (level < MAX_LEVEL) {
             level++;
@@ -148,7 +151,6 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
 
     public void enteredBuilding() {
         isInBuilding = true;
-        // invalidateAllMovement();
     }
 
     public void onInGameEnter() {
@@ -177,7 +179,6 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         InGameState.map.sector.setSpecialCollisions();
         setPosition(building.playerLeaveX, building.playerLeaveY);
         isInBuilding = false;
-        // invalidateAllMovement();
     }
 
     public void invalidateAllMovement() {
@@ -230,8 +231,6 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
 
     /**
      * Generate collisions with sector entities that aren't traversable
-     *
-     * @param sector The sector to generate collisions for its non-traversable entities
      */
     public void generateSectorSpecificCollisions(MapSector sector) {
         generateSectorSpecificCollisions(sector, false);
@@ -239,8 +238,6 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
 
     /**
      * Generate collisions with sector entities that aren't traversable
-     *
-     * @param sector The sector to generate collisions for its non-traversable entities
      */
     public void generateSectorSpecificCollisions(MapSector sector, boolean allBoundaries) {
         for (Entity e : sector.entities) {

@@ -41,8 +41,6 @@ public abstract class AnimatedEntity extends VisibleEntity {
 
     /**
      * Changes {@link #animation}
-     *
-     * @param i The index of the animation to switch to in {@link #animations}
      */
     protected void switchAnimation(int i) {
         if (i >= animations.size()) {

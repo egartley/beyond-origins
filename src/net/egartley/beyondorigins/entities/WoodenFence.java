@@ -10,7 +10,7 @@ import net.egartley.beyondorigins.data.Images;
 import org.newdawn.slick.Image;
 
 /**
- * Testing dynamic creation of sprites/images
+ * Test for dynamic creation of sprites and their images
  */
 public class WoodenFence extends VisibleEntity {
 

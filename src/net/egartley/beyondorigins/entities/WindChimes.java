@@ -11,6 +11,9 @@ import net.egartley.beyondorigins.core.threads.DelayedEvent;
 import net.egartley.beyondorigins.data.Images;
 import org.newdawn.slick.Animation;
 
+/**
+ * An object involved with the FH test boss
+ */
 public class WindChimes extends AnimatedEntity {
 
     // private boolean isIdle = true;

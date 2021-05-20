@@ -10,6 +10,9 @@ import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.TrueTypeFont;
 
+/**
+ * A small number that briefly appears indicating the amount of damage dealt
+ */
 public class DamageNumber extends VisibleEntity {
 
     private final int amount;

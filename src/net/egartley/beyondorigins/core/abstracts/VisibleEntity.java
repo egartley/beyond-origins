@@ -81,10 +81,6 @@ public abstract class VisibleEntity extends Entity {
     }
 
     protected void onSpriteChanged() {
-        /*if (this instanceof AnimatedEntity) {
-            ((AnimatedEntity) this).animations.clear();
-            ((AnimatedEntity) this).setAnimations();
-        }*/
         boundaries.clear();
         setBoundaries();
         Collisions.endWith(this);

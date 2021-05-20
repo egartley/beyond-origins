@@ -3,6 +3,9 @@ package net.egartley.beyondorigins.core.logic.interaction;
 import net.egartley.beyondorigins.core.abstracts.MapSector;
 import org.newdawn.slick.Color;
 
+/**
+ * A boundary specifically for map sector changes
+ */
 public class MapSectorChangeBoundary extends Boundary {
 
     public MapSector to;

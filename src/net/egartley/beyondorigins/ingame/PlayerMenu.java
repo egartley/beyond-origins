@@ -12,7 +12,7 @@ import org.newdawn.slick.Graphics;
 import java.util.ArrayList;
 
 /**
- * What shows up when the user presses E in game
+ * The menu that appears after pressing "E" on the keyboard
  */
 public class PlayerMenu implements Tickable {
 
@@ -56,11 +56,6 @@ public class PlayerMenu implements Tickable {
         tabs.add(questsPanelTab);
     }
 
-    /**
-     * Called when a tab (rather its clickable area) is clicked by the user
-     *
-     * @param clickedTab The tab that was clicked
-     */
     private void onTabClicked(ClickableArea clickedTab) {
         if (clickedTab.equals(questsPanelTab) && !panel.equals(questsPanel)) {
             questsPanel.onShow();
@@ -81,10 +76,8 @@ public class PlayerMenu implements Tickable {
     }
 
     public void render(Graphics graphics) {
-        // dim the game to make the menu easier to see
         graphics.setColor(backgroundColor);
         graphics.fillRect(0, 0, Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT);
-        // actually show whatever panel is the current one
         panel.render(graphics);
     }
 
