@@ -2,6 +2,7 @@ package net.egartley.beyondorigins.ingame.maps.debug;
 
 import net.egartley.beyondorigins.core.abstracts.Map;
 import net.egartley.beyondorigins.core.abstracts.MapSector;
+import net.egartley.beyondorigins.core.enums.Direction;
 import net.egartley.beyondorigins.core.logic.events.MapSectorChangeEvent;
 import net.egartley.beyondorigins.ingame.maps.debug.sectors.Sector1;
 import net.egartley.beyondorigins.ingame.maps.debug.sectors.Sector2;
@@ -24,10 +25,10 @@ public class DebugMap extends Map {
         MapSector sec2 = sectors.get(1);
         MapSector sec3 = sectors.get(2);
         MapSector sec4 = sectors.get(3);
-        sec1.setNeighborAt(sec2, MapSector.TOP);
-        sec2.setNeighborAt(sec3, MapSector.RIGHT);
-        sec3.setNeighborAt(sec4, MapSector.BOTTOM);
-        sec4.setNeighborAt(sec1, MapSector.LEFT);
+        sec1.setNeighborAt(sec2, Direction.UP);
+        sec2.setNeighborAt(sec3, Direction.RIGHT);
+        sec3.setNeighborAt(sec4, Direction.DOWN);
+        sec4.setNeighborAt(sec1, Direction.LEFT);
     }
 
     @Override

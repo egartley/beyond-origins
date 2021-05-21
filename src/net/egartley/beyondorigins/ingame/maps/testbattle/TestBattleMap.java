@@ -2,6 +2,7 @@ package net.egartley.beyondorigins.ingame.maps.testbattle;
 
 import net.egartley.beyondorigins.core.abstracts.Map;
 import net.egartley.beyondorigins.core.abstracts.MapSector;
+import net.egartley.beyondorigins.core.enums.Direction;
 import net.egartley.beyondorigins.core.logic.Calculate;
 import net.egartley.beyondorigins.core.logic.events.MapSectorChangeEvent;
 import net.egartley.beyondorigins.entities.FH;
@@ -19,7 +20,7 @@ public class TestBattleMap extends Map {
         sectors.add(new Sector2(this));
         MapSector sec1 = sectors.get(0);
         MapSector sec2 = sectors.get(1);
-        sec1.setNeighborAt(sec2, MapSector.RIGHT);
+        sec1.setNeighborAt(sec2, Direction.RIGHT);
     }
 
     public void spawnFHBoss() {
