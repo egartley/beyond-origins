@@ -41,7 +41,7 @@ public class PlayerInventory extends UIElement {
     }
 
     private void renderLine(String text, Graphics graphics) {
-        graphics.drawString(text, x() + 282, y() + 78 + (detailsLineIndex * playerNameFont.getLineHeight()));
+        graphics.drawString(text, x + 282, y + 78 + (detailsLineIndex * playerNameFont.getLineHeight()));
         detailsLineIndex++;
     }
 
@@ -102,16 +102,16 @@ public class PlayerInventory extends UIElement {
 
     @Override
     public void render(Graphics graphics) {
-        graphics.drawImage(image, x(), y());
+        graphics.drawImage(image, x, y);
         slots.forEach(slot -> slot.render(graphics));
         slots.forEach(slot -> slot.renderStack(graphics));
         // player display
         Image playerImage = Entities.PLAYER.sprite.asImage();
-        graphics.drawImage(playerImage, Calculate.getCenter(x() + 243, playerImage.getWidth()), Calculate.getCenter(y() + 96, playerImage.getHeight()));
+        graphics.drawImage(playerImage, Calculate.getCenter(x + 243, playerImage.getWidth()), Calculate.getCenter(y + 96, playerImage.getHeight()));
         // details text
         graphics.setColor(playerNameColor);
         graphics.setFont(playerNameFont);
-        graphics.drawString("Player's Name", x() + 282, y() + 58);
+        graphics.drawString("Player's Name", x + 282, y + 58);
         graphics.setColor(detailsColor);
         graphics.setFont(detailsFont);
         renderLine("Level " + Entities.PLAYER.level, graphics);

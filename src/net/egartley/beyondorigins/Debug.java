@@ -68,7 +68,7 @@ public class Debug {
     public static void render(Graphics graphics) {
         row = 0;
         graphics.setFont(font);
-        drawLine("Location: " + InGameState.map.sector + " (" + Entities.PLAYER.x() + ", " + Entities.PLAYER.y() + ")", graphics);
+        drawLine("Location: " + InGameState.map.sector + " (" + Entities.PLAYER.x + ", " + Entities.PLAYER.y + ")", graphics);
         drawLine("Mouse: " + Mouse.x + ", " + Mouse.y, graphics);
         if (Entities.PLAYER.lastCollision != null) {
             drawLine("Last collision: " + Entities.PLAYER.lastCollision, graphics);

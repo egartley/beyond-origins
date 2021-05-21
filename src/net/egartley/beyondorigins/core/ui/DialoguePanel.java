@@ -91,7 +91,7 @@ public class DialoguePanel extends UIElement {
     private void renderLine(String text, Graphics graphics) {
         // max width 380, or max str length 49
         lineIndex++;
-        graphics.drawString(text, x() + 106, y() + 3 + (22 * lineIndex));
+        graphics.drawString(text, x + 106, y + 3 + (22 * lineIndex));
     }
 
     @Override
@@ -104,7 +104,7 @@ public class DialoguePanel extends UIElement {
         if (!isShowing) {
             return;
         }
-        graphics.drawImage(image, x(), y());
+        graphics.drawImage(image, x, y);
         Image characterImage = exchange.currentDialogue.character.getCharacterImage();
         graphics.drawImage(characterImage, 277 - characterImage.getWidth() / 2, 414 - (characterImage.getHeight() - 44));
         graphics.setColor(Color.white);

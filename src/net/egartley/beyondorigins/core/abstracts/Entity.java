@@ -78,8 +78,8 @@ public abstract class Entity extends Renderable implements Tickable {
 
     private void drawNameTag(Graphics graphics) {
         int width = debugFont.getWidth(toString()) + 8;
-        int nameX = (x() + (this.width / 2)) - width / 2;
-        int nameY = y() - 18;
+        int nameX = (x + (this.width / 2)) - width / 2;
+        int nameY = y - 18;
         graphics.setColor(nameTagBackgroundColor);
         graphics.setFont(debugFont);
         graphics.fillRect(nameX, nameY, width, 18);
@@ -88,8 +88,8 @@ public abstract class Entity extends Renderable implements Tickable {
     }
 
     private void drawHealthBar(Graphics graphics) {
-        int baseX = (x() + (width / 2)) - healthBarWidth / 2;
-        int baseY = y() - 30;
+        int baseX = (x + (width / 2)) - healthBarWidth / 2;
+        int baseY = y - 30;
         graphics.setColor(Color.black);
         graphics.fillRect(baseX - 1, baseY - 1, healthBarWidth + 2, 8);
         graphics.setColor(Color.red);
@@ -103,14 +103,14 @@ public abstract class Entity extends Renderable implements Tickable {
     }
 
     private void x(int x, boolean setDelta) {
-        super.x(x);
+        this.x = x;
         if (setDelta) {
             deltaX = x;
         }
     }
 
     private void y(int y, boolean setDelta) {
-        super.y(y);
+        this.y = y;
         if (setDelta) {
             deltaY = y;
         }
@@ -136,12 +136,10 @@ public abstract class Entity extends Renderable implements Tickable {
         deltaY = y;
     }
 
-    @Override
     public void x(int x) {
         x(x, true);
     }
 
-    @Override
     public void y(int y) {
         y(y, true);
     }
@@ -184,7 +182,7 @@ public abstract class Entity extends Renderable implements Tickable {
                 }
                 isMovingUpwards = true;
                 deltaY -= speed;
-                y(y() - (int) Math.abs(deltaY - y()), false);
+                y -= (int) Math.abs(deltaY - y);
                 onMove(Direction.UP);
                 break;
             case DOWN:
@@ -193,7 +191,7 @@ public abstract class Entity extends Renderable implements Tickable {
                 }
                 isMovingDownwards = true;
                 deltaY += speed;
-                y(y() + (int) Math.abs(deltaY - y()), false);
+                y += (int) Math.abs(deltaY - y);
                 onMove(Direction.DOWN);
                 break;
             case LEFT:
@@ -202,7 +200,7 @@ public abstract class Entity extends Renderable implements Tickable {
                 }
                 isMovingLeftwards = true;
                 deltaX -= speed;
-                x(x() - (int) Math.abs(deltaX - x()), false);
+                x -= (int) Math.abs(deltaX - x);
                 onMove(Direction.LEFT);
                 break;
             case RIGHT:
@@ -211,7 +209,7 @@ public abstract class Entity extends Renderable implements Tickable {
                 }
                 isMovingRightwards = true;
                 deltaX += speed;
-                x(x() + (int) Math.abs(deltaX - x()), false);
+                x += (int) Math.abs(deltaX - x);
                 onMove(Direction.RIGHT);
                 break;
             default:
@@ -228,7 +226,7 @@ public abstract class Entity extends Renderable implements Tickable {
     }
 
     public void follow(Entity toFollow, EntityBoundary boundary, int tolerance) {
-        if (!Calculate.isWithinToleranceOf(this.x(), toFollow.x(), tolerance)) {
+        if (!Calculate.isWithinToleranceOf(x, toFollow.x, tolerance)) {
             if (isMovingRightwards && this.isRightOf(toFollow)) {
                 isMovingRightwards = false;
                 isMovingLeftwards = true;
@@ -240,7 +238,7 @@ public abstract class Entity extends Renderable implements Tickable {
             isMovingLeftwards = false;
             isMovingRightwards = false;
         }
-        if (!Calculate.isWithinToleranceOf(this.y(), toFollow.y(), tolerance)) {
+        if (!Calculate.isWithinToleranceOf(y, toFollow.y, tolerance)) {
             if (this.isBelow(toFollow)) {
                 isMovingDownwards = false;
                 isMovingUpwards = true;
@@ -272,7 +270,7 @@ public abstract class Entity extends Renderable implements Tickable {
     }
 
     public boolean isRightOf(Entity e) {
-        return x() > e.x();
+        return x > e.x;
     }
 
     public boolean isLeftOf(Entity e) {
@@ -280,7 +278,7 @@ public abstract class Entity extends Renderable implements Tickable {
     }
 
     public boolean isAbove(Entity e) {
-        return y() < e.y();
+        return y < e.y;
     }
 
     public boolean isBelow(Entity e) {

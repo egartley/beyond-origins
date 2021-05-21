@@ -30,8 +30,8 @@ public class MenuButton extends GenericButton {
     }
 
     private void setStringCoords(Font font) {
-        stringX = x() + (width / 2) - (font.getWidth(text) / 2);
-        stringY = y() + (height / 2) - (font.getHeight(text) / 2);
+        stringX = x + (width / 2) - (font.getWidth(text) / 2);
+        stringY = y + (height / 2) - (font.getHeight(text) / 2);
         didSetStringCoords = true;
     }
 

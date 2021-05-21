@@ -49,15 +49,15 @@ public class NotificationBanner extends UIElement {
     }
 
     private void slideUp() {
-        y(y() - SPEED);
+        y -= SPEED;
     }
 
     private void slideDown() {
-        y(y() + SPEED);
+        y += SPEED;
     }
 
     private void drawLine(String line, Graphics graphics) {
-        graphics.drawString(line, x() + 64, y() + 24 + (offset * 18));
+        graphics.drawString(line, x + 64, y + 24 + (offset * 18));
         offset++;
     }
 
@@ -80,7 +80,7 @@ public class NotificationBanner extends UIElement {
             public void onFinish() {
                 slideUp();
                 isReadyToMoveAgain = true;
-                done = y() <= startY;
+                done = y <= startY;
             }
         }.start();
     }
@@ -102,22 +102,22 @@ public class NotificationBanner extends UIElement {
             InGameState.onNotificationFinish(this);
             return;
         }
-        didReachTargetY = y() >= TARGET_Y || didReachTargetY;
+        didReachTargetY = y >= TARGET_Y || didReachTargetY;
         if (!didStart) {
             start();
         } else if (isReadyToMoveAgain && !didReachTargetY && !didShow) {
             moveDown();
         } else if (isReadyToMoveAgain && !didShow) {
             show();
-        } else if (isReadyToMoveAgain && y() >= startY) {
+        } else if (isReadyToMoveAgain && y >= startY) {
             moveUp();
         }
     }
 
     @Override
     public void render(Graphics graphics) {
-        graphics.drawImage(image, x(), y());
-        graphics.drawImage(icon, x() + 8 + (48 - icon.getWidth()) / 2, y() + 8 + (48 - icon.getHeight()) / 2);
+        graphics.drawImage(image, x, y);
+        graphics.drawImage(icon, x + 8 + (48 - icon.getWidth()) / 2, y + 8 + (48 - icon.getHeight()) / 2);
         graphics.setColor(Color.white);
         graphics.setFont(FONT);
         for (String line : lines) {

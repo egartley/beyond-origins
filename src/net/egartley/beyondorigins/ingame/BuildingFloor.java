@@ -35,10 +35,10 @@ public class BuildingFloor extends Renderable implements Tickable {
         this.parent = parent;
         image = Images.get("resources/images/buildings/floors/" + parent.name + "_" + number + ".png");
         setPosition(Calculate.getCenteredX(image.getWidth()), Calculate.getCenteredY(image.getHeight()));
-        upperYLimit = y();
-        lowerYLimit = y() + image.getHeight() - Entities.PLAYER.sprite.height;
-        leftLimit = x();
-        rightLimit = x() + image.getWidth() - Entities.PLAYER.sprite.width;
+        upperYLimit = y;
+        lowerYLimit = y + image.getHeight() - Entities.PLAYER.sprite.height;
+        leftLimit = x;
+        rightLimit = x + image.getWidth() - Entities.PLAYER.sprite.width;
     }
 
     public void addChanger(BuildingChanger changer) {
@@ -85,10 +85,10 @@ public class BuildingFloor extends Renderable implements Tickable {
      * Ensures the player doesn't move beyond the limits of this floor (into the background)
      */
     public void checkPlayerLimits() {
-        Entities.PLAYER.isAllowedToMoveUpwards = Entities.PLAYER.y() > upperYLimit;
-        Entities.PLAYER.isAllowedToMoveDownwards = Entities.PLAYER.y() < lowerYLimit;
-        Entities.PLAYER.isAllowedToMoveLeftwards = Entities.PLAYER.x() > leftLimit;
-        Entities.PLAYER.isAllowedToMoveRightwards = Entities.PLAYER.x() < rightLimit;
+        Entities.PLAYER.isAllowedToMoveUpwards = Entities.PLAYER.y > upperYLimit;
+        Entities.PLAYER.isAllowedToMoveDownwards = Entities.PLAYER.y < lowerYLimit;
+        Entities.PLAYER.isAllowedToMoveLeftwards = Entities.PLAYER.x > leftLimit;
+        Entities.PLAYER.isAllowedToMoveRightwards = Entities.PLAYER.x < rightLimit;
     }
 
     @Override
@@ -99,7 +99,7 @@ public class BuildingFloor extends Renderable implements Tickable {
 
     @Override
     public void render(Graphics graphics) {
-        graphics.drawImage(image, x(), y());
+        graphics.drawImage(image, x, y);
         entities.forEach(e -> e.render(graphics));
         if (Game.debug) {
             changers.forEach(c -> c.defaultBoundary.render(graphics));

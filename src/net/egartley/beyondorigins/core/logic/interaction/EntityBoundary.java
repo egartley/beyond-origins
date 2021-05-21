@@ -48,8 +48,8 @@ public class EntityBoundary extends Boundary {
 
     @Override
     public void tick() {
-        x = entity.x() - horizontalOffset;
-        y = entity.y() - verticalOffset;
+        x = entity.x - horizontalOffset;
+        y = entity.y - verticalOffset;
         super.tick();
     }
 

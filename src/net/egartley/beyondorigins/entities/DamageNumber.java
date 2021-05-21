@@ -26,8 +26,8 @@ public class DamageNumber extends VisibleEntity {
         this.amount = amount;
         isSectorSpecific = true;
         speed = 0.8;
-        setPosition(damaged.x() + Util.randomInt(2, damaged.width - 2), damaged.y());
-        initalY = y();
+        setPosition(damaged.x + Util.randomInt(2, damaged.width - 2), damaged.y);
+        initalY = y;
     }
 
     private void destroy() {
@@ -37,7 +37,7 @@ public class DamageNumber extends VisibleEntity {
     @Override
     public void tick() {
         move(Direction.UP);
-        if (y() <= initalY - FLOAT_DISTANCE) {
+        if (y <= initalY - FLOAT_DISTANCE) {
             destroy();
         }
     }
@@ -46,7 +46,7 @@ public class DamageNumber extends VisibleEntity {
     public void render(Graphics graphics) {
         graphics.setColor(TEXT_COLOR);
         graphics.setFont(FONT);
-        graphics.drawString(String.valueOf(amount), x(), y());
+        graphics.drawString(String.valueOf(amount), x, y);
     }
 
     @Override

@@ -62,7 +62,7 @@ public class Wizard extends AnimatedEntity implements Character {
                 setSprites(1);
                 wearingHat = true;
                 // update position so that it looks like he doesn't move (hat makes him "taller")
-                y(y() - 12);
+                y -= 12;
                 interactions.get(0).collision.end();
                 Quests.WIZARD_HAT.objectives.get(1).complete();
                 Quests.WIZARD_HAT.complete();

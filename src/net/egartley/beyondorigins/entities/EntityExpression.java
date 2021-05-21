@@ -72,7 +72,7 @@ public class EntityExpression extends AnimatedEntity {
         if (animation.isStopped()) {
             animation.start();
         }
-        setPosition(Calculate.getCenter(target.x() + (target.width / 2), sprite.width), target.y() - 24);
+        setPosition(Calculate.getCenter(target.x + (target.width / 2), sprite.width), target.y - 24);
         super.tick();
     }
 

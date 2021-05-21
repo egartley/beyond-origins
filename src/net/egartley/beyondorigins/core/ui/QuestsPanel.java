@@ -119,11 +119,11 @@ public class QuestsPanel extends UIElement implements Saveable, Loadable {
     }
 
     private int getSlotX() {
-        return x() + 13;
+        return x + 13;
     }
 
     private int getSlotY(int i) {
-        return y() + (53 + (i) * 34);
+        return y + (53 + (i) * 34);
     }
 
     public Quest get(byte id) {
@@ -145,7 +145,7 @@ public class QuestsPanel extends UIElement implements Saveable, Loadable {
 
     @Override
     public void render(Graphics graphics) {
-        graphics.drawImage(image, x(), y());
+        graphics.drawImage(image, x, y);
         // assume, at least for now, that there's no need for scrolling (more than 5 at a time)
         for (QuestSlot slot : slots) {
             slot.render(graphics);

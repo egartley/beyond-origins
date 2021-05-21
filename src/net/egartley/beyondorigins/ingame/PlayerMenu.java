@@ -32,7 +32,7 @@ public class PlayerMenu implements Tickable {
         // show inventory by default
         panel = inventoryPanel;
         // set and add tabs
-        inventoryPanelTab = new ClickableArea(panel.x() + 20, panel.y() + 1, 53, 25) {
+        inventoryPanelTab = new ClickableArea(panel.x + 20, panel.y + 1, 53, 25) {
             @Override
             public void onHover() {
             }
@@ -42,7 +42,7 @@ public class PlayerMenu implements Tickable {
                 onTabClicked(this);
             }
         };
-        questsPanelTab = new ClickableArea(panel.x() + 79, panel.y() + 1, 53, 25) {
+        questsPanelTab = new ClickableArea(panel.x + 79, panel.y + 1, 53, 25) {
             @Override
             public void onHover() {
             }

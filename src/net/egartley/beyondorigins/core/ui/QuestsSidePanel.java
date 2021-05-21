@@ -56,35 +56,35 @@ public class QuestsSidePanel extends UIElement {
             // title
             graphics.setFont(titleFont);
             graphics.setColor(titleColor);
-            graphics.drawString(quest.title, x() + 8, y() + 2);
+            graphics.drawString(quest.title, x + 8, y + 2);
             // description
             graphics.setFont(descriptionFont);
             graphics.setColor(descriptionColor);
             int offset = 0;
             for (String line : descriptionLines) {
-                graphics.drawString(line, x() + 8, y() + 24 + (offset * 14));
+                graphics.drawString(line, x + 8, y + 24 + (offset * 14));
                 offset++;
             }
             // objective(s)
-            int baseY = y() + 36 + (offset * 14);
+            int baseY = y + 36 + (offset * 14);
             for (int i = 0; i < quest.objectives.size(); i++) {
                 QuestObjective objective = quest.objectives.get(i);
                 // checkbox
                 if (!objective.isComplete) {
-                    graphics.drawImage(checkboxImage, x() + 8, baseY);
+                    graphics.drawImage(checkboxImage, x + 8, baseY);
                 } else {
-                    graphics.drawImage(checkboxCheckedImage, x() + 6, baseY - 2);
+                    graphics.drawImage(checkboxCheckedImage, x + 6, baseY - 2);
                 }
                 // title
                 graphics.setFont(objectiveTitleFont);
                 graphics.setColor(objectiveTitleColor);
-                graphics.drawString(objective.title, x() + 30, baseY);
+                graphics.drawString(objective.title, x + 30, baseY);
                 // description
                 graphics.setFont(objectiveDescriptionFont);
                 graphics.setColor(objectiveDescriptionColor);
                 baseY += 32;
                 for (String line : objectiveLines.get(i)) {
-                    graphics.drawString(line, x() + 8, baseY - 11);
+                    graphics.drawString(line, x + 8, baseY - 11);
                     baseY += 14;
                 }
             }

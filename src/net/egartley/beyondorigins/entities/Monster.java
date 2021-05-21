@@ -42,8 +42,8 @@ public class Monster extends AnimatedEntity implements Damageable {
         onColdDeath();
         InGameState.map.sector.removeEntity(this);
         if (InGameState.map instanceof TestBattleMap) {
-            ((TestBattleMap) (InGameState.map)).spawnMonster(this.x() + Util.randomInt(-25, 25), this.y() + Util.randomInt(50, 75));
-            ((TestBattleMap) (InGameState.map)).spawnMonster(this.x() + Util.randomInt(-25, 25), this.y() - Util.randomInt(50, 75));
+            ((TestBattleMap) (InGameState.map)).spawnMonster(this.x + Util.randomInt(-25, 25), this.y + Util.randomInt(50, 75));
+            ((TestBattleMap) (InGameState.map)).spawnMonster(this.x + Util.randomInt(-25, 25), this.y - Util.randomInt(50, 75));
         }
     }
 
@@ -87,12 +87,12 @@ public class Monster extends AnimatedEntity implements Damageable {
             isMovingRightwards = true;
             animation = animations.get(RIGHT_NORMAL_ANIMATION);
         }
-        if (isMovingRightwards && x() > Game.WINDOW_WIDTH - 75) {
+        if (isMovingRightwards && x > Game.WINDOW_WIDTH - 75) {
             animation.stop();
             animation = isHurt ? animations.get(LEFT_NORMAL_ANIMATION) : animations.get(LEFT_HURT_ANIMATION);
             isMovingRightwards = false;
             isMovingLeftwards = true;
-        } else if (isMovingLeftwards && x() < 30) {
+        } else if (isMovingLeftwards && x < 30) {
             animation.stop();
             animation = isHurt ? animations.get(RIGHT_HURT_ANIMATION) : animations.get(RIGHT_HURT_ANIMATION);
             isMovingLeftwards = false;

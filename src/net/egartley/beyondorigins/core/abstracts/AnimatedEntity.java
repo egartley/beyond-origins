@@ -56,7 +56,7 @@ public abstract class AnimatedEntity extends VisibleEntity {
 
     @Override
     public void render(Graphics graphics) {
-        animation.draw(x(), y());
+        animation.draw(x, y);
         if (Game.debug) {
             drawDebug(graphics);
         }

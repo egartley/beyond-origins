@@ -40,11 +40,11 @@ public abstract class VisibleEntity extends Entity {
     }
 
     public void drawFirstLayer(Graphics graphics) {
-        graphics.drawImage(firstLayer, x(), y() + secondLayer.getHeight());
+        graphics.drawImage(firstLayer, x, y + secondLayer.getHeight());
     }
 
     public void drawSecondLayer(Graphics graphics) {
-        graphics.drawImage(secondLayer, x(), y());
+        graphics.drawImage(secondLayer, x, y);
         if (Game.debug) {
             drawDebug(graphics);
         }
@@ -92,7 +92,7 @@ public abstract class VisibleEntity extends Entity {
 
     @Override
     public void render(Graphics graphics) {
-        graphics.drawImage(image, x(), y());
+        graphics.drawImage(image, x, y);
         super.render(graphics);
     }
 

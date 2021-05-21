@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 
 /**
@@ -320,6 +321,8 @@ public abstract class MapSector extends Renderable implements Tickable {
         try {
             tickables.forEach(Tickable::tick);
             changeCollisions.forEach(MapSectorChangeCollision::tick);
+        } catch (ConcurrentModificationException e) {
+            // ignore
         } catch (Exception e) {
             Debug.error(e);
         }

@@ -40,8 +40,8 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
         ArrayList<Rectangle> intersectionRectangles = new ArrayList<>();
         ArrayList<PlayerInventorySlot> intersectedSlots = new ArrayList<>();
         for (PlayerInventorySlot slot : PlayerInventory.slots) {
-            Rectangle r1 = new Rectangle(slot.x(), slot.y(), PlayerInventorySlot.SIZE, PlayerInventorySlot.SIZE);
-            Rectangle r2 = new Rectangle(x(), y(), PlayerInventorySlot.SIZE, PlayerInventorySlot.SIZE);
+            Rectangle r1 = new Rectangle(slot.x, slot.y, PlayerInventorySlot.SIZE, PlayerInventorySlot.SIZE);
+            Rectangle r2 = new Rectangle(x, y, PlayerInventorySlot.SIZE, PlayerInventorySlot.SIZE);
             if (r1.intersects(r2)) {
                 intersectionRectangles.add(r1.intersection(r2));
                 intersectedSlots.add(slot);
@@ -75,7 +75,7 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
         } else {
             // did not end over any slots
             PlayerInventory panel = InGameState.playerMenu.inventoryPanel;
-            if (!Util.isWithinBounds(x(), y(), panel.x(), panel.y(), panel.width, panel.height)) {
+            if (!Util.isWithinBounds(x, y, panel.x, panel.y, panel.width, panel.height)) {
                 drop();
             }
         }
@@ -89,7 +89,7 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
     @Override
     public void tick() {
         // check if the cursor is over this stack
-        mouseHover = Util.isWithinBounds(Mouse.x, Mouse.y, x(), y(), PlayerInventorySlot.SIZE, PlayerInventorySlot.SIZE);
+        mouseHover = Util.isWithinBounds(Mouse.x, Mouse.y, x, y, PlayerInventorySlot.SIZE, PlayerInventorySlot.SIZE);
         // whether or not to render the tooltip
         isShowingTooltip = isBeingDragged || (mouseHover && PlayerInventory.stackBeingDragged == null);
         if (isShowingTooltip) {
@@ -118,12 +118,12 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
 
     @Override
     public void render(Graphics graphics) {
-        graphics.drawImage(itemStack.item.image, x(), y());
+        graphics.drawImage(itemStack.item.image, x, y);
         graphics.setColor(Color.white);
         graphics.setFont(amountFont);
         if (itemStack.amount > 1) {
             int offset = itemStack.amount < 10 ? 12 : 18;
-            graphics.drawString(String.valueOf(itemStack.amount), x() + PlayerInventorySlot.SIZE - offset, y() + PlayerInventorySlot.SIZE - 17);
+            graphics.drawString(String.valueOf(itemStack.amount), x + PlayerInventorySlot.SIZE - offset, y + PlayerInventorySlot.SIZE - 17);
         }
         if (!setFontMetrics) {
             tooltipWidth = PlayerInventory.tooltipFont.getWidth(itemStack.item.displayName);
