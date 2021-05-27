@@ -6,7 +6,6 @@ import net.egartley.beyondorigins.core.abstracts.Map;
 import net.egartley.beyondorigins.core.controllers.KeyboardController;
 import net.egartley.beyondorigins.core.input.KeyTyped;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
-import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.ui.DialoguePanel;
 import net.egartley.beyondorigins.core.ui.NotificationBanner;
 import net.egartley.beyondorigins.data.Items;
@@ -96,10 +95,7 @@ public class InGameState extends BasicGameState {
      * @see Map#onPlayerEnter()
      */
     public static void changeMap(int i) {
-        for (EntityEntityCollision collision : Collisions.with(Entities.PLAYER)) {
-            collision.end();
-        }
-        Collisions.nuke();
+        Collisions.endAndNuke();
         if (map != null) {
             map.onPlayerLeave();
         }
@@ -111,7 +107,7 @@ public class InGameState extends BasicGameState {
      * Give the player a quest
      */
     public static void giveQuest(Quest quest, boolean start) {
-        playerMenu.questsPanel.add(quest, start);
+        playerMenu.questsPanel.addQuest(quest, start);
         pushNotification(new NotificationBanner("New quest added!"));
     }
 
@@ -119,7 +115,7 @@ public class InGameState extends BasicGameState {
      * Remove, or clear, a quest from the player
      */
     public static void removeQuest(Quest quest) {
-        playerMenu.questsPanel.remove(quest);
+        playerMenu.questsPanel.removeQuest(quest);
     }
 
     /**

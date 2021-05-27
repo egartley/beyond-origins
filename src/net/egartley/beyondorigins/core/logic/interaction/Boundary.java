@@ -17,14 +17,12 @@ public abstract class Boundary extends Renderable implements Tickable {
     protected BoundaryOffset offset;
     protected BoundaryPadding padding;
 
-    public int x;
-    public int y;
     public int top;
     public int left;
     public int right;
     public int width;
-    public int bottom;
     public int height;
+    public int bottom;
     public boolean isCollided;
     public boolean isVisible = true;
     public Color drawColor;

@@ -35,10 +35,10 @@ public class Wizard extends AnimatedEntity implements Character {
     public boolean wearingHat = false;
 
     public Wizard() {
-        super("Wizard", new SpriteSheet(Images.get(Images.WIZARD_DEFAULT), 30, 44, 2, 4));
+        super("Wizard", new SpriteSheet(Images.getImage(Images.WIZARD_DEFAULT), 30, 44, 2, 4));
         speed = 0.8;
         image = sprites.get(0).asImage();
-        sheets.add(new SpriteSheet(Images.get(Images.WIZARD_WITH_HAT), 30, 56, 2, 4));
+        sheets.add(new SpriteSheet(Images.getImage(Images.WIZARD_WITH_HAT), 30, 56, 2, 4));
         meetPlayerExpression = new EntityExpression(EntityExpression.ATTENTION, this);
         foundHatExpression = new EntityExpression(EntityExpression.HEART, this);
         dialogue_meetPlayer = new DialogueExchange(new CharacterDialogue(this, "wizard/meet-player-1.def"),
@@ -58,7 +58,7 @@ public class Wizard extends AnimatedEntity implements Character {
         DialogueController.addFinished(new DialogueFinishedEvent(dialogue_gotHat) {
             @Override
             public void onFinish() {
-                Entities.PLAYER.inventory.remove(Items.WIZARD_HAT);
+                Entities.PLAYER.inventory.removeItem(Items.WIZARD_HAT);
                 setSprites(1);
                 wearingHat = true;
                 // update position so that it looks like he doesn't move (hat makes him "taller")
@@ -91,7 +91,7 @@ public class Wizard extends AnimatedEntity implements Character {
     }
 
     private void onPlayerInteraction() {
-        boolean playerHasHat = Entities.PLAYER.inventory.contains(Items.WIZARD_HAT);
+        boolean playerHasHat = Entities.PLAYER.inventory.containsItem(Items.WIZARD_HAT);
         if (!metPlayer) {
             InGameState.dialogue.startExchange(dialogue_meetPlayer);
         } else if (playerHasHat && !foundHat) {

@@ -21,14 +21,14 @@ public class EntityEntityCollisionEvent {
     }
 
     private void calculateCollidedSide(int tolerance, EntityBoundary boundary1, EntityBoundary boundary2) {
-        if (Calculate.isEntityWithinToleranceOf(boundary1, boundary2, Direction.LEFT, tolerance)) {
+        if (Calculate.isEntityWithinTolerance(boundary1, boundary2, Direction.LEFT, tolerance)) {
             collidedSide = Side.LEFT;
-        } else if (Calculate.isEntityWithinToleranceOf(boundary1, boundary2, Direction.RIGHT, tolerance)) {
+        } else if (Calculate.isEntityWithinTolerance(boundary1, boundary2, Direction.RIGHT, tolerance)) {
             collidedSide = Side.RIGHT;
         }
-        if (Calculate.isEntityWithinToleranceOf(boundary1, boundary2, Direction.UP, tolerance)) {
+        if (Calculate.isEntityWithinTolerance(boundary1, boundary2, Direction.UP, tolerance)) {
             collidedSide = Side.TOP;
-        } else if (Calculate.isEntityWithinToleranceOf(boundary1, boundary2, Direction.DOWN, tolerance)) {
+        } else if (Calculate.isEntityWithinTolerance(boundary1, boundary2, Direction.DOWN, tolerance)) {
             collidedSide = Side.BOTTOM;
         }
     }

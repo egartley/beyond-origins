@@ -31,7 +31,7 @@ import org.newdawn.slick.Input;
 
 public class Player extends AnimatedEntity implements Character, Damageable, Attacker {
 
-    private boolean frozen;
+    private boolean isFrozen;
     private boolean isMovementInvalidated;
     private final int MAX_LEVEL = 100;
     private final int DEFAULT_DAMAGE = 4;
@@ -41,6 +41,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
     private final byte RIGHT_ANIMATION = 1;
     private final int MAX_EXPERIENCE = 4900601;
     private final int ANIMATION_THRESHOLD = 165;
+    private final int[] MOVEMENT_KEYS = new int[]{Input.KEY_W, Input.KEY_A, Input.KEY_S, Input.KEY_D};
 
     public int level = 1;
     public int experience = 0;
@@ -55,16 +56,16 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
     public EntityBoundary attackBoundary;
 
     public Player() {
-        super("Player", new SpriteSheet(Images.get(Images.PLAYER), 30, 44, 2, 4));
+        super("Player", new SpriteSheet(Images.getImage(Images.PLAYER), 30, 44, 2, 4));
         isSectorSpecific = false;
         isDualRendered = false;
         speed = 2;
         health = 30;
-        maximumHealth = health;
+        maxHealth = health;
         inventory = new EntityInventory(this, 20) {
             @Override
             public void onUpdate() {
-                PlayerInventory.populate();
+                PlayerInventory.updateSlots();
             }
         };
         attack = new KeyTyped(Input.KEY_ENTER) {
@@ -131,7 +132,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
      * Restores the player's ability to move
      */
     public void thaw() {
-        frozen = false;
+        isFrozen = false;
         isAllowedToMoveUpwards = true;
         isAllowedToMoveDownwards = true;
         isAllowedToMoveLeftwards = true;
@@ -142,7 +143,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
      * Makes the player immovable
      */
     public void freeze() {
-        frozen = true;
+        isFrozen = true;
         isAllowedToMoveUpwards = false;
         isAllowedToMoveDownwards = false;
         isAllowedToMoveLeftwards = false;
@@ -194,7 +195,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
 
             public void end(EntityEntityCollisionEvent event) {
                 boolean noMovementRestrictions = true;
-                for (EntityEntityCollision c : Collisions.concurrent(Entities.PLAYER)) {
+                for (EntityEntityCollision c : Collisions.getConcurrentWith(Entities.PLAYER)) {
                     if (c.isMovementRestricting) {
                         noMovementRestrictions = false;
                         break;
@@ -211,8 +212,8 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         Collisions.add(baseCollision);
         for (EntityEntityCollision collision : Util.getAllBoundaryCollisions(baseCollision, this, otherBoundary)) {
             boolean add = true;
-            for (EntityBoundary exclude : exclusions) {
-                if (collision.boundaries[0] == exclude || collision.boundaries[1] == exclude) {
+            for (EntityBoundary b : exclusions) {
+                if (collision.boundaries[0] == b || collision.boundaries[1] == b) {
                     add = false;
                     break;
                 }
@@ -309,7 +310,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         boolean left = Game.input.isKeyDown(Input.KEY_A) && !isMovementInvalidated;
         boolean down = Game.input.isKeyDown(Input.KEY_S) && !isMovementInvalidated;
         boolean right = Game.input.isKeyDown(Input.KEY_D) && !isMovementInvalidated;
-        if (!frozen) {
+        if (!isFrozen) {
             move(up, down, left, right);
         }
         if (!left && !right && !down && !up && !animation.isStopped()) {
@@ -318,10 +319,10 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         }
         // this makes it so that the user has to re-press any keys already being pressed in order to move the player again
         if (isMovementInvalidated) {
-            for (int keyCode : new int[]{Input.KEY_W, Input.KEY_A, Input.KEY_S, Input.KEY_D}) {
+            for (int kc : MOVEMENT_KEYS) {
                 // invalidate only the keys that are currently pressed down
-                if (Keyboard.isPressed(keyCode)) {
-                    Keyboard.invalidateKey(keyCode);
+                if (Keyboard.isPressed(kc)) {
+                    Keyboard.invalidateKey(kc);
                 }
             }
             isMovementInvalidated = false;
@@ -331,7 +332,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
 
     @Override
     public void attack() {
-        for (EntityEntityCollision c : Collisions.concurrent(this)) {
+        for (EntityEntityCollision c : Collisions.getConcurrentWith(this)) {
             Entity e = c.entities[0] != this ? c.entities[0] : c.entities[1];
             if (e instanceof Damageable) {
                 ((Damageable) e).takeDamage(DEFAULT_DAMAGE);
@@ -351,8 +352,8 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
     @Override
     public void heal(int amount) {
         health += amount;
-        if (health > maximumHealth) {
-            health = maximumHealth;
+        if (health > maxHealth) {
+            health = maxHealth;
         }
     }
 

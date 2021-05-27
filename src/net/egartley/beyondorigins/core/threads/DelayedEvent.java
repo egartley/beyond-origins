@@ -7,7 +7,7 @@ import net.egartley.beyondorigins.Debug;
  */
 public class DelayedEvent implements Runnable {
 
-    private boolean naturalStop = true;
+    private boolean didNaturalStop = true;
 
     public double duration;
     public boolean isRunning;
@@ -33,7 +33,7 @@ public class DelayedEvent implements Runnable {
      * Cancel the delayed event, and kill its thread. {@link #onFinish()} is not called
      */
     public void cancel() {
-        naturalStop = false;
+        didNaturalStop = false;
         thread.interrupt();
     }
 
@@ -41,7 +41,7 @@ public class DelayedEvent implements Runnable {
      * Executes the event now, regardless of delay
      */
     public void fastForward() {
-        naturalStop = true;
+        didNaturalStop = true;
         thread.interrupt();
     }
 
@@ -60,7 +60,7 @@ public class DelayedEvent implements Runnable {
             } catch (InterruptedException e) {
                 Debug.warning("Delayed event was killed");
             }
-            if (naturalStop) {
+            if (didNaturalStop) {
                 onFinish();
             }
         }

@@ -16,7 +16,7 @@ import java.util.ArrayList;
  */
 public class PlayerMenu implements Tickable {
 
-    private final Color backgroundColor = new Color(0, 0, 0, 152);
+    private final Color BACKGROUND_COLOR = new Color(0, 0, 0, 152);
 
     public UIElement panel;
     public QuestsPanel questsPanel;
@@ -76,7 +76,7 @@ public class PlayerMenu implements Tickable {
     }
 
     public void render(Graphics graphics) {
-        graphics.setColor(backgroundColor);
+        graphics.setColor(BACKGROUND_COLOR);
         graphics.fillRect(0, 0, Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT);
         panel.render(graphics);
     }

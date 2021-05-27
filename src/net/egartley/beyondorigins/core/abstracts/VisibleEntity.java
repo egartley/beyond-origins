@@ -27,10 +27,7 @@ public abstract class VisibleEntity extends Entity {
 
     public VisibleEntity(String name, Sprite sprite) {
         super(name, sprite.width, sprite.height);
-        setSprite(sprite, false);
-        setBoundaries();
-        setCollisions();
-        setInteractions();
+        setSprite(sprite);
     }
 
     public VisibleEntity(String name, SpriteSheet sheet) {
@@ -53,21 +50,21 @@ public abstract class VisibleEntity extends Entity {
     public void setSprites(int index) {
         if (index < sheets.size()) {
             sprites = sheets.get(index).sprites;
-            setSprite(0, true);
+            setSprite(0);
         } else {
             Debug.warning("Tried to get a sprite for \"" + this + "\" at an invalid index, " + index + " (must be less than " + sprites.size() + ")");
         }
     }
 
-    protected void setSprite(int index, boolean update) {
+    protected void setSprite(int index) {
         if (index < sprites.size() && index >= 0) {
-            setSprite(sprites.get(index), update);
+            setSprite(sprites.get(index));
         } else {
             Debug.warning("Tried to get a sprite for \"" + this + "\" at an invalid index, " + index + " (must be less than " + sprites.size() + ")");
         }
     }
 
-    protected void setSprite(Sprite sprite, boolean update) {
+    protected void setSprite(Sprite sprite) {
         if (sprite == null) {
             Debug.warning("Tried to set the sprite for " + this + " to null");
             return;
@@ -75,15 +72,13 @@ public abstract class VisibleEntity extends Entity {
         this.sprite = sprite;
         sprites.add(sprite);
         image = sprite.asImage();
-        if (update) {
-            onSpriteChanged();
-        }
+        onSpriteChanged();
     }
 
     protected void onSpriteChanged() {
         boundaries.clear();
         setBoundaries();
-        Collisions.endWith(this);
+        Collisions.endAllWith(this);
         setCollisions();
         interactions.forEach(i -> i.collision.end());
         interactions.clear();

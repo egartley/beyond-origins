@@ -8,22 +8,22 @@ import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
  */
 public class BuildingChanger extends Entity {
 
-    public byte action;
+    public byte actionType;
     public int jumpNumber;
     public static final byte JUMP = 3;
     public static final byte LEAVE = 2;
     public static final byte UPSTAIRS = 0;
     public static final byte DOWNSTAIRS = 1;
 
-    public BuildingChanger(byte action, int x, int y, int width, int height) {
+    public BuildingChanger(byte actionType, int x, int y, int width, int height) {
         super("BuildingChanger", width, height);
-        this.action = action;
+        this.actionType = actionType;
         setPosition(x, y);
         setBoundaries();
     }
 
-    public BuildingChanger(byte action, int jumpNumber, int x, int y, int width, int height) {
-        this(action, x, y, width, height);
+    public BuildingChanger(byte actionType, int jumpNumber, int x, int y, int width, int height) {
+        this(actionType, x, y, width, height);
         this.jumpNumber = jumpNumber;
     }
 

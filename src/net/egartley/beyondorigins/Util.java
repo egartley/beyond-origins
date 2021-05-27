@@ -20,7 +20,7 @@ public class Util {
      */
     public static void annulCollisionEvent(EntityEntityCollisionEvent event, Entity entity) {
         // check for other movement restrictions
-        for (EntityEntityCollision c : Collisions.concurrent(entity)) {
+        for (EntityEntityCollision c : Collisions.getConcurrentWith(entity)) {
             if (c.lastEvent == null) {
                 continue;
             }
@@ -211,7 +211,7 @@ public class Util {
      * Builds an animation from the given image and supplied parameters
      */
     public static Animation getTemplateAnimation(byte imageStore, int width, int height, int rows, int frames, int frameDelay, int rowOffset) {
-        return new Animation(getAnimationFrames(new SpriteSheet(Images.get(imageStore), width, height, rows, frames).sprites.get(rowOffset)), frameDelay);
+        return new Animation(getAnimationFrames(new SpriteSheet(Images.getImage(imageStore), width, height, rows, frames).sprites.get(rowOffset)), frameDelay);
     }
 
     /**

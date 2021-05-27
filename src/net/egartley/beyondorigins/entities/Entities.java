@@ -26,15 +26,15 @@ public class Entities {
     public static Sprite getSpriteTemplate(byte id) {
         switch (id) {
             case TEMPLATE_TREE:
-                return new SpriteSheet(Images.get(Images.TREE_DEFAULT), 1, 1).getSprite(0);
+                return new SpriteSheet(Images.getImage(Images.TREE_DEFAULT), 1, 1).getSprite(0);
             case TEMPLATE_ROCK:
-                return new SpriteSheet(Images.get(Images.ROCK_DEFAULT), 1, 1).getSprite(0);
+                return new SpriteSheet(Images.getImage(Images.ROCK_DEFAULT), 1, 1).getSprite(0);
             case TEMPLATE_WP:
-                return new SpriteSheet(Images.get(Images.WARP_PAD), 1, 1).getSprite(0);
+                return new SpriteSheet(Images.getImage(Images.WARP_PAD), 1, 1).getSprite(0);
             case TEMPLATE_CT:
-                return new SpriteSheet(Images.get(Images.CUTSCENE), 1, 1).getSprite(0);
+                return new SpriteSheet(Images.getImage(Images.CUTSCENE), 1, 1).getSprite(0);
             default:
-                return new Sprite(Images.get("resources/images/unknown.png"));
+                return new Sprite(Images.getImageFromPath("resources/images/unknown.png"));
         }
     }
 

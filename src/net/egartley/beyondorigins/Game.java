@@ -72,7 +72,7 @@ public class Game extends StateBasedGame implements InputProviderListener {
     @Override
     public void mouseReleased(int button, int x, int y) {
         Mouse.isDragging = false;
-        MouseController.onMouseClick(button, x, y);
+        MouseController.onMouseClick(x, y);
     }
 
     @Override

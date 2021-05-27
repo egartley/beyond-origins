@@ -10,12 +10,12 @@ import java.util.ArrayList;
  */
 public abstract class Map extends Renderable implements Tickable {
 
-    public String id;
+    public String name;
     public MapSector sector;
     public ArrayList<MapSector> sectors = new ArrayList<>();
 
-    public Map(String id) {
-        this.id = id;
+    public Map(String name) {
+        this.name = name;
     }
 
     public abstract void onPlayerEnter();
@@ -38,7 +38,7 @@ public abstract class Map extends Renderable implements Tickable {
 
     @Override
     public String toString() {
-        return id;
+        return name;
     }
 
 }

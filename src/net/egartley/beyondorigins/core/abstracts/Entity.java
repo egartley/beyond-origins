@@ -19,10 +19,10 @@ import java.util.ArrayList;
 
 public abstract class Entity extends Renderable implements Tickable {
 
-    private final int healthBarWidth = 64;
-    private static final Color healthBarColor = new Color(0, 179, 0);
-    private static final Color nameTagBackgroundColor = new Color(0, 0, 0, 128);
-    private static final Font debugFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 11), true);
+    private final int HEALTH_BAR_WIDTH = 64;
+    private static final Color HEALTH_BAR_COLOR = new Color(0, 179, 0);
+    private static final Color NAME_TAG_BACKGROUND_COLOR = new Color(0, 0, 0, 128);
+    private static final Font DEBUG_FONT = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 11), true);
 
     protected boolean isMovingUpwards;
     protected boolean isMovingDownwards;
@@ -31,16 +31,16 @@ public abstract class Entity extends Renderable implements Tickable {
 
     public int uuid;
     public int width;
-    public int health;
     public int height;
-    public int maximumHealth;
+    public int health;
+    public int maxHealth;
     public double speed;
     public double deltaX;
     public double deltaY;
     public boolean isCollided;
     public boolean isTraversable;
     public boolean isSectorSpecific;
-    public boolean canCollide = true;
+    public boolean isAbleToCollide = true;
     public boolean isAllowedToMoveUpwards = true;
     public boolean isAllowedToMoveDownwards = true;
     public boolean isAllowedToMoveLeftwards = true;
@@ -58,7 +58,7 @@ public abstract class Entity extends Renderable implements Tickable {
         this.height = height;
         speed = 1.0;
         health = 50;
-        maximumHealth = health;
+        maxHealth = health;
         uuid = Util.randomInt(999999, 100000, true);
     }
 
@@ -77,25 +77,25 @@ public abstract class Entity extends Renderable implements Tickable {
     }
 
     private void drawNameTag(Graphics graphics) {
-        int width = debugFont.getWidth(toString()) + 8;
+        int width = DEBUG_FONT.getWidth(toString()) + 8;
         int nameX = (x + (this.width / 2)) - width / 2;
         int nameY = y - 18;
-        graphics.setColor(nameTagBackgroundColor);
-        graphics.setFont(debugFont);
+        graphics.setColor(NAME_TAG_BACKGROUND_COLOR);
+        graphics.setFont(DEBUG_FONT);
         graphics.fillRect(nameX, nameY, width, 18);
         graphics.setColor(Color.white);
-        graphics.drawString(toString(), nameX + 5, nameY + 16 - debugFont.getLineHeight());
+        graphics.drawString(toString(), nameX + 5, nameY + 16 - DEBUG_FONT.getLineHeight());
     }
 
     private void drawHealthBar(Graphics graphics) {
-        int baseX = (x + (width / 2)) - healthBarWidth / 2;
+        int baseX = (x + (width / 2)) - HEALTH_BAR_WIDTH / 2;
         int baseY = y - 30;
         graphics.setColor(Color.black);
-        graphics.fillRect(baseX - 1, baseY - 1, healthBarWidth + 2, 8);
+        graphics.fillRect(baseX - 1, baseY - 1, HEALTH_BAR_WIDTH + 2, 8);
         graphics.setColor(Color.red);
-        graphics.fillRect(baseX, baseY, healthBarWidth, 6);
-        graphics.setColor(healthBarColor);
-        graphics.fillRect(baseX, baseY, health * (healthBarWidth) / (maximumHealth), 6);
+        graphics.fillRect(baseX, baseY, HEALTH_BAR_WIDTH, 6);
+        graphics.setColor(HEALTH_BAR_COLOR);
+        graphics.fillRect(baseX, baseY, health * (HEALTH_BAR_WIDTH) / (maxHealth), 6);
     }
 
     private void drawBoundaries(Graphics graphics) {
@@ -152,16 +152,16 @@ public abstract class Entity extends Renderable implements Tickable {
         move(direction, defaultBoundary, true, false);
     }
 
-    protected void move(Direction direction, boolean reset) {
-        move(direction, defaultBoundary, reset, false);
+    protected void move(Direction direction, boolean resetIsMoving) {
+        move(direction, defaultBoundary, resetIsMoving, false);
     }
 
-    protected void move(Direction direction, EntityBoundary boundary, boolean reset) {
-        move(direction, boundary, reset, false);
+    protected void move(Direction direction, EntityBoundary boundary, boolean resetIsMoving) {
+        move(direction, boundary, resetIsMoving, false);
     }
 
-    protected void move(Direction direction, EntityBoundary boundary, boolean reset, boolean contain) {
-        if (reset) {
+    protected void move(Direction direction, EntityBoundary boundary, boolean reserIsMoving, boolean containToWindow) {
+        if (reserIsMoving) {
             isMovingUpwards = false;
             isMovingDownwards = false;
             isMovingLeftwards = false;
@@ -177,7 +177,7 @@ public abstract class Entity extends Renderable implements Tickable {
             return;
         switch (direction) {
             case UP:
-                if (contain && boundary.top <= 0) {
+                if (containToWindow && boundary.top <= 0) {
                     break; // top of window
                 }
                 isMovingUpwards = true;
@@ -186,7 +186,7 @@ public abstract class Entity extends Renderable implements Tickable {
                 onMove(Direction.UP);
                 break;
             case DOWN:
-                if (contain && boundary.bottom >= Game.WINDOW_HEIGHT) {
+                if (containToWindow && boundary.bottom >= Game.WINDOW_HEIGHT) {
                     break; // bottom of window
                 }
                 isMovingDownwards = true;
@@ -195,7 +195,7 @@ public abstract class Entity extends Renderable implements Tickable {
                 onMove(Direction.DOWN);
                 break;
             case LEFT:
-                if (contain && boundary.left <= 0) {
+                if (containToWindow && boundary.left <= 0) {
                     break; // left side of window
                 }
                 isMovingLeftwards = true;
@@ -204,7 +204,7 @@ public abstract class Entity extends Renderable implements Tickable {
                 onMove(Direction.LEFT);
                 break;
             case RIGHT:
-                if (contain && boundary.right >= Game.WINDOW_WIDTH) {
+                if (containToWindow && boundary.right >= Game.WINDOW_WIDTH) {
                     break; // right side of window
                 }
                 isMovingRightwards = true;
@@ -226,7 +226,7 @@ public abstract class Entity extends Renderable implements Tickable {
     }
 
     public void follow(Entity toFollow, EntityBoundary boundary, int tolerance) {
-        if (!Calculate.isWithinToleranceOf(x, toFollow.x, tolerance)) {
+        if (!Calculate.isPointWithinTolerance(x, toFollow.x, tolerance)) {
             if (isMovingRightwards && this.isRightOf(toFollow)) {
                 isMovingRightwards = false;
                 isMovingLeftwards = true;
@@ -238,7 +238,7 @@ public abstract class Entity extends Renderable implements Tickable {
             isMovingLeftwards = false;
             isMovingRightwards = false;
         }
-        if (!Calculate.isWithinToleranceOf(y, toFollow.y, tolerance)) {
+        if (!Calculate.isPointWithinTolerance(y, toFollow.y, tolerance)) {
             if (this.isBelow(toFollow)) {
                 isMovingDownwards = false;
                 isMovingUpwards = true;

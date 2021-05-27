@@ -29,12 +29,12 @@ public class Monster extends AnimatedEntity implements Damageable {
     private DelayedEvent hurtEvent = null;
 
     public Monster() {
-        super("Monster", new SpriteSheet(Images.get(Images.MONSTER), 36, 58, 4, 3));
+        super("Monster", new SpriteSheet(Images.getImage(Images.MONSTER), 36, 58, 4, 3));
         isSectorSpecific = true;
         isDualRendered = false;
         speed = 0.7;
         health = 35;
-        maximumHealth = health;
+        maxHealth = health;
     }
 
     @Override
@@ -142,8 +142,8 @@ public class Monster extends AnimatedEntity implements Damageable {
     @Override
     public void heal(int amount) {
         health += amount;
-        if (health > maximumHealth) {
-            health = maximumHealth;
+        if (health > maxHealth) {
+            health = maxHealth;
         }
     }
 

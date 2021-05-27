@@ -3,20 +3,20 @@ package net.egartley.beyondorigins.core.ui;
 import net.egartley.beyondorigins.core.abstracts.UIElement;
 import net.egartley.beyondorigins.core.controllers.MouseController;
 import net.egartley.beyondorigins.core.input.Mouse;
-import net.egartley.beyondorigins.core.input.MouseClicked;
+import net.egartley.beyondorigins.core.input.MouseClickedEvent;
 import org.newdawn.slick.Image;
 
 public class GenericButton extends UIElement {
 
-    public boolean isBeingHovered;
-    public MouseClicked clicked;
+    public boolean isHovering;
+    public MouseClickedEvent clickedEvent;
 
     public GenericButton(int width, int height) {
         super(width, height);
-        clicked = new MouseClicked() {
+        clickedEvent = new MouseClickedEvent() {
             @Override
-            public void onClick(int button, int x, int y) {
-                checkClick(button, x, y);
+            public void onClick(int x, int y) {
+                checkClick(x, y);
             }
         };
     }
@@ -40,23 +40,23 @@ public class GenericButton extends UIElement {
 
     }
 
-    public void checkClick(int button, int x, int y) {
+    public void checkClick(int x, int y) {
         if (isClickInBounds(x, y) && isEnabled) {
             onClick();
         }
     }
 
     public void registerClicked() {
-        MouseController.addMouseClicked(clicked);
+        MouseController.addMouseClicked(clickedEvent);
     }
 
     public void deregisterClicked() {
-        MouseController.removeMouseClicked(clicked);
+        MouseController.removeMouseClicked(clickedEvent);
     }
 
     @Override
     public void tick() {
-        isBeingHovered = isClickInBounds(Mouse.x, Mouse.y) && isEnabled;
+        isHovering = isClickInBounds(Mouse.x, Mouse.y) && isEnabled;
     }
 
 }

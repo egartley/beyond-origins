@@ -35,7 +35,7 @@ public class Dummy extends AnimatedEntity implements Character {
     private final DialogueExchange dialogue_playerCollision;
 
     public Dummy() {
-        super("Dummy", new SpriteSheet(Images.get(Images.DUMMY), 30, 44, 2, 4));
+        super("Dummy", new SpriteSheet(Images.getImage(Images.DUMMY), 30, 44, 2, 4));
         setPosition(470, 132);
         isSectorSpecific = false;
         isDualRendered = false;
@@ -73,7 +73,7 @@ public class Dummy extends AnimatedEntity implements Character {
     }
 
     public void onSectorLeave(MapSector leaving) {
-        Collisions.removeWith(this);
+        Collisions.removeAllWith(this);
         leaving.removeEntity(this, true);
     }
 

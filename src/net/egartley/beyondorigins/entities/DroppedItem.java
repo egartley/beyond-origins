@@ -39,7 +39,7 @@ public class DroppedItem extends VisibleEntity {
             public void onFinish() {
                 canPickup = true;
                 if (pickup()) {
-                    Collisions.endWith(me);
+                    Collisions.endAllWith(me);
                 }
             }
         }.start();
@@ -66,7 +66,7 @@ public class DroppedItem extends VisibleEntity {
      */
     private boolean pickup() {
         if (!Entities.PLAYER.inventory.isFull() && canPickup && isPlayerOver) {
-            Entities.PLAYER.inventory.put(itemStack);
+            Entities.PLAYER.inventory.putStack(itemStack);
             lifetimeDelay.cancel();
             destroy();
             return true;

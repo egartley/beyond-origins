@@ -13,7 +13,7 @@ public class MapTile {
     public static final String GRASS_PATH_2 = "grass-path-2";
 
     public MapTile(String id) {
-        this(id, Images.get(Images.mapTilePath + id + ".png"));
+        this(id, Images.getImageFromPath(Images.mapTilePath + id + ".png"));
     }
 
     public MapTile(String id, Image image) {

@@ -11,8 +11,8 @@ public class SpriteSheet {
 
     private final int rows;
     private final int frames;
-    private final int spriteWidth;
-    private final int spriteHeight;
+    private final int frameWidth;
+    private final int frameHeight;
     private final Image sheet;
 
     public ArrayList<Sprite> sprites;
@@ -29,24 +29,24 @@ public class SpriteSheet {
         this(sheet, sheet.getWidth(), sheet.getHeight(), rows, frames);
     }
 
-    public SpriteSheet(Image image, int width, int height, int rows, int frames) {
+    public SpriteSheet(Image image, int frameWidth, int frameHeight, int rows, int frames) {
         sheet = image;
-        spriteWidth = width;
-        spriteHeight = height;
+        this.frameWidth = frameWidth;
+        this.frameHeight = frameHeight;
         this.rows = rows;
         this.frames = frames;
-        load();
+        loadSprites();
     }
 
-    private void load() {
+    private void loadSprites() {
         sprites = new ArrayList<>(rows);
         for (int i = 0; i < rows; i++) {
-            sprites.add(new Sprite(getRow(i), spriteWidth, spriteHeight, frames));
+            sprites.add(new Sprite(getRow(i), frameWidth, frameHeight, frames));
         }
     }
 
     private Image getRow(int index) {
-        return sheet.getSubImage(0, index * spriteHeight, sheet.getWidth(), spriteHeight);
+        return sheet.getSubImage(0, index * frameHeight, sheet.getWidth(), frameHeight);
     }
 
     public Sprite getSprite(int index) {

@@ -21,7 +21,7 @@ public class NotificationBanner extends UIElement {
     private static final double SLIDE_DELAY = 0.001D, SHOW_DELAY = 3.5D;
     private static final Font FONT = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 14), true);
 
-    public boolean done = false;
+    public boolean isDone;
     public Image icon;
     public String[] lines;
 
@@ -30,14 +30,14 @@ public class NotificationBanner extends UIElement {
     }
 
     public NotificationBanner(String text, String iconFile) {
-        super(Images.get(Images.uiPath + "notification-banner.png"));
-        icon = Images.get(Images.path + iconFile);
+        super(Images.getImageFromPath(Images.uiPath + "notification-banner.png"));
+        icon = Images.getImageFromPath(Images.path + iconFile);
         startY = -8 - image.getHeight();
         lines = Util.toLines(text, FONT, 260);
         setPosition(Calculate.getCenteredX(width), startY);
     }
 
-    private void show() {
+    private void showBanner() {
         isReadyToMoveAgain = false;
         new DelayedEvent(SHOW_DELAY) {
             @Override
@@ -80,7 +80,7 @@ public class NotificationBanner extends UIElement {
             public void onFinish() {
                 slideUp();
                 isReadyToMoveAgain = true;
-                done = y <= startY;
+                isDone = y <= startY;
             }
         }.start();
     }
@@ -98,7 +98,7 @@ public class NotificationBanner extends UIElement {
 
     @Override
     public void tick() {
-        if (done) {
+        if (isDone) {
             InGameState.onNotificationFinish(this);
             return;
         }
@@ -108,7 +108,7 @@ public class NotificationBanner extends UIElement {
         } else if (isReadyToMoveAgain && !didReachTargetY && !didShow) {
             moveDown();
         } else if (isReadyToMoveAgain && !didShow) {
-            show();
+            showBanner();
         } else if (isReadyToMoveAgain && y >= startY) {
             moveUp();
         }

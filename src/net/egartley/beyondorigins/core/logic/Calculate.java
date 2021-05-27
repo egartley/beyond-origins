@@ -34,7 +34,7 @@ public class Calculate {
      * Returns whether or not the first entity is within "tolerance", or distance of, the second entity, in the
      * specified direction
      */
-    public static boolean isEntityWithinToleranceOf(EntityBoundary e1, EntityBoundary e2, Direction direction, int tolerance) {
+    public static boolean isEntityWithinTolerance(EntityBoundary e1, EntityBoundary e2, Direction direction, int tolerance) {
         switch (direction) {
             case UP:
                 return e2.top - tolerance <= e1.bottom && e1.top < e2.top && e1.bottom - e2.top <= tolerance;
@@ -53,11 +53,11 @@ public class Calculate {
      * Returns whether or not the first entity is within "tolerance", or distance of, the second entity, in the
      * specified direction, using the entities' default boundaries
      */
-    public static boolean isEntityWithinToleranceOf(Entity baseEntity, Entity targetEntity, Direction direction, int tolerance) {
-        return isEntityWithinToleranceOf(baseEntity.defaultBoundary, targetEntity.defaultBoundary, direction, tolerance);
+    public static boolean isEntityWithinTolerance(Entity baseEntity, Entity targetEntity, Direction direction, int tolerance) {
+        return isEntityWithinTolerance(baseEntity.defaultBoundary, targetEntity.defaultBoundary, direction, tolerance);
     }
 
-    public static boolean isWithinToleranceOf(int x, int y, int tolerance) {
+    public static boolean isPointWithinTolerance(int x, int y, int tolerance) {
         return Math.max(x, y) - Math.min(x, y) <= tolerance;
     }
 

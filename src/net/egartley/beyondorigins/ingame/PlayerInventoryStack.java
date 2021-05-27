@@ -19,11 +19,11 @@ import java.util.ArrayList;
 public class PlayerInventoryStack extends Renderable implements Tickable {
 
     private int tooltipWidth;
-    private static final Font amountFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12), true);
+    private static final Font AMOUNT_FONT = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12), true);
 
-    public boolean mouseHover;
+    public boolean isBeingHovered;
     public boolean didStartDrag;
-    public boolean setFontMetrics;
+    public boolean setTooltipWidth;
     public boolean isBeingDragged;
     public boolean isShowingTooltip;
     public static int MAX_AMOUNT = 99;
@@ -89,16 +89,16 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
     @Override
     public void tick() {
         // check if the cursor is over this stack
-        mouseHover = Util.isWithinBounds(Mouse.x, Mouse.y, x, y, PlayerInventorySlot.SIZE, PlayerInventorySlot.SIZE);
+        isBeingHovered = Util.isWithinBounds(Mouse.x, Mouse.y, x, y, PlayerInventorySlot.SIZE, PlayerInventorySlot.SIZE);
         // whether or not to render the tooltip
-        isShowingTooltip = isBeingDragged || (mouseHover && PlayerInventory.stackBeingDragged == null);
+        isShowingTooltip = isBeingDragged || (isBeingHovered && PlayerInventory.stackBeingDragged == null);
         if (isShowingTooltip) {
             PlayerInventory.tooltipWidth = tooltipWidth;
             PlayerInventory.tooltipText = itemStack.item.displayName;
         }
         if (Mouse.isDragging) {
             // user is dragging, anchor to cursor position
-            if ((mouseHover || didStartDrag) && (PlayerInventory.stackBeingDragged == this || PlayerInventory.stackBeingDragged == null)) {
+            if ((isBeingHovered || didStartDrag) && (PlayerInventory.stackBeingDragged == this || PlayerInventory.stackBeingDragged == null)) {
                 PlayerInventory.stackBeingDragged = this;
                 // keep cursor centered
                 setPosition(Mouse.x - (PlayerInventorySlot.SIZE / 2), Mouse.y - (PlayerInventorySlot.SIZE / 2));
@@ -120,14 +120,14 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
     public void render(Graphics graphics) {
         graphics.drawImage(itemStack.item.image, x, y);
         graphics.setColor(Color.white);
-        graphics.setFont(amountFont);
-        if (itemStack.amount > 1) {
-            int offset = itemStack.amount < 10 ? 12 : 18;
-            graphics.drawString(String.valueOf(itemStack.amount), x + PlayerInventorySlot.SIZE - offset, y + PlayerInventorySlot.SIZE - 17);
+        graphics.setFont(AMOUNT_FONT);
+        if (itemStack.quantity > 1) {
+            int offset = itemStack.quantity < 10 ? 12 : 18;
+            graphics.drawString(String.valueOf(itemStack.quantity), x + PlayerInventorySlot.SIZE - offset, y + PlayerInventorySlot.SIZE - 17);
         }
-        if (!setFontMetrics) {
-            tooltipWidth = PlayerInventory.tooltipFont.getWidth(itemStack.item.displayName);
-            setFontMetrics = true;
+        if (!setTooltipWidth) {
+            tooltipWidth = PlayerInventory.TOOLTIP_FONT.getWidth(itemStack.item.displayName);
+            setTooltipWidth = true;
         }
     }
 

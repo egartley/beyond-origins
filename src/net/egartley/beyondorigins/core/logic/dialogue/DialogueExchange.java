@@ -47,17 +47,15 @@ public class DialogueExchange {
     }
 
     public void advance() {
-        boolean advance = InGameState.dialogue.isReadyToAdvance;
-
-        isFinished = isCurrentDialogueFinished() && characterDialogueIndex + 1 == dialogues.size() && advance;
+        boolean isReadyToAdvance = InGameState.dialogue.isReadyToAdvance;
+        isFinished = isCurrentDialogueFinished() && characterDialogueIndex + 1 == dialogues.size() && isReadyToAdvance;
         if (isFinished) {
             return;
         }
-
-        if (isCurrentDialogueFinished() && advance) {
+        if (isCurrentDialogueFinished() && isReadyToAdvance) {
             nextDialogue();
             InGameState.dialogue.delay();
-        } else if (advance) {
+        } else if (isReadyToAdvance) {
             nextLine();
         }
     }

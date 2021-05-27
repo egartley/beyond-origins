@@ -18,7 +18,7 @@ public abstract class AnimatedEntity extends VisibleEntity {
     protected ArrayList<Animation> animations = new ArrayList<>();
 
     public AnimatedEntity(String name) {
-        this(name, new SpriteSheet(Images.get(Images.UNKNOWN)));
+        this(name, new SpriteSheet(Images.getImage(Images.UNKNOWN)));
     }
 
     public AnimatedEntity(String name, SpriteSheet sheet) {
@@ -39,18 +39,15 @@ public abstract class AnimatedEntity extends VisibleEntity {
         }
     }
 
-    /**
-     * Changes {@link #animation}
-     */
-    protected void switchAnimation(int i) {
-        if (i >= animations.size()) {
+    protected void switchAnimation(int index) {
+        if (index >= animations.size() || index < 0) {
             Debug.warning("Tried to switch to an animation at an invalid index");
             return;
         }
-        if (animations.indexOf(animation) != i) {
-            // this prevents the same animation being set again
+        // make sure the same animation isn't set again
+        if (animations.indexOf(animation) != index) {
             animation.stop();
-            animation = animations.get(i);
+            animation = animations.get(index);
         }
     }
 

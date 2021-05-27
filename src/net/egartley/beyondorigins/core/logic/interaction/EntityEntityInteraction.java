@@ -17,7 +17,7 @@ public class EntityEntityInteraction {
 
     private boolean isActive;
     private boolean didInteract;
-    private static final int defaultKeyCode = Input.KEY_ENTER;
+    private static final int DEFAULT_KEY_CODE = Input.KEY_ENTER;
     private final KeyTyped keyTyped;
 
     /**
@@ -35,7 +35,7 @@ public class EntityEntityInteraction {
                 didInteract = false;
             }
         };
-        keyTyped = new KeyTyped(defaultKeyCode) {
+        keyTyped = new KeyTyped(DEFAULT_KEY_CODE) {
             @Override
             public void onType() {
                 if (collision.isCollided && !didInteract) {

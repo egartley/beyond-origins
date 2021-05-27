@@ -22,7 +22,7 @@ public class Collisions {
         collisions.remove(collision);
     }
 
-    public static void removeWith(Entity entity) {
+    public static void removeAllWith(Entity entity) {
         ArrayList<EntityEntityCollision> toRemove = new ArrayList<>();
         for (EntityEntityCollision c : collisions) {
             if (c.entities[0].equals(entity) || c.entities[1].equals(entity)) {
@@ -34,7 +34,7 @@ public class Collisions {
         }
     }
 
-    public static void endWith(Entity entity) {
+    public static void endAllWith(Entity entity) {
         ArrayList<EntityEntityCollision> end = new ArrayList<>();
         for (EntityEntityCollision c : collisions) {
             if (c.entities[0].equals(entity) || c.entities[1].equals(entity)) {
@@ -46,9 +46,16 @@ public class Collisions {
         }
     }
 
-    public static void endRemove(EntityEntityCollision collision) {
+    public static void endAndRemove(EntityEntityCollision collision) {
         collision.end();
         remove(collision);
+    }
+
+    public static void endAndNuke() {
+        for (EntityEntityCollision c : collisions) {
+            c.end();
+        }
+        nuke();
     }
 
     public static void nuke() {
@@ -65,11 +72,11 @@ public class Collisions {
         }
     }
 
-    public static int amount() {
+    public static int getAmount() {
         return collisions.size();
     }
 
-    public static ArrayList<EntityEntityCollision> with(Entity entity) {
+    public static ArrayList<EntityEntityCollision> getAllWith(Entity entity) {
         ArrayList<EntityEntityCollision> with = new ArrayList<>();
         for (EntityEntityCollision c : collisions) {
             if (c.entities[0].equals(entity) || c.entities[1].equals(entity)) {
@@ -79,7 +86,7 @@ public class Collisions {
         return with;
     }
 
-    public static ArrayList<EntityEntityCollision> concurrent(Entity entity) {
+    public static ArrayList<EntityEntityCollision> getConcurrentWith(Entity entity) {
         ArrayList<EntityEntityCollision> concurrent = new ArrayList<>();
         for (EntityEntityCollision c : collisions) {
             if ((c.entities[0].equals(entity) || c.entities[1].equals(entity)) && c.isCollided) {
@@ -87,10 +94,6 @@ public class Collisions {
             }
         }
         return concurrent;
-    }
-
-    public static ArrayList<EntityEntityCollision> all() {
-        return collisions;
     }
 
 }

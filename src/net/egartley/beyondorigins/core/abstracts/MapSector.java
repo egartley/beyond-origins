@@ -80,7 +80,7 @@ public abstract class MapSector extends Renderable implements Tickable {
     private void buildTiles() {
         String entireJSONString = null;
         try {
-            entireJSONString = Files.readString(FileSystems.getDefault().getPath("resources", "data", "maps", parent.id, "sector-" + number + ".def"));
+            entireJSONString = Files.readString(FileSystems.getDefault().getPath("resources", "data", "maps", parent.name, "sector-" + number + ".def"));
         } catch (IOException e) {
             Debug.error(e);
         }
@@ -137,7 +137,7 @@ public abstract class MapSector extends Renderable implements Tickable {
     }
 
     private void fill(String id) {
-        Image image = Images.get(Images.mapTilePath + id + ".png");
+        Image image = Images.getImageFromPath(Images.mapTilePath + id + ".png");
         for (int r = 0; r < TILE_ROWS; r++) {
             ArrayList<MapTile> column = new ArrayList<>();
             for (int c = 0; c < TILE_COLUMNS; c++) {
@@ -153,7 +153,7 @@ public abstract class MapSector extends Renderable implements Tickable {
             int c = o.getInt("c");
             int r = o.getInt("r");
             String id = tileIDs.get(tileKeys.indexOf(o.getString("key")));
-            Image image = Images.get(Images.mapTilePath + id + ".png");
+            Image image = Images.getImageFromPath(Images.mapTilePath + id + ".png");
             if (o.has("rotate")) {
                 image.rotate(o.getInt("rotate"));
             }
@@ -211,8 +211,8 @@ public abstract class MapSector extends Renderable implements Tickable {
     }
 
     public void removeEntity(Entity e, boolean primary) {
-        Collisions.endWith(e);
-        Collisions.removeWith(e);
+        Collisions.endAllWith(e);
+        Collisions.removeAllWith(e);
         if (e instanceof Damageable && !primary) {
             ((Damageable) (e)).onColdDeath();
         }
@@ -277,7 +277,7 @@ public abstract class MapSector extends Renderable implements Tickable {
         }
         if (changeBoundary != null) {
             changeBoundaries.add(changeBoundary);
-            changeCollisions.add(new MapSectorChangeCollision(changeBoundary, Entities.PLAYER.boundary, changeBoundary.to, this, parent));
+            changeCollisions.add(new MapSectorChangeCollision(changeBoundary, Entities.PLAYER.boundary, changeBoundary.goingTo, this, parent));
         } else {
             Debug.warning("Could not set a neighbor (\"" + neighbor + "\") for \"" + this + "\"!");
         }

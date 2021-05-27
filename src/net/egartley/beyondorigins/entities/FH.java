@@ -26,12 +26,12 @@ public class FH extends AnimatedEntity implements Damageable {
     private final double REGEN_DELAY = 1.25D;
 
     public FH() {
-        super("FH", new SpriteSheet(Images.get(Images.FH), 30, 44, 2, 4));
+        super("FH", new SpriteSheet(Images.getImage(Images.FH), 30, 44, 2, 4));
         isSectorSpecific = true;
         isDualRendered = false;
         speed = 0.35;
         health = 120;
-        maximumHealth = health;
+        maxHealth = health;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class FH extends AnimatedEntity implements Damageable {
         super.tick();
 
         // regenerate health
-        if (health < maximumHealth && readyToHeal) {
+        if (health < maxHealth && readyToHeal) {
             readyToHeal = false;
             new DelayedEvent(REGEN_DELAY) {
                 @Override
@@ -101,8 +101,8 @@ public class FH extends AnimatedEntity implements Damageable {
     @Override
     public void heal(int amount) {
         health += amount;
-        if (health > maximumHealth) {
-            health = maximumHealth;
+        if (health > maxHealth) {
+            health = maxHealth;
         }
     }
 

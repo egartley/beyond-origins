@@ -33,7 +33,7 @@ public class ImageButton extends GenericButton {
     public void render(Graphics graphics) {
         if (!isEnabled) {
             graphics.drawImage(disabledImage, x, y);
-        } else if (isBeingHovered) {
+        } else if (isHovering) {
             graphics.drawImage(hoverImage, x, y);
         } else {
             graphics.drawImage(enabledImage, x, y);

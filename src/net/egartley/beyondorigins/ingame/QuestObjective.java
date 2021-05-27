@@ -18,11 +18,11 @@ public class QuestObjective {
         boolean first = !isComplete;
         isComplete = true;
         if (first) {
-            onComplete();
+            onCompletion();
         }
     }
 
-    public void onComplete() {
+    public void onCompletion() {
 
     }
 

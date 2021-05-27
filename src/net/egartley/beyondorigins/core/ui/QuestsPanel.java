@@ -15,18 +15,18 @@ import java.util.ArrayList;
 public class QuestsPanel extends UIElement implements Saveable, Loadable {
 
     private final QuestsSidePanel sidePanel;
-    private final ImageButton pageLeftButton;
-    private final ImageButton pageRightButton;
+    private final ImageButton pageLeft;
+    private final ImageButton pageRight;
     private final ArrayList<QuestSlot> slots = new ArrayList<>();
 
     public QuestsPanel() {
-        super(Images.get(Images.QUESTS_PANEL));
+        super(Images.getImage(Images.QUESTS_PANEL));
         setPosition(Calculate.getCenteredX(width), Calculate.getCenteredY(height));
         sidePanel = new QuestsSidePanel();
-        Image enabled = Images.get(Images.PAGE_BUTTON_ENABLED);
-        Image disabled = Images.get(Images.PAGE_BUTTON_DISABLED);
-        Image hover = Images.get(Images.PAGE_BUTTON_HOVER);
-        pageLeftButton = new ImageButton(enabled, disabled, hover, 324, 359) {
+        Image enabled = Images.getImage(Images.PAGE_BUTTON_ENABLED);
+        Image disabled = Images.getImage(Images.PAGE_BUTTON_DISABLED);
+        Image hover = Images.getImage(Images.PAGE_BUTTON_HOVER);
+        pageLeft = new ImageButton(enabled, disabled, hover, 324, 359) {
             public void onClick() {
                 pageLeftButtonClick();
             }
@@ -37,21 +37,21 @@ public class QuestsPanel extends UIElement implements Saveable, Loadable {
         enabled.rotate(180);
         disabled.rotate(180);
         hover.rotate(180);
-        pageRightButton = new ImageButton(enabled, disabled, hover, 362, 359) {
+        pageRight = new ImageButton(enabled, disabled, hover, 362, 359) {
             public void onClick() {
                 pageRightButtonClick();
             }
         };
     }
 
-    public void add(Quest quest) {
-        add(quest, false);
+    public void addQuest(Quest quest) {
+        addQuest(quest, false);
     }
 
-    public void add(Quest quest, boolean start) {
+    public void addQuest(Quest quest, boolean start) {
         boolean contains = false;
-        for (int i = 0; i < slots.size(); i++) {
-            if (slots.get(i).quest.equals(quest)) {
+        for (QuestSlot s : slots) {
+            if (s.quest.equals(quest)) {
                 contains = true;
                 break;
             }
@@ -64,7 +64,7 @@ public class QuestsPanel extends UIElement implements Saveable, Loadable {
         }
     }
 
-    public void remove(Quest quest) {
+    public void removeQuest(Quest quest) {
         int index = -1;
         boolean contains = false;
         for (int i = 0; i < slots.size(); i++) {
@@ -80,7 +80,7 @@ public class QuestsPanel extends UIElement implements Saveable, Loadable {
         }
     }
 
-    public void slotClicked(QuestSlot clickedSlot) {
+    public void onSlotClicked(QuestSlot clickedSlot) {
         if (!slots.contains(clickedSlot)) {
             Debug.warning("Tried to click a quest slot that isn't showing in the panel! (\"" + clickedSlot.quest + "\")");
             return;
@@ -101,13 +101,13 @@ public class QuestsPanel extends UIElement implements Saveable, Loadable {
     }
 
     public void onShow() {
-        pageLeftButton.registerClicked();
-        pageRightButton.registerClicked();
+        pageLeft.registerClicked();
+        pageRight.registerClicked();
     }
 
     public void onHide() {
-        pageLeftButton.deregisterClicked();
-        pageRightButton.deregisterClicked();
+        pageLeft.deregisterClicked();
+        pageRight.deregisterClicked();
     }
 
     private void pageLeftButtonClick() {
@@ -126,7 +126,7 @@ public class QuestsPanel extends UIElement implements Saveable, Loadable {
         return y + (53 + (i) * 34);
     }
 
-    public Quest get(byte id) {
+    public Quest getQuest(byte id) {
         for (QuestSlot slot : slots) {
             if (slot.quest.id == id) {
                 return slot.quest;
@@ -139,8 +139,8 @@ public class QuestsPanel extends UIElement implements Saveable, Loadable {
     public void tick() {
         slots.forEach(QuestSlot::tick);
         sidePanel.tick();
-        pageLeftButton.tick();
-        pageRightButton.tick();
+        pageLeft.tick();
+        pageRight.tick();
     }
 
     @Override
@@ -151,8 +151,8 @@ public class QuestsPanel extends UIElement implements Saveable, Loadable {
             slot.render(graphics);
         }
         sidePanel.render(graphics);
-        pageLeftButton.render(graphics);
-        pageRightButton.render(graphics);
+        pageLeft.render(graphics);
+        pageRight.render(graphics);
     }
 
     @Override

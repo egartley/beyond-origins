@@ -24,7 +24,7 @@ public class WoodenFence extends VisibleEntity {
         }
         this.length = length;
         hasCorners = corners;
-        setSprite(buildSprite(), true);
+        setSprite(buildSprite());
         isTraversable = false;
         isDualRendered = true;
         isSectorSpecific = true;
@@ -34,9 +34,9 @@ public class WoodenFence extends VisibleEntity {
 
     private Sprite buildSprite() {
         Image build = null;
-        Image full = Images.get(Images.entityPath + "wooden-fence-full.png");
+        Image full = Images.getImageFromPath(Images.entityPath + "wooden-fence-full.png");
         if (hasCorners) {
-            build = Images.get(Images.entityPath + "wooden-fence-left-end.png");
+            build = Images.getImageFromPath(Images.entityPath + "wooden-fence-left-end.png");
         } else {
             build = full;
         }
@@ -50,7 +50,7 @@ public class WoodenFence extends VisibleEntity {
             }
         }
         if (hasCorners) {
-            build = Util.stitchImage(build, Images.get(Images.entityPath + "wooden-fence-right-end.png"));
+            build = Util.stitchImage(build, Images.getImageFromPath(Images.entityPath + "wooden-fence-right-end.png"));
         }
         return new Sprite(build);
     }

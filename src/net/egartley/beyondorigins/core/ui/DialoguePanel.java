@@ -14,19 +14,19 @@ import org.newdawn.slick.*;
 public class DialoguePanel extends UIElement {
 
     private short lineIndex = -1;
-    private static final double DELAY = 1.225D;
+    private static final double ADVANCE_DELAY = 1.225D;
     private DialogueExchange exchange;
-    private final Image moreLinesImage;
-    private static final Font characterNameFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12), true);
+    private final Image moreLines;
+    private static final Font CHARACTER_NAME_FONT = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12), true);
 
     public boolean isShowing;
     public boolean isReadyToAdvance;
     public static final short MAX_LINES = 5;
-    public static Font lineFont = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 14), true);
+    public static final Font LINE_FONT = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 14), true);
 
     public DialoguePanel() {
-        super(Images.get(Images.DIALOGUE_PANEL), true);
-        moreLinesImage = Images.get(Images.MORE_LINES);
+        super(Images.getImage(Images.DIALOGUE_PANEL), true);
+        moreLines = Images.getImage(Images.MORE_LINES);
         setPosition(Calculate.getCenteredX(image.getWidth()), Game.WINDOW_HEIGHT - image.getHeight() - 8);
     }
 
@@ -51,11 +51,11 @@ public class DialoguePanel extends UIElement {
     }
 
     /**
-     * Disable advancing the dialogue for {@link #DELAY} amount of time
+     * Disable advancing the dialogue for {@link #ADVANCE_DELAY} amount of time
      */
     public void delay() {
         isReadyToAdvance = false;
-        new DelayedEvent(DELAY) {
+        new DelayedEvent(ADVANCE_DELAY) {
             @Override
             public void onFinish() {
                 isReadyToAdvance = true;
@@ -108,15 +108,15 @@ public class DialoguePanel extends UIElement {
         Image characterImage = exchange.currentDialogue.character.getCharacterImage();
         graphics.drawImage(characterImage, 277 - characterImage.getWidth() / 2, 414 - (characterImage.getHeight() - 44));
         graphics.setColor(Color.white);
-        graphics.setFont(characterNameFont);
-        graphics.drawString(exchange.currentDialogue.character.getName(), 277 - characterNameFont.getWidth(exchange.currentDialogue.character.getName()) / 2, 466);
-        graphics.setFont(lineFont);
+        graphics.setFont(CHARACTER_NAME_FONT);
+        graphics.drawString(exchange.currentDialogue.character.getName(), 277 - CHARACTER_NAME_FONT.getWidth(exchange.currentDialogue.character.getName()) / 2, 466);
+        graphics.setFont(LINE_FONT);
         for (String line : exchange.displayedLines) {
             renderLine(line, graphics);
         }
         lineIndex = 0;
         if (isReadyToAdvance) {
-            graphics.drawImage(moreLinesImage, 700, 500);
+            graphics.drawImage(moreLines, 700, 500);
         }
     }
 

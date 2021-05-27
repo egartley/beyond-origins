@@ -26,7 +26,7 @@ public class WindChimes extends AnimatedEntity {
     private EntityBoundary overheadBoundary;
 
     public WindChimes(int x, int y) {
-        super("WindChimes", new SpriteSheet(Images.get(Images.WIND_CHIMES), 31, 54, 2, 5));
+        super("WindChimes", new SpriteSheet(Images.getImage(Images.WIND_CHIMES), 31, 54, 2, 5));
         isSectorSpecific = true;
         isDualRendered = false;
         isTraversable = false;

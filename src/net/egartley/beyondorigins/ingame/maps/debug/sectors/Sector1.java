@@ -37,8 +37,8 @@ public class Sector1 extends MapSector {
         pad = new WarpPad(Entities.getSpriteTemplate(Entities.TEMPLATE_WP), 500, 100);
         addEntity(pad);
         // test items
-        Entities.PLAYER.inventory.put(Items.HMM, 1);
-        Entities.PLAYER.inventory.put(Items.CURRENT_YEAR, 3);
+        Entities.PLAYER.inventory.putItem(Items.HMM, 1);
+        Entities.PLAYER.inventory.putItem(Items.CURRENT_YEAR, 3);
         // test quest
         /*Quest quest = new Quest(Quests.TEST_QUEST_2, "Test quest 2", "Here's another quest for testing, bud!");
         quest.objectives.add(new QuestObjective("Do this thing", "Because you HAVE TO. That's why."));
@@ -68,8 +68,8 @@ public class Sector1 extends MapSector {
     public void setSpecialCollisions() {
         Collisions.add(new EntityEntityCollision(Entities.PLAYER.boundary, hatTree.defaultBoundary) {
             public void start(EntityEntityCollisionEvent e) {
-                if (!Entities.PLAYER.inventory.contains(Items.WIZARD_HAT) && Entities.WIZARD.metPlayer && !Entities.WIZARD.foundHat) {
-                    Entities.PLAYER.inventory.put(Items.WIZARD_HAT);
+                if (!Entities.PLAYER.inventory.containsItem(Items.WIZARD_HAT) && Entities.WIZARD.metPlayer && !Entities.WIZARD.foundHat) {
+                    Entities.PLAYER.inventory.putItem(Items.WIZARD_HAT);
                     InGameState.pushNotification(new NotificationBanner("You have found the Wizard's hat!", "items/wizard-hat.png"));
                     Quests.WIZARD_HAT.objectives.get(0).complete();
                 }

@@ -33,7 +33,7 @@ public class BuildingFloor extends Renderable implements Tickable {
     public BuildingFloor(int number, Building parent) {
         this.number = number;
         this.parent = parent;
-        image = Images.get("resources/images/buildings/floors/" + parent.name + "_" + number + ".png");
+        image = Images.getImageFromPath("resources/images/buildings/floors/" + parent.name + "_" + number + ".png");
         setPosition(Calculate.getCenteredX(image.getWidth()), Calculate.getCenteredY(image.getHeight()));
         upperYLimit = y;
         lowerYLimit = y + image.getHeight() - Entities.PLAYER.sprite.height;
@@ -48,7 +48,7 @@ public class BuildingFloor extends Renderable implements Tickable {
             @Override
             public void start(EntityEntityCollisionEvent event) {
                 end();
-                switch (changer.action) {
+                switch (changer.actionType) {
                     case BuildingChanger.UPSTAIRS:
                         me.parent.upstairs();
                         break;
@@ -74,7 +74,7 @@ public class BuildingFloor extends Renderable implements Tickable {
     }
 
     public void onPlayerLeave() {
-        changerCollisions.forEach(Collisions::endRemove);
+        changerCollisions.forEach(Collisions::endAndRemove);
     }
 
     public void onPlayerEnter(BuildingFloor from) {

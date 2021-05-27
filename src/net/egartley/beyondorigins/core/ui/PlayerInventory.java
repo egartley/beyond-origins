@@ -15,11 +15,11 @@ import java.util.ArrayList;
 public class PlayerInventory extends UIElement {
 
     private int detailsLineIndex = 0;
-    private static final Color detailsColor = new Color(111, 88, 61);
-    private static final Color playerNameColor = new Color(65, 53, 37);
-    private static final Color tooltipBorderColor = new Color(65, 11, 67);
-    private static final Font detailsFont = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 11), true);
-    private static final Font playerNameFont = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.BOLD, 14), true);
+    private static final Color DETAILS_COLOR = new Color(111, 88, 61);
+    private static final Color PLAYER_NAME_COLOR = new Color(65, 53, 37);
+    private static final Color TOOLTIP_BORDER_COLOR = new Color(65, 11, 67);
+    private static final Font DETAILS_FONT = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 11), true);
+    private static final Font PLAYER_NAME_FONT = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.BOLD, 14), true);
 
     public static int tooltipWidth;
     public static boolean isShowingTooltip;
@@ -28,10 +28,10 @@ public class PlayerInventory extends UIElement {
     public static String tooltipText;
     public static PlayerInventoryStack stackBeingDragged;
     public static ArrayList<PlayerInventorySlot> slots = new ArrayList<>();
-    public static Font tooltipFont = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14), true);
+    public static final Font TOOLTIP_FONT = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14), true);
 
     public PlayerInventory() {
-        super(Images.get(Images.INVENTORY_PANEL));
+        super(Images.getImage(Images.INVENTORY_PANEL));
         setPosition(Calculate.getCenteredX(width), Calculate.getCenteredY(height));
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMNS; c++) {
@@ -41,24 +41,21 @@ public class PlayerInventory extends UIElement {
     }
 
     private void renderLine(String text, Graphics graphics) {
-        graphics.drawString(text, x + 282, y + 78 + (detailsLineIndex * playerNameFont.getLineHeight()));
+        graphics.drawString(text, x + 282, y + 78 + (detailsLineIndex * PLAYER_NAME_FONT.getLineHeight()));
         detailsLineIndex++;
     }
 
     private void drawToolTip(Graphics graphics) {
-        graphics.setColor(tooltipBorderColor);
+        graphics.setColor(TOOLTIP_BORDER_COLOR);
         graphics.fillRoundRect(Mouse.x - 2, Mouse.y - 28, tooltipWidth + 14, 26, 8);
         graphics.setColor(Color.black);
         graphics.fillRoundRect(Mouse.x + 1, Mouse.y - 25, tooltipWidth + 8, 20, 6);
         graphics.setColor(Color.white);
-        graphics.setFont(tooltipFont);
+        graphics.setFont(TOOLTIP_FONT);
         graphics.drawString(tooltipText, Mouse.x + 5, Mouse.y - 23);
     }
 
-    /**
-     * Updates {@link #slots} from the player's actual inventory
-     */
-    public static void populate() {
+    public static void updateSlots() {
         for (int i = 0; i < slots.size(); i++) {
             PlayerInventorySlot slot = slots.get(i);
             ItemStack itemStack = Entities.PLAYER.inventory.getStack(i);
@@ -67,7 +64,7 @@ public class PlayerInventory extends UIElement {
     }
 
     public static void clearSlot(int index) {
-        Entities.PLAYER.inventory.set(null, index);
+        Entities.PLAYER.inventory.setStackAt(null, index);
     }
 
     public static void swapStacks(PlayerInventoryStack stack1, PlayerInventoryStack stack2) {
@@ -75,29 +72,27 @@ public class PlayerInventory extends UIElement {
         ItemStack items2 = stack2.itemStack;
         stack1.itemStack = items2;
         stack2.itemStack = items1;
-        Entities.PLAYER.inventory.set(items1, stack2.slot.index);
-        Entities.PLAYER.inventory.set(items2, stack1.slot.index);
+        Entities.PLAYER.inventory.setStackAt(items1, stack2.slot.index);
+        Entities.PLAYER.inventory.setStackAt(items2, stack1.slot.index);
     }
 
     public static void moveStackToEmpty(PlayerInventoryStack stack, int emptySlotIndex) {
         clearSlot(stack.slot.index);
-        Entities.PLAYER.inventory.set(stack.itemStack, emptySlotIndex);
+        Entities.PLAYER.inventory.setStackAt(stack.itemStack, emptySlotIndex);
         stack.slot.clear();
     }
 
     @Override
     public void tick() {
-        boolean nohover = true;
+        boolean isNotHovering = true;
         for (PlayerInventorySlot slot : slots) {
             slot.tick();
-            if (!slot.isEmpty() && slot.stack.mouseHover) {
+            if (!slot.isEmpty() && slot.stack.isBeingHovered) {
                 isShowingTooltip = true;
-                nohover = false;
+                isNotHovering = false;
             }
         }
-        if (nohover) {
-            isShowingTooltip = false;
-        }
+        isShowingTooltip = !isNotHovering;
     }
 
     @Override
@@ -109,11 +104,11 @@ public class PlayerInventory extends UIElement {
         Image playerImage = Entities.PLAYER.sprite.asImage();
         graphics.drawImage(playerImage, Calculate.getCenter(x + 243, playerImage.getWidth()), Calculate.getCenter(y + 96, playerImage.getHeight()));
         // details text
-        graphics.setColor(playerNameColor);
-        graphics.setFont(playerNameFont);
+        graphics.setColor(PLAYER_NAME_COLOR);
+        graphics.setFont(PLAYER_NAME_FONT);
         graphics.drawString("Player's Name", x + 282, y + 58);
-        graphics.setColor(detailsColor);
-        graphics.setFont(detailsFont);
+        graphics.setColor(DETAILS_COLOR);
+        graphics.setFont(DETAILS_FONT);
         renderLine("Level " + Entities.PLAYER.level, graphics);
         renderLine("Experience: " + Entities.PLAYER.experience, graphics);
         detailsLineIndex = 0;
