@@ -12,11 +12,11 @@ import org.newdawn.slick.Graphics;
 import java.util.ArrayList;
 
 /**
- * What shows up when the user presses E in game
+ * The menu that appears after pressing "E" on the keyboard
  */
 public class PlayerMenu implements Tickable {
 
-    private final Color backgroundColor = new Color(0, 0, 0, 152);
+    private final Color BACKGROUND_COLOR = new Color(0, 0, 0, 152);
 
     public UIElement panel;
     public QuestsPanel questsPanel;
@@ -32,7 +32,7 @@ public class PlayerMenu implements Tickable {
         // show inventory by default
         panel = inventoryPanel;
         // set and add tabs
-        inventoryPanelTab = new ClickableArea(panel.x() + 20, panel.y() + 1, 53, 25) {
+        inventoryPanelTab = new ClickableArea(panel.x + 20, panel.y + 1, 53, 25) {
             @Override
             public void onHover() {
             }
@@ -42,7 +42,7 @@ public class PlayerMenu implements Tickable {
                 onTabClicked(this);
             }
         };
-        questsPanelTab = new ClickableArea(panel.x() + 79, panel.y() + 1, 53, 25) {
+        questsPanelTab = new ClickableArea(panel.x + 79, panel.y + 1, 53, 25) {
             @Override
             public void onHover() {
             }
@@ -56,11 +56,6 @@ public class PlayerMenu implements Tickable {
         tabs.add(questsPanelTab);
     }
 
-    /**
-     * Called when a tab (rather its clickable area) is clicked by the user
-     *
-     * @param clickedTab The tab that was clicked
-     */
     private void onTabClicked(ClickableArea clickedTab) {
         if (clickedTab.equals(questsPanelTab) && !panel.equals(questsPanel)) {
             questsPanel.onShow();
@@ -81,10 +76,8 @@ public class PlayerMenu implements Tickable {
     }
 
     public void render(Graphics graphics) {
-        // dim the game to make the menu easier to see
-        graphics.setColor(backgroundColor);
+        graphics.setColor(BACKGROUND_COLOR);
         graphics.fillRect(0, 0, Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT);
-        // actually show whatever panel is the current one
         panel.render(graphics);
     }
 

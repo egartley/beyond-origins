@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.core.abstracts.Entity;
+import net.egartley.beyondorigins.core.abstracts.VisibleEntity;
 import net.egartley.beyondorigins.core.graphics.Sprite;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
@@ -12,9 +13,9 @@ import net.egartley.beyondorigins.core.threads.DelayedEvent;
 import net.egartley.beyondorigins.gamestates.InGameState;
 
 /**
- * An item that was dropped from the player's inventory (by the user or programatically)
+ * An item that was dropped from the player's inventory (by the user dragging it out, or programatically)
  */
-public class DroppedItem extends Entity {
+public class DroppedItem extends VisibleEntity {
 
     private final DelayedEvent lifetimeDelay;
     private static final double PICKUP_DELAY = 2.25D;
@@ -38,7 +39,7 @@ public class DroppedItem extends Entity {
             public void onFinish() {
                 canPickup = true;
                 if (pickup()) {
-                    Collisions.endWith(me);
+                    Collisions.endAllWith(me);
                 }
             }
         }.start();
@@ -65,7 +66,7 @@ public class DroppedItem extends Entity {
      */
     private boolean pickup() {
         if (!Entities.PLAYER.inventory.isFull() && canPickup && isPlayerOver) {
-            Entities.PLAYER.inventory.put(itemStack);
+            Entities.PLAYER.inventory.putStack(itemStack);
             lifetimeDelay.cancel();
             destroy();
             return true;
@@ -80,7 +81,7 @@ public class DroppedItem extends Entity {
 
     @Override
     protected void setBoundaries() {
-        boundaries.add(new EntityBoundary(this, sprite, new BoundaryPadding(1)));
+        boundaries.add(new EntityBoundary(this, sprite.width, sprite.height, new BoundaryPadding(1)));
         defaultBoundary = boundaries.get(0);
     }
 

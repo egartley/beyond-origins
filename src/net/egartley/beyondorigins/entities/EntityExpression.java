@@ -10,7 +10,7 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 
 /**
- * An image that appears above an entity to convey an emotion
+ * An small animation that appears above an entity to convey an emotion
  */
 public class EntityExpression extends AnimatedEntity {
 
@@ -35,29 +35,33 @@ public class EntityExpression extends AnimatedEntity {
         super("Expression");
         this.type = type;
         this.target = target;
-        sprite = getTemplateSpriteSheet(type).sprites.get(0);
+        SpriteSheet sheet = getTemplateSpriteSheet(type);
+        sheets.clear();
+        sheets.add(sheet);
+        sprites = sheet.sprites;
+        sprite = sprites.get(0);
         animations.add(getTemplateAnimation());
         animation = animations.get(0);
         image = sprite.asImage();
     }
 
+    private Animation getTemplateAnimation() {
+        return new Animation(Util.getAnimationFrames(sprite), ANIMATIONSPEED_NORMAL);
+    }
+
     private SpriteSheet getTemplateSpriteSheet(byte type) {
         switch (type) {
             case CONFUSION:
-                return new SpriteSheet(Images.get(Images.expressionPath + "confusion.png"), 18, 18, 1, 4);
+                return new SpriteSheet(Images.getImageFromPath(Images.expressionPath + "confusion.png"), 18, 18, 1, 4);
             case ATTENTION:
-                return new SpriteSheet(Images.get(Images.expressionPath + "attention.png"), 18, 18, 1, 4);
+                return new SpriteSheet(Images.getImageFromPath(Images.expressionPath + "attention.png"), 18, 18, 1, 4);
             case ANGER:
-                return new SpriteSheet(Images.get(Images.expressionPath + "anger.png"), 18, 18, 1, 2);
+                return new SpriteSheet(Images.getImageFromPath(Images.expressionPath + "anger.png"), 18, 18, 1, 2);
             case HEART:
-                return new SpriteSheet(Images.get(Images.expressionPath + "heart.png"), 18, 18, 1, 2);
+                return new SpriteSheet(Images.getImageFromPath(Images.expressionPath + "heart.png"), 18, 18, 1, 2);
             default:
-                return new SpriteSheet(Images.get(Images.path + "unknown.png"), 32, 32, 1, 1);
+                return new SpriteSheet(Images.getImageFromPath(Images.path + "unknown.png"), 32, 32, 1, 1);
         }
-    }
-
-    private Animation getTemplateAnimation() {
-        return new Animation(Util.getAnimationFrames(sprite), ANIMATIONSPEED_NORMAL);
     }
 
     @Override
@@ -68,7 +72,7 @@ public class EntityExpression extends AnimatedEntity {
         if (animation.isStopped()) {
             animation.start();
         }
-        setPosition(Calculate.getCenter(target.x() + (target.sprite.width / 2), sprite.width), target.y() - 24);
+        setPosition(Calculate.getCenter(target.x + (target.width / 2), sprite.width), target.y - 24);
         super.tick();
     }
 

@@ -6,10 +6,13 @@ import net.egartley.beyondorigins.gamestates.InGameState;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * A collection of dialogues between characters
+ */
 public class DialogueExchange {
 
-    public int characterDialogueIndex = -1;
     public boolean isFinished;
+    public int characterDialogueIndex = -1;
     public String[] allLines;
     public String[] queuedLines;
     public String[] displayedLines;
@@ -44,17 +47,15 @@ public class DialogueExchange {
     }
 
     public void advance() {
-        boolean advance = InGameState.dialogue.isReadyToAdvance;
-
-        isFinished = isCurrentDialogueFinished() && characterDialogueIndex + 1 == dialogues.size() && advance;
+        boolean isReadyToAdvance = InGameState.dialogue.isReadyToAdvance;
+        isFinished = isCurrentDialogueFinished() && characterDialogueIndex + 1 == dialogues.size() && isReadyToAdvance;
         if (isFinished) {
             return;
         }
-
-        if (isCurrentDialogueFinished() && advance) {
+        if (isCurrentDialogueFinished() && isReadyToAdvance) {
             nextDialogue();
             InGameState.dialogue.delay();
-        } else if (advance) {
+        } else if (isReadyToAdvance) {
             nextLine();
         }
     }

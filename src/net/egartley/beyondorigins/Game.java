@@ -15,9 +15,6 @@ import org.newdawn.slick.command.InputProvider;
 import org.newdawn.slick.command.InputProviderListener;
 import org.newdawn.slick.state.StateBasedGame;
 
-/**
- * The "main" class, mostly for interacting with the Slick2D library
- */
 public class Game extends StateBasedGame implements InputProviderListener {
 
     // TODO: Look into http://slick.ninjacave.com/wiki/index.php?title=Deferred_Resource_Loading
@@ -34,9 +31,9 @@ public class Game extends StateBasedGame implements InputProviderListener {
     // TODO: Change dialogue finished events management
 
     public static boolean debug = true;
-    public static Input input;
     public static final int WINDOW_WIDTH = 959;
     public static final int WINDOW_HEIGHT = 543;
+    public static Input input;
 
     public Game() {
         super("Beyond Origins");
@@ -55,6 +52,10 @@ public class Game extends StateBasedGame implements InputProviderListener {
         }
     }
 
+    public static void quit() {
+        System.exit(0);
+    }
+
     @Override
     public void initStatesList(GameContainer container) throws SlickException {
         input = container.getInput();
@@ -64,10 +65,6 @@ public class Game extends StateBasedGame implements InputProviderListener {
         this.addState(new MainMenuState());
     }
 
-    public static void quit() {
-        System.exit(0);
-    }
-
     @Override
     public void mousePressed(int button, int x, int y) {
     }
@@ -75,7 +72,7 @@ public class Game extends StateBasedGame implements InputProviderListener {
     @Override
     public void mouseReleased(int button, int x, int y) {
         Mouse.isDragging = false;
-        MouseController.onMouseClick(button, x, y);
+        MouseController.onMouseClick(x, y);
     }
 
     @Override

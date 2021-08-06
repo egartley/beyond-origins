@@ -3,11 +3,11 @@ package net.egartley.beyondorigins.entities;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.core.abstracts.AnimatedEntity;
+import net.egartley.beyondorigins.core.enums.Direction;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
 import net.egartley.beyondorigins.core.interfaces.Damageable;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
-import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.core.threads.DelayedEvent;
 import net.egartley.beyondorigins.data.Images;
@@ -21,20 +21,20 @@ import org.newdawn.slick.Animation;
 public class Monster extends AnimatedEntity implements Damageable {
 
     private boolean isHurt;
-    private DelayedEvent hurtEvent = null;
     private final int ANIMATION_THRESHOLD = 200;
     private final byte LEFT_HURT_ANIMATION = 3;
     private final byte RIGHT_HURT_ANIMATION = 2;
     private final byte LEFT_NORMAL_ANIMATION = 1;
     private final byte RIGHT_NORMAL_ANIMATION = 0;
+    private DelayedEvent hurtEvent = null;
 
     public Monster() {
-        super("Monster", new SpriteSheet(Images.get(Images.MONSTER), 36, 58, 4, 3));
+        super("Monster", new SpriteSheet(Images.getImage(Images.MONSTER), 36, 58, 4, 3));
         isSectorSpecific = true;
         isDualRendered = false;
         speed = 0.7;
         health = 35;
-        maximumHealth = health;
+        maxHealth = health;
     }
 
     @Override
@@ -42,8 +42,8 @@ public class Monster extends AnimatedEntity implements Damageable {
         onColdDeath();
         InGameState.map.sector.removeEntity(this);
         if (InGameState.map instanceof TestBattleMap) {
-            ((TestBattleMap) (InGameState.map)).spawnMonster(this.x() + Util.randomInt(-25, 25), this.y() + Util.randomInt(50, 75));
-            ((TestBattleMap) (InGameState.map)).spawnMonster(this.x() + Util.randomInt(-25, 25), this.y() - Util.randomInt(50, 75));
+            ((TestBattleMap) (InGameState.map)).spawnMonster(this.x + Util.randomInt(-25, 25), this.y + Util.randomInt(50, 75));
+            ((TestBattleMap) (InGameState.map)).spawnMonster(this.x + Util.randomInt(-25, 25), this.y - Util.randomInt(50, 75));
         }
     }
 
@@ -87,21 +87,21 @@ public class Monster extends AnimatedEntity implements Damageable {
             isMovingRightwards = true;
             animation = animations.get(RIGHT_NORMAL_ANIMATION);
         }
-        if (isMovingRightwards && x() > Game.WINDOW_WIDTH - 75) {
+        if (isMovingRightwards && x > Game.WINDOW_WIDTH - 75) {
             animation.stop();
             animation = isHurt ? animations.get(LEFT_NORMAL_ANIMATION) : animations.get(LEFT_HURT_ANIMATION);
             isMovingRightwards = false;
             isMovingLeftwards = true;
-        } else if (isMovingLeftwards && x() < 30) {
+        } else if (isMovingLeftwards && x < 30) {
             animation.stop();
             animation = isHurt ? animations.get(RIGHT_HURT_ANIMATION) : animations.get(RIGHT_HURT_ANIMATION);
             isMovingLeftwards = false;
             isMovingRightwards = true;
         }
         if (isMovingRightwards) {
-            move(DIRECTION_RIGHT);
+            move(Direction.RIGHT);
         } else if (isMovingLeftwards) {
-            move(DIRECTION_LEFT);
+            move(Direction.LEFT);
         }
         if (isHurt && (animations.indexOf(animation) == RIGHT_NORMAL_ANIMATION || animations.indexOf(animation) == LEFT_NORMAL_ANIMATION)) {
             int oldFrameIndex = animation.getFrame();
@@ -142,8 +142,8 @@ public class Monster extends AnimatedEntity implements Damageable {
     @Override
     public void heal(int amount) {
         health += amount;
-        if (health > maximumHealth) {
-            health = maximumHealth;
+        if (health > maxHealth) {
+            health = maxHealth;
         }
     }
 

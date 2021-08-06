@@ -30,28 +30,28 @@ public class EntityInventory {
 
     }
 
-    public void set(ItemStack stack, int index) {
+    public void setStackAt(ItemStack stack, int index) {
         slots.set(index, stack);
         onUpdate();
     }
 
-    public int amountOf(GameItem item) {
+    public int getAmount(GameItem item) {
         int amount = 0;
         for (int i = 0; i < slots.size(); i++) {
-            if (isEmpty(i)) {
+            if (isSlotEmpty(i)) {
                 continue;
             }
             ItemStack stack = slots.get(i);
             if (stack.item.is(item)) {
-                amount += stack.amount;
+                amount += stack.quantity;
             }
         }
         return amount;
     }
 
-    public int nextEmptySlot() {
+    public int getNextEmptySlotIndex() {
         for (int i = 0; i < slots.size(); i++) {
-            if (isEmpty(i)) {
+            if (isSlotEmpty(i)) {
                 return i;
             }
         }
@@ -59,13 +59,13 @@ public class EntityInventory {
         return -1;
     }
 
-    public int firstAvailableSlotFor(GameItem item) {
+    public int getNextAvailableSlotIndex(GameItem item) {
         if (isEmpty()) {
             return 0;
         }
         // first check for filled slots with the same item
         for (int i = 0; i < slots.size(); i++) {
-            if (isEmpty(i)) {
+            if (isSlotEmpty(i)) {
                 continue;
             }
             ItemStack stack = slots.get(i);
@@ -76,23 +76,23 @@ public class EntityInventory {
                 return i;
             }
         }
-        return nextEmptySlot();
+        return getNextEmptySlotIndex();
     }
 
     public boolean isFull() {
-        return nextEmptySlot() == -1;
+        return getNextEmptySlotIndex() == -1;
     }
 
     public boolean isEmpty() {
         for (int i = 0; i < slots.size(); i++) {
-            if (!isEmpty(i)) {
+            if (!isSlotEmpty(i)) {
                 return false;
             }
         }
         return true;
     }
 
-    public boolean isEmpty(int index) {
+    public boolean isSlotEmpty(int index) {
         if (index >= 0 && index < slots.size()) {
             return slots.get(index) == null;
         } else {
@@ -101,59 +101,59 @@ public class EntityInventory {
         }
     }
 
-    public boolean put(GameItem item) {
-        return put(new ItemStack(item));
-    }
-
-    public boolean put(ItemStack stack) {
-        return put(stack.item, stack.amount);
-    }
-
-    public boolean put(GameItem item, int amount) {
-        int index = firstAvailableSlotFor(item);
+    public boolean putItem(GameItem item, int amount) {
+        int index = getNextAvailableSlotIndex(item);
         if (index == -1) {
             // there's no where to put the item(s)
             Debug.out("Couldn't find anywhere to put " + amount + " of " + item);
             return false;
         }
-        if (isEmpty(index)) {
-            return put(item, amount, index);
+        if (isSlotEmpty(index)) {
+            return putItem(item, amount, index);
         } else {
             ItemStack mergeStack = getStack(index);
-            int mergeAmount = mergeStack.amount;
+            int mergeAmount = mergeStack.quantity;
             boolean overflow = mergeAmount + amount > ItemStack.MAX_AMOUNT;
             if (!overflow) {
                 mergeStack.add(amount);
-                set(mergeStack, index);
+                setStackAt(mergeStack, index);
                 return true;
             } else {
                 int diff = ItemStack.MAX_AMOUNT - mergeAmount;
                 mergeStack.add(diff);
-                set(mergeStack, index);
+                setStackAt(mergeStack, index);
                 amount -= diff;
-                return put(item, amount);
+                return putItem(item, amount);
             }
         }
     }
 
-    private boolean put(GameItem item, int amount, int slotIndex) {
-        set(new ItemStack(item, amount), slotIndex);
+    public boolean putItem(GameItem item) {
+        return putStack(new ItemStack(item));
+    }
+
+    private boolean putItem(GameItem item, int amount, int slotIndex) {
+        setStackAt(new ItemStack(item, amount), slotIndex);
         return true;
     }
 
-    public boolean remove(GameItem item) {
-        return remove(item, 1);
+    public boolean putStack(ItemStack stack) {
+        return putItem(stack.item, stack.quantity);
     }
 
-    public boolean remove(GameItem item, int amount) {
+    public boolean removeItem(GameItem item) {
+        return removeItem(item, 1);
+    }
+
+    public boolean removeItem(GameItem item, int amount) {
         // first find the smallest stack
         int smallestIndex = -1, smallestAmount = ItemStack.MAX_AMOUNT + 1;
         for (int i = 0; i < slots.size(); i++) {
-            if (!isEmpty(i)) {
+            if (!isSlotEmpty(i)) {
                 ItemStack stack = getStack(i);
                 if (stack.item.is(item)) {
-                    if (stack.amount < smallestAmount) {
-                        smallestAmount = stack.amount;
+                    if (stack.quantity < smallestAmount) {
+                        smallestAmount = stack.quantity;
                         smallestIndex = i;
                     }
                 }
@@ -166,25 +166,25 @@ public class EntityInventory {
             // easy, just take away the amount and that's it
             ItemStack stack = getStack(smallestIndex);
             stack.take(amount);
-            set(stack, smallestIndex);
+            setStackAt(stack, smallestIndex);
         } else {
             // remove the stack, and call remove again with the remaining amount
-            set(null, smallestIndex);
-            return remove(item, amount - smallestAmount);
+            setStackAt(null, smallestIndex);
+            return removeItem(item, amount - smallestAmount);
         }
         return false;
     }
 
-    public boolean contains(GameItem item) {
-        return contains(item, 1);
+    public boolean containsItem(GameItem item) {
+        return containsItems(item, 1);
     }
 
-    public boolean contains(GameItem item, int amount) {
-        return contains(item, amount, false);
+    public boolean containsItems(GameItem item, int amount) {
+        return getAmount(item) >= amount;
     }
 
-    public boolean contains(GameItem item, int amount, boolean exact) {
-        return exact ? amountOf(item) == amount : amountOf(item) >= amount;
+    public boolean containsItemsExact(GameItem item, int amount) {
+        return getAmount(item) == amount;
     }
 
     public ItemStack getStack(int index) {

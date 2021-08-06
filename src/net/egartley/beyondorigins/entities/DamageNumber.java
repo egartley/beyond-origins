@@ -2,30 +2,32 @@ package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.core.abstracts.Entity;
+import net.egartley.beyondorigins.core.abstracts.VisibleEntity;
+import net.egartley.beyondorigins.core.enums.Direction;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.TrueTypeFont;
 
-public class DamageNumber extends Entity {
+/**
+ * A small number that briefly appears indicating the amount of damage dealt
+ */
+public class DamageNumber extends VisibleEntity {
 
     private final int amount;
     private final int initalY;
     private final int FLOAT_DISTANCE = 26;
-
     private final Color TEXT_COLOR = Color.yellow;
     private final Font FONT = new TrueTypeFont(new java.awt.Font("Consolas", java.awt.Font.PLAIN, 10), true);
 
     public DamageNumber(int amount, Entity damaged) {
         super("Damage");
-        setPosition(damaged.x() + Util.randomInt(2, damaged.sprite.width - 2), damaged.y());
-        setBoundaries();
+        this.amount = amount;
         isSectorSpecific = true;
         speed = 0.8;
-
-        this.amount = amount;
-        initalY = y();
+        setPosition(damaged.x + Util.randomInt(2, damaged.width - 2), damaged.y);
+        initalY = y;
     }
 
     private void destroy() {
@@ -34,8 +36,8 @@ public class DamageNumber extends Entity {
 
     @Override
     public void tick() {
-        move(DIRECTION_UP);
-        if (y() <= initalY - FLOAT_DISTANCE) {
+        move(Direction.UP);
+        if (y <= initalY - FLOAT_DISTANCE) {
             destroy();
         }
     }
@@ -44,7 +46,7 @@ public class DamageNumber extends Entity {
     public void render(Graphics graphics) {
         graphics.setColor(TEXT_COLOR);
         graphics.setFont(FONT);
-        graphics.drawString(String.valueOf(amount), x(), y());
+        graphics.drawString(String.valueOf(amount), x, y);
     }
 
     @Override

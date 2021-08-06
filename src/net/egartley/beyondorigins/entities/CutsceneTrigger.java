@@ -5,7 +5,6 @@ import net.egartley.beyondorigins.core.abstracts.Entity;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
-import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 
 /**
@@ -16,10 +15,12 @@ public class CutsceneTrigger extends Entity {
     public Cutscene cutscene;
 
     public CutsceneTrigger(Cutscene cutscene, int x, int y) {
-        super("Cutscene", Entities.getSpriteTemplate(Entities.TEMPLATE_CT));
-        setPosition(x, y);
-        isSectorSpecific = true;
+        super("Cutscene", 32, 32);
         this.cutscene = cutscene;
+        isSectorSpecific = true;
+        setPosition(x, y);
+        setBoundaries();
+        setCollisions();
     }
 
     @Override

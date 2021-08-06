@@ -1,6 +1,6 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.beyondorigins.core.abstracts.Entity;
+import net.egartley.beyondorigins.core.abstracts.VisibleEntity;
 import net.egartley.beyondorigins.core.graphics.Sprite;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
@@ -8,7 +8,7 @@ import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 /**
  * Rock that the player cannot walk over, but can walk behind
  */
-public class DefaultRock extends Entity {
+public class DefaultRock extends VisibleEntity {
 
     public DefaultRock(Sprite sprite, int x, int y) {
         super("Rock", sprite);

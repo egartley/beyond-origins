@@ -3,14 +3,20 @@ package net.egartley.beyondorigins.core.ui;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.core.controllers.MouseController;
 import net.egartley.beyondorigins.core.input.Mouse;
-import net.egartley.beyondorigins.core.input.MouseClicked;
+import net.egartley.beyondorigins.core.input.MouseClickedEvent;
 
+/**
+ * An area on the screen that reacts to mouse interaction
+ */
 public class ClickableArea {
 
     private boolean didHover = false;
-    private final MouseClicked clicked;
+    private final MouseClickedEvent clickedEvent;
 
-    public int x, y, width, height;
+    public int x;
+    public int y;
+    public int width;
+    public int height;
     public boolean isCursorInBounds = false;
 
     public ClickableArea(int x, int y, int width, int height) {
@@ -19,9 +25,9 @@ public class ClickableArea {
         this.width = width;
         this.height = height;
         ClickableArea me = this;
-        clicked = new MouseClicked() {
+        clickedEvent = new MouseClickedEvent() {
             @Override
-            public void onClick(int button, int x, int y) {
+            public void onClick(int x, int y) {
                 me.checkClick();
             }
         };
@@ -34,20 +40,26 @@ public class ClickableArea {
         }
     }
 
+    /**
+     * The mouse was clicked when the cursor was in the area
+     */
     public void onClick() {
 
     }
 
+    /**
+     * The cursor is in the area (cursor entered, called again if left and came back)
+     */
     public void onHover() {
 
     }
 
     public void removeClicked() {
-        MouseController.removeMouseClicked(clicked);
+        MouseController.removeMouseClicked(clickedEvent);
     }
 
     public void registerClicked() {
-        MouseController.addMouseClicked(clicked);
+        MouseController.addMouseClicked(clickedEvent);
     }
 
     public void tick() {

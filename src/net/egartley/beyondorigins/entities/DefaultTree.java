@@ -1,6 +1,6 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.beyondorigins.core.abstracts.Entity;
+import net.egartley.beyondorigins.core.abstracts.VisibleEntity;
 import net.egartley.beyondorigins.core.graphics.Sprite;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
@@ -8,7 +8,7 @@ import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 /**
  * Basic tree that the player can walk under, but not over
  */
-public class DefaultTree extends Entity {
+public class DefaultTree extends VisibleEntity {
 
     public DefaultTree(Sprite sprite, int x, int y) {
         super("Tree", sprite);

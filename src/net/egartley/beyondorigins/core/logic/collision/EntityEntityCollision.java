@@ -9,11 +9,11 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * A collision between two different entities (specifically their specified boundaries)
+ * A collision between two different entities
  */
 public class EntityEntityCollision {
 
-    private boolean firedEvent;
+    private boolean didFireEvent;
     private final Rectangle[] rectangles;
 
     public boolean isCollided;
@@ -34,7 +34,7 @@ public class EntityEntityCollision {
     }
 
     public void tick() {
-        if (!isActive || !entities[0].canCollide || !entities[1].canCollide) {
+        if (!isActive || !entities[0].isAbleToCollide || !entities[1].isAbleToCollide) {
             return;
         }
         rectangles[0].x = boundaries[0].x - 1;
@@ -43,30 +43,20 @@ public class EntityEntityCollision {
         rectangles[1].y = boundaries[1].y - 1;
         // the magic happens right here!!
         isCollided = rectangles[0].intersects(rectangles[1]);
-        if (isCollided && !firedEvent) {
+        if (isCollided && !didFireEvent) {
             lastEvent = new EntityEntityCollisionEvent(this);
-            onCollide();
+            onCollision();
             start(lastEvent);
-            firedEvent = true;
+            didFireEvent = true;
         }
-        if (!isCollided && firedEvent) {
+        if (!isCollided && didFireEvent) {
             onCollisionEnd();
             end(lastEvent);
-            firedEvent = false;
+            didFireEvent = false;
         }
     }
 
-    /**
-     * This is called <em>once</em> after the collision occurs
-     */
     public void start(EntityEntityCollisionEvent event) {
-
-    }
-
-    /**
-     * This is called <em>once</em> after the collision ends
-     */
-    public void end(EntityEntityCollisionEvent event) {
 
     }
 
@@ -78,29 +68,22 @@ public class EntityEntityCollision {
         isCollided = false;
         onCollisionEnd();
         end(lastEvent);
-        firedEvent = false;
+        didFireEvent = false;
     }
 
-    /**
-     * Sets or updates the colors for both boundaries
-     */
-    private void setBoundaryColors() {
-        determineBoundaryColors(entities[0].boundaries);
-        determineBoundaryColors(entities[1].boundaries);
-    }
+    public void end(EntityEntityCollisionEvent event) {
 
-    private void determineBoundaryColors(ArrayList<EntityBoundary> boundaries) {
-        boundaries.forEach(this::determineBoundaryColor);
     }
 
     private void determineBoundaryColor(EntityBoundary boundary) {
         boundary.drawColor = boundary.isCollided ? Color.red : Color.orange;
     }
 
-    /**
-     * Called right before {@link #start(EntityEntityCollisionEvent)}
-     */
-    private void onCollide() {
+    private void determineBoundaryColors(ArrayList<EntityBoundary> boundaries) {
+        boundaries.forEach(this::determineBoundaryColor);
+    }
+
+    private void onCollision() {
         for (Entity e : entities) {
             e.lastCollision = this;
             e.isCollided = true;
@@ -111,21 +94,18 @@ public class EntityEntityCollision {
         setBoundaryColors();
     }
 
-    /**
-     * Called right before {@link #end(EntityEntityCollisionEvent)}
-     */
     private void onCollisionEnd() {
         for (EntityBoundary boundary : boundaries) {
-            ArrayList<EntityEntityCollision> concurrent = Collisions.concurrent(boundary.entity);
+            ArrayList<EntityEntityCollision> concurrent = Collisions.getConcurrentWith(boundary.entity);
             if (concurrent.size() == 0) {
                 boundary.isCollided = false;
                 continue;
             }
-            for (EntityEntityCollision collision : concurrent) {
-                if (collision.isCollided) {
+            for (EntityEntityCollision c : concurrent) {
+                if (c.isCollided) {
                     // one of the entities has another collided collision (not this)
                     // check to see if either of the collided collision's boundaries are of this boundaries
-                    boundary.isCollided = collision.boundaries[0] == boundary || collision.boundaries[1] == boundary;
+                    boundary.isCollided = c.boundaries[0] == boundary || c.boundaries[1] == boundary;
                     // break because boundary has at least one other collided collision, move on to other one
                     if (boundary.isCollided) {
                         break;
@@ -134,17 +114,21 @@ public class EntityEntityCollision {
                 boundary.isCollided = false;
             }
         }
-        for (Entity entity : entities) {
-            for (EntityBoundary boundary : entity.boundaries) {
-                if (boundary.isCollided) {
-                    // at least one boundary is collided
-                    entity.isCollided = true;
+        for (Entity e : entities) {
+            for (EntityBoundary b : e.boundaries) {
+                if (b.isCollided) {
+                    e.isCollided = true;
                     break;
                 }
-                entity.isCollided = false;
+                e.isCollided = false;
             }
         }
         setBoundaryColors();
+    }
+
+    private void setBoundaryColors() {
+        determineBoundaryColors(entities[0].boundaries);
+        determineBoundaryColors(entities[1].boundaries);
     }
 
     @Override

@@ -6,6 +6,9 @@ import net.egartley.beyondorigins.core.abstracts.MapSector;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.gamestates.InGameState;
 
+/**
+ * Test cutscene
+ */
 public class TestScene extends Cutscene {
 
     public TestScene(Map parent) {

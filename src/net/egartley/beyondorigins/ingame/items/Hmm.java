@@ -6,7 +6,7 @@ import net.egartley.beyondorigins.data.Images;
 public class Hmm extends GameItem {
 
     public Hmm() {
-        super("hmm", "Hmm", Images.get("resources/images/items/hmm.png"));
+        super("hmm", "Hmm", Images.getImageFromPath("resources/images/items/hmm.png"));
     }
 
 }

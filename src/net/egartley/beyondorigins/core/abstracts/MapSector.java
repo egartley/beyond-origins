@@ -3,6 +3,7 @@ package net.egartley.beyondorigins.core.abstracts;
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
+import net.egartley.beyondorigins.core.enums.Direction;
 import net.egartley.beyondorigins.core.graphics.MapTile;
 import net.egartley.beyondorigins.core.interfaces.Damageable;
 import net.egartley.beyondorigins.core.interfaces.Tickable;
@@ -21,11 +22,10 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.HashMap;
 
 /**
  * Specific part, or area, of a map that fills the entire window
- *
- * @see Map
  */
 public abstract class MapSector extends Renderable implements Tickable {
 
@@ -35,7 +35,7 @@ public abstract class MapSector extends Renderable implements Tickable {
     private final short TILE_SIZE = 32;
     private final short BOUNDARY_SIZE = 18;
     private final short PLAYER_ENTRANCE_OFFSET = BOUNDARY_SIZE + 4;
-    private final ArrayList<MapSector> neighbors = new ArrayList<>(MAX_NEIGHBORS);
+    private final HashMap<Direction, MapSector> neighbors = new HashMap<>();
     private final ArrayList<MapSectorChangeCollision> changeCollisions = new ArrayList<>();
 
     protected Map parent;
@@ -43,66 +43,27 @@ public abstract class MapSector extends Renderable implements Tickable {
     protected ArrayList<MapSectorChangeBoundary> changeBoundaries = new ArrayList<>();
 
     public int number;
-    public static final byte TOP = 0;
-    public static final byte RIGHT = 1;
-    public static final byte BOTTOM = 2;
-    public static final byte LEFT = 3;
     public static final short TILE_ROWS = 17;
     public static final short TILE_COLUMNS = 30;
     public ArrayList<Entity> entities = new ArrayList<>();
+    public ArrayList<Tickable> tickables = new ArrayList<>();
     public ArrayList<Entity> primaryEntities = new ArrayList<>();
     public ArrayList<Renderable> renderables = new ArrayList<>();
-    public ArrayList<Tickable> tickables = new ArrayList<>();
 
-
-    /**
-     * Creates a new map sector, then calls {@link #buildTiles()}
-     */
     public MapSector(Map parent, int number) {
         this.parent = parent;
         this.number = number;
-        for (byte i = 0; i < MAX_NEIGHBORS; i++) {
-            neighbors.add(null);
-        }
         buildTiles();
     }
 
     public abstract void init();
 
-    /**
-     * Minimum requirement for rendering, must be called first in any implementation
-     */
-    @Override
-    public void render(Graphics graphics) {
-        drawTiles(graphics);
-        try {
-            for (Entity e : entities) {
-                if (e.isDualRendered) {
-                    e.drawFirstLayer(graphics);
-                }
-            }
-            primaryEntities.forEach(r -> r.render(graphics));
-            for (Entity e : entities) {
-                if (e.isDualRendered) {
-                    e.drawSecondLayer(graphics);
-                } else {
-                    e.render(graphics);
-                }
-            }
-            if (Game.debug) {
-                changeBoundaries.forEach(boundary -> boundary.render(graphics));
-            }
-            renderables.forEach(r -> r.render(graphics));
-        } catch (Exception e) {
-            Debug.error(e);
-        }
-    }
+    public abstract void setSpecialCollisions();
 
-    /**
-     * Renders all of the sector's tiles
-     *
-     * @param graphics The graphics to use
-     */
+    public abstract void onPlayerEnter(MapSector from);
+
+    public abstract void onPlayerLeave(MapSector to);
+
     protected void drawTiles(Graphics graphics) {
         deltaX = 0;
         deltaY = 0;
@@ -116,13 +77,10 @@ public abstract class MapSector extends Renderable implements Tickable {
         }
     }
 
-    /**
-     * Populate {@link #tiles} with {@link MapTile} objects, defined in the sector's .def file
-     */
     private void buildTiles() {
         String entireJSONString = null;
         try {
-            entireJSONString = Files.readString(FileSystems.getDefault().getPath("resources", "data", "maps", parent.id, "sector-" + number + ".def"));
+            entireJSONString = Files.readString(FileSystems.getDefault().getPath("resources", "data", "maps", parent.name, "sector-" + number + ".def"));
         } catch (IOException e) {
             Debug.error(e);
         }
@@ -179,7 +137,7 @@ public abstract class MapSector extends Renderable implements Tickable {
     }
 
     private void fill(String id) {
-        Image image = Images.get(Images.mapTilePath + id + ".png");
+        Image image = Images.getImageFromPath(Images.mapTilePath + id + ".png");
         for (int r = 0; r < TILE_ROWS; r++) {
             ArrayList<MapTile> column = new ArrayList<>();
             for (int c = 0; c < TILE_COLUMNS; c++) {
@@ -195,26 +153,11 @@ public abstract class MapSector extends Renderable implements Tickable {
             int c = o.getInt("c");
             int r = o.getInt("r");
             String id = tileIDs.get(tileKeys.indexOf(o.getString("key")));
-            Image image = Images.get(Images.mapTilePath + id + ".png");
+            Image image = Images.getImageFromPath(Images.mapTilePath + id + ".png");
             if (o.has("rotate")) {
                 image.rotate(o.getInt("rotate"));
             }
             tiles.get(r).set(c, new MapTile(id, image));
-        }
-    }
-
-    /**
-     * Minimum requirement for each tick, must be called first in any implementation
-     */
-    @Override
-    public void tick() {
-        try {
-            tickables.forEach(Tickable::tick);
-            changeCollisions.forEach(MapSectorChangeCollision::tick);
-        } catch (ConcurrentModificationException cme) {
-            // ignore for now
-        } catch (Exception e) {
-            Debug.error(e);
         }
     }
 
@@ -231,42 +174,15 @@ public abstract class MapSector extends Renderable implements Tickable {
         Collisions.nuke();
     }
 
-    /**
-     * Set sector-specific, or "special" collisions, such as ones that have to do with a quest
-     */
-    public abstract void setSpecialCollisions();
-
-    public abstract void onPlayerEnter(MapSector from);
-
-    public abstract void onPlayerLeave(MapSector to);
-
-    /**
-     * Updates the player's position in accordance with the sector they just came from
-     *
-     * @param from Where the player is coming from
-     */
     protected void updatePlayerPosition(MapSector from) {
-        playerEnteredFrom(neighbors.indexOf(from));
-    }
-
-    /**
-     * Update, or "correct", the player's position based on what direction it came from
-     *
-     * @param direction The direction from where the player came into this sector
-     * @see #TOP
-     * @see #BOTTOM
-     * @see #LEFT
-     * @see #RIGHT
-     */
-    private void playerEnteredFrom(int direction) {
-        switch (direction) {
-            case TOP:
+        switch (getNeighborDirection(from)) {
+            case UP:
                 Entities.PLAYER.y(PLAYER_ENTRANCE_OFFSET);
                 break;
             case LEFT:
                 Entities.PLAYER.x(PLAYER_ENTRANCE_OFFSET);
                 break;
-            case BOTTOM:
+            case DOWN:
                 Entities.PLAYER.y(Game.WINDOW_HEIGHT - PLAYER_ENTRANCE_OFFSET - Entities.PLAYER.sprite.height);
                 break;
             case RIGHT:
@@ -295,8 +211,8 @@ public abstract class MapSector extends Renderable implements Tickable {
     }
 
     public void removeEntity(Entity e, boolean primary) {
-        Collisions.endWith(e);
-        Collisions.removeWith(e);
+        Collisions.endAllWith(e);
+        Collisions.removeAllWith(e);
         if (e instanceof Damageable && !primary) {
             ((Damageable) (e)).onColdDeath();
         }
@@ -324,40 +240,34 @@ public abstract class MapSector extends Renderable implements Tickable {
         renderables.remove(renderable);
     }
 
-    /**
-     * Sets a neighboring sector in the direction, as well as reciprocating it
-     *
-     * @param neighbor  The sector to set as a neighbor
-     * @param direction {@link #TOP}, {@link #LEFT}, {@link #BOTTOM}, or {@link #RIGHT}
-     */
-    public void setNeighborAt(MapSector neighbor, byte direction) {
+    public void setNeighborAt(MapSector neighbor, Direction direction) {
         setNeighborAt(neighbor, direction, false);
     }
 
-    private void setNeighborAt(MapSector neighbor, byte direction, boolean didSetInverse) {
+    private void setNeighborAt(MapSector neighbor, Direction direction, boolean didSetInverse) {
         MapSectorChangeBoundary changeBoundary = null;
         switch (direction) {
-            case TOP:
+            case UP:
                 if (!didSetInverse) {
-                    neighbor.setNeighborAt(this, BOTTOM, true);
+                    neighbor.setNeighborAt(this, Direction.DOWN, true);
                 }
                 changeBoundary = new MapSectorChangeBoundary(0, 0, Game.WINDOW_WIDTH - 1, BOUNDARY_SIZE, neighbor);
                 break;
             case RIGHT:
                 if (!didSetInverse) {
-                    neighbor.setNeighborAt(this, LEFT, true);
+                    neighbor.setNeighborAt(this, Direction.LEFT, true);
                 }
                 changeBoundary = new MapSectorChangeBoundary(Game.WINDOW_WIDTH - BOUNDARY_SIZE - 1, 0, BOUNDARY_SIZE, Game.WINDOW_HEIGHT - 1, neighbor);
                 break;
-            case BOTTOM:
+            case DOWN:
                 if (!didSetInverse) {
-                    neighbor.setNeighborAt(this, TOP, true);
+                    neighbor.setNeighborAt(this, Direction.UP, true);
                 }
                 changeBoundary = new MapSectorChangeBoundary(0, Game.WINDOW_HEIGHT - BOUNDARY_SIZE - 1, Game.WINDOW_WIDTH - 1, BOUNDARY_SIZE, neighbor);
                 break;
             case LEFT:
                 if (!didSetInverse) {
-                    neighbor.setNeighborAt(this, RIGHT, true);
+                    neighbor.setNeighborAt(this, Direction.RIGHT, true);
                 }
                 changeBoundary = new MapSectorChangeBoundary(0, 0, BOUNDARY_SIZE, Game.WINDOW_HEIGHT - 1, neighbor);
                 break;
@@ -367,17 +277,67 @@ public abstract class MapSector extends Renderable implements Tickable {
         }
         if (changeBoundary != null) {
             changeBoundaries.add(changeBoundary);
-            changeCollisions.add(new MapSectorChangeCollision(changeBoundary, Entities.PLAYER.boundary, changeBoundary.to, this, parent));
+            changeCollisions.add(new MapSectorChangeCollision(changeBoundary, Entities.PLAYER.boundary, changeBoundary.goingTo, this, parent));
         } else {
             Debug.warning("Could not set a neighbor (\"" + neighbor + "\") for \"" + this + "\"!");
         }
-        neighbors.set(direction, neighbor);
+        neighbors.put(direction, neighbor);
     }
 
-    /**
-     * @return parent, sector index
-     * @see #parent
-     */
+    @Override
+    public void render(Graphics graphics) {
+        drawTiles(graphics);
+        try {
+            for (Entity e : entities) {
+                if (e instanceof VisibleEntity) {
+                    VisibleEntity ve = (VisibleEntity) e;
+                    if (ve.isDualRendered) {
+                        ve.drawFirstLayer(graphics);
+                    }
+                }
+            }
+            primaryEntities.forEach(r -> r.render(graphics));
+            for (Entity e : entities) {
+                if (e instanceof VisibleEntity) {
+                    VisibleEntity ve = (VisibleEntity) e;
+                    if (ve.isDualRendered) {
+                        ve.drawSecondLayer(graphics);
+                    } else {
+                        e.render(graphics);
+                    }
+                }
+            }
+            if (Game.debug) {
+                changeBoundaries.forEach(boundary -> boundary.render(graphics));
+            }
+            renderables.forEach(r -> r.render(graphics));
+        } catch (Exception e) {
+            Debug.error(e);
+        }
+    }
+
+    @Override
+    public void tick() {
+        try {
+            tickables.forEach(Tickable::tick);
+            changeCollisions.forEach(MapSectorChangeCollision::tick);
+        } catch (ConcurrentModificationException e) {
+            // ignore
+        } catch (Exception e) {
+            Debug.error(e);
+        }
+    }
+
+    private Direction getNeighborDirection(MapSector neighbor) {
+        for (java.util.Map.Entry<Direction, MapSector> entry : neighbors.entrySet()) {
+            if (entry.getValue() == neighbor) {
+                return entry.getKey();
+            }
+        }
+        Debug.warning("Unable to get the direction for neighbor \"" + neighbor + "\" of \"" + this + "\"!");
+        return Direction.DOWN;
+    }
+
     public String toString() {
         return parent.toString() + ", Sector " + (parent.sectors.indexOf(this) + 1);
     }

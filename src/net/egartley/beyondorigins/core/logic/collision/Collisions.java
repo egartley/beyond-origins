@@ -5,6 +5,9 @@ import net.egartley.beyondorigins.core.abstracts.Entity;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
+/**
+ * A collection of all the collisions that can be checked (may not be active)
+ */
 public class Collisions {
 
     private static final ArrayList<EntityEntityCollision> collisions = new ArrayList<>();
@@ -19,7 +22,7 @@ public class Collisions {
         collisions.remove(collision);
     }
 
-    public static void removeWith(Entity entity) {
+    public static void removeAllWith(Entity entity) {
         ArrayList<EntityEntityCollision> toRemove = new ArrayList<>();
         for (EntityEntityCollision c : collisions) {
             if (c.entities[0].equals(entity) || c.entities[1].equals(entity)) {
@@ -31,7 +34,7 @@ public class Collisions {
         }
     }
 
-    public static void endWith(Entity entity) {
+    public static void endAllWith(Entity entity) {
         ArrayList<EntityEntityCollision> end = new ArrayList<>();
         for (EntityEntityCollision c : collisions) {
             if (c.entities[0].equals(entity) || c.entities[1].equals(entity)) {
@@ -43,33 +46,16 @@ public class Collisions {
         }
     }
 
-    public static void endRemove(EntityEntityCollision collision) {
+    public static void endAndRemove(EntityEntityCollision collision) {
         collision.end();
         remove(collision);
     }
 
-    public static ArrayList<EntityEntityCollision> with(Entity entity) {
-        ArrayList<EntityEntityCollision> with = new ArrayList<>();
+    public static void endAndNuke() {
         for (EntityEntityCollision c : collisions) {
-            if (c.entities[0].equals(entity) || c.entities[1].equals(entity)) {
-                with.add(c);
-            }
+            c.end();
         }
-        return with;
-    }
-
-    public static ArrayList<EntityEntityCollision> concurrent(Entity entity) {
-        ArrayList<EntityEntityCollision> concurrent = new ArrayList<>();
-        for (EntityEntityCollision c : collisions) {
-            if ((c.entities[0].equals(entity) || c.entities[1].equals(entity)) && c.isCollided) {
-                concurrent.add(c);
-            }
-        }
-        return concurrent;
-    }
-
-    public static ArrayList<EntityEntityCollision> all() {
-        return collisions;
+        nuke();
     }
 
     public static void nuke() {
@@ -86,8 +72,28 @@ public class Collisions {
         }
     }
 
-    public static int amount() {
+    public static int getAmount() {
         return collisions.size();
+    }
+
+    public static ArrayList<EntityEntityCollision> getAllWith(Entity entity) {
+        ArrayList<EntityEntityCollision> with = new ArrayList<>();
+        for (EntityEntityCollision c : collisions) {
+            if (c.entities[0].equals(entity) || c.entities[1].equals(entity)) {
+                with.add(c);
+            }
+        }
+        return with;
+    }
+
+    public static ArrayList<EntityEntityCollision> getConcurrentWith(Entity entity) {
+        ArrayList<EntityEntityCollision> concurrent = new ArrayList<>();
+        for (EntityEntityCollision c : collisions) {
+            if ((c.entities[0].equals(entity) || c.entities[1].equals(entity)) && c.isCollided) {
+                concurrent.add(c);
+            }
+        }
+        return concurrent;
     }
 
 }

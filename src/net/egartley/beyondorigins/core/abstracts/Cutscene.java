@@ -8,10 +8,10 @@ import org.newdawn.slick.Graphics;
 public abstract class Cutscene extends MapSector {
 
     private double transitionAlpha = 255;
-    private Color transitionColor = Color.black;
-    private MapSector returnSector;
-    private final int barHeight = 64;
+    private final int BAR_HEIGHT = 64;
     private final double TRANSITION_SPEED = 1.5;
+    private MapSector returnSector;
+    private Color transitionColor = Color.black;
 
     public boolean isShowingTransition;
 
@@ -43,8 +43,8 @@ public abstract class Cutscene extends MapSector {
             }
         }
         graphics.setColor(Color.black);
-        graphics.fillRect(0, 0, Game.WINDOW_WIDTH, barHeight);
-        graphics.fillRect(0, Game.WINDOW_HEIGHT - barHeight, Game.WINDOW_WIDTH, barHeight);
+        graphics.fillRect(0, 0, Game.WINDOW_WIDTH, BAR_HEIGHT);
+        graphics.fillRect(0, Game.WINDOW_HEIGHT - BAR_HEIGHT, Game.WINDOW_WIDTH, BAR_HEIGHT);
     }
 
     @Override

@@ -2,7 +2,7 @@ package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.core.abstracts.Entity;
+import net.egartley.beyondorigins.core.abstracts.VisibleEntity;
 import net.egartley.beyondorigins.core.graphics.Sprite;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
@@ -10,9 +10,9 @@ import net.egartley.beyondorigins.data.Images;
 import org.newdawn.slick.Image;
 
 /**
- * Testing dynamic creation of sprites/images
+ * Test for dynamic creation of sprites and their images
  */
-public class WoodenFence extends Entity {
+public class WoodenFence extends VisibleEntity {
 
     private final int length;
     private final boolean hasCorners;
@@ -24,7 +24,7 @@ public class WoodenFence extends Entity {
         }
         this.length = length;
         hasCorners = corners;
-        setSprite(buildSprite(), true);
+        setSprite(buildSprite());
         isTraversable = false;
         isDualRendered = true;
         isSectorSpecific = true;
@@ -34,9 +34,9 @@ public class WoodenFence extends Entity {
 
     private Sprite buildSprite() {
         Image build = null;
-        Image full = Images.get(Images.entityPath + "wooden-fence-full.png");
+        Image full = Images.getImageFromPath(Images.entityPath + "wooden-fence-full.png");
         if (hasCorners) {
-            build = Images.get(Images.entityPath + "wooden-fence-left-end.png");
+            build = Images.getImageFromPath(Images.entityPath + "wooden-fence-left-end.png");
         } else {
             build = full;
         }
@@ -50,7 +50,7 @@ public class WoodenFence extends Entity {
             }
         }
         if (hasCorners) {
-            build = Util.stitchImage(build, Images.get(Images.entityPath + "wooden-fence-right-end.png"));
+            build = Util.stitchImage(build, Images.getImageFromPath(Images.entityPath + "wooden-fence-right-end.png"));
         }
         return new Sprite(build);
     }

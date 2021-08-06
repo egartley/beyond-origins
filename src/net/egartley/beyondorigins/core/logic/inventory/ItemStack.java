@@ -4,39 +4,39 @@ import net.egartley.beyondorigins.core.abstracts.GameItem;
 
 public class ItemStack {
 
-    public int amount;
-    public GameItem item;
+    public int quantity;
     public static final int MAX_AMOUNT = 99;
+    public GameItem item;
 
     public ItemStack(GameItem item) {
         this(item, 1);
     }
 
-    public ItemStack(GameItem item, int amount) {
+    public ItemStack(GameItem item, int quantity) {
         this.item = item;
-        add(amount);
+        add(quantity);
     }
 
     public void add(int number) {
-        amount += number;
-        if (amount > MAX_AMOUNT) {
-            amount = MAX_AMOUNT;
+        quantity += number;
+        if (quantity > MAX_AMOUNT) {
+            quantity = MAX_AMOUNT;
         }
     }
 
     public void take(int number) {
-        amount -= number;
-        if (amount < 0) {
-            amount = 0;
+        quantity -= number;
+        if (quantity < 0) {
+            quantity = 0;
         }
     }
 
     public boolean isFull() {
-        return amount == MAX_AMOUNT;
+        return quantity == MAX_AMOUNT;
     }
 
     public String toString() {
-        return item.displayName + " (" + amount + ")";
+        return item.displayName + " (" + quantity + ")";
     }
 
 }

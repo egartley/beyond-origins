@@ -6,6 +6,6 @@ import net.egartley.beyondorigins.data.Images;
 public class WizardHat extends GameItem {
 
     public WizardHat() {
-        super("wizhat", "Wizard's Hat", Images.get("resources/images/items/wizard-hat.png"));
+        super("wizhat", "Wizard's Hat", Images.getImageFromPath("resources/images/items/wizard-hat.png"));
     }
 }

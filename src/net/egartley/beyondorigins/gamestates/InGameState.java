@@ -6,7 +6,6 @@ import net.egartley.beyondorigins.core.abstracts.Map;
 import net.egartley.beyondorigins.core.controllers.KeyboardController;
 import net.egartley.beyondorigins.core.input.KeyTyped;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
-import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.ui.DialoguePanel;
 import net.egartley.beyondorigins.core.ui.NotificationBanner;
 import net.egartley.beyondorigins.data.Items;
@@ -29,15 +28,15 @@ public class InGameState extends BasicGameState {
     private static final ArrayList<KeyTyped> keyTypeds = new ArrayList<>();
     private static final ArrayList<NotificationBanner> notifications = new ArrayList<>();
 
+    public static boolean canPlay = true;
+    public static boolean isDialogueVisible;
+    public static boolean isInventoryVisible;
+    public static final int ID = 1;
     public static Map map;
     public static Building building;
     public static PlayerMenu playerMenu;
     public static DialoguePanel dialogue;
     public static ArrayList<Map> maps = new ArrayList<>();
-    public static boolean canPlay = true;
-    public static boolean isDialogueVisible;
-    public static boolean isInventoryVisible;
-    public static final int ID = 1;
 
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
@@ -48,7 +47,7 @@ public class InGameState extends BasicGameState {
         maps.add(new TestBattleMap());
         playerMenu = new PlayerMenu();
         dialogue = new DialoguePanel();
-        changeMap(1);
+        changeMap(0);
         keyTypeds.add(new KeyTyped(Input.KEY_E) {
             @Override
             public void onType() {
@@ -96,10 +95,7 @@ public class InGameState extends BasicGameState {
      * @see Map#onPlayerEnter()
      */
     public static void changeMap(int i) {
-        for (EntityEntityCollision collision : Collisions.with(Entities.PLAYER)) {
-            collision.end();
-        }
-        Collisions.nuke();
+        Collisions.endAndNuke();
         if (map != null) {
             map.onPlayerLeave();
         }
@@ -109,29 +105,21 @@ public class InGameState extends BasicGameState {
 
     /**
      * Give the player a quest
-     *
-     * @param quest The quest to give the player
-     * @param start Whether or not to "start" the quest after giving it
      */
     public static void giveQuest(Quest quest, boolean start) {
-        playerMenu.questsPanel.add(quest, start);
+        playerMenu.questsPanel.addQuest(quest, start);
         pushNotification(new NotificationBanner("New quest added!"));
     }
 
     /**
      * Remove, or clear, a quest from the player
-     *
-     * @param quest The quest to remove
      */
     public static void removeQuest(Quest quest) {
-        playerMenu.questsPanel.remove(quest);
+        playerMenu.questsPanel.removeQuest(quest);
     }
 
     /**
      * Add a notification to the notification queue
-     *
-     * @param notification The notification to add
-     * @see #notifications
      */
     public static void pushNotification(NotificationBanner notification) {
         notifications.add(notification);
@@ -139,9 +127,6 @@ public class InGameState extends BasicGameState {
 
     /**
      * Remove the notification from the queue
-     *
-     * @param notification The notification to remove
-     * @see #notifications
      */
     public static void onNotificationFinish(NotificationBanner notification) {
         notifications.remove(notification);
@@ -161,17 +146,14 @@ public class InGameState extends BasicGameState {
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics graphics) throws SlickException {
-        // first, check if we're in a building
         if (Entities.PLAYER.isInBuilding) {
             graphics.setColor(Color.black);
             graphics.fillRect(0, 0, Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT);
             building.currentFloor.render(graphics);
             Entities.PLAYER.render(graphics);
         } else {
-            // not in a building, so just render the map as normal
             map.render(graphics);
         }
-        // check if the user can interact at all
         if (canPlay) {
             if (isInventoryVisible) {
                 playerMenu.render(graphics);
@@ -179,9 +161,8 @@ public class InGameState extends BasicGameState {
                 dialogue.render(graphics);
             }
         }
-        // check for any pending notifications
         if (!notifications.isEmpty()) {
-            // treated as a queue, so only the first is rendered
+            // treated as a queue, so only the first is rendered (bad?)
             notifications.get(0).render(graphics);
         }
         if (Game.debug) {
@@ -191,7 +172,6 @@ public class InGameState extends BasicGameState {
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-        // see render method for comments
         if (Entities.PLAYER.isInBuilding) {
             building.currentFloor.checkPlayerLimits();
             building.currentFloor.tick();

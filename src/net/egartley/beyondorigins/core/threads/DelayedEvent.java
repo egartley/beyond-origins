@@ -2,18 +2,19 @@ package net.egartley.beyondorigins.core.threads;
 
 import net.egartley.beyondorigins.Debug;
 
+/**
+ * An event that is executed after a delay
+ */
 public class DelayedEvent implements Runnable {
 
-    private boolean naturalStop = true;
+    private boolean didNaturalStop = true;
 
     public double duration;
     public boolean isRunning;
     public Thread thread;
 
     /**
-     * Create a new delayed event, which will call {@link #onFinish()} after the specified amount of time
-     *
-     * @param duration How long to wait, in seconds
+     * Create a new delayed event, which will execute after the amount of time (seconds)
      */
     public DelayedEvent(double duration) {
         this.duration = duration;
@@ -32,20 +33,20 @@ public class DelayedEvent implements Runnable {
      * Cancel the delayed event, and kill its thread. {@link #onFinish()} is not called
      */
     public void cancel() {
-        naturalStop = false;
+        didNaturalStop = false;
         thread.interrupt();
     }
 
     /**
-     * Call {@link #onFinish()} now ("fast forward" through the delay)
+     * Executes the event now, regardless of delay
      */
     public void fastForward() {
-        naturalStop = true;
+        didNaturalStop = true;
         thread.interrupt();
     }
 
     /**
-     * Called after {@link #duration} has passed (after calling {@link #start()})
+     * Actually execute the event (either by fast-forward or delay)
      */
     public void onFinish() {
 
@@ -59,7 +60,7 @@ public class DelayedEvent implements Runnable {
             } catch (InterruptedException e) {
                 Debug.warning("Delayed event was killed");
             }
-            if (naturalStop) {
+            if (didNaturalStop) {
                 onFinish();
             }
         }

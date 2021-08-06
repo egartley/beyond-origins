@@ -2,9 +2,6 @@ package net.egartley.beyondorigins.ingame;
 
 import java.util.ArrayList;
 
-/**
- * A list of tasks, or objectives, the player should complete. Shown in the player menu in the quests tab
- */
 public class Quest {
 
     public byte id;
@@ -29,7 +26,7 @@ public class Quest {
 
     }
 
-    public void onComplete() {
+    public void onCompletion() {
 
     }
 
@@ -45,20 +42,18 @@ public class Quest {
      */
     public void complete() {
         if (!isComplete) {
-            onComplete();
+            onCompletion();
         }
         isComplete = true;
-        for (QuestObjective objective : objectives) {
-            // just to make sure all the objectives are marked as complete
-            objective.complete();
+        for (QuestObjective o : objectives) {
+            o.complete();
         }
     }
 
     /**
      * Returns true if the quest has started, but not completed, false otherwise
-     * @return True if the quest has started but not completed, false otherwise
      */
-    public boolean inProgress() {
+    public boolean isInProgress() {
         return didStart && !isComplete;
     }
 

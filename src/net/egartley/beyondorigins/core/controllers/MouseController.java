@@ -1,24 +1,24 @@
 package net.egartley.beyondorigins.core.controllers;
 
-import net.egartley.beyondorigins.core.input.MouseClicked;
+import net.egartley.beyondorigins.core.input.MouseClickedEvent;
 
 import java.util.ArrayList;
 
 public class MouseController {
 
-    private static final ArrayList<MouseClicked> clickeds = new ArrayList<>();
+    private static final ArrayList<MouseClickedEvent> clickeds = new ArrayList<>();
 
-    public static void onMouseClick(int button, int x, int y) {
-        ((ArrayList<MouseClicked>) clickeds.clone()).forEach(mc -> mc.onClick(button, x, y));
+    public static void onMouseClick(int x, int y) {
+        ((ArrayList<MouseClickedEvent>) clickeds.clone()).forEach(mc -> mc.onClick(x, y));
     }
 
-    public static void addMouseClicked(MouseClicked mc) {
+    public static void addMouseClicked(MouseClickedEvent mc) {
         if (!clickeds.contains(mc)) {
             clickeds.add(mc);
         }
     }
 
-    public static void removeMouseClicked(MouseClicked mc) {
+    public static void removeMouseClicked(MouseClickedEvent mc) {
         clickeds.remove(mc);
     }
 
