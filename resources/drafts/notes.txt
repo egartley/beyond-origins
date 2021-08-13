@@ -1,0 +1,17 @@
+House-1
+House-2
+	Test building
+
+Cephalon-1
+	Draft design for cephalon-like thing
+
+Cheese
+	Draft design to show when player is attempting to cheese something (work?)
+
+Walk Template
+	Color-coded template for a basic character walking animation
+-------------------------------------------------------------------------------
+Complete
+	House-1, Cheese, Cephalon-1
+WIP
+	House-2, House-2 inside
