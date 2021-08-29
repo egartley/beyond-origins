@@ -6,6 +6,7 @@ import net.egartley.beyondorigins.core.abstracts.Map;
 import net.egartley.beyondorigins.core.controllers.KeyboardController;
 import net.egartley.beyondorigins.core.input.KeyTyped;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
+import net.egartley.beyondorigins.core.ui.ActionUI;
 import net.egartley.beyondorigins.core.ui.DialoguePanel;
 import net.egartley.beyondorigins.core.ui.NotificationBanner;
 import net.egartley.beyondorigins.data.Items;
@@ -25,6 +26,8 @@ import java.util.ArrayList;
 
 public class InGameState extends BasicGameState {
 
+    private static boolean isShowingActionUI;
+    private static ActionUI actionUI;
     private static final ArrayList<KeyTyped> keyTypeds = new ArrayList<>();
     private static final ArrayList<NotificationBanner> notifications = new ArrayList<>();
 
@@ -132,6 +135,16 @@ public class InGameState extends BasicGameState {
         notifications.remove(notification);
     }
 
+    public static void showActionUI(String text, int keycode) {
+        actionUI = new ActionUI(text, keycode);
+        actionUI.tick();
+        isShowingActionUI = true;
+    }
+
+    public static void hideActionUI() {
+        isShowingActionUI = false;
+    }
+
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {
         keyTypeds.forEach(KeyboardController::addKeyTyped);
@@ -153,6 +166,9 @@ public class InGameState extends BasicGameState {
             Entities.PLAYER.render(graphics);
         } else {
             map.render(graphics);
+        }
+        if (isShowingActionUI) {
+            actionUI.render(graphics);
         }
         if (canPlay) {
             if (isInventoryVisible) {
@@ -178,6 +194,9 @@ public class InGameState extends BasicGameState {
             Entities.PLAYER.tick();
         } else {
             map.tick();
+        }
+        if (isShowingActionUI) {
+            actionUI.tick();
         }
         if (canPlay) {
             if (isInventoryVisible) {

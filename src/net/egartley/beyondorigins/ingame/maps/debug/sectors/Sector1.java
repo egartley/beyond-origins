@@ -14,6 +14,7 @@ import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.WarpPad;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.ingame.buildings.House1;
+import org.newdawn.slick.Input;
 
 public class Sector1 extends MapSector {
 
@@ -68,11 +69,16 @@ public class Sector1 extends MapSector {
     public void setSpecialCollisions() {
         Collisions.add(new EntityEntityCollision(Entities.PLAYER.boundary, hatTree.defaultBoundary) {
             public void start(EntityEntityCollisionEvent e) {
+                InGameState.showActionUI("Test", Input.KEY_ENTER);
                 if (!Entities.PLAYER.inventory.containsItem(Items.WIZARD_HAT) && Entities.WIZARD.metPlayer && !Entities.WIZARD.foundHat) {
                     Entities.PLAYER.inventory.putItem(Items.WIZARD_HAT);
                     InGameState.pushNotification(new NotificationBanner("You have found the Wizard's hat!", "items/wizard-hat.png"));
                     Quests.WIZARD_HAT.objectives.get(0).complete();
                 }
+            }
+
+            public void end(EntityEntityCollisionEvent e) {
+                InGameState.hideActionUI();
             }
         });
         Collisions.add(new EntityEntityCollision(Entities.PLAYER.boundary, pad.defaultBoundary) {

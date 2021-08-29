@@ -12,6 +12,10 @@ public abstract class UIElement extends Renderable implements Tickable {
     public boolean isEnabled;
     public Image image;
 
+    public UIElement() {
+
+    }
+
     public UIElement(Image image) {
         this(image, true);
     }
