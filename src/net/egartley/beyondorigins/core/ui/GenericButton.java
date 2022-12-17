@@ -28,12 +28,14 @@ public class GenericButton extends UIElement {
 
     public GenericButton(Image image, int x, int y) {
         this(image);
-        setPosition(x, y);
+        this.x = x;
+        this.y = y;
     }
 
     public GenericButton(int width, int height, int x, int y) {
         this(width, height);
-        setPosition(x, y);
+        this.x = x;
+        this.y = y;
     }
 
     public void onClick() {

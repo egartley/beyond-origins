@@ -1,8 +1,9 @@
 package net.egartley.beyondorigins.ingame;
 
+import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.core.abstracts.Entity;
-import net.egartley.beyondorigins.core.abstracts.Renderable;
+import net.egartley.beyondorigins.core.interfaces.Renderable;
 import net.egartley.beyondorigins.core.interfaces.Tickable;
 import net.egartley.beyondorigins.core.logic.Calculate;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
@@ -16,12 +17,13 @@ import org.newdawn.slick.Image;
 
 import java.util.ArrayList;
 
-public class BuildingFloor extends Renderable implements Tickable {
+public class BuildingFloor implements Tickable, Renderable {
 
     private final ArrayList<Entity> entities = new ArrayList<>();
     private final ArrayList<BuildingChanger> changers = new ArrayList<>();
     private final ArrayList<EntityEntityCollision> changerCollisions = new ArrayList<>();
 
+    public int x, y;
     public int number;
     public int leftLimit;
     public int rightLimit;
@@ -34,11 +36,16 @@ public class BuildingFloor extends Renderable implements Tickable {
         this.number = number;
         this.parent = parent;
         image = Images.getImageFromPath("resources/images/buildings/floors/" + parent.name + "_" + number + ".png");
-        setPosition(Calculate.getCenteredX(image.getWidth()), Calculate.getCenteredY(image.getHeight()));
-        upperYLimit = y;
-        lowerYLimit = y + image.getHeight() - Entities.PLAYER.sprite.height;
-        leftLimit = x;
-        rightLimit = x + image.getWidth() - Entities.PLAYER.sprite.width;
+        if (image != null) {
+            x = Calculate.getCenteredX(image.getWidth());
+            y = Calculate.getCenteredY(image.getHeight());
+            upperYLimit = y;
+            lowerYLimit = y + image.getHeight() - Entities.PLAYER.sprite.height;
+            leftLimit = x;
+            rightLimit = x + image.getWidth() - Entities.PLAYER.sprite.width;
+        } else {
+            Debug.error("Unable to load building floor image for " + parent.name + " (" + number + ")");
+        }
     }
 
     public void addChanger(BuildingChanger changer) {
@@ -49,20 +56,12 @@ public class BuildingFloor extends Renderable implements Tickable {
             public void start(EntityEntityCollisionEvent event) {
                 end();
                 switch (changer.actionType) {
-                    case BuildingChanger.UPSTAIRS:
-                        me.parent.upstairs();
-                        break;
-                    case BuildingChanger.DOWNSTAIRS:
-                        me.parent.downstairs();
-                        break;
-                    case BuildingChanger.LEAVE:
-                        me.parent.onPlayerLeave();
-                        break;
-                    case BuildingChanger.JUMP:
-                        me.parent.changeFloor(me.parent.floors.get(changer.jumpNumber));
-                        break;
-                    default:
-                        break;
+                    case BuildingChanger.UPSTAIRS -> me.parent.upstairs();
+                    case BuildingChanger.DOWNSTAIRS -> me.parent.downstairs();
+                    case BuildingChanger.LEAVE -> me.parent.onPlayerLeave();
+                    case BuildingChanger.JUMP -> me.parent.changeFloor(me.parent.floors.get(changer.jumpNumber));
+                    default -> {
+                    }
                 }
             }
         };

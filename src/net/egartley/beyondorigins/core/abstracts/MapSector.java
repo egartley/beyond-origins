@@ -6,6 +6,7 @@ import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.core.enums.Direction;
 import net.egartley.beyondorigins.core.graphics.MapTile;
 import net.egartley.beyondorigins.core.interfaces.Damageable;
+import net.egartley.beyondorigins.core.interfaces.Renderable;
 import net.egartley.beyondorigins.core.interfaces.Tickable;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.MapSectorChangeCollision;
@@ -27,7 +28,7 @@ import java.util.HashMap;
 /**
  * Specific part, or area, of a map that fills the entire window
  */
-public abstract class MapSector extends Renderable implements Tickable {
+public abstract class MapSector implements Tickable, Renderable {
 
     private int deltaX;
     private int deltaY;

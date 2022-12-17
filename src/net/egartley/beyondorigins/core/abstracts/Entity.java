@@ -4,6 +4,7 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.core.enums.Direction;
 import net.egartley.beyondorigins.core.interfaces.Damageable;
+import net.egartley.beyondorigins.core.interfaces.Renderable;
 import net.egartley.beyondorigins.core.interfaces.Tickable;
 import net.egartley.beyondorigins.core.logic.Calculate;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
@@ -17,7 +18,7 @@ import org.newdawn.slick.TrueTypeFont;
 
 import java.util.ArrayList;
 
-public abstract class Entity extends Renderable implements Tickable {
+public abstract class Entity implements Tickable, Renderable {
 
     private final int HEALTH_BAR_WIDTH = 64;
     private static final Color HEALTH_BAR_COLOR = new Color(0, 179, 0);
@@ -29,6 +30,7 @@ public abstract class Entity extends Renderable implements Tickable {
     protected boolean isMovingLeftwards;
     protected boolean isMovingRightwards;
 
+    public int x, y;
     public int uuid;
     public int width;
     public int height;
@@ -129,9 +131,9 @@ public abstract class Entity extends Renderable implements Tickable {
         interactions.forEach(EntityEntityInteraction::tick);
     }
 
-    @Override
     public void setPosition(int x, int y) {
-        super.setPosition(x, y);
+        this.x = x;
+        this.y = y;
         deltaX = x;
         deltaY = y;
     }

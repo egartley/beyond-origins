@@ -1,5 +1,6 @@
 package net.egartley.beyondorigins.core.abstracts;
 
+import net.egartley.beyondorigins.core.interfaces.Renderable;
 import net.egartley.beyondorigins.core.interfaces.Tickable;
 import net.egartley.beyondorigins.core.logic.events.MapSectorChangeEvent;
 
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Collection of "sectors" that make up a map, which is like a level or world
  */
-public abstract class Map extends Renderable implements Tickable {
+public abstract class Map implements Tickable, Renderable {
 
     public String name;
     public MapSector sector;

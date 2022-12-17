@@ -21,7 +21,8 @@ public class QuestsPanel extends UIElement implements Saveable, Loadable {
 
     public QuestsPanel() {
         super(Images.getImage(Images.QUESTS_PANEL));
-        setPosition(Calculate.getCenteredX(width), Calculate.getCenteredY(height));
+        this.x = Calculate.getCenteredX(width);
+        this.y = Calculate.getCenteredY(height);
         sidePanel = new QuestsSidePanel();
         Image enabled = Images.getImage(Images.PAGE_BUTTON_ENABLED);
         Image disabled = Images.getImage(Images.PAGE_BUTTON_DISABLED);

@@ -25,7 +25,8 @@ public class QuestsSidePanel extends UIElement {
 
     public QuestsSidePanel() {
         super(412, 277);
-        setPosition(446, 186);
+        this.x = 446;
+        this.y = 186;
         checkboxImage = Images.getImage(Images.QUEST_CHECKBOX);
         checkboxCheckedImage = Images.getImage(Images.QUEST_CHECKBOX_CHECKED);
     }

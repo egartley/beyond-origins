@@ -27,7 +27,8 @@ public class DialoguePanel extends UIElement {
     public DialoguePanel() {
         super(Images.getImage(Images.DIALOGUE_PANEL), true);
         moreLines = Images.getImage(Images.MORE_LINES);
-        setPosition(Calculate.getCenteredX(image.getWidth()), Game.WINDOW_HEIGHT - image.getHeight() - 8);
+        this.x = Calculate.getCenteredX(image.getWidth());
+        this.y = Game.WINDOW_HEIGHT - image.getHeight() - 8;
     }
 
     /**

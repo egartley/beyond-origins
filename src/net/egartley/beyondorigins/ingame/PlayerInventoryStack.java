@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.core.abstracts.Renderable;
+import net.egartley.beyondorigins.core.interfaces.Renderable;
 import net.egartley.beyondorigins.core.input.Mouse;
 import net.egartley.beyondorigins.core.interfaces.Tickable;
 import net.egartley.beyondorigins.core.logic.inventory.ItemStack;
@@ -16,11 +16,13 @@ import org.newdawn.slick.TrueTypeFont;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class PlayerInventoryStack extends Renderable implements Tickable {
+public class PlayerInventoryStack implements Tickable, Renderable {
 
     private int tooltipWidth;
-    private static final Font AMOUNT_FONT = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12), true);
+    private static final Font AMOUNT_FONT =
+            new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12), true);
 
+    public int x, y;
     public boolean isBeingHovered;
     public boolean didStartDrag;
     public boolean setTooltipWidth;
@@ -33,7 +35,8 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
     public PlayerInventoryStack(ItemStack itemStack, PlayerInventorySlot slot) {
         this.itemStack = itemStack;
         this.slot = slot;
-        setPosition(slot.baseItemX, slot.baseItemY);
+        x = slot.baseItemX;
+        y = slot.baseItemY;
     }
 
     private void onDragEnd() {
@@ -90,7 +93,7 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
     public void tick() {
         // check if the cursor is over this stack
         isBeingHovered = Util.isWithinBounds(Mouse.x, Mouse.y, x, y, PlayerInventorySlot.SIZE, PlayerInventorySlot.SIZE);
-        // whether or not to render the tooltip
+        // whether to render the tooltip
         isShowingTooltip = isBeingDragged || (isBeingHovered && PlayerInventory.stackBeingDragged == null);
         if (isShowingTooltip) {
             PlayerInventory.tooltipWidth = tooltipWidth;
@@ -101,7 +104,8 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
             if ((isBeingHovered || didStartDrag) && (PlayerInventory.stackBeingDragged == this || PlayerInventory.stackBeingDragged == null)) {
                 PlayerInventory.stackBeingDragged = this;
                 // keep cursor centered
-                setPosition(Mouse.x - (PlayerInventorySlot.SIZE / 2), Mouse.y - (PlayerInventorySlot.SIZE / 2));
+                x = Mouse.x - (PlayerInventorySlot.SIZE / 2);
+                y = Mouse.y - (PlayerInventorySlot.SIZE / 2);
                 didStartDrag = true;
                 isBeingDragged = true;
             }
@@ -111,7 +115,8 @@ public class PlayerInventoryStack extends Renderable implements Tickable {
             PlayerInventory.stackBeingDragged = null;
             isBeingDragged = false;
         } else {
-            setPosition(slot.baseItemX, slot.baseItemY);
+            x = slot.baseItemX;
+            y = slot.baseItemY;
             didStartDrag = false;
         }
     }

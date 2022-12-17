@@ -1,12 +1,14 @@
 package net.egartley.beyondorigins.core.abstracts;
 
 import net.egartley.beyondorigins.Util;
+import net.egartley.beyondorigins.core.interfaces.Renderable;
 import net.egartley.beyondorigins.core.interfaces.Tickable;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
-public abstract class UIElement extends Renderable implements Tickable {
+public abstract class UIElement implements Tickable, Renderable {
 
+    public int x, y;
     public int width;
     public int height;
     public boolean isEnabled;

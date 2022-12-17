@@ -32,7 +32,8 @@ public class PlayerInventory extends UIElement {
 
     public PlayerInventory() {
         super(Images.getImage(Images.INVENTORY_PANEL));
-        setPosition(Calculate.getCenteredX(width), Calculate.getCenteredY(height));
+        this.x = Calculate.getCenteredX(width);
+        this.y = Calculate.getCenteredY(height);
         for (int r = 0; r < ROWS; r++) {
             for (int c = 0; c < COLUMNS; c++) {
                 slots.add(new PlayerInventorySlot(null, r, c));

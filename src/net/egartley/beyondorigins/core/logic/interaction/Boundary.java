@@ -1,6 +1,6 @@
 package net.egartley.beyondorigins.core.logic.interaction;
 
-import net.egartley.beyondorigins.core.abstracts.Renderable;
+import net.egartley.beyondorigins.core.interfaces.Renderable;
 import net.egartley.beyondorigins.core.interfaces.Tickable;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -10,13 +10,14 @@ import java.awt.*;
 /**
  * A specified area on the screen
  */
-public abstract class Boundary extends Renderable implements Tickable {
+public abstract class Boundary implements Tickable, Renderable {
 
     protected int verticalOffset;
     protected int horizontalOffset;
     protected BoundaryOffset offset;
     protected BoundaryPadding padding;
 
+    public int x, y;
     public int top;
     public int left;
     public int right;

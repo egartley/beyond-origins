@@ -34,7 +34,8 @@ public class NotificationBanner extends UIElement {
         icon = Images.getImageFromPath(Images.path + iconFile);
         startY = -8 - image.getHeight();
         lines = Util.toLines(text, FONT, 260);
-        setPosition(Calculate.getCenteredX(width), startY);
+        this.x = Calculate.getCenteredX(width);
+        this.y = startY;
     }
 
     private void showBanner() {
