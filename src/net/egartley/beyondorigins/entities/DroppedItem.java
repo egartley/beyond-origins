@@ -60,9 +60,9 @@ public class DroppedItem extends VisibleEntity {
     }
 
     /**
-     * Attempt to pickup the dropped item
+     * Attempt to pick up the dropped item
      *
-     * @return Whether or not the dropped item was successfully picked up by the player
+     * @return Whether the dropped item was successfully picked up by the player
      */
     private boolean pickup() {
         if (!Entities.PLAYER.inventory.isFull() && canPickup && isPlayerOver) {

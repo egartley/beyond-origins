@@ -25,7 +25,8 @@ public class Building extends VisibleEntity {
     public ArrayList<BuildingFloor> floors = new ArrayList<>();
 
     public Building(String id, int x, int y, int playerLeaveX, int playerLeaveY) {
-        super(id, new SpriteSheet(Images.getImageFromPath("resources/images/buildings/" + id + ".png"), 1, 1).sprites.get(0));
+        super(id, new SpriteSheet(Images.getImageFromPath("resources/images/buildings/" + id + ".png"),
+                1, 1).sprites.get(0));
         isSectorSpecific = true;
         // set isTraversable to true, even though it's not, since collisions are generated later
         isTraversable = true;

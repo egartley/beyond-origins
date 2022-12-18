@@ -70,9 +70,12 @@ public class Sector1 extends MapSector {
         Collisions.add(new EntityEntityCollision(Entities.PLAYER.boundary, hatTree.defaultBoundary) {
             public void start(EntityEntityCollisionEvent e) {
                 InGameState.showActionUI("Test", Input.KEY_ENTER);
-                if (!Entities.PLAYER.inventory.containsItem(Items.WIZARD_HAT) && Entities.WIZARD.metPlayer && !Entities.WIZARD.foundHat) {
+                if (!Entities.PLAYER.inventory.containsItem(Items.WIZARD_HAT) &&
+                        Entities.WIZARD.metPlayer && !Entities.WIZARD.foundHat) {
                     Entities.PLAYER.inventory.putItem(Items.WIZARD_HAT);
-                    InGameState.pushNotification(new NotificationBanner("You have found the Wizard's hat!", "items/wizard-hat.png"));
+                    InGameState.pushNotification(
+                            new NotificationBanner("You have found the Wizard's hat!",
+                                    "items/wizard-hat.png"));
                     Quests.WIZARD_HAT.objectives.get(0).complete();
                 }
             }

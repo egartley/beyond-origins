@@ -19,7 +19,8 @@ public class DamageNumber extends VisibleEntity {
     private final int initalY;
     private final int FLOAT_DISTANCE = 26;
     private final Color TEXT_COLOR = Color.yellow;
-    private final Font FONT = new TrueTypeFont(new java.awt.Font("Consolas", java.awt.Font.PLAIN, 10), true);
+    private final Font FONT =
+            new TrueTypeFont(new java.awt.Font("Consolas", java.awt.Font.PLAIN, 10), true);
 
     public DamageNumber(int amount, Entity damaged) {
         super("Damage");

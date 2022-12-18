@@ -1,5 +1,6 @@
 package net.egartley.beyondorigins.core.ui;
 
+import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.core.abstracts.UIElement;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.entities.Entities;
@@ -12,20 +13,24 @@ public class ActionUI extends UIElement {
     private int iconWidth;
     private int playerMidX;
     private int startX;
-    private final int PADDING = 4;
 
-    private Color textColor = Color.white;
-    private Color backgroundColor = new Color(0, 0, 0, 128);
-    private Font font = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12), true);
-    private Image icon;
-    private String text;
+    private final int PADDING = 4;
+    private final Color textColor = Color.white;
+    private final Color backgroundColor = new Color(0, 0, 0, 128);
+    private final Font font = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12), true);
+    private final Image icon;
+    private final String text;
 
     public ActionUI(String text, int keycode) {
         this.text = text;
         icon = Images.getImageFromPath("resources/images/ui/keys/" + keycode + ".png");
-        textWidth = font.getWidth(text);
-        iconWidth = icon.getWidth();
-        fullWidth = textWidth + PADDING + iconWidth;
+        if (icon == null) {
+            Debug.error("Couldn't load icon file for key \"" + keycode + "\"!");
+        } else {
+            textWidth = font.getWidth(text);
+            iconWidth = icon.getWidth();
+            fullWidth = textWidth + PADDING + iconWidth;
+        }
     }
 
     @Override

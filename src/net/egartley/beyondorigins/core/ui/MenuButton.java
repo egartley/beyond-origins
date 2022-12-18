@@ -18,7 +18,8 @@ public class MenuButton extends GenericButton {
     private final Color HOVER_TEXT_COLOR = Color.darkGray;
     private final Color ENABLED_COLOR = Color.red.darker();
     private final Color HOVER_COLOR = ENABLED_COLOR.brighter();
-    private final Font FONT = new TrueTypeFont(new java.awt.Font("Georgia", java.awt.Font.PLAIN, 24), true);
+    private final Font FONT =
+            new TrueTypeFont(new java.awt.Font("Georgia", java.awt.Font.PLAIN, 24), true);
 
     public MenuButton(String text, boolean isEnabledByDefault, int x, int y, int width, int height) {
         super(width, height, x, y);

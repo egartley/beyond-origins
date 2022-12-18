@@ -57,7 +57,8 @@ public class WoodenFence extends VisibleEntity {
 
     @Override
     protected void setBoundaries() {
-        boundaries.add(new EntityBoundary(this, image.getWidth(), image.getHeight(), new BoundaryPadding(-12, 0, -10, 0)));
+        boundaries.add(new EntityBoundary(this, image.getWidth(), image.getHeight(),
+                new BoundaryPadding(-12, 0, -10, 0)));
         defaultBoundary = boundaries.get(0);
     }
 

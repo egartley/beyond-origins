@@ -24,19 +24,22 @@ public class MainMenuState extends BasicGameState {
 
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-        buttons.add(new MenuButton("Resume", true, (Game.WINDOW_WIDTH / 2) - 47, (Game.WINDOW_HEIGHT / 2) - 16, 94, 32) {
+        buttons.add(new MenuButton("Resume", true,
+                (Game.WINDOW_WIDTH / 2) - 47, (Game.WINDOW_HEIGHT / 2) - 16, 94, 32) {
             @Override
             public void onClick() {
                 game.enterState(InGameState.ID);
             }
         });
-        buttons.add(new MenuButton("New Game", true, (Game.WINDOW_WIDTH / 2) - 60, (Game.WINDOW_HEIGHT / 2) - 16 + 52, 120, 32) {
+        buttons.add(new MenuButton("New Game", true,
+                (Game.WINDOW_WIDTH / 2) - 60, (Game.WINDOW_HEIGHT / 2) - 16 + 52, 120, 32) {
             @Override
             public void onClick() {
 
             }
         });
-        buttons.add(new MenuButton("Quit", true, (Game.WINDOW_WIDTH / 2) - 28, (Game.WINDOW_HEIGHT / 2) - 16 + 104, 56, 32) {
+        buttons.add(new MenuButton("Quit", true,
+                (Game.WINDOW_WIDTH / 2) - 28, (Game.WINDOW_HEIGHT / 2) - 16 + 104, 56, 32) {
             @Override
             public void onClick() {
                 Game.quit();

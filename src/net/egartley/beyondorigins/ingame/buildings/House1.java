@@ -61,10 +61,14 @@ public class House1 extends Building {
 
     @Override
     protected void setBoundaries() {
-        defaultBoundary = new EntityBoundary(this, 31, 24, new BoundaryPadding(0), new BoundaryOffset(0, 75, 0, 53));
-        blockBoundary1 = new EntityBoundary(this, 31, 23, new BoundaryPadding(0), new BoundaryOffset(0, 64, 0, 22));
-        blockBoundary2 = new EntityBoundary(this, 30, 23, new BoundaryPadding(0), new BoundaryOffset(0, 64, 0, 84));
-        blockBoundary3 = new EntityBoundary(this, 31, 11, new BoundaryPadding(0), new BoundaryOffset(0, 64, 0, 53));
+        defaultBoundary = new EntityBoundary(this, 31, 24, new BoundaryPadding(0),
+                new BoundaryOffset(0, 75, 0, 53));
+        blockBoundary1 = new EntityBoundary(this, 31, 23, new BoundaryPadding(0),
+                new BoundaryOffset(0, 64, 0, 22));
+        blockBoundary2 = new EntityBoundary(this, 30, 23, new BoundaryPadding(0),
+                new BoundaryOffset(0, 64, 0, 84));
+        blockBoundary3 = new EntityBoundary(this, 31, 11, new BoundaryPadding(0),
+                new BoundaryOffset(0, 64, 0, 53));
         entryBoundary = defaultBoundary;
         boundaries.add(defaultBoundary);
         boundaries.add(blockBoundary1);

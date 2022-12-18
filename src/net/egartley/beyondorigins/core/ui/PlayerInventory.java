@@ -18,8 +18,10 @@ public class PlayerInventory extends UIElement {
     private static final Color DETAILS_COLOR = new Color(111, 88, 61);
     private static final Color PLAYER_NAME_COLOR = new Color(65, 53, 37);
     private static final Color TOOLTIP_BORDER_COLOR = new Color(65, 11, 67);
-    private static final Font DETAILS_FONT = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 11), true);
-    private static final Font PLAYER_NAME_FONT = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.BOLD, 14), true);
+    private static final Font DETAILS_FONT =
+            new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 11), true);
+    private static final Font PLAYER_NAME_FONT =
+            new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.BOLD, 14), true);
 
     public static int tooltipWidth;
     public static boolean isShowingTooltip;
@@ -28,7 +30,8 @@ public class PlayerInventory extends UIElement {
     public static String tooltipText;
     public static PlayerInventoryStack stackBeingDragged;
     public static ArrayList<PlayerInventorySlot> slots = new ArrayList<>();
-    public static final Font TOOLTIP_FONT = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14), true);
+    public static final Font TOOLTIP_FONT =
+            new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14), true);
 
     public PlayerInventory() {
         super(Images.getImage(Images.INVENTORY_PANEL));
@@ -103,7 +106,9 @@ public class PlayerInventory extends UIElement {
         slots.forEach(slot -> slot.renderStack(graphics));
         // player display
         Image playerImage = Entities.PLAYER.sprite.asImage();
-        graphics.drawImage(playerImage, Calculate.getCenter(x + 243, playerImage.getWidth()), Calculate.getCenter(y + 96, playerImage.getHeight()));
+        graphics.drawImage(playerImage,
+                Calculate.getCenter(x + 243, playerImage.getWidth()),
+                Calculate.getCenter(y + 96, playerImage.getHeight()));
         // details text
         graphics.setColor(PLAYER_NAME_COLOR);
         graphics.setFont(PLAYER_NAME_FONT);

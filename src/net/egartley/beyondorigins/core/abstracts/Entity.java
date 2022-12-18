@@ -23,7 +23,8 @@ public abstract class Entity implements Tickable, Renderable {
     private final int HEALTH_BAR_WIDTH = 64;
     private static final Color HEALTH_BAR_COLOR = new Color(0, 179, 0);
     private static final Color NAME_TAG_BACKGROUND_COLOR = new Color(0, 0, 0, 128);
-    private static final Font DEBUG_FONT = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 11), true);
+    private static final Font DEBUG_FONT =
+            new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 11), true);
 
     protected boolean isMovingUpwards;
     protected boolean isMovingDownwards;
@@ -132,10 +133,8 @@ public abstract class Entity implements Tickable, Renderable {
     }
 
     public void setPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
-        deltaX = x;
-        deltaY = y;
+        x(x);
+        y(y);
     }
 
     public void x(int x) {
@@ -178,7 +177,7 @@ public abstract class Entity implements Tickable, Renderable {
         if (direction == Direction.RIGHT && !isAllowedToMoveRightwards)
             return;
         switch (direction) {
-            case UP:
+            case UP -> {
                 if (containToWindow && boundary.top <= 0) {
                     break; // top of window
                 }
@@ -186,8 +185,8 @@ public abstract class Entity implements Tickable, Renderable {
                 deltaY -= speed;
                 y -= (int) Math.abs(deltaY - y);
                 onMove(Direction.UP);
-                break;
-            case DOWN:
+            }
+            case DOWN -> {
                 if (containToWindow && boundary.bottom >= Game.WINDOW_HEIGHT) {
                     break; // bottom of window
                 }
@@ -195,8 +194,8 @@ public abstract class Entity implements Tickable, Renderable {
                 deltaY += speed;
                 y += (int) Math.abs(deltaY - y);
                 onMove(Direction.DOWN);
-                break;
-            case LEFT:
+            }
+            case LEFT -> {
                 if (containToWindow && boundary.left <= 0) {
                     break; // left side of window
                 }
@@ -204,8 +203,8 @@ public abstract class Entity implements Tickable, Renderable {
                 deltaX -= speed;
                 x -= (int) Math.abs(deltaX - x);
                 onMove(Direction.LEFT);
-                break;
-            case RIGHT:
+            }
+            case RIGHT -> {
                 if (containToWindow && boundary.right >= Game.WINDOW_WIDTH) {
                     break; // right side of window
                 }
@@ -213,9 +212,7 @@ public abstract class Entity implements Tickable, Renderable {
                 deltaX += speed;
                 x += (int) Math.abs(deltaX - x);
                 onMove(Direction.RIGHT);
-                break;
-            default:
-                break;
+            }
         }
     }
 
@@ -272,11 +269,11 @@ public abstract class Entity implements Tickable, Renderable {
     }
 
     public boolean isRightOf(Entity e) {
-        return x > e.x;
+        return x > e.x + e.width;
     }
 
     public boolean isLeftOf(Entity e) {
-        return !isRightOf(e);
+        return x < e.x;
     }
 
     public boolean isAbove(Entity e) {
@@ -284,7 +281,7 @@ public abstract class Entity implements Tickable, Renderable {
     }
 
     public boolean isBelow(Entity e) {
-        return !isAbove(e);
+        return y > e.y + e.height;
     }
 
     public String toString() {

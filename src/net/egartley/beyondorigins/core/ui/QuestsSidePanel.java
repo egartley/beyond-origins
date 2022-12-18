@@ -17,11 +17,16 @@ public class QuestsSidePanel extends UIElement {
     private static Image checkboxImage;
     private static Image checkboxCheckedImage;
     private static final Color TITLE_COLOR = new Color(65, 53, 37);
-    private static final Color DESCRIPTION_COLOR = TITLE_COLOR, OBJECTIVE_TITLE_COLOR = TITLE_COLOR, OBJECTIVE_DESCRIPTION_COLOR = TITLE_COLOR;
-    private static final Font DESCRIPTION_FONT = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 11), true);
+    private static final Color DESCRIPTION_COLOR = TITLE_COLOR,
+            OBJECTIVE_TITLE_COLOR = TITLE_COLOR,
+            OBJECTIVE_DESCRIPTION_COLOR = TITLE_COLOR;
+    private static final Font DESCRIPTION_FONT =
+            new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 11), true);
     private static final Font OBJECTIVE_DESCRIPTION_FONT = DESCRIPTION_FONT;
-    private static final Font OBJECTIVE_TITLE_FONT = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 11), true);
-    private static final Font TITLE_FONT = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.BOLD, 16), true);
+    private static final Font OBJECTIVE_TITLE_FONT =
+            new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 11), true);
+    private static final Font TITLE_FONT =
+            new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.BOLD, 16), true);
 
     public QuestsSidePanel() {
         super(412, 277);

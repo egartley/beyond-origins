@@ -81,7 +81,8 @@ public abstract class MapSector implements Tickable, Renderable {
     private void buildTiles() {
         String entireJSONString = null;
         try {
-            entireJSONString = Files.readString(FileSystems.getDefault().getPath("resources", "data", "maps", parent.name, "sector-" + number + ".def"));
+            entireJSONString = Files.readString(FileSystems.getDefault().getPath("resources", "data",
+                    "maps", parent.name, "sector-" + number + ".def"));
         } catch (IOException e) {
             Debug.error(e);
         }
@@ -101,13 +102,11 @@ public abstract class MapSector implements Tickable, Renderable {
             tileIDs.add(entry.getString("tile"));
         }
         switch (buildType.toLowerCase()) {
-            case "fill":
-                fill(tileIDs.get(tileKeys.indexOf(tilesObject.getString("data"))));
-                break;
-            case "mixed":
+            case "fill" -> fill(tileIDs.get(tileKeys.indexOf(tilesObject.getString("data"))));
+            case "mixed" -> {
                 fill(tileIDs.get(tileKeys.indexOf(tilesObject.getJSONObject("data").getString("common"))));
                 mixed(tilesObject.getJSONObject("data").getJSONArray("custom"), tileIDs, tileKeys);
-                break;
+            }
         }
         if (root.has("random")) {
             JSONArray keys = root.getJSONArray("random");
@@ -119,15 +118,9 @@ public abstract class MapSector implements Tickable, Renderable {
                         if (tile.id.equalsIgnoreCase(id)) {
                             if (Util.fiftyFifty()) {
                                 switch (Util.randomInt(0, 2, true)) {
-                                    case 0:
-                                        tile.rotate();
-                                        break;
-                                    case 1:
-                                        tile.rotate(180);
-                                        break;
-                                    case 2:
-                                        tile.rotate(270);
-                                        break;
+                                    case 0 -> tile.rotate();
+                                    case 1 -> tile.rotate(180);
+                                    case 2 -> tile.rotate(270);
                                 }
                             }
                         }
@@ -150,15 +143,19 @@ public abstract class MapSector implements Tickable, Renderable {
 
     private void mixed(JSONArray custom, ArrayList<String> tileIDs, ArrayList<String> tileKeys) {
         for (int i = 0; i < custom.length(); i++) {
-            JSONObject o = (JSONObject) custom.get(i);
-            int c = o.getInt("c");
-            int r = o.getInt("r");
-            String id = tileIDs.get(tileKeys.indexOf(o.getString("key")));
+            JSONObject tileObject = (JSONObject) custom.get(i);
+            int row = tileObject.getInt("r");
+            int column = tileObject.getInt("c");
+            String id = tileIDs.get(tileKeys.indexOf(tileObject.getString("key")));
             Image image = Images.getImageFromPath(Images.mapTilePath + id + ".png");
-            if (o.has("rotate")) {
-                image.rotate(o.getInt("rotate"));
+            if (image == null) {
+                Debug.error("Unable to load image \"" + Images.mapTilePath + id + ".png\"");
+                continue;
             }
-            tiles.get(r).set(c, new MapTile(id, image));
+            if (tileObject.has("rotate")) {
+                image.rotate(tileObject.getInt("rotate"));
+            }
+            tiles.get(row).set(column, new MapTile(id, image));
         }
     }
 
@@ -177,20 +174,10 @@ public abstract class MapSector implements Tickable, Renderable {
 
     protected void updatePlayerPosition(MapSector from) {
         switch (getNeighborDirection(from)) {
-            case UP:
-                Entities.PLAYER.y(PLAYER_ENTRANCE_OFFSET);
-                break;
-            case LEFT:
-                Entities.PLAYER.x(PLAYER_ENTRANCE_OFFSET);
-                break;
-            case DOWN:
-                Entities.PLAYER.y(Game.WINDOW_HEIGHT - PLAYER_ENTRANCE_OFFSET - Entities.PLAYER.sprite.height);
-                break;
-            case RIGHT:
-                Entities.PLAYER.x(Game.WINDOW_WIDTH - PLAYER_ENTRANCE_OFFSET - Entities.PLAYER.sprite.width);
-                break;
-            default:
-                break;
+            case UP -> Entities.PLAYER.y(PLAYER_ENTRANCE_OFFSET);
+            case LEFT -> Entities.PLAYER.x(PLAYER_ENTRANCE_OFFSET);
+            case DOWN -> Entities.PLAYER.y(Game.WINDOW_HEIGHT - PLAYER_ENTRANCE_OFFSET - Entities.PLAYER.sprite.height);
+            case RIGHT -> Entities.PLAYER.x(Game.WINDOW_WIDTH - PLAYER_ENTRANCE_OFFSET - Entities.PLAYER.sprite.width);
         }
     }
 
@@ -248,33 +235,32 @@ public abstract class MapSector implements Tickable, Renderable {
     private void setNeighborAt(MapSector neighbor, Direction direction, boolean didSetInverse) {
         MapSectorChangeBoundary changeBoundary = null;
         switch (direction) {
-            case UP:
+            case UP -> {
                 if (!didSetInverse) {
                     neighbor.setNeighborAt(this, Direction.DOWN, true);
                 }
                 changeBoundary = new MapSectorChangeBoundary(0, 0, Game.WINDOW_WIDTH - 1, BOUNDARY_SIZE, neighbor);
-                break;
-            case RIGHT:
+            }
+            case RIGHT -> {
                 if (!didSetInverse) {
                     neighbor.setNeighborAt(this, Direction.LEFT, true);
                 }
                 changeBoundary = new MapSectorChangeBoundary(Game.WINDOW_WIDTH - BOUNDARY_SIZE - 1, 0, BOUNDARY_SIZE, Game.WINDOW_HEIGHT - 1, neighbor);
-                break;
-            case DOWN:
+            }
+            case DOWN -> {
                 if (!didSetInverse) {
                     neighbor.setNeighborAt(this, Direction.UP, true);
                 }
                 changeBoundary = new MapSectorChangeBoundary(0, Game.WINDOW_HEIGHT - BOUNDARY_SIZE - 1, Game.WINDOW_WIDTH - 1, BOUNDARY_SIZE, neighbor);
-                break;
-            case LEFT:
+            }
+            case LEFT -> {
                 if (!didSetInverse) {
                     neighbor.setNeighborAt(this, Direction.RIGHT, true);
                 }
                 changeBoundary = new MapSectorChangeBoundary(0, 0, BOUNDARY_SIZE, Game.WINDOW_HEIGHT - 1, neighbor);
-                break;
-            default:
-                Debug.warning("Unknown direction specified while attempting to set a sector neighbor! (" + direction + ")");
-                break;
+            }
+            default ->
+                    Debug.warning("Unknown direction specified while attempting to set a sector neighbor! (" + direction + ")");
         }
         if (changeBoundary != null) {
             changeBoundaries.add(changeBoundary);
@@ -290,8 +276,7 @@ public abstract class MapSector implements Tickable, Renderable {
         drawTiles(graphics);
         try {
             for (Entity e : entities) {
-                if (e instanceof VisibleEntity) {
-                    VisibleEntity ve = (VisibleEntity) e;
+                if (e instanceof VisibleEntity ve) {
                     if (ve.isDualRendered) {
                         ve.drawFirstLayer(graphics);
                     }
@@ -299,8 +284,7 @@ public abstract class MapSector implements Tickable, Renderable {
             }
             primaryEntities.forEach(r -> r.render(graphics));
             for (Entity e : entities) {
-                if (e instanceof VisibleEntity) {
-                    VisibleEntity ve = (VisibleEntity) e;
+                if (e instanceof VisibleEntity ve) {
                     if (ve.isDualRendered) {
                         ve.drawSecondLayer(graphics);
                     } else {

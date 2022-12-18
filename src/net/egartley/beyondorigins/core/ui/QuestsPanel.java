@@ -83,7 +83,8 @@ public class QuestsPanel extends UIElement implements Saveable, Loadable {
 
     public void onSlotClicked(QuestSlot clickedSlot) {
         if (!slots.contains(clickedSlot)) {
-            Debug.warning("Tried to click a quest slot that isn't showing in the panel! (\"" + clickedSlot.quest + "\")");
+            Debug.warning(
+                    "Tried to click a quest slot that isn't showing in the panel! (\"" + clickedSlot.quest + "\")");
             return;
         }
         if (sidePanel.getQuest() != null && sidePanel.getQuest().equals(clickedSlot.quest)) {

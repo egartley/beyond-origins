@@ -78,7 +78,8 @@ public class FH extends AnimatedEntity implements Damageable {
 
     @Override
     protected void setBoundaries() {
-        boundaries.add(new EntityBoundary(this, sprite.width, sprite.height, new BoundaryPadding(0, 2, 0, 2)));
+        boundaries.add(new EntityBoundary(this, sprite.width, sprite.height,
+                new BoundaryPadding(0, 2, 0, 2)));
         defaultBoundary = boundaries.get(0);
     }
 

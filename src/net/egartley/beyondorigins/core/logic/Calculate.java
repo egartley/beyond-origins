@@ -31,26 +31,20 @@ public class Calculate {
     }
 
     /**
-     * Returns whether or not the first entity is within "tolerance", or distance of, the second entity, in the
+     * Returns whether the first entity is within "tolerance", or distance of, the second entity, in the
      * specified direction
      */
     public static boolean isEntityWithinTolerance(EntityBoundary e1, EntityBoundary e2, Direction direction, int tolerance) {
-        switch (direction) {
-            case UP:
-                return e2.top - tolerance <= e1.bottom && e1.top < e2.top && e1.bottom - e2.top <= tolerance;
-            case DOWN:
-                return e2.bottom + tolerance >= e1.top && e1.bottom > e2.bottom && e2.bottom - e1.top <= tolerance;
-            case LEFT:
-                return e2.left <= e1.right + tolerance && e1.left < e2.left && e1.right - e2.left <= tolerance;
-            case RIGHT:
-                return e2.right + tolerance >= e1.left && e1.left > e2.left && e2.right - e1.left <= tolerance;
-            default:
-                return false;
-        }
+        return switch (direction) {
+            case UP -> e2.top - tolerance <= e1.bottom && e1.top < e2.top && e1.bottom - e2.top <= tolerance;
+            case DOWN -> e2.bottom + tolerance >= e1.top && e1.bottom > e2.bottom && e2.bottom - e1.top <= tolerance;
+            case LEFT -> e2.left <= e1.right + tolerance && e1.left < e2.left && e1.right - e2.left <= tolerance;
+            case RIGHT -> e2.right + tolerance >= e1.left && e1.left > e2.left && e2.right - e1.left <= tolerance;
+        };
     }
 
     /**
-     * Returns whether or not the first entity is within "tolerance", or distance of, the second entity, in the
+     * Returns whether the first entity is within "tolerance", or distance of, the second entity, in the
      * specified direction, using the entities' default boundaries
      */
     public static boolean isEntityWithinTolerance(Entity baseEntity, Entity targetEntity, Direction direction, int tolerance) {

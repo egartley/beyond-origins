@@ -24,7 +24,8 @@ public class DefaultRock extends VisibleEntity {
 
     @Override
     protected void setBoundaries() {
-        boundaries.add(new EntityBoundary(this, image.getWidth(), image.getHeight(), new BoundaryPadding(-4, 1, -8, 1)));
+        boundaries.add(new EntityBoundary(this, image.getWidth(), image.getHeight(),
+                new BoundaryPadding(-4, 1, -8, 1)));
         defaultBoundary = boundaries.get(0);
     }
 

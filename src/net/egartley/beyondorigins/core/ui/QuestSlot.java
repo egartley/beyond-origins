@@ -10,8 +10,10 @@ public class QuestSlot extends ClickableArea {
     private static boolean didLoadImages;
     private Image slotImage;
     private static Image slotHoverImage, slotNormalImage;
-    private static final Color SLOT_SELECTED_TITLE_COLOR = Color.white, SLOT_TITLE_COLOR = new Color(65, 53, 37);
-    private static final Font SLOT_TITLE_FONT = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 14), true);
+    private static final Color SLOT_SELECTED_TITLE_COLOR = Color.white,
+            SLOT_TITLE_COLOR = new Color(65, 53, 37);
+    private static final Font SLOT_TITLE_FONT =
+            new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 14), true);
 
     public boolean isSelected;
     public Quest quest;

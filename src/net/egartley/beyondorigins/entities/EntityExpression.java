@@ -50,18 +50,20 @@ public class EntityExpression extends AnimatedEntity {
     }
 
     private SpriteSheet getTemplateSpriteSheet(byte type) {
-        switch (type) {
-            case CONFUSION:
-                return new SpriteSheet(Images.getImageFromPath(Images.expressionPath + "confusion.png"), 18, 18, 1, 4);
-            case ATTENTION:
-                return new SpriteSheet(Images.getImageFromPath(Images.expressionPath + "attention.png"), 18, 18, 1, 4);
-            case ANGER:
-                return new SpriteSheet(Images.getImageFromPath(Images.expressionPath + "anger.png"), 18, 18, 1, 2);
-            case HEART:
-                return new SpriteSheet(Images.getImageFromPath(Images.expressionPath + "heart.png"), 18, 18, 1, 2);
-            default:
-                return new SpriteSheet(Images.getImageFromPath(Images.path + "unknown.png"), 32, 32, 1, 1);
-        }
+        return switch (type) {
+            case CONFUSION ->
+                    new SpriteSheet(Images.getImageFromPath(
+                            Images.expressionPath + "confusion.png"), 18, 18, 1, 4);
+            case ATTENTION ->
+                    new SpriteSheet(Images.getImageFromPath(
+                            Images.expressionPath + "attention.png"), 18, 18, 1, 4);
+            case ANGER -> new SpriteSheet(Images.getImageFromPath(
+                    Images.expressionPath + "anger.png"), 18, 18, 1, 2);
+            case HEART -> new SpriteSheet(Images.getImageFromPath(
+                    Images.expressionPath + "heart.png"), 18, 18, 1, 2);
+            default -> new SpriteSheet(Images.getImageFromPath(
+                    Images.path + "unknown.png"), 32, 32, 1, 1);
+        };
     }
 
     @Override

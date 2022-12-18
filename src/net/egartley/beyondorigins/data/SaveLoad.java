@@ -7,17 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-class SaveFile {
-
-    int id;
-    JSONObject data;
-
-    void write(String path) throws IOException {
-        Files.writeString(Paths.get(path), data.toString());
-    }
-
-}
-
 public class SaveLoad {
 
     private static int currentID = -1;

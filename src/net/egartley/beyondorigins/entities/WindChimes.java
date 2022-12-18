@@ -26,7 +26,8 @@ public class WindChimes extends AnimatedEntity {
     private EntityBoundary overheadBoundary;
 
     public WindChimes(int x, int y) {
-        super("WindChimes", new SpriteSheet(Images.getImage(Images.WIND_CHIMES), 31, 54, 2, 5));
+        super("WindChimes", new SpriteSheet(
+                Images.getImage(Images.WIND_CHIMES), 31, 54, 2, 5));
         isSectorSpecific = true;
         isDualRendered = false;
         isTraversable = false;
@@ -53,8 +54,10 @@ public class WindChimes extends AnimatedEntity {
 
     @Override
     public void setAnimations() {
-        animations.add(new Animation(Util.getAnimationFrames(sprites.get(LEFT_SWING_ANIMATION)), ANIMATION_THRESHOLD + Util.randomInt(10, 100, true)));
-        animations.add(new Animation(Util.getAnimationFrames(sprites.get(RIGHT_SWING_ANIMATION)), ANIMATION_THRESHOLD + Util.randomInt(10, 100, true)));
+        animations.add(new Animation(Util.getAnimationFrames(sprites.get(LEFT_SWING_ANIMATION)),
+                ANIMATION_THRESHOLD + Util.randomInt(10, 100, true)));
+        animations.add(new Animation(Util.getAnimationFrames(sprites.get(RIGHT_SWING_ANIMATION)),
+                ANIMATION_THRESHOLD + Util.randomInt(10, 100, true)));
         animation = animations.get(LEFT_SWING_ANIMATION);
         for (Animation a : animations) {
             a.setLooping(false);
@@ -68,9 +71,12 @@ public class WindChimes extends AnimatedEntity {
 
     @Override
     protected void setBoundaries() {
-        mastBoundary = new EntityBoundary(this, sprite.width, sprite.height, new BoundaryPadding(-4, 0, -19, -27));
-        overheadBoundary = new EntityBoundary(this, sprite.width, sprite.height, new BoundaryPadding(0, -4, -42, -4));
-        chimeBoundary = new EntityBoundary(this, sprite.width, sprite.height, new BoundaryPadding(-12, -12, -29, 0));
+        mastBoundary = new EntityBoundary(this, sprite.width, sprite.height,
+                new BoundaryPadding(-4, 0, -19, -27));
+        overheadBoundary = new EntityBoundary(this, sprite.width, sprite.height,
+                new BoundaryPadding(0, -4, -42, -4));
+        chimeBoundary = new EntityBoundary(this, sprite.width, sprite.height,
+                new BoundaryPadding(-12, -12, -29, 0));
         boundaries.add(mastBoundary);
         boundaries.add(overheadBoundary);
         boundaries.add(chimeBoundary);

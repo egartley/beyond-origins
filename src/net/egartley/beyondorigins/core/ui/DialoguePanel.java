@@ -17,12 +17,14 @@ public class DialoguePanel extends UIElement {
     private static final double ADVANCE_DELAY = 1.225D;
     private DialogueExchange exchange;
     private final Image moreLines;
-    private static final Font CHARACTER_NAME_FONT = new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12), true);
+    private static final Font CHARACTER_NAME_FONT =
+            new TrueTypeFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12), true);
 
     public boolean isShowing;
     public boolean isReadyToAdvance;
     public static final short MAX_LINES = 5;
-    public static final Font LINE_FONT = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 14), true);
+    public static final Font LINE_FONT =
+            new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 14), true);
 
     public DialoguePanel() {
         super(Images.getImage(Images.DIALOGUE_PANEL), true);
@@ -107,10 +109,12 @@ public class DialoguePanel extends UIElement {
         }
         graphics.drawImage(image, x, y);
         Image characterImage = exchange.currentDialogue.character.getCharacterImage();
-        graphics.drawImage(characterImage, 277 - characterImage.getWidth() / 2, 414 - (characterImage.getHeight() - 44));
+        graphics.drawImage(characterImage, 277 - characterImage.getWidth() / 2,
+                414 - (characterImage.getHeight() - 44));
         graphics.setColor(Color.white);
         graphics.setFont(CHARACTER_NAME_FONT);
-        graphics.drawString(exchange.currentDialogue.character.getName(), 277 - CHARACTER_NAME_FONT.getWidth(exchange.currentDialogue.character.getName()) / 2, 466);
+        graphics.drawString(exchange.currentDialogue.character.getName(),
+                277 - CHARACTER_NAME_FONT.getWidth(exchange.currentDialogue.character.getName()) / 2, 466);
         graphics.setFont(LINE_FONT);
         for (String line : exchange.displayedLines) {
             renderLine(line, graphics);

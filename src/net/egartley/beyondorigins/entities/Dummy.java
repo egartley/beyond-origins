@@ -35,13 +35,16 @@ public class Dummy extends AnimatedEntity implements Character {
     private final DialogueExchange dialogue_playerCollision;
 
     public Dummy() {
-        super("Dummy", new SpriteSheet(Images.getImage(Images.DUMMY), 30, 44, 2, 4));
+        super("Dummy", new SpriteSheet(
+                Images.getImage(Images.DUMMY), 30, 44, 2, 4));
         setPosition(470, 132);
         isSectorSpecific = false;
         isDualRendered = false;
         speed = 1.1;
         exp = new EntityExpression(EntityExpression.HEART, this);
-        dialogue_playerCollision = new DialogueExchange(new CharacterDialogue(this, "dummy/player-collision.def"), new CharacterDialogue(Entities.PLAYER, "player/dummy-collision.def"));
+        dialogue_playerCollision = new DialogueExchange(
+                new CharacterDialogue(this, "dummy/player-collision.def"),
+                new CharacterDialogue(Entities.PLAYER, "player/dummy-collision.def"));
         DialogueController.addFinished(new DialogueFinishedEvent(dialogue_playerCollision) {
             @Override
             public void onFinish() {
@@ -125,7 +128,8 @@ public class Dummy extends AnimatedEntity implements Character {
 
     @Override
     public void setBoundaries() {
-        boundaries.add(new EntityBoundary(this, sprite.width, sprite.height, new BoundaryPadding(0, 2, 0, 2)));
+        boundaries.add(new EntityBoundary(this, sprite.width, sprite.height,
+                new BoundaryPadding(0, 2, 0, 2)));
         defaultBoundary = boundaries.get(0);
     }
 

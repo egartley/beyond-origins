@@ -61,7 +61,7 @@ public class EntityEntityCollision {
     }
 
     /**
-     * End the collision, regardless of whether or not there is still
+     * End the collision, regardless of whether there is still
      * an actual collision between the entities
      */
     public void end() {

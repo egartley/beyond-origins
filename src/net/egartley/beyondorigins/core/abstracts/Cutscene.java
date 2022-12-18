@@ -23,7 +23,7 @@ public abstract class Cutscene extends MapSector {
 
     public void start() {
         returnSector = parent.sector;
-        parent.changeSector(this, parent.sector);
+        parent.changeSector(this, returnSector);
         isShowingTransition = true;
     }
 

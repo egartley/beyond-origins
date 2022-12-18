@@ -24,7 +24,8 @@ public class DefaultTree extends VisibleEntity {
 
     @Override
     protected void setBoundaries() {
-        defaultBoundary = new EntityBoundary(this, image.getWidth(), image.getHeight(), new BoundaryPadding(-24, -24, -24, -24));
+        defaultBoundary = new EntityBoundary(this, image.getWidth(), image.getHeight(),
+                new BoundaryPadding(-24, -24, -24, -24));
         boundaries.add(defaultBoundary);
     }
 

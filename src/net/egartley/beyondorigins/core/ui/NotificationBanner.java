@@ -19,7 +19,8 @@ public class NotificationBanner extends UIElement {
     private static int startY;
     private static final int TARGET_Y = 8;
     private static final double SLIDE_DELAY = 0.001D, SHOW_DELAY = 3.5D;
-    private static final Font FONT = new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 14), true);
+    private static final Font FONT =
+            new TrueTypeFont(new java.awt.Font("Bookman Old Style", java.awt.Font.PLAIN, 14), true);
 
     public boolean isDone;
     public Image icon;

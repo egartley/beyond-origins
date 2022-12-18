@@ -52,7 +52,8 @@ public abstract class VisibleEntity extends Entity {
             sprites = sheets.get(index).sprites;
             setSprite(0);
         } else {
-            Debug.warning("Tried to get a sprite for \"" + this + "\" at an invalid index, " + index + " (must be less than " + sprites.size() + ")");
+            Debug.warning("Tried to get a sprite for \"" + this + "\" at an invalid index, " +
+                    index + " (must be less than " + sprites.size() + ")");
         }
     }
 
@@ -60,7 +61,8 @@ public abstract class VisibleEntity extends Entity {
         if (index < sprites.size() && index >= 0) {
             setSprite(sprites.get(index));
         } else {
-            Debug.warning("Tried to get a sprite for \"" + this + "\" at an invalid index, " + index + " (must be less than " + sprites.size() + ")");
+            Debug.warning("Tried to get a sprite for \"" + this + "\" at an invalid index, " +
+                    index + " (must be less than " + sprites.size() + ")");
         }
     }
 
