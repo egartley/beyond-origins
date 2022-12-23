@@ -1,32 +1,38 @@
 package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.core.abstracts.AnimatedEntity;
+import net.egartley.beyondorigins.core.abstracts.BossEntity;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
+import net.egartley.beyondorigins.core.interfaces.Attacker;
 import net.egartley.beyondorigins.core.interfaces.Damageable;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
+import net.egartley.beyondorigins.core.logic.combat.Attack;
+import net.egartley.beyondorigins.core.logic.combat.AttackSet;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.core.threads.DelayedEvent;
 import net.egartley.beyondorigins.data.Images;
+import net.egartley.beyondorigins.entities.attacks.DoorSlamAttack;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import org.newdawn.slick.Animation;
 
 /**
  * Test boss. Inspired by a real person
  */
-public class FH extends AnimatedEntity implements Damageable {
+public class FH extends BossEntity implements Damageable {
 
     private boolean readyToHeal = true;
-    private final int ANIMATION_THRESHOLD = 390;
-    private final int REGEN_AMOUNT = 2;
-    private final byte LEFT_NORMAL_ANIMATION = 0;
-    private final byte RIGHT_NORMAL_ANIMATION = 1;
+    private final int ANIMATION_THRESHOLD = 390, ATTACK_THRESHOLD = 250, REGEN_AMOUNT = 2;
     private final double REGEN_DELAY = 1.25D;
 
+    private AttackSet doorSlamAttackSet;
+
     public FH() {
-        super("FH", new SpriteSheet(Images.getImage(Images.FH), 30, 44, 2, 4));
+        super("FH",
+                new SpriteSheet(Images.getImage(Images.FH_WALK), 30, 44, 2, 4),
+                new SpriteSheet(Images.getImage(Images.FH_ATTACK1), 30, 44, 2, 4));
+        spawnCooldown = 2.0D;
         isSectorSpecific = true;
         isDualRendered = false;
         speed = 0.35;
@@ -37,6 +43,22 @@ public class FH extends AnimatedEntity implements Damageable {
     @Override
     public void tick() {
         super.tick();
+
+        // spawn cooldown
+        if (!spawnCooldownStarted) {
+            // normally would start an idle or spawn animation here
+            // for now just do nothing
+            spawnCooldownStarted = true;
+            System.out.println("Starting spawn cooldown");
+            new DelayedEvent(spawnCooldown) {
+                @Override
+                public void onFinish() {
+                    System.out.println("Finished spawn cooldown");
+                    spawnCooldownFinished = true;
+                }
+            }.start();
+            return;
+        }
 
         // regenerate health
         if (health < maxHealth && readyToHeal) {
@@ -50,25 +72,52 @@ public class FH extends AnimatedEntity implements Damageable {
             }.start();
         }
 
-        // follow/catch up with player
-        if (!isMovingLeftwards && !isMovingRightwards) {
-            isMovingRightwards = true;
-            animation = animations.get(RIGHT_NORMAL_ANIMATION);
+        if (spawnCooldownFinished && !inAttackCooldown && !isAttacking) {
+            System.out.println("Calling startNextAttack");
+            startNextAttack();
+            setSprites(1);
+            return;
         }
-        follow(Entities.PLAYER, defaultBoundary, (int) Math.ceil(speed));
 
-        if (animation.isStopped()) {
-            animation.start();
+        if ((spawnCooldownStarted && !spawnCooldownFinished) || !isAttacking) {
+            // follow/catch up with player
+            if (!isMovingLeftwards && !isMovingRightwards) {
+                isMovingRightwards = true;
+                animation = animations.get(rightAnimationIndex);
+            }
+            follow(Entities.PLAYER, defaultBoundary, (int) Math.ceil(speed));
+
+            if (animation.isStopped()) {
+                animation.start();
+            }
         }
     }
 
     @Override
+    public void setAttackSets() {
+        DoorSlamAttack doorSlamAttack = new DoorSlamAttack(this, animations.get(2), animations.get(3));
+        doorSlamAttackSet = new AttackSet(doorSlamAttack);
+        attackSets.add(doorSlamAttackSet);
+        attackSet = doorSlamAttackSet;
+    }
+
+    @Override
     public void setAnimations() {
-        animations.add(new Animation(Util.getAnimationFrames(sprites.get(LEFT_NORMAL_ANIMATION)), ANIMATION_THRESHOLD));
-        animations.add(new Animation(Util.getAnimationFrames(sprites.get(RIGHT_NORMAL_ANIMATION)), ANIMATION_THRESHOLD));
-        animation = animations.get(RIGHT_NORMAL_ANIMATION);
         leftAnimationIndex = 0;
         rightAnimationIndex = 1;
+        animations.add(
+                new Animation(Util.getAnimationFrames(sprites.get(leftAnimationIndex)), ANIMATION_THRESHOLD));
+        animations.add(
+                new Animation(Util.getAnimationFrames(sprites.get(rightAnimationIndex)), ANIMATION_THRESHOLD));
+        animation = animations.get(rightAnimationIndex);
+
+        SpriteSheet attack1Sheet = sheets.get(1);
+        Animation attack1AnimationLeft = new Animation(Util.getAnimationFrames(attack1Sheet.sprites.get(0)), ATTACK_THRESHOLD);
+        attack1AnimationLeft.setLooping(false);
+        Animation attack1AnimationRight = new Animation(Util.getAnimationFrames(attack1Sheet.sprites.get(1)), ATTACK_THRESHOLD);
+        attack1AnimationRight.setLooping(false);
+        animations.add(attack1AnimationLeft);
+        animations.add(attack1AnimationRight);
     }
 
     @Override
@@ -84,12 +133,7 @@ public class FH extends AnimatedEntity implements Damageable {
     }
 
     @Override
-    protected void setInteractions() {
-
-    }
-
-    @Override
-    public void takeDamage(int amount) {
+    public void dealDamage(int amount) {
         health -= amount;
         if (health < 0) {
             health = 0;
@@ -109,7 +153,7 @@ public class FH extends AnimatedEntity implements Damageable {
 
     @Override
     public void onDeath() {
-        onColdDeath();
+        animation.stop();
         InGameState.map.sector.removeEntity(this);
     }
 

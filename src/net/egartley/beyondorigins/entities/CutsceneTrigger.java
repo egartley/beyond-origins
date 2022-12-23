@@ -40,9 +40,4 @@ public class CutsceneTrigger extends Entity {
         Collisions.add(collision);
     }
 
-    @Override
-    protected void setInteractions() {
-
-    }
-
 }

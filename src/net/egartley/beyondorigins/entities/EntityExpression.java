@@ -88,18 +88,17 @@ public class EntityExpression extends AnimatedEntity {
 
     @Override
     public void setAnimations() {
+
     }
 
     @Override
     protected void setBoundaries() {
+
     }
 
     @Override
     public void setCollisions() {
-    }
 
-    @Override
-    protected void setInteractions() {
     }
 
 }

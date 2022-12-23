@@ -5,6 +5,7 @@ import net.egartley.beyondorigins.core.abstracts.AnimatedEntity;
 import net.egartley.beyondorigins.core.controllers.DialogueController;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
 import net.egartley.beyondorigins.core.interfaces.Character;
+import net.egartley.beyondorigins.core.interfaces.Interactable;
 import net.egartley.beyondorigins.core.logic.dialogue.CharacterDialogue;
 import net.egartley.beyondorigins.core.logic.dialogue.DialogueExchange;
 import net.egartley.beyondorigins.core.logic.events.DialogueFinishedEvent;
@@ -21,7 +22,7 @@ import org.newdawn.slick.Image;
 /**
  * An NPC for testing dialogue and quests
  */
-public class Wizard extends AnimatedEntity implements Character {
+public class Wizard extends AnimatedEntity implements Character, Interactable {
 
     private final int ANIMATION_THRESHOLD = 210;
     private final DialogueExchange dialogue_gotHat;
@@ -121,6 +122,7 @@ public class Wizard extends AnimatedEntity implements Character {
 
     @Override
     public void setCollisions() {
+
     }
 
     @Override

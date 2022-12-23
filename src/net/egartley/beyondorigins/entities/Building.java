@@ -1,4 +1,4 @@
-package net.egartley.beyondorigins.ingame;
+package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.core.abstracts.VisibleEntity;
@@ -9,6 +9,7 @@ import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.gamestates.InGameState;
+import net.egartley.beyondorigins.ingame.BuildingFloor;
 
 import java.util.ArrayList;
 
@@ -98,11 +99,6 @@ public class Building extends VisibleEntity {
 
     @Override
     public void setCollisions() {
-
-    }
-
-    @Override
-    protected void setInteractions() {
 
     }
 

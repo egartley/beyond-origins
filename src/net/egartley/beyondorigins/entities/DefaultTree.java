@@ -31,10 +31,7 @@ public class DefaultTree extends VisibleEntity {
 
     @Override
     public void setCollisions() {
-    }
 
-    @Override
-    protected void setInteractions() {
     }
 
 }

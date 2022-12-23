@@ -8,6 +8,7 @@ import net.egartley.beyondorigins.core.controllers.DialogueController;
 import net.egartley.beyondorigins.core.enums.Direction;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
 import net.egartley.beyondorigins.core.interfaces.Character;
+import net.egartley.beyondorigins.core.interfaces.Interactable;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.dialogue.CharacterDialogue;
@@ -23,7 +24,7 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
-public class Dummy extends AnimatedEntity implements Character {
+public class Dummy extends AnimatedEntity implements Character, Interactable {
 
     private short walktime = 0;
     private boolean isTalkingToPlayer;

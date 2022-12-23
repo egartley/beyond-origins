@@ -13,7 +13,7 @@ import net.egartley.beyondorigins.data.Items;
 import net.egartley.beyondorigins.data.Quests;
 import net.egartley.beyondorigins.data.SaveLoad;
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.ingame.Building;
+import net.egartley.beyondorigins.entities.Building;
 import net.egartley.beyondorigins.ingame.PlayerMenu;
 import net.egartley.beyondorigins.ingame.Quest;
 import net.egartley.beyondorigins.ingame.maps.debug.DebugMap;

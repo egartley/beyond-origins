@@ -83,9 +83,4 @@ public class WindChimes extends AnimatedEntity {
         defaultBoundary = boundaries.get(2);
     }
 
-    @Override
-    protected void setInteractions() {
-
-    }
-
 }

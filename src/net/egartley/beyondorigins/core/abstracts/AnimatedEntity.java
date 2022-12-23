@@ -21,8 +21,8 @@ public abstract class AnimatedEntity extends VisibleEntity {
         this(name, new SpriteSheet(Images.getImage(Images.UNKNOWN)));
     }
 
-    public AnimatedEntity(String name, SpriteSheet sheet) {
-        super(name, sheet);
+    public AnimatedEntity(String name, SpriteSheet... sheets) {
+        super(name, sheets);
         setAnimations();
     }
 

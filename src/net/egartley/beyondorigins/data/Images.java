@@ -14,6 +14,7 @@ public class Images {
     public static String entityPath = path + "entities/";
     public static String mapTilePath = path + "map-tiles/";
     public static String expressionPath = entityPath + "expressions/";
+    public static String bossPath = entityPath + "boss/";
     public final static byte PLAYER = 0;
     public final static byte DUMMY = 1;
     public final static byte TILE_GRASS = 2;
@@ -40,6 +41,8 @@ public class Images {
     public final static byte MONSTER = 23;
     public final static byte CUTSCENE = 24;
     public final static byte WIND_CHIMES = 25;
+    public final static byte FH_WALK = 26;
+    public final static byte FH_ATTACK1 = 27;
     public final static byte UNKNOWN = 100;
 
     /**
@@ -53,6 +56,8 @@ public class Images {
             case WIZARD_WITH_HAT -> getImageFromPath(entityPath + "wizard-with-hat.png");
             case MONSTER -> getImageFromPath(entityPath + "monster.png");
             case FH -> getImageFromPath(entityPath + "fh-default.png");
+            case FH_WALK -> getImageFromPath(bossPath + "fh/fh-walk.png");
+            case FH_ATTACK1 -> getImageFromPath(bossPath + "fh/fh-attack1.png");
             case WIND_CHIMES -> getImageFromPath(entityPath + "wind-chimes.png");
             case TREE_DEFAULT -> getImageFromPath(entityPath + "tree-default.png");
             case ROCK_DEFAULT -> getImageFromPath(entityPath + "rock-default.png");

@@ -10,6 +10,7 @@ import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.data.Images;
+import net.egartley.beyondorigins.entities.Building;
 import net.egartley.beyondorigins.entities.BuildingChanger;
 import net.egartley.beyondorigins.entities.Entities;
 import org.newdawn.slick.Graphics;

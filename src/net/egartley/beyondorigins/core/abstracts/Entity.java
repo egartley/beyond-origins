@@ -4,6 +4,7 @@ import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.core.enums.Direction;
 import net.egartley.beyondorigins.core.interfaces.Damageable;
+import net.egartley.beyondorigins.core.interfaces.Interactable;
 import net.egartley.beyondorigins.core.interfaces.Renderable;
 import net.egartley.beyondorigins.core.interfaces.Tickable;
 import net.egartley.beyondorigins.core.logic.Calculate;
@@ -69,8 +70,6 @@ public abstract class Entity implements Tickable, Renderable {
 
     protected abstract void setBoundaries();
 
-    protected abstract void setInteractions();
-
     public void drawDebug(Graphics graphics) {
         drawBoundaries(graphics);
         drawNameTag(graphics);
@@ -129,7 +128,9 @@ public abstract class Entity implements Tickable, Renderable {
     @Override
     public void tick() {
         boundaries.forEach(EntityBoundary::tick);
-        interactions.forEach(EntityEntityInteraction::tick);
+        if (this instanceof Interactable) {
+            interactions.forEach(EntityEntityInteraction::tick);
+        }
     }
 
     public void setPosition(int x, int y) {

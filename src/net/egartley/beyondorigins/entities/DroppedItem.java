@@ -103,8 +103,4 @@ public class DroppedItem extends VisibleEntity {
         });
     }
 
-    @Override
-    protected void setInteractions() {
-    }
-
 }

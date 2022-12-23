@@ -60,9 +60,4 @@ public class DamageNumber extends VisibleEntity {
 
     }
 
-    @Override
-    protected void setInteractions() {
-
-    }
-
 }

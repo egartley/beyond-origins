@@ -9,7 +9,7 @@ import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
 import net.egartley.beyondorigins.entities.BuildingChanger;
 import net.egartley.beyondorigins.entities.Entities;
-import net.egartley.beyondorigins.ingame.Building;
+import net.egartley.beyondorigins.entities.Building;
 import net.egartley.beyondorigins.ingame.BuildingFloor;
 
 /**

@@ -24,7 +24,6 @@ import net.egartley.beyondorigins.core.logic.inventory.EntityInventory;
 import net.egartley.beyondorigins.core.ui.PlayerInventory;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.gamestates.InGameState;
-import net.egartley.beyondorigins.ingame.Building;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
@@ -297,10 +296,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
 
     @Override
     public void setCollisions() {
-    }
 
-    @Override
-    public void setInteractions() {
     }
 
     @Override
@@ -335,14 +331,14 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
         for (EntityEntityCollision c : Collisions.getConcurrentWith(this)) {
             Entity e = c.entities[0] != this ? c.entities[0] : c.entities[1];
             if (e instanceof Damageable) {
-                ((Damageable) e).takeDamage(DEFAULT_DAMAGE);
+                ((Damageable) e).dealDamage(DEFAULT_DAMAGE);
                 InGameState.map.sector.addEntity(new DamageNumber(DEFAULT_DAMAGE, e));
             }
         }
     }
 
     @Override
-    public void takeDamage(int amount) {
+    public void dealDamage(int amount) {
         health -= amount;
         if (health < 0) {
             health = 0;
@@ -359,10 +355,12 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
 
     @Override
     public void onDeath() {
+
     }
 
     @Override
     public void onColdDeath() {
+
     }
 
     @Override

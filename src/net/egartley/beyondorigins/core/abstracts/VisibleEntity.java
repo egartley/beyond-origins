@@ -4,11 +4,13 @@ import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.core.graphics.Sprite;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
+import net.egartley.beyondorigins.core.interfaces.Interactable;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class VisibleEntity extends Entity {
 
@@ -30,10 +32,10 @@ public abstract class VisibleEntity extends Entity {
         setSprite(sprite);
     }
 
-    public VisibleEntity(String name, SpriteSheet sheet) {
-        this(name, sheet.sprites.get(0));
-        sprites = sheet.sprites;
-        sheets.add(sheet);
+    public VisibleEntity(String name, SpriteSheet... sheets) {
+        this(name, sheets[0].sprites.get(0));
+        this.sheets.addAll(List.of(sheets));
+        setSprites(0);
     }
 
     public void drawFirstLayer(Graphics graphics) {
@@ -82,9 +84,11 @@ public abstract class VisibleEntity extends Entity {
         setBoundaries();
         Collisions.endAllWith(this);
         setCollisions();
-        interactions.forEach(i -> i.collision.end());
-        interactions.clear();
-        setInteractions();
+        if (this instanceof Interactable) {
+            interactions.forEach(i -> i.collision.end());
+            interactions.clear();
+            ((Interactable) this).setInteractions();
+        }
     }
 
     @Override

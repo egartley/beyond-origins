@@ -79,11 +79,6 @@ public class Monster extends AnimatedEntity implements Damageable {
     }
 
     @Override
-    protected void setInteractions() {
-
-    }
-
-    @Override
     public void tick() {
         super.tick();
         if (!isMovingLeftwards && !isMovingRightwards) {
@@ -121,7 +116,7 @@ public class Monster extends AnimatedEntity implements Damageable {
     }
 
     @Override
-    public void takeDamage(int amount) {
+    public void dealDamage(int amount) {
         health -= amount;
         if (health < 0) {
             health = 0;

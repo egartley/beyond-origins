@@ -21,7 +21,8 @@ public class Util {
     public static void annulCollisionEvent(EntityEntityCollisionEvent event, Entity entity) {
         // check for other movement restrictions
         for (EntityEntityCollision c : Collisions.getConcurrentWith(entity)) {
-            if (c.lastEvent == null) {
+            if (c.lastEvent == null || event == null) {
+                Debug.warning("Event when attempting to annul collision for " + entity + " was null!");
                 continue;
             }
             if (c.lastEvent.collidedSide == event.collidedSide && c.lastEvent.invoker != event.invoker) {
@@ -30,21 +31,14 @@ public class Util {
                 return;
             }
         }
+        if (event == null) {
+            return;
+        }
         switch (event.collidedSide) {
-            case TOP:
-                entity.isAllowedToMoveDownwards = true;
-                break;
-            case BOTTOM:
-                entity.isAllowedToMoveUpwards = true;
-                break;
-            case LEFT:
-                entity.isAllowedToMoveRightwards = true;
-                break;
-            case RIGHT:
-                entity.isAllowedToMoveLeftwards = true;
-                break;
-            default:
-                break;
+            case TOP -> entity.isAllowedToMoveDownwards = true;
+            case BOTTOM -> entity.isAllowedToMoveUpwards = true;
+            case LEFT -> entity.isAllowedToMoveRightwards = true;
+            case RIGHT -> entity.isAllowedToMoveLeftwards = true;
         }
     }
 
@@ -57,20 +51,10 @@ public class Util {
     public static void onCollisionWithNonTraversableEntity(EntityEntityCollisionEvent event, Entity entity) {
         entity.lastCollisionEvent = event;
         switch (event.collidedSide) {
-            case RIGHT:
-                entity.isAllowedToMoveLeftwards = false;
-                break;
-            case LEFT:
-                entity.isAllowedToMoveRightwards = false;
-                break;
-            case TOP:
-                entity.isAllowedToMoveDownwards = false;
-                break;
-            case BOTTOM:
-                entity.isAllowedToMoveUpwards = false;
-                break;
-            default:
-                break;
+            case RIGHT -> entity.isAllowedToMoveLeftwards = false;
+            case LEFT -> entity.isAllowedToMoveRightwards = false;
+            case TOP -> entity.isAllowedToMoveDownwards = false;
+            case BOTTOM -> entity.isAllowedToMoveUpwards = false;
         }
     }
 
@@ -116,7 +100,7 @@ public class Util {
     }
 
     /**
-     * Returns whether or not the specified point is overlapping the specified area
+     * Returns whether the specified point is overlapping the specified area
      */
     public static boolean isWithinBounds(int pointX, int pointY, int boundsX, int boundsY, int width, int height) {
         return pointX >= boundsX && pointX <= boundsX + width && pointY >= boundsY && pointY <= boundsY + height;
