@@ -31,10 +31,9 @@ public abstract class AnimatedEntity extends VisibleEntity {
     @Override
     public void follow(Entity toFollow, EntityBoundary boundary, int tolerance) {
         super.follow(toFollow, boundary, tolerance);
-        int animationIndex = animations.indexOf(animation);
-        if (isMovingRightwards && animationIndex == leftAnimationIndex) {
+        if (isMovingRightwards) {
             switchAnimation(rightAnimationIndex);
-        } else if (isMovingLeftwards && animationIndex == rightAnimationIndex) {
+        } else if (isMovingLeftwards) {
             switchAnimation(leftAnimationIndex);
         }
     }

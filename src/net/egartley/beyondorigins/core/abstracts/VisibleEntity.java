@@ -83,6 +83,7 @@ public abstract class VisibleEntity extends Entity {
         boundaries.clear();
         setBoundaries();
         Collisions.endAllWith(this);
+        Collisions.removeAllWith(this);
         setCollisions();
         if (this instanceof Interactable) {
             interactions.forEach(i -> i.collision.end());

@@ -51,8 +51,8 @@ public class Calculate {
         return isEntityWithinTolerance(baseEntity.defaultBoundary, targetEntity.defaultBoundary, direction, tolerance);
     }
 
-    public static boolean isPointWithinTolerance(int x, int y, int tolerance) {
-        return Math.max(x, y) - Math.min(x, y) <= tolerance;
+    public static boolean isPointWithinTolerance(int a, int b, int tolerance) {
+        return Math.max(a, b) - Math.min(a, b) <= tolerance;
     }
 
 }

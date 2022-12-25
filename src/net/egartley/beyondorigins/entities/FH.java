@@ -1,13 +1,11 @@
 package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.core.abstracts.BossEntity;
+import net.egartley.beyondorigins.core.abstracts.CombatEntity;
 import net.egartley.beyondorigins.core.graphics.SpriteSheet;
-import net.egartley.beyondorigins.core.interfaces.Attacker;
 import net.egartley.beyondorigins.core.interfaces.Damageable;
 import net.egartley.beyondorigins.core.logic.collision.Collisions;
 import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
-import net.egartley.beyondorigins.core.logic.combat.Attack;
 import net.egartley.beyondorigins.core.logic.combat.AttackSet;
 import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
 import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
@@ -20,10 +18,10 @@ import org.newdawn.slick.Animation;
 /**
  * Test boss. Inspired by a real person
  */
-public class FH extends BossEntity implements Damageable {
+public class FH extends CombatEntity implements Damageable {
 
     private boolean readyToHeal = true;
-    private final int ANIMATION_THRESHOLD = 390, ATTACK_THRESHOLD = 250, REGEN_AMOUNT = 2;
+    private final int ANIMATION_THRESHOLD = 390, ATTACK_THRESHOLD = 150, REGEN_AMOUNT = 2;
     private final double REGEN_DELAY = 1.25D;
 
     private AttackSet doorSlamAttackSet;
@@ -49,11 +47,9 @@ public class FH extends BossEntity implements Damageable {
             // normally would start an idle or spawn animation here
             // for now just do nothing
             spawnCooldownStarted = true;
-            System.out.println("Starting spawn cooldown");
             new DelayedEvent(spawnCooldown) {
                 @Override
                 public void onFinish() {
-                    System.out.println("Finished spawn cooldown");
                     spawnCooldownFinished = true;
                 }
             }.start();
@@ -72,21 +68,20 @@ public class FH extends BossEntity implements Damageable {
             }.start();
         }
 
-        if (spawnCooldownFinished && !inAttackCooldown && !isAttacking) {
-            System.out.println("Calling startNextAttack");
-            startNextAttack();
-            setSprites(1);
+        if (!spawnCooldownFinished) {
             return;
         }
 
-        if ((spawnCooldownStarted && !spawnCooldownFinished) || !isAttacking) {
+        if (!inAttackCooldown && !isAttacking) {
+            startNextAttack();
+            setSprites(1);
+        } else if (inAttackCooldown) {
             // follow/catch up with player
             if (!isMovingLeftwards && !isMovingRightwards) {
                 isMovingRightwards = true;
                 animation = animations.get(rightAnimationIndex);
             }
             follow(Entities.PLAYER, defaultBoundary, (int) Math.ceil(speed));
-
             if (animation.isStopped()) {
                 animation.start();
             }

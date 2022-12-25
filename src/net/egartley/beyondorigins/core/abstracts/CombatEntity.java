@@ -8,15 +8,15 @@ import net.egartley.beyondorigins.entities.Entities;
 
 import java.util.ArrayList;
 
-public abstract class BossEntity extends AnimatedEntity {
+public abstract class CombatEntity extends AnimatedEntity {
 
     public double spawnCooldown = 1.0D;
     public boolean spawnCooldownFinished, spawnCooldownStarted, inAttackCooldown, isAttacking;
-    public Attack lastAttack;
+    public Attack currentAttack;
     public AttackSet attackSet;
     public ArrayList<AttackSet> attackSets = new ArrayList<>();
 
-    public BossEntity(String name, SpriteSheet... sheets) {
+    public CombatEntity(String name, SpriteSheet... sheets) {
         super(name, sheets);
         setAttackSets();
     }
@@ -24,9 +24,8 @@ public abstract class BossEntity extends AnimatedEntity {
     public abstract void setAttackSets();
 
     public void startNextAttack() {
-        System.out.println("Starting next attack");
         Attack attack = attackSet.getNextAttack();
-        lastAttack = attack;
+        currentAttack = attack;
         isAttacking = true;
         attack.animation = this.isLeftOf(Entities.PLAYER) ? attack.animationRight : attack.animationLeft;
         switchAnimation(animations.indexOf(attack.animation));
@@ -34,13 +33,11 @@ public abstract class BossEntity extends AnimatedEntity {
     }
 
     public void onAttackFinish() {
-        System.out.println("Finished attack, starting cooldown");
         isAttacking = false;
         inAttackCooldown = true;
-        new DelayedEvent(lastAttack.cooldown) {
+        new DelayedEvent(currentAttack.cooldown) {
             @Override
             public void onFinish() {
-                System.out.println("Cooldown done");
                 inAttackCooldown = false;
             }
         }.start();
@@ -50,7 +47,7 @@ public abstract class BossEntity extends AnimatedEntity {
     public void tick() {
         super.tick();
         if (isAttacking) {
-            lastAttack.tick();
+            currentAttack.tick();
         }
     }
 

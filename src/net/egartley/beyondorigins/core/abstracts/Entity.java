@@ -162,8 +162,8 @@ public abstract class Entity implements Tickable, Renderable {
         move(direction, boundary, resetIsMoving, false);
     }
 
-    protected void move(Direction direction, EntityBoundary boundary, boolean reserIsMoving, boolean containToWindow) {
-        if (reserIsMoving) {
+    protected void move(Direction direction, EntityBoundary boundary, boolean resetIsMoving, boolean containToWindow) {
+        if (resetIsMoving) {
             isMovingUpwards = false;
             isMovingDownwards = false;
             isMovingLeftwards = false;

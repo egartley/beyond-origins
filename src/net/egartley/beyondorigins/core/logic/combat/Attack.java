@@ -1,12 +1,13 @@
 package net.egartley.beyondorigins.core.logic.combat;
 
-import net.egartley.beyondorigins.core.abstracts.BossEntity;
+import net.egartley.beyondorigins.core.abstracts.CombatEntity;
 import net.egartley.beyondorigins.core.interfaces.Tickable;
+import net.egartley.beyondorigins.entities.Entities;
 import org.newdawn.slick.Animation;
 
 public class Attack implements Tickable {
 
-    protected final BossEntity parent;
+    protected final CombatEntity parent;
 
     public int damage, weight;
     public double cooldown;
@@ -14,7 +15,7 @@ public class Attack implements Tickable {
 
     public Animation animation, animationLeft, animationRight;
 
-    public Attack(BossEntity parent, int damage, double cooldown, int weight,
+    public Attack(CombatEntity parent, int damage, double cooldown, int weight,
                   Animation animationLeft, Animation animationRight) {
         this.parent = parent;
         this.damage = damage;
@@ -29,11 +30,16 @@ public class Attack implements Tickable {
         animation.restart();
     }
 
+    public void end() {
+        Entities.PLAYER.dealDamage(damage);
+        parent.onAttackFinish();
+        calledOnFinish = true;
+    }
+
     @Override
     public void tick() {
         if (animation.isStopped() && !calledOnFinish) {
-            parent.onAttackFinish();
-            calledOnFinish = true;
+            end();
         }
     }
 
