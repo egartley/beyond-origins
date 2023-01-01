@@ -45,7 +45,7 @@ public class Game extends StateBasedGame implements InputProviderListener {
             app.setDisplayMode(WINDOW_WIDTH, WINDOW_HEIGHT, false);
             app.setTargetFrameRate(60);
             app.setShowFPS(false);
-            app.setIcon("resources/images/icon.png");
+            app.setIcon("images/icon.png");
             app.start();
         } catch (SlickException e) {
             e.printStackTrace();

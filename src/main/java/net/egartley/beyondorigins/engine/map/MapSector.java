@@ -83,7 +83,7 @@ public abstract class MapSector implements Tickable, Renderable {
     private void buildTiles() {
         String entireJSONString = null;
         try {
-            entireJSONString = Files.readString(FileSystems.getDefault().getPath("resources", "data",
+            entireJSONString = Files.readString(FileSystems.getDefault().getPath("data",
                     "maps", parent.name, "sector-" + number + ".def"));
         } catch (IOException e) {
             Debug.error(e);

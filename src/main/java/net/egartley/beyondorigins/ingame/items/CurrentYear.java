@@ -6,7 +6,7 @@ import net.egartley.beyondorigins.data.Images;
 public class CurrentYear extends GameItem {
 
     public CurrentYear() {
-        super("currentyear", "IT'S CURRENT YEAR", Images.getImageFromPath("resources/images/items/current-year.png"));
+        super("currentyear", "IT'S CURRENT YEAR", Images.getImageFromPath("images/items/current-year.png"));
     }
 
 }

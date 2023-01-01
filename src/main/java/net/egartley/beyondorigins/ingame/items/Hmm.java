@@ -3,9 +3,10 @@ package net.egartley.beyondorigins.ingame.items;
 import net.egartley.beyondorigins.engine.logic.inventory.GameItem;
 import net.egartley.beyondorigins.data.Images;
 
-public class WizardHat extends GameItem {
+public class Hmm extends GameItem {
 
-    public WizardHat() {
-        super("wizhat", "Wizard's Hat", Images.getImageFromPath("resources/images/items/wizard-hat.png"));
+    public Hmm() {
+        super("hmm", "Hmm", Images.getImageFromPath("images/items/hmm.png"));
     }
+
 }

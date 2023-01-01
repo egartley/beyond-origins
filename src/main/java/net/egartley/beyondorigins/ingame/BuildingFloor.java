@@ -36,7 +36,7 @@ public class BuildingFloor implements Tickable, Renderable {
     public BuildingFloor(int number, Building parent) {
         this.number = number;
         this.parent = parent;
-        image = Images.getImageFromPath("resources/images/buildings/floors/" + parent.name + "_" + number + ".png");
+        image = Images.getImageFromPath("images/buildings/floors/" + parent.name + "_" + number + ".png");
         if (image != null) {
             x = Calculate.getCenteredX(image.getWidth());
             y = Calculate.getCenteredY(image.getHeight());

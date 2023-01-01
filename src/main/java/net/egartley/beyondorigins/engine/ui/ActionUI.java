@@ -22,7 +22,7 @@ public class ActionUI extends UIElement {
 
     public ActionUI(String text, int keycode) {
         this.text = text;
-        icon = Images.getImageFromPath("resources/images/ui/keys/" + keycode + ".png");
+        icon = Images.getImageFromPath("images/ui/keys/" + keycode + ".png");
         if (icon == null) {
             Debug.error("Couldn't load icon file for key \"" + keycode + "\"!");
         } else {

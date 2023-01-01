@@ -8,6 +8,7 @@ import net.egartley.beyondorigins.engine.ui.panel.DialoguePanel;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * A piece of dialogue for a specific character
@@ -48,8 +49,7 @@ public class CharacterDialogue {
 
     private void setLines(String path) {
         try {
-            lines = Util.toLines(Files.readString(
-                    FileSystems.getDefault().getPath("resources", "dialogue", path)),
+            lines = Util.toLines(Files.readString(Path.of("src", "main", "resources", "dialogue", path)),
                     DialoguePanel.LINE_FONT, 370);
         } catch (IOException e) {
             Debug.error(e);

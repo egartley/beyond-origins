@@ -19,7 +19,7 @@ public class Entities {
 
     public static void initialize() {
         PLAYER = new Player();
-        DUMMY = new Dummy();
+        // DUMMY = new Dummy();
         WIZARD = new Wizard();
     }
 
@@ -31,7 +31,7 @@ public class Entities {
                     Images.getImage(Images.ROCK_DEFAULT), 1, 1).getSprite(0);
             case TEMPLATE_WP -> new SpriteSheet(Images.getImage(Images.WARP_PAD), 1, 1).getSprite(0);
             case TEMPLATE_CT -> new SpriteSheet(Images.getImage(Images.CUTSCENE), 1, 1).getSprite(0);
-            default -> new Sprite(Images.getImageFromPath("resources/images/unknown.png"));
+            default -> new Sprite(Images.getImageFromPath("images/unknown.png"));
         };
     }
 

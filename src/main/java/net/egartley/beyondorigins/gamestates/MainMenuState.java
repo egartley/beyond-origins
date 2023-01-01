@@ -19,7 +19,7 @@ public class MainMenuState extends BasicGameState {
     public ArrayList<MenuButton> buttons = new ArrayList<>();
 
     public MainMenuState() {
-        logo = Images.getImageFromPath("resources/images/logo.png");
+        logo = Images.getImageFromPath("images/logo.png");
     }
 
     @Override
