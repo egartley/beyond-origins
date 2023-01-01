@@ -1,6 +1,6 @@
 package net.egartley.beyondorigins.ingame.items;
 
-import net.egartley.beyondorigins.core.abstracts.GameItem;
+import net.egartley.beyondorigins.engine.logic.inventory.GameItem;
 import net.egartley.beyondorigins.data.Images;
 
 public class CurrentYear extends GameItem {

@@ -1,10 +1,10 @@
 package net.egartley.beyondorigins.ingame.maps.testbattle.sectors;
 
-import net.egartley.beyondorigins.core.abstracts.Map;
-import net.egartley.beyondorigins.core.abstracts.MapSector;
-import net.egartley.beyondorigins.core.logic.collision.Collisions;
-import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
-import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
+import net.egartley.beyondorigins.engine.map.Map;
+import net.egartley.beyondorigins.engine.map.MapSector;
+import net.egartley.beyondorigins.engine.logic.collision.Collisions;
+import net.egartley.beyondorigins.engine.logic.collision.EntityEntityCollision;
+import net.egartley.beyondorigins.engine.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.WarpPad;
 import net.egartley.beyondorigins.gamestates.InGameState;

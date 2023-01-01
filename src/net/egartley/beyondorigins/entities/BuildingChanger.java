@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.beyondorigins.core.abstracts.Entity;
-import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
+import net.egartley.beyondorigins.engine.entities.Entity;
+import net.egartley.beyondorigins.engine.logic.collision.boundaries.EntityBoundary;
 
 /**
  * An area that will trigger a change in the player's location and floor within a building

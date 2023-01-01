@@ -1,9 +1,9 @@
 package net.egartley.beyondorigins;
 
-import net.egartley.beyondorigins.core.controllers.KeyboardController;
-import net.egartley.beyondorigins.core.controllers.MouseController;
-import net.egartley.beyondorigins.core.input.Keyboard;
-import net.egartley.beyondorigins.core.input.Mouse;
+import net.egartley.beyondorigins.engine.controllers.KeyboardController;
+import net.egartley.beyondorigins.engine.controllers.MouseController;
+import net.egartley.beyondorigins.engine.input.Keyboard;
+import net.egartley.beyondorigins.engine.input.Mouse;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.gamestates.MainMenuState;
 import org.newdawn.slick.AppGameContainer;

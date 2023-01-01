@@ -1,8 +1,7 @@
 package net.egartley.beyondorigins.entities.attacks;
 
-import net.egartley.beyondorigins.core.abstracts.CombatEntity;
-import net.egartley.beyondorigins.core.logic.combat.Attack;
-import net.egartley.beyondorigins.entities.Entities;
+import net.egartley.beyondorigins.engine.entities.CombatEntity;
+import net.egartley.beyondorigins.engine.logic.combat.Attack;
 import org.newdawn.slick.Animation;
 
 public class DoorSlamAttack extends Attack {

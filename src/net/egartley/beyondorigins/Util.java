@@ -1,12 +1,12 @@
 package net.egartley.beyondorigins;
 
-import net.egartley.beyondorigins.core.abstracts.Entity;
-import net.egartley.beyondorigins.core.graphics.Sprite;
-import net.egartley.beyondorigins.core.graphics.SpriteSheet;
-import net.egartley.beyondorigins.core.logic.collision.Collisions;
-import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
-import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
-import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
+import net.egartley.beyondorigins.engine.entities.Entity;
+import net.egartley.beyondorigins.engine.graphics.Sprite;
+import net.egartley.beyondorigins.engine.graphics.SpriteSheet;
+import net.egartley.beyondorigins.engine.logic.collision.Collisions;
+import net.egartley.beyondorigins.engine.logic.collision.EntityEntityCollision;
+import net.egartley.beyondorigins.engine.logic.events.EntityEntityCollisionEvent;
+import net.egartley.beyondorigins.engine.logic.collision.boundaries.EntityBoundary;
 import net.egartley.beyondorigins.data.Images;
 import org.newdawn.slick.*;
 

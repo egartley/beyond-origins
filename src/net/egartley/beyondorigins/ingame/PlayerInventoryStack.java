@@ -1,11 +1,11 @@
 package net.egartley.beyondorigins.ingame;
 
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.core.interfaces.Renderable;
-import net.egartley.beyondorigins.core.input.Mouse;
-import net.egartley.beyondorigins.core.interfaces.Tickable;
-import net.egartley.beyondorigins.core.logic.inventory.ItemStack;
-import net.egartley.beyondorigins.core.ui.PlayerInventory;
+import net.egartley.beyondorigins.engine.interfaces.Renderable;
+import net.egartley.beyondorigins.engine.input.Mouse;
+import net.egartley.beyondorigins.engine.interfaces.Tickable;
+import net.egartley.beyondorigins.engine.logic.inventory.ItemStack;
+import net.egartley.beyondorigins.engine.ui.PlayerInventory;
 import net.egartley.beyondorigins.entities.DroppedItem;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import org.newdawn.slick.Color;

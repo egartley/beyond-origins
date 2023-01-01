@@ -1,15 +1,15 @@
 package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.core.abstracts.CombatEntity;
-import net.egartley.beyondorigins.core.graphics.SpriteSheet;
-import net.egartley.beyondorigins.core.interfaces.Damageable;
-import net.egartley.beyondorigins.core.logic.collision.Collisions;
-import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
-import net.egartley.beyondorigins.core.logic.combat.AttackSet;
-import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
-import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
-import net.egartley.beyondorigins.core.threads.DelayedEvent;
+import net.egartley.beyondorigins.engine.entities.CombatEntity;
+import net.egartley.beyondorigins.engine.graphics.SpriteSheet;
+import net.egartley.beyondorigins.engine.interfaces.Damageable;
+import net.egartley.beyondorigins.engine.logic.collision.Collisions;
+import net.egartley.beyondorigins.engine.logic.collision.EntityEntityCollision;
+import net.egartley.beyondorigins.engine.logic.combat.AttackSet;
+import net.egartley.beyondorigins.engine.logic.collision.boundaries.BoundaryPadding;
+import net.egartley.beyondorigins.engine.logic.collision.boundaries.EntityBoundary;
+import net.egartley.beyondorigins.engine.threads.DelayedEvent;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.entities.attacks.DoorSlamAttack;
 import net.egartley.beyondorigins.gamestates.InGameState;

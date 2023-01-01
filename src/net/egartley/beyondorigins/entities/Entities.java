@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.beyondorigins.core.graphics.Sprite;
-import net.egartley.beyondorigins.core.graphics.SpriteSheet;
+import net.egartley.beyondorigins.engine.graphics.Sprite;
+import net.egartley.beyondorigins.engine.graphics.SpriteSheet;
 import net.egartley.beyondorigins.data.Images;
 
 /**

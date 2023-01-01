@@ -1,16 +1,16 @@
 package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.core.abstracts.AnimatedEntity;
-import net.egartley.beyondorigins.core.controllers.DialogueController;
-import net.egartley.beyondorigins.core.graphics.SpriteSheet;
-import net.egartley.beyondorigins.core.interfaces.Character;
-import net.egartley.beyondorigins.core.interfaces.Interactable;
-import net.egartley.beyondorigins.core.logic.dialogue.CharacterDialogue;
-import net.egartley.beyondorigins.core.logic.dialogue.DialogueExchange;
-import net.egartley.beyondorigins.core.logic.events.DialogueFinishedEvent;
-import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
-import net.egartley.beyondorigins.core.logic.interaction.EntityEntityInteraction;
+import net.egartley.beyondorigins.engine.entities.AnimatedEntity;
+import net.egartley.beyondorigins.engine.controllers.DialogueController;
+import net.egartley.beyondorigins.engine.graphics.SpriteSheet;
+import net.egartley.beyondorigins.engine.interfaces.Character;
+import net.egartley.beyondorigins.engine.interfaces.Interactable;
+import net.egartley.beyondorigins.engine.logic.dialogue.CharacterDialogue;
+import net.egartley.beyondorigins.engine.logic.dialogue.DialogueExchange;
+import net.egartley.beyondorigins.engine.logic.events.DialogueFinishedEvent;
+import net.egartley.beyondorigins.engine.logic.collision.boundaries.EntityBoundary;
+import net.egartley.beyondorigins.engine.logic.collision.EntityEntityInteraction;
 import net.egartley.beyondorigins.data.Images;
 import net.egartley.beyondorigins.data.Items;
 import net.egartley.beyondorigins.data.Quests;

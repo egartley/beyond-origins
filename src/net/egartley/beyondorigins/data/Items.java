@@ -1,6 +1,6 @@
 package net.egartley.beyondorigins.data;
 
-import net.egartley.beyondorigins.core.abstracts.GameItem;
+import net.egartley.beyondorigins.engine.logic.inventory.GameItem;
 import net.egartley.beyondorigins.ingame.items.CurrentYear;
 import net.egartley.beyondorigins.ingame.items.Hmm;
 import net.egartley.beyondorigins.ingame.items.WizardHat;

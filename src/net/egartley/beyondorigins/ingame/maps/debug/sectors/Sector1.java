@@ -1,12 +1,12 @@
 package net.egartley.beyondorigins.ingame.maps.debug.sectors;
 
-import net.egartley.beyondorigins.core.abstracts.Map;
-import net.egartley.beyondorigins.core.abstracts.MapSector;
-import net.egartley.beyondorigins.core.graphics.Sprite;
-import net.egartley.beyondorigins.core.logic.collision.Collisions;
-import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
-import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
-import net.egartley.beyondorigins.core.ui.NotificationBanner;
+import net.egartley.beyondorigins.engine.map.Map;
+import net.egartley.beyondorigins.engine.map.MapSector;
+import net.egartley.beyondorigins.engine.graphics.Sprite;
+import net.egartley.beyondorigins.engine.logic.collision.Collisions;
+import net.egartley.beyondorigins.engine.logic.collision.EntityEntityCollision;
+import net.egartley.beyondorigins.engine.logic.events.EntityEntityCollisionEvent;
+import net.egartley.beyondorigins.engine.ui.NotificationBanner;
 import net.egartley.beyondorigins.data.Items;
 import net.egartley.beyondorigins.data.Quests;
 import net.egartley.beyondorigins.entities.DefaultTree;

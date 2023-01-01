@@ -1,9 +1,9 @@
 package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.core.abstracts.Entity;
-import net.egartley.beyondorigins.core.abstracts.VisibleEntity;
-import net.egartley.beyondorigins.core.enums.Direction;
+import net.egartley.beyondorigins.engine.entities.Entity;
+import net.egartley.beyondorigins.engine.entities.VisibleEntity;
+import net.egartley.beyondorigins.engine.enums.Direction;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;

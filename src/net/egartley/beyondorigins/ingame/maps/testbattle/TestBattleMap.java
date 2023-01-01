@@ -1,10 +1,10 @@
 package net.egartley.beyondorigins.ingame.maps.testbattle;
 
-import net.egartley.beyondorigins.core.abstracts.Map;
-import net.egartley.beyondorigins.core.abstracts.MapSector;
-import net.egartley.beyondorigins.core.enums.Direction;
-import net.egartley.beyondorigins.core.logic.Calculate;
-import net.egartley.beyondorigins.core.logic.events.MapSectorChangeEvent;
+import net.egartley.beyondorigins.engine.map.Map;
+import net.egartley.beyondorigins.engine.map.MapSector;
+import net.egartley.beyondorigins.engine.enums.Direction;
+import net.egartley.beyondorigins.engine.logic.Calculate;
+import net.egartley.beyondorigins.engine.logic.events.MapSectorChangeEvent;
 import net.egartley.beyondorigins.entities.FH;
 import net.egartley.beyondorigins.entities.Monster;
 import net.egartley.beyondorigins.entities.WindChimes;

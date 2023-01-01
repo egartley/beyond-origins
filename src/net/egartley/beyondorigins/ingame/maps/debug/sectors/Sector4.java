@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins.ingame.maps.debug.sectors;
 
-import net.egartley.beyondorigins.core.abstracts.Map;
-import net.egartley.beyondorigins.core.abstracts.MapSector;
+import net.egartley.beyondorigins.engine.map.Map;
+import net.egartley.beyondorigins.engine.map.MapSector;
 import net.egartley.beyondorigins.entities.CutsceneTrigger;
 import net.egartley.beyondorigins.ingame.maps.debug.cutscenes.TestScene;
 

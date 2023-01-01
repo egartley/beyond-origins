@@ -1,13 +1,12 @@
 package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Debug;
-import net.egartley.beyondorigins.core.abstracts.VisibleEntity;
-import net.egartley.beyondorigins.core.graphics.SpriteSheet;
-import net.egartley.beyondorigins.core.logic.collision.Collisions;
-import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
-import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
+import net.egartley.beyondorigins.engine.entities.VisibleEntity;
+import net.egartley.beyondorigins.engine.graphics.SpriteSheet;
+import net.egartley.beyondorigins.engine.logic.collision.Collisions;
+import net.egartley.beyondorigins.engine.logic.collision.boundaries.BoundaryPadding;
+import net.egartley.beyondorigins.engine.logic.collision.boundaries.EntityBoundary;
 import net.egartley.beyondorigins.data.Images;
-import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import net.egartley.beyondorigins.ingame.BuildingFloor;
 

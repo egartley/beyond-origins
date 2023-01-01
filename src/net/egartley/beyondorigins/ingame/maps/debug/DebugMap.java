@@ -1,9 +1,9 @@
 package net.egartley.beyondorigins.ingame.maps.debug;
 
-import net.egartley.beyondorigins.core.abstracts.Map;
-import net.egartley.beyondorigins.core.abstracts.MapSector;
-import net.egartley.beyondorigins.core.enums.Direction;
-import net.egartley.beyondorigins.core.logic.events.MapSectorChangeEvent;
+import net.egartley.beyondorigins.engine.map.Map;
+import net.egartley.beyondorigins.engine.map.MapSector;
+import net.egartley.beyondorigins.engine.enums.Direction;
+import net.egartley.beyondorigins.engine.logic.events.MapSectorChangeEvent;
 import net.egartley.beyondorigins.ingame.maps.debug.sectors.Sector1;
 import net.egartley.beyondorigins.ingame.maps.debug.sectors.Sector2;
 import net.egartley.beyondorigins.ingame.maps.debug.sectors.Sector3;

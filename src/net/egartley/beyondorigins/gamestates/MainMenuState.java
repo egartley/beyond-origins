@@ -1,8 +1,8 @@
 package net.egartley.beyondorigins.gamestates;
 
 import net.egartley.beyondorigins.Game;
-import net.egartley.beyondorigins.core.logic.Calculate;
-import net.egartley.beyondorigins.core.ui.MenuButton;
+import net.egartley.beyondorigins.engine.logic.Calculate;
+import net.egartley.beyondorigins.engine.ui.button.MenuButton;
 import net.egartley.beyondorigins.data.Images;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;

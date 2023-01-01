@@ -1,9 +1,9 @@
 package net.egartley.beyondorigins.entities;
 
-import net.egartley.beyondorigins.core.abstracts.VisibleEntity;
-import net.egartley.beyondorigins.core.graphics.Sprite;
-import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
-import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
+import net.egartley.beyondorigins.engine.entities.VisibleEntity;
+import net.egartley.beyondorigins.engine.graphics.Sprite;
+import net.egartley.beyondorigins.engine.logic.collision.boundaries.BoundaryPadding;
+import net.egartley.beyondorigins.engine.logic.collision.boundaries.EntityBoundary;
 
 /**
  * Basic tree that the player can walk under, but not over

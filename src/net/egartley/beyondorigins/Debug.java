@@ -1,7 +1,7 @@
 package net.egartley.beyondorigins;
 
-import net.egartley.beyondorigins.core.input.Mouse;
-import net.egartley.beyondorigins.core.logic.collision.Collisions;
+import net.egartley.beyondorigins.engine.input.Mouse;
+import net.egartley.beyondorigins.engine.logic.collision.Collisions;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.gamestates.InGameState;
 import org.newdawn.slick.Color;

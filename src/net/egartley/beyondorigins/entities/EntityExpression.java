@@ -1,10 +1,10 @@
 package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.Util;
-import net.egartley.beyondorigins.core.abstracts.AnimatedEntity;
-import net.egartley.beyondorigins.core.abstracts.Entity;
-import net.egartley.beyondorigins.core.graphics.SpriteSheet;
-import net.egartley.beyondorigins.core.logic.Calculate;
+import net.egartley.beyondorigins.engine.entities.AnimatedEntity;
+import net.egartley.beyondorigins.engine.entities.Entity;
+import net.egartley.beyondorigins.engine.graphics.SpriteSheet;
+import net.egartley.beyondorigins.engine.logic.Calculate;
 import net.egartley.beyondorigins.data.Images;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;

@@ -1,12 +1,12 @@
 package net.egartley.beyondorigins.ingame.buildings;
 
-import net.egartley.beyondorigins.core.logic.Calculate;
-import net.egartley.beyondorigins.core.logic.collision.Collisions;
-import net.egartley.beyondorigins.core.logic.collision.EntityEntityCollision;
-import net.egartley.beyondorigins.core.logic.events.EntityEntityCollisionEvent;
-import net.egartley.beyondorigins.core.logic.interaction.BoundaryOffset;
-import net.egartley.beyondorigins.core.logic.interaction.BoundaryPadding;
-import net.egartley.beyondorigins.core.logic.interaction.EntityBoundary;
+import net.egartley.beyondorigins.engine.logic.Calculate;
+import net.egartley.beyondorigins.engine.logic.collision.Collisions;
+import net.egartley.beyondorigins.engine.logic.collision.EntityEntityCollision;
+import net.egartley.beyondorigins.engine.logic.events.EntityEntityCollisionEvent;
+import net.egartley.beyondorigins.engine.logic.collision.boundaries.BoundaryOffset;
+import net.egartley.beyondorigins.engine.logic.collision.boundaries.BoundaryPadding;
+import net.egartley.beyondorigins.engine.logic.collision.boundaries.EntityBoundary;
 import net.egartley.beyondorigins.entities.BuildingChanger;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.entities.Building;

@@ -1,8 +1,8 @@
 package net.egartley.beyondorigins.ingame.maps.debug.cutscenes;
 
-import net.egartley.beyondorigins.core.abstracts.Cutscene;
-import net.egartley.beyondorigins.core.abstracts.Map;
-import net.egartley.beyondorigins.core.abstracts.MapSector;
+import net.egartley.beyondorigins.engine.map.Cutscene;
+import net.egartley.beyondorigins.engine.map.Map;
+import net.egartley.beyondorigins.engine.map.MapSector;
 import net.egartley.beyondorigins.entities.Entities;
 import net.egartley.beyondorigins.gamestates.InGameState;
 
