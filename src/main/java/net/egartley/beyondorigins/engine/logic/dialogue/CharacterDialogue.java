@@ -6,16 +6,12 @@ import net.egartley.beyondorigins.engine.interfaces.Character;
 import net.egartley.beyondorigins.engine.ui.panel.DialoguePanel;
 
 import java.io.IOException;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-/**
- * A piece of dialogue for a specific character
- */
 public class CharacterDialogue {
 
-    private int amountOfRandoms;
+    private int randomAmount;
 
     public String path;
     public String[] lines;
@@ -25,26 +21,26 @@ public class CharacterDialogue {
         this(character, path, false, 0);
     }
 
-    public CharacterDialogue(Character character, String path, boolean random, int amountOfRandoms) {
+    public CharacterDialogue(Character character, String path, boolean random, int randomAmount) {
         this.character = character;
         this.path = path;
         if (!random) {
             setLines(path);
         } else {
-            this.amountOfRandoms = amountOfRandoms;
-            setLinesFromRandom();
+            this.randomAmount = randomAmount;
+            setLinesRandom();
         }
     }
 
     public void onStart() {
-        setLinesFromRandom();
+        setLinesRandom();
     }
 
-    public void setLinesFromRandom() {
-        if (amountOfRandoms <= 0) {
+    public void setLinesRandom() {
+        if (randomAmount <= 0) {
             return;
         }
-        setLines(path + "-" + Util.randomInt(1, amountOfRandoms, true) + ".def");
+        setLines(path + "-" + Util.randomInt(1, randomAmount, true) + ".def");
     }
 
     private void setLines(String path) {

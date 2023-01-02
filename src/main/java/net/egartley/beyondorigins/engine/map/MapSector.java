@@ -83,13 +83,13 @@ public abstract class MapSector implements Tickable, Renderable {
     private void buildTiles() {
         String entireJSONString = null;
         try {
-            entireJSONString = Files.readString(FileSystems.getDefault().getPath("data",
-                    "maps", parent.name, "sector-" + number + ".def"));
+            entireJSONString = Files.readString(FileSystems.getDefault().getPath("src", "main",
+                    "resources", "data", "maps", parent.name, "sector-" + number + ".def"));
         } catch (IOException e) {
             Debug.error(e);
         }
         if (entireJSONString == null) {
-            Debug.warning("There was a problem while building the tiles for \"" + this + "\"");
+            Debug.warning("There was a problem while building the tiles for \"" + this + "\" (JSON string was null)");
             return;
         }
         JSONObject root = new JSONObject(entireJSONString);

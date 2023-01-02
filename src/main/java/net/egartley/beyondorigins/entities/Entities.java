@@ -4,9 +4,6 @@ import net.egartley.beyondorigins.engine.graphics.Sprite;
 import net.egartley.beyondorigins.engine.graphics.SpriteSheet;
 import net.egartley.beyondorigins.data.Images;
 
-/**
- * Commonly referenced entities, such as the player
- */
 public class Entities {
 
     public static final byte TEMPLATE_WP = 3;
@@ -19,7 +16,7 @@ public class Entities {
 
     public static void initialize() {
         PLAYER = new Player();
-        // DUMMY = new Dummy();
+        DUMMY = new Dummy();
         WIZARD = new Wizard();
     }
 
