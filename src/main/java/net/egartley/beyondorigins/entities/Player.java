@@ -39,7 +39,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
     private final byte LEFT_ANIMATION = 0;
     private final byte RIGHT_ANIMATION = 1;
     private final int MAX_EXPERIENCE = 4900601;
-    private final int ANIMATION_THRESHOLD = 165;
+    private final int ANIMATION_THRESHOLD = 120;
     private final int[] MOVEMENT_KEYS = new int[]{Input.KEY_W, Input.KEY_A, Input.KEY_S, Input.KEY_D};
 
     public int level = 1;
@@ -57,7 +57,7 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
     public Player() {
         super("Player", new SpriteSheet(Images.getImage(Images.PLAYER), 30, 44, 2, 4));
         isSectorSpecific = false;
-        isDualRendered = false;
+        isRenderPlayerBased = false;
         speed = 2;
         health = 30;
         maxHealth = health;
@@ -330,8 +330,8 @@ public class Player extends AnimatedEntity implements Character, Damageable, Att
     public void attack() {
         for (EntityEntityCollision c : Collisions.getConcurrentWith(this)) {
             Entity e = c.entities[0] != this ? c.entities[0] : c.entities[1];
-            if (e instanceof Damageable) {
-                ((Damageable) e).dealDamage(DEFAULT_DAMAGE);
+            if (e instanceof Damageable de) {
+                de.dealDamage(DEFAULT_DAMAGE);
                 InGameState.map.sector.addEntity(new DamageNumber(DEFAULT_DAMAGE, e));
             }
         }

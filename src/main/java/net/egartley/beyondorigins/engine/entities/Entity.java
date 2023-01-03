@@ -12,6 +12,7 @@ import net.egartley.beyondorigins.engine.logic.collision.EntityEntityCollision;
 import net.egartley.beyondorigins.engine.logic.events.EntityEntityCollisionEvent;
 import net.egartley.beyondorigins.engine.logic.collision.boundaries.EntityBoundary;
 import net.egartley.beyondorigins.engine.logic.collision.EntityEntityInteraction;
+import net.egartley.beyondorigins.entities.Entities;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
@@ -38,6 +39,7 @@ public abstract class Entity implements Tickable, Renderable {
     public int height;
     public int health;
     public int maxHealth;
+    public int renderLayerThresholdY;
     public double speed;
     public double deltaX;
     public double deltaY;
@@ -49,6 +51,8 @@ public abstract class Entity implements Tickable, Renderable {
     public boolean isAllowedToMoveDownwards = true;
     public boolean isAllowedToMoveLeftwards = true;
     public boolean isAllowedToMoveRightwards = true;
+    public boolean isRenderPlayerBased = false;
+    public boolean isRenderingBelowPlayer = true;
     public String name;
     public EntityBoundary defaultBoundary = null;
     public EntityEntityCollision lastCollision = null;
@@ -130,6 +134,9 @@ public abstract class Entity implements Tickable, Renderable {
         boundaries.forEach(EntityBoundary::tick);
         if (this instanceof Interactable) {
             interactions.forEach(EntityEntityInteraction::tick);
+        }
+        if (isRenderPlayerBased) {
+            isRenderingBelowPlayer = !(Entities.PLAYER.y < this.y + renderLayerThresholdY);
         }
     }
 

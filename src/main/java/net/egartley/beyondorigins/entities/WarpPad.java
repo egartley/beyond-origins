@@ -13,7 +13,6 @@ public class WarpPad extends VisibleEntity {
         super("Warp Portal", sprite);
         setPosition(x, y);
         isSectorSpecific = true;
-        isDualRendered = false;
         isTraversable = false;
     }
 

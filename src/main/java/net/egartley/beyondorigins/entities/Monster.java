@@ -29,10 +29,8 @@ public class Monster extends AnimatedEntity implements Damageable {
     private DelayedEvent hurtEvent = null;
 
     public Monster() {
-        super("Monster", new SpriteSheet(
-                Images.getImage(Images.MONSTER), 36, 58, 4, 3));
+        super("Monster", new SpriteSheet(Images.getImage(Images.MONSTER), 36, 58, 4, 3));
         isSectorSpecific = true;
-        isDualRendered = false;
         speed = 0.7;
         health = 35;
         maxHealth = health;
@@ -42,11 +40,13 @@ public class Monster extends AnimatedEntity implements Damageable {
     public void onDeath() {
         onColdDeath();
         InGameState.map.sector.removeEntity(this);
-        if (InGameState.map instanceof TestBattleMap) {
-            ((TestBattleMap) (InGameState.map)).spawnMonster(this.x + Util.randomInt(-25, 25),
-                    this.y + Util.randomInt(50, 75));
-            ((TestBattleMap) (InGameState.map)).spawnMonster(this.x + Util.randomInt(-25, 25),
-                    this.y - Util.randomInt(50, 75));
+        if (InGameState.map instanceof TestBattleMap tbm) {
+            if (Util.fiftyFifty()) {
+                tbm.spawnMonster(this.x + Util.randomInt(-25, 25), this.y + Util.randomInt(50, 75));
+                if (Util.fiftyFifty()) {
+                    tbm.spawnMonster(this.x + Util.randomInt(-25, 25), this.y - Util.randomInt(50, 75));
+                }
+            }
         }
     }
 
@@ -98,7 +98,7 @@ public class Monster extends AnimatedEntity implements Damageable {
         }
         if (isMovingRightwards) {
             move(Direction.RIGHT);
-        } else if (isMovingLeftwards) {
+        } else {
             move(Direction.LEFT);
         }
         if (isHurt && (animations.indexOf(animation) == RIGHT_NORMAL_ANIMATION || animations.indexOf(animation) == LEFT_NORMAL_ANIMATION)) {

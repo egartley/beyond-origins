@@ -63,7 +63,7 @@ public class Wizard extends AnimatedEntity implements Character, Interactable {
             @Override
             public void onFinish() {
                 Entities.PLAYER.inventory.removeItem(Items.WIZARD_HAT);
-                setSprites(1);
+                setSpritesFromSheet(1);
                 wearingHat = true;
                 // update position so that it looks like he doesn't move (hat makes him "taller")
                 y -= 12;

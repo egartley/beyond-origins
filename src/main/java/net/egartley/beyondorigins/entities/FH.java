@@ -32,7 +32,6 @@ public class FH extends CombatEntity implements Damageable {
                 new SpriteSheet(Images.getImage(Images.FH_ATTACK1), 30, 44, 2, 4));
         spawnCooldown = 2.0D;
         isSectorSpecific = true;
-        isDualRendered = false;
         speed = 0.35;
         health = 120;
         maxHealth = health;
@@ -74,7 +73,7 @@ public class FH extends CombatEntity implements Damageable {
 
         if (!inAttackCooldown && !isAttacking) {
             startNextAttack();
-            setSprites(1);
+            setSpritesFromSheet(1);
         } else if (inAttackCooldown) {
             // follow/catch up with player
             if (!isMovingLeftwards && !isMovingRightwards) {

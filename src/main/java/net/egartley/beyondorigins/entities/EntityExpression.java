@@ -10,7 +10,7 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 
 /**
- * An small animation that appears above an entity to convey an emotion
+ * A small animation that appears above an entity to convey an emotion
  */
 public class EntityExpression extends AnimatedEntity {
 

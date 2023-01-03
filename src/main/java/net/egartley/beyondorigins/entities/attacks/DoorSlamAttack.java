@@ -12,7 +12,7 @@ public class DoorSlamAttack extends Attack {
 
     public void end() {
         super.end();
-        parent.setSprites(0);
+        parent.setSpritesFromSheet(0);
     }
 
 }

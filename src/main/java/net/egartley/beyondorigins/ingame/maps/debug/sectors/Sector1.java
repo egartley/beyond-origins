@@ -29,14 +29,13 @@ public class Sector1 extends MapSector {
 
     @Override
     public void init() {
-        Sprite s = Entities.getSpriteTemplate(Entities.TEMPLATE_TREE);
-        addEntity(new DefaultTree(s, 36, 200));
-        hatTree = new DefaultTree(s, 100, 200);
-        addEntity(hatTree);
+        addEntityDirect(new DefaultTree(36, 200));
+        hatTree = new DefaultTree(100, 200);
+        addEntityDirect(hatTree);
         house = new House1(280, 200, 334, 313);
-        addEntity(house);
+        addEntityDirect(house);
         pad = new WarpPad(Entities.getSpriteTemplate(Entities.TEMPLATE_WP), 500, 100);
-        addEntity(pad);
+        addEntityDirect(pad);
         // test items
         Entities.PLAYER.inventory.putItem(Items.HMM, 1);
         Entities.PLAYER.inventory.putItem(Items.CURRENT_YEAR, 3);
@@ -46,7 +45,6 @@ public class Sector1 extends MapSector {
         quest.objectives.add(new QuestObjective("Do this other thing", "Just do it, already."));
         quest.objectives.add(new QuestObjective("Final task", "Get it over with."));
         InGameState.quests.add(quest);*/
-
         setSpecialCollisions();
     }
 

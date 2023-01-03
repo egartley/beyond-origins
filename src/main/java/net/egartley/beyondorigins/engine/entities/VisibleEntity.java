@@ -1,7 +1,6 @@
 package net.egartley.beyondorigins.engine.entities;
 
 import net.egartley.beyondorigins.Debug;
-import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.engine.graphics.Sprite;
 import net.egartley.beyondorigins.engine.graphics.SpriteSheet;
 import net.egartley.beyondorigins.engine.interfaces.Interactable;
@@ -15,12 +14,9 @@ import java.util.List;
 public abstract class VisibleEntity extends Entity {
 
     protected Image image;
-    protected Image firstLayer;
-    protected Image secondLayer;
     protected ArrayList<Sprite> sprites = new ArrayList<>();
     protected ArrayList<SpriteSheet> sheets = new ArrayList<>();
 
-    public boolean isDualRendered;
     public Sprite sprite;
 
     public VisibleEntity(String name) {
@@ -35,21 +31,10 @@ public abstract class VisibleEntity extends Entity {
     public VisibleEntity(String name, SpriteSheet... sheets) {
         this(name, sheets[0].sprites.get(0));
         this.sheets.addAll(List.of(sheets));
-        setSprites(0);
+        setSpritesFromSheet(0);
     }
 
-    public void drawFirstLayer(Graphics graphics) {
-        graphics.drawImage(firstLayer, x, y + secondLayer.getHeight());
-    }
-
-    public void drawSecondLayer(Graphics graphics) {
-        graphics.drawImage(secondLayer, x, y);
-        if (Game.debug) {
-            drawDebug(graphics);
-        }
-    }
-
-    public void setSprites(int index) {
+    public void setSpritesFromSheet(int index) {
         if (index < sheets.size()) {
             sprites = sheets.get(index).sprites;
             setSprite(0);
@@ -85,10 +70,10 @@ public abstract class VisibleEntity extends Entity {
         Collisions.endAllWith(this);
         Collisions.removeAllWith(this);
         setCollisions();
-        if (this instanceof Interactable) {
+        if (this instanceof Interactable ie) {
             interactions.forEach(i -> i.collision.end());
             interactions.clear();
-            ((Interactable) this).setInteractions();
+            ie.setInteractions();
         }
     }
 

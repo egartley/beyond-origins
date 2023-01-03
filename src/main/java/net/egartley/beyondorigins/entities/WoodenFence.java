@@ -26,23 +26,16 @@ public class WoodenFence extends VisibleEntity {
         hasCorners = corners;
         setSprite(buildSprite());
         isTraversable = false;
-        isDualRendered = true;
         isSectorSpecific = true;
-        firstLayer = image.getSubImage(0, 18, image.getWidth(), 9);
-        secondLayer = image.getSubImage(0, 0, image.getWidth(), 18);
     }
 
     private Sprite buildSprite() {
-        Image build = null;
+        Image build;
         Image full = Images.getImageFromPath(Images.entityPath + "wooden-fence-full.png");
         if (hasCorners) {
             build = Images.getImageFromPath(Images.entityPath + "wooden-fence-left-end.png");
         } else {
             build = full;
-        }
-        if (build == null) {
-            Debug.warning("There was a problem while buiilding the sprite for a wooden fence");
-            return null;
         }
         if (length > 1) {
             for (int i = 0; i < length - 1; i++) {

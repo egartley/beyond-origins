@@ -13,7 +13,7 @@ import net.egartley.beyondorigins.ingame.BuildingFloor;
 import java.util.ArrayList;
 
 /**
- * A place that the player can enter, treated seperately from the current map
+ * A place that the player can enter, treated separately from the current map
  */
 public class Building extends VisibleEntity {
 
@@ -28,6 +28,7 @@ public class Building extends VisibleEntity {
         super(id, new SpriteSheet(Images.getImageFromPath("images/buildings/" + id + ".png"),
                 1, 1).sprites.get(0));
         isSectorSpecific = true;
+        isRenderPlayerBased = true;
         // set isTraversable to true, even though it's not, since collisions are generated later
         isTraversable = true;
         setPosition(x, y);

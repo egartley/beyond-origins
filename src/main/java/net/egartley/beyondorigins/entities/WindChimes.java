@@ -29,7 +29,6 @@ public class WindChimes extends AnimatedEntity {
         super("WindChimes", new SpriteSheet(
                 Images.getImage(Images.WIND_CHIMES), 31, 54, 2, 5));
         isSectorSpecific = true;
-        isDualRendered = false;
         isTraversable = false;
         setPosition(x, y);
     }
@@ -37,7 +36,6 @@ public class WindChimes extends AnimatedEntity {
     @Override
     public void tick() {
         super.tick();
-
         // simulate wind with random animation delays and lengths
         if (animation.isStopped() && swingAgain) {
             swingAgain = false;

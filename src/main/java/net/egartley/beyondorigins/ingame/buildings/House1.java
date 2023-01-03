@@ -23,9 +23,7 @@ public class House1 extends Building {
 
     public House1(int x, int y, int playerLeaveX, int playerLeaveY) {
         super("House-1", x, y, playerLeaveX, playerLeaveY);
-        isDualRendered = true;
-        firstLayer = image.getSubImage(0, 64, image.getWidth(), 58);
-        secondLayer = image.getSubImage(0, 0, image.getWidth(), 64);
+        renderLayerThresholdY = 58;
         // first floor
         BuildingFloor floor = new BuildingFloor(0, this) {
             @Override

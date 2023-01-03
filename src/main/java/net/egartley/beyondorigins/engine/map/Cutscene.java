@@ -47,9 +47,4 @@ public abstract class Cutscene extends MapSector {
         graphics.fillRect(0, Game.WINDOW_HEIGHT - BAR_HEIGHT, Game.WINDOW_WIDTH, BAR_HEIGHT);
     }
 
-    @Override
-    public void tick() {
-        tickables.forEach(Tickable::tick);
-    }
-
 }

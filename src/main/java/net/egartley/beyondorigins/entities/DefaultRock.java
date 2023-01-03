@@ -10,16 +10,11 @@ import net.egartley.beyondorigins.engine.logic.collision.boundaries.EntityBounda
  */
 public class DefaultRock extends VisibleEntity {
 
-    public DefaultRock(Sprite sprite, int x, int y) {
-        super("Rock", sprite);
+    public DefaultRock(int x, int y) {
+        super("Rock", Entities.getSpriteTemplate(Entities.TEMPLATE_ROCK));
         setPosition(x, y);
         isSectorSpecific = true;
-        isDualRendered = true;
         isTraversable = false;
-        // top half
-        firstLayer = image.getSubImage(0, image.getHeight() / 2, image.getWidth(), image.getHeight() / 2);
-        // bottom half
-        secondLayer = image.getSubImage(0, 0, image.getWidth(), image.getHeight() / 2);
     }
 
     @Override

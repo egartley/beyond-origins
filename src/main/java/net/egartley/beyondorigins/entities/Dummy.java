@@ -40,7 +40,6 @@ public class Dummy extends AnimatedEntity implements Character, Interactable {
                 Images.getImage(Images.DUMMY), 30, 44, 2, 4));
         setPosition(470, 132);
         isSectorSpecific = false;
-        isDualRendered = false;
         speed = 1.1;
         exp = new EntityExpression(EntityExpression.HEART, this);
         dialogue_playerCollision = new DialogueExchange(
@@ -55,7 +54,7 @@ public class Dummy extends AnimatedEntity implements Character, Interactable {
     }
 
     public void onSectorEnter(MapSector entering) {
-        entering.addEntity(this, true);
+        entering.addEntity(this);
         for (Entity e : entering.entities) {
             if (!e.isTraversable && e.isSectorSpecific) {
                 EntityEntityCollision baseCollision = new EntityEntityCollision(boundaries.get(0), e.defaultBoundary) {
@@ -78,7 +77,7 @@ public class Dummy extends AnimatedEntity implements Character, Interactable {
 
     public void onSectorLeave(MapSector leaving) {
         Collisions.removeAllWith(this);
-        leaving.removeEntity(this, true);
+        leaving.removeEntity(this);
     }
 
     @Override

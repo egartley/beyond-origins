@@ -4,7 +4,6 @@ import net.egartley.beyondorigins.Debug;
 import net.egartley.beyondorigins.Game;
 import net.egartley.beyondorigins.Util;
 import net.egartley.beyondorigins.engine.entities.Entity;
-import net.egartley.beyondorigins.engine.entities.VisibleEntity;
 import net.egartley.beyondorigins.engine.enums.Direction;
 import net.egartley.beyondorigins.engine.graphics.MapTile;
 import net.egartley.beyondorigins.engine.interfaces.Damageable;
@@ -24,7 +23,6 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 
 /**
@@ -34,6 +32,7 @@ public abstract class MapSector implements Tickable, Renderable {
 
     private int deltaX;
     private int deltaY;
+    private ArrayList<Entity> removeList, addList;
     private final byte MAX_NEIGHBORS = 4;
     private final short TILE_SIZE = 32;
     private final short BOUNDARY_SIZE = 18;
@@ -49,14 +48,13 @@ public abstract class MapSector implements Tickable, Renderable {
     public static final short TILE_ROWS = 17;
     public static final short TILE_COLUMNS = 30;
     public ArrayList<Entity> entities = new ArrayList<>();
-    public ArrayList<Tickable> tickables = new ArrayList<>();
-    public ArrayList<Entity> primaryEntities = new ArrayList<>();
-    public ArrayList<Renderable> renderables = new ArrayList<>();
 
     public MapSector(Map parent, int number) {
         this.parent = parent;
         this.number = number;
         buildTiles();
+        removeList = new ArrayList<>();
+        addList = new ArrayList<>();
     }
 
     public abstract void init();
@@ -150,10 +148,6 @@ public abstract class MapSector implements Tickable, Renderable {
             int column = tileObject.getInt("c");
             String id = tileIDs.get(tileKeys.indexOf(tileObject.getString("key")));
             Image image = Images.getImageFromPath(Images.mapTilePath + id + ".png");
-            if (image == null) {
-                Debug.error("Unable to load image \"" + Images.mapTilePath + id + ".png\"");
-                continue;
-            }
             if (tileObject.has("rotate")) {
                 image.rotate(tileObject.getInt("rotate"));
             }
@@ -162,15 +156,11 @@ public abstract class MapSector implements Tickable, Renderable {
     }
 
     public void onPlayerEnter_internal() {
-        addEntity(Entities.PLAYER, true);
         init();
     }
 
     public void onPlayerLeave_internal() {
-        ArrayList<Entity> e = (ArrayList<Entity>) entities.clone();
-        e.forEach(this::removeEntity);
-        e = (ArrayList<Entity>) primaryEntities.clone();
-        e.forEach(entity -> removeEntity(entity, true));
+        entities.clear();
         Collisions.nuke();
     }
 
@@ -183,51 +173,25 @@ public abstract class MapSector implements Tickable, Renderable {
         }
     }
 
-    public void addEntity(Entity e) {
-        addEntity(e, false);
+    public void addEntityDirect(Entity e) {
+        entities.add(e);
     }
 
-    public void addEntity(Entity e, boolean primary) {
-        if (primary) {
-            primaryEntities.add(e);
-        } else {
-            entities.add(e);
-        }
-        addTickable(e);
+    public void removeEntityDirect(Entity e) {
+        entities.remove(e);
+    }
+
+    public void addEntity(Entity e) {
+        addList.add(e);
     }
 
     public void removeEntity(Entity e) {
-        removeEntity(e, false);
-    }
-
-    public void removeEntity(Entity e, boolean primary) {
         Collisions.endAllWith(e);
         Collisions.removeAllWith(e);
-        if (e instanceof Damageable && !primary) {
-            ((Damageable) (e)).onColdDeath();
+        if (e instanceof Damageable de) {
+            de.onColdDeath();
         }
-        if (primary) {
-            primaryEntities.remove(e);
-        } else {
-            entities.remove(e);
-        }
-        removeTickable(e);
-    }
-
-    public void addTickable(Tickable tickable) {
-        tickables.add(tickable);
-    }
-
-    public void removeTickable(Tickable tickable) {
-        tickables.remove(tickable);
-    }
-
-    public void addRenderable(Renderable renderable) {
-        renderables.add(renderable);
-    }
-
-    public void removeRenderable(Renderable renderable) {
-        renderables.remove(renderable);
+        removeList.add(e);
     }
 
     public void setNeighborAt(MapSector neighbor, Direction direction) {
@@ -273,46 +237,43 @@ public abstract class MapSector implements Tickable, Renderable {
         neighbors.put(direction, neighbor);
     }
 
+    protected void updateEntityList() {
+        entities.addAll(addList);
+        for (Entity e : removeList) {
+            entities.remove(e);
+        }
+        addList.clear();
+        removeList.clear();
+    }
+
     @Override
     public void render(Graphics graphics) {
         drawTiles(graphics);
-        try {
-            for (Entity e : entities) {
-                if (e instanceof VisibleEntity ve) {
-                    if (ve.isDualRendered) {
-                        ve.drawFirstLayer(graphics);
-                    }
-                }
+        updateEntityList();
+        for (Entity e : entities) {
+            if (!e.isRenderPlayerBased || e.isRenderingBelowPlayer) {
+                e.render(graphics);
             }
-            primaryEntities.forEach(r -> r.render(graphics));
-            for (Entity e : entities) {
-                if (e instanceof VisibleEntity ve) {
-                    if (ve.isDualRendered) {
-                        ve.drawSecondLayer(graphics);
-                    } else {
-                        e.render(graphics);
-                    }
-                }
+        }
+        Entities.PLAYER.render(graphics);
+        for (Entity e : entities) {
+            if (e.isRenderPlayerBased && !e.isRenderingBelowPlayer) {
+                e.render(graphics);
             }
-            if (Game.debug) {
-                changeBoundaries.forEach(boundary -> boundary.render(graphics));
-            }
-            renderables.forEach(r -> r.render(graphics));
-        } catch (Exception e) {
-            Debug.error(e);
+        }
+        if (Game.debug) {
+            changeBoundaries.forEach(boundary -> boundary.render(graphics));
         }
     }
 
     @Override
     public void tick() {
-        try {
-            tickables.forEach(Tickable::tick);
-            changeCollisions.forEach(MapSectorChangeCollision::tick);
-        } catch (ConcurrentModificationException e) {
-            // ignore
-        } catch (Exception e) {
-            Debug.error(e);
+        updateEntityList();
+        for (Entity e : entities) {
+            e.tick();
         }
+        Entities.PLAYER.tick();
+        changeCollisions.forEach(MapSectorChangeCollision::tick);
     }
 
     private Direction getNeighborDirection(MapSector neighbor) {

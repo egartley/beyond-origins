@@ -23,16 +23,6 @@ public class TestBattleMap extends Map {
         sec1.setNeighborAt(sec2, Direction.RIGHT);
     }
 
-    public void spawnFHBoss() {
-        FH fh = new FH();
-        fh.setPosition(Calculate.getCenteredX(fh.sprite.width), Calculate.getCenteredY(fh.sprite.height));
-        sector.addEntity(fh);
-        sector.addEntity(new WindChimes(100, 150));
-        sector.addEntity(new WindChimes(100, 450));
-        sector.addEntity(new WindChimes(600, 150));
-        sector.addEntity(new WindChimes(600, 450));
-    }
-
     public void spawnMonster(int x, int y) {
         Monster monster = new Monster();
         monster.setPosition(x, y);

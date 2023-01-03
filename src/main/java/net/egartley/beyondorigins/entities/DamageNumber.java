@@ -16,7 +16,7 @@ import org.newdawn.slick.TrueTypeFont;
 public class DamageNumber extends VisibleEntity {
 
     private final int amount;
-    private final int initalY;
+    private final int initialY;
     private final int FLOAT_DISTANCE = 26;
     private final Color TEXT_COLOR = Color.yellow;
     private final Font FONT =
@@ -28,7 +28,7 @@ public class DamageNumber extends VisibleEntity {
         isSectorSpecific = true;
         speed = 0.8;
         setPosition(damaged.x + Util.randomInt(2, damaged.width - 2), damaged.y);
-        initalY = y;
+        initialY = y;
     }
 
     private void destroy() {
@@ -38,7 +38,7 @@ public class DamageNumber extends VisibleEntity {
     @Override
     public void tick() {
         move(Direction.UP);
-        if (y <= initalY - FLOAT_DISTANCE) {
+        if (y <= initialY - FLOAT_DISTANCE) {
             destroy();
         }
     }

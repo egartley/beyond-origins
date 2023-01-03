@@ -7,8 +7,8 @@ import org.newdawn.slick.*;
 
 public class QuestSlot extends ClickableArea {
 
-    private static boolean didLoadImages;
     private Image slotImage;
+
     private static Image slotHoverImage, slotNormalImage;
     private static final Color SLOT_SELECTED_TITLE_COLOR = Color.white,
             SLOT_TITLE_COLOR = new Color(65, 53, 37);
@@ -21,12 +21,9 @@ public class QuestSlot extends ClickableArea {
     public QuestSlot(Quest quest, int x, int y) {
         super(x, y, 0, 0);
         this.quest = quest;
-        if (!didLoadImages) {
-            // might not be the best way to do this, but don't want to reload the same
-            // images each time the constructor is called (hence they're static)
+        if (slotNormalImage == null) {
             slotNormalImage = Images.getImage(Images.QUEST_SLOT);
             slotHoverImage = Images.getImage(Images.QUEST_SLOT_HOVER);
-            didLoadImages = true;
         }
         slotImage = slotNormalImage;
         width = slotImage.getWidth();

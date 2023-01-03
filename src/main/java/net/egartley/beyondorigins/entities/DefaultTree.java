@@ -1,7 +1,6 @@
 package net.egartley.beyondorigins.entities;
 
 import net.egartley.beyondorigins.engine.entities.VisibleEntity;
-import net.egartley.beyondorigins.engine.graphics.Sprite;
 import net.egartley.beyondorigins.engine.logic.collision.boundaries.BoundaryPadding;
 import net.egartley.beyondorigins.engine.logic.collision.boundaries.EntityBoundary;
 
@@ -10,16 +9,13 @@ import net.egartley.beyondorigins.engine.logic.collision.boundaries.EntityBounda
  */
 public class DefaultTree extends VisibleEntity {
 
-    public DefaultTree(Sprite sprite, int x, int y) {
-        super("Tree", sprite);
+    public DefaultTree(int x, int y) {
+        super("Tree", Entities.getSpriteTemplate(Entities.TEMPLATE_TREE));
         setPosition(x, y);
         isSectorSpecific = true;
-        isDualRendered = true;
         isTraversable = false;
-        // set the first layer as the leaves
-        firstLayer = image.getSubImage(0, 45, image.getWidth(), 19);
-        // set the second layer as the trunk
-        secondLayer = image.getSubImage(0, 0, image.getWidth(), 45);
+        isRenderPlayerBased = true;
+        renderLayerThresholdY = 38;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package net.egartley.beyondorigins.data;
 
+import net.egartley.beyondorigins.Debug;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 

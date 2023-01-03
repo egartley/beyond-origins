@@ -29,7 +29,6 @@ public class DroppedItem extends VisibleEntity {
         super("DroppedItem", new Sprite(stack.item.image.getScaledCopy(0.5F)));
         itemStack = stack;
         isSectorSpecific = true;
-        isDualRendered = false;
         isTraversable = true;
         image = sprite.asImage();
         setPosition(x, y);
