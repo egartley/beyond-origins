@@ -14,8 +14,7 @@ public class Button extends UIElement implements Tickable {
 
     @Override
     public void tick() {
-        // TODO
-        isHovering = isEnabled && isMouseWithinBounds(0, 0);
+        isHovering = isEnabled && isMouseWithinBounds();
     }
 
 }

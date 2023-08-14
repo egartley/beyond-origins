@@ -1,5 +1,7 @@
 package net.egartley.beyondorigins.engine;
 
+import net.egartley.beyondorigins.Game;
+
 public class UIElement extends Renderable {
 
     public boolean isEnabled;
@@ -19,6 +21,10 @@ public class UIElement extends Renderable {
     public UIElement(int x, int y, int width, int height, boolean isEnabled) {
         super(x, y, width, height);
         this.isEnabled = isEnabled;
+    }
+
+    public boolean isMouseWithinBounds() {
+        return isMouseWithinBounds(Game.mouse.x, Game.mouse.y);
     }
 
     public boolean isMouseWithinBounds(int mouseX, int mouseY) {

@@ -1,5 +1,6 @@
 package net.egartley.beyondorigins;
 
+import net.egartley.beyondorigins.engine.Mouse;
 import net.egartley.beyondorigins.states.MainMenu;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
@@ -13,11 +14,14 @@ public class Game extends StateBasedGame implements InputProviderListener {
     public static final int WINDOW_WIDTH = 959;
     public static final int WINDOW_HEIGHT = 543;
 
+    public static Mouse mouse;
+
     public Game() {
         super("Beyond Origins");
     }
 
     public static void main(String[] args) {
+        mouse = new Mouse();
         try {
             AppGameContainer app = new AppGameContainer(new Game());
             app.setDisplayMode(WINDOW_WIDTH, WINDOW_HEIGHT, false);
@@ -46,17 +50,20 @@ public class Game extends StateBasedGame implements InputProviderListener {
 
     @Override
     public void mouseReleased(int button, int x, int y) {
-
+        mouse.isDragging = false;
     }
 
     @Override
     public void mouseMoved(int oldx, int oldy, int newx, int newy) {
-
+        mouse.x = newx;
+        mouse.y = newy;
     }
 
     @Override
     public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-
+        mouse.x = newx;
+        mouse.y = newy;
+        mouse.isDragging = true;
     }
 
     @Override
