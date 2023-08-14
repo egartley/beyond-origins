@@ -8,12 +8,14 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class MainMenu extends BasicGameState {
 
+    public static int ID = 0;
+
     private Image logo;
     private TextButton[] buttons;
 
     @Override
     public int getID() {
-        return 0;
+        return ID;
     }
 
     @Override
