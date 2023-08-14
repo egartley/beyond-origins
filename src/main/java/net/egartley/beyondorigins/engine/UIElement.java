@@ -22,8 +22,9 @@ public class UIElement extends Renderable {
     }
 
     public boolean isMouseWithinBounds(int mouseX, int mouseY) {
-        // TODO
-        return false;
+        boolean boundedX = mouseX >= x && mouseX <= x + width;
+        boolean boundedY = mouseY >= y && mouseY <= y + height;
+        return boundedX && boundedY;
     }
 
 }
