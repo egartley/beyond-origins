@@ -1,5 +1,6 @@
 package net.egartley.beyondorigins;
 
+import net.egartley.beyondorigins.states.MainMenu;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -35,7 +36,7 @@ public class Game extends StateBasedGame implements InputProviderListener {
 
     @Override
     public void initStatesList(GameContainer container) throws SlickException {
-
+        this.addState(new MainMenu());
     }
 
     @Override
