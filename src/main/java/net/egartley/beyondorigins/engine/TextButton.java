@@ -32,7 +32,6 @@ public class TextButton extends Button {
         graphics.drawString(text, stringX, stringY);
     }
 
-    @Override
     public void setPosition(int x, int y) {
         this.x = x;
         this.y = y;

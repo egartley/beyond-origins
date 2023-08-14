@@ -13,11 +13,6 @@ public abstract class Renderable {
         this.height = height;
     }
 
-    protected void setPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
     protected void render(Graphics graphics) {
 
     }
