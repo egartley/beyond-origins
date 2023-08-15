@@ -1,5 +1,7 @@
 package net.egartley.beyondorigins.states;
 
+import net.egartley.beyondorigins.engine.LevelMap;
+import net.egartley.beyondorigins.levelmaps.debug.DebugMap;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -11,6 +13,9 @@ public class InGame extends BasicGameState {
 
     public static int ID = 1;
 
+    private LevelMap currentMap;
+    private LevelMap[] levelMaps;
+
     @Override
     public int getID() {
         return ID;
@@ -18,12 +23,14 @@ public class InGame extends BasicGameState {
 
     @Override
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
-        // TODO: stub
+
     }
 
     @Override
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {
-        // TODO: stub
+        levelMaps = new LevelMap[1];
+        levelMaps[0] = new DebugMap();
+        currentMap = levelMaps[0];
     }
 
     @Override
@@ -33,8 +40,7 @@ public class InGame extends BasicGameState {
 
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
-        g.setColor(Color.white);
-        g.fillRect(200, 200, 48, 48);
+        currentMap.currentSector.render(g);
     }
 
     @Override
