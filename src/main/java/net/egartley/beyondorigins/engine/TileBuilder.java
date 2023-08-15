@@ -12,16 +12,10 @@ import java.util.ArrayList;
 
 public class TileBuilder {
 
-    private final short TILE_ROWS = 17, TILE_COLS = 30, TILE_SIZE = 32;
+    private final short TILE_ROWS = 17, TILE_COLS = 30;
 
-    private ArrayList<ArrayList<LevelMapTile>> tiles;
-
-    public TileBuilder() {
-        tiles = new ArrayList<>();
-    }
-
-    protected void buildTiles(LevelMapSector sector) {
-        tiles.clear();
+    protected ArrayList<ArrayList<LevelMapTile>> buildTiles(LevelMapSector sector) {
+        ArrayList<ArrayList<LevelMapTile>> tiles = new ArrayList<>();
         String entireJSONString = null;
         try {
             entireJSONString = Files.readString(FileSystems.getDefault().getPath("src", "main",
@@ -31,7 +25,7 @@ public class TileBuilder {
         }
         if (entireJSONString == null) {
             System.out.println("WARNING: Issue while building the tiles for \"" + this + "\" (JSON string was null)");
-            return;
+            return tiles;
         }
         JSONObject root = new JSONObject(entireJSONString);
         JSONArray legend = root.getJSONArray("legend");
@@ -45,10 +39,10 @@ public class TileBuilder {
             tileIDs.add(entry.getString("tile"));
         }
         switch (buildType.toLowerCase()) {
-            case "fill" -> fill(tileIDs.get(tileKeys.indexOf(tilesObject.getString("data"))));
+            case "fill" -> fill(tileIDs.get(tileKeys.indexOf(tilesObject.getString("data"))), tiles);
             case "mixed" -> {
-                fill(tileIDs.get(tileKeys.indexOf(tilesObject.getJSONObject("data").getString("common"))));
-                mixed(tilesObject.getJSONObject("data").getJSONArray("custom"), tileIDs, tileKeys);
+                fill(tileIDs.get(tileKeys.indexOf(tilesObject.getJSONObject("data").getString("common"))), tiles);
+                mixed(tilesObject.getJSONObject("data").getJSONArray("custom"), tileIDs, tileKeys, tiles);
             }
         }
         if (root.has("random")) {
@@ -71,9 +65,10 @@ public class TileBuilder {
                 }
             }
         }
+        return tiles;
     }
 
-    private void fill(String id) {
+    private void fill(String id, ArrayList<ArrayList<LevelMapTile>> tiles) {
         Image image;
         try {
             image = new Image("images/map-tiles/" + id + ".png");
@@ -89,7 +84,7 @@ public class TileBuilder {
         }
     }
 
-    private void mixed(JSONArray custom, ArrayList<String> tileIDs, ArrayList<String> tileKeys) {
+    private void mixed(JSONArray custom, ArrayList<String> tileIDs, ArrayList<String> tileKeys, ArrayList<ArrayList<LevelMapTile>> tiles) {
         for (int i = 0; i < custom.length(); i++) {
             JSONObject tileObject = (JSONObject) custom.get(i);
             int row = tileObject.getInt("r");
@@ -106,10 +101,6 @@ public class TileBuilder {
             }
             tiles.get(row).set(column, new LevelMapTile(id, image));
         }
-    }
-
-    public ArrayList<ArrayList<LevelMapTile>> getTiles() {
-        return tiles;
     }
 
 }

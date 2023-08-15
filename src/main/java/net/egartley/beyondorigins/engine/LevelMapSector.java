@@ -18,8 +18,6 @@ public abstract class LevelMapSector implements Tickable {
     public LevelMapSector(LevelMap parent, int id) {
         this.parent = parent;
         this.id = id;
-        this.parent.tileBuilder.buildTiles(this);
-        this.tiles = this.parent.tileBuilder.getTiles();
     }
 
     public abstract void init();
@@ -35,6 +33,10 @@ public abstract class LevelMapSector implements Tickable {
     public void onLeave(LevelMapSector to) {
         // entities.clear();
         // Collisions.nuke();
+    }
+
+    public void buildTiles() {
+        this.tiles = this.parent.tileBuilder.buildTiles(this);
     }
 
     protected void drawTiles(Graphics graphics) {
