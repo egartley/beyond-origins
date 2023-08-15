@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class Mouse {
 
-    private ArrayList<ClickEvent> clickEvents;
-
     public int x, y;
     public boolean isDragging;
+
+    private ArrayList<ClickEvent> clickEvents;
 
     public Mouse() {
         clickEvents = new ArrayList<>();

@@ -5,6 +5,7 @@ import net.egartley.beyondorigins.Game;
 public class Button extends UIElement implements Tickable {
 
     public boolean isHovering;
+
     public ClickEvent clickEvent;
 
     public Button(int width, int height) {

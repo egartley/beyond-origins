@@ -7,11 +7,11 @@ import org.newdawn.slick.TrueTypeFont;
 
 public class TextButton extends Button {
 
-    private static final Font FONT = new TrueTypeFont(new java.awt.Font("Georgia", java.awt.Font.PLAIN, 24), true);
-
     private int stringX, stringY;
+
     private String text;
     private Color textColor;
+    private static final Font FONT = new TrueTypeFont(new java.awt.Font("Georgia", java.awt.Font.PLAIN, 24), true);
 
     public TextButton(int x, int y, int width, int height, String text) {
         super(x, y, width, height);
