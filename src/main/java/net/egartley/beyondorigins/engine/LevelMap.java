@@ -29,10 +29,6 @@ public abstract class LevelMap implements Tickable {
         currentSector.onEnter(previous);
     }
 
-    public ArrayList<LevelMapSector> getSectors() {
-        return sectors;
-    }
-
     public LevelMapSector getSector(int id) {
         for (LevelMapSector s : sectors) {
             if (s.id == id) {

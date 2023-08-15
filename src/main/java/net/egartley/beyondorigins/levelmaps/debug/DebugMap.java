@@ -18,7 +18,7 @@ public class DebugMap extends LevelMap {
 
     @Override
     public void onEnter() {
-        setSector(getSectors().get(0));
+
     }
 
     @Override

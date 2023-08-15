@@ -122,7 +122,7 @@ public abstract class LevelMapSector implements Tickable {
         neighbors.put(direction, neighbor);*/
     }
 
-    private void buildTiles() {
+    protected void buildTiles() {
         String entireJSONString = null;
         try {
             entireJSONString = Files.readString(FileSystems.getDefault().getPath("src", "main",
@@ -174,7 +174,7 @@ public abstract class LevelMapSector implements Tickable {
         }
     }
 
-    private void fill(String id) {
+    protected void fill(String id) {
         Image image;
         try {
             image = new Image("images/map-tiles/" + id + ".png");
@@ -190,7 +190,7 @@ public abstract class LevelMapSector implements Tickable {
         }
     }
 
-    private void mixed(JSONArray custom, ArrayList<String> tileIDs, ArrayList<String> tileKeys) {
+    protected void mixed(JSONArray custom, ArrayList<String> tileIDs, ArrayList<String> tileKeys) {
         for (int i = 0; i < custom.length(); i++) {
             JSONObject tileObject = (JSONObject) custom.get(i);
             int row = tileObject.getInt("r");
@@ -211,7 +211,7 @@ public abstract class LevelMapSector implements Tickable {
 
     @Override
     public String toString() {
-        return parent.toString() + ", Sector " + (parent.getSectors().indexOf(this) + 1);
+        return parent.toString() + ", Sector " + this.id;
     }
 
 }
