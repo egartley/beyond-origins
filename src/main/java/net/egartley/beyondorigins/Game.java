@@ -1,6 +1,7 @@
 package net.egartley.beyondorigins;
 
 import net.egartley.beyondorigins.engine.Mouse;
+import net.egartley.beyondorigins.states.InGame;
 import net.egartley.beyondorigins.states.MainMenu;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
@@ -41,6 +42,7 @@ public class Game extends StateBasedGame implements InputProviderListener {
     @Override
     public void initStatesList(GameContainer container) throws SlickException {
         this.addState(new MainMenu());
+        this.addState(new InGame());
     }
 
     @Override

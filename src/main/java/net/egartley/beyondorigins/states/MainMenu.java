@@ -22,7 +22,12 @@ public class MainMenu extends BasicGameState {
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         logo = new Image("images/logo.png");
         buttons = new TextButton[3];
-        buttons[0] = new TextButton(Game.WINDOW_WIDTH / 2 - 75, 260, 150, 32, "Resume");
+        buttons[0] = new TextButton(Game.WINDOW_WIDTH / 2 - 75, 260, 150, 32, "Resume") {
+            @Override
+            public void onClick() {
+                game.enterState(InGame.ID);
+            }
+        };
         buttons[1] = new TextButton(Game.WINDOW_WIDTH / 2 - 75, 260 + 48, 150, 32, "New Game");
         buttons[2] = new TextButton(Game.WINDOW_WIDTH / 2 - 75, 260 + 96, 150, 32, "Quit") {
             @Override
