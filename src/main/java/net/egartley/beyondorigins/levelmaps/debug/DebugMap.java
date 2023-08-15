@@ -6,14 +6,9 @@ import net.egartley.beyondorigins.engine.LevelMapSector;
 public class DebugMap extends LevelMap {
 
     public DebugMap() {
-        super("Debug");
+        super("debug");
         addSector(new Sector1(this));
         setSector(getSector(1));
-    }
-
-    @Override
-    public void tick() {
-        currentSector.tick();
     }
 
     @Override

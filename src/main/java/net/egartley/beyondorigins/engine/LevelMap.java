@@ -6,11 +6,13 @@ public abstract class LevelMap implements Tickable {
 
     public String name;
     public LevelMapSector currentSector;
+    protected TileBuilder tileBuilder;
     private ArrayList<LevelMapSector> sectors;
 
     public LevelMap(String name) {
         this.name = name;
         sectors = new ArrayList<>();
+        tileBuilder = new TileBuilder();
     }
 
     public abstract void onEnter();
@@ -43,6 +45,11 @@ public abstract class LevelMap implements Tickable {
         if (!sectors.contains(sector)) {
             sectors.add(sector);
         }
+    }
+
+    @Override
+    public void tick() {
+        currentSector.tick();
     }
 
     @Override
