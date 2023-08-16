@@ -1,12 +1,12 @@
-package net.egartley.beyondorigins.levelmaps.debug;
+package net.egartley.beyondorigins.maps.debug;
 
 import net.egartley.beyondorigins.engine.LevelMap;
 import net.egartley.beyondorigins.engine.LevelMapSector;
 
-public class Sector2 extends LevelMapSector {
+public class Sector1 extends LevelMapSector {
 
-    public Sector2(LevelMap parent) {
-        super(parent, 2);
+    public Sector1(LevelMap parent) {
+        super(parent, 1);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package net.egartley.beyondorigins.levelmaps.debug;
+package net.egartley.beyondorigins.maps.debug;
 
 import net.egartley.beyondorigins.engine.Direction;
 import net.egartley.beyondorigins.engine.LevelMap;
