@@ -16,56 +16,51 @@ public class TileBuilder {
 
     protected ArrayList<ArrayList<LevelMapTile>> buildTiles(LevelMapSector sector) {
         ArrayList<ArrayList<LevelMapTile>> tiles = new ArrayList<>();
-        String entireJSONString = null;
-        try {
-            entireJSONString = Files.readString(FileSystems.getDefault().getPath("src", "main",
-                    "resources", "data", "maps", sector.parent.name, "sector-" + sector.id + ".def"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (entireJSONString == null) {
-            System.out.println("WARNING: Issue while building the tiles for \"" + this + "\" (JSON string was null)");
+
+        String jsonString = getJSONString(sector);
+        if (jsonString.isEmpty()) {
             return tiles;
         }
-        JSONObject root = new JSONObject(entireJSONString);
+
+        JSONObject root = new JSONObject(jsonString);
         JSONArray legend = root.getJSONArray("legend");
         JSONObject tilesObject = root.getJSONObject("tiles");
         ArrayList<String> tileKeys = new ArrayList<>();
         ArrayList<String> tileIDs = new ArrayList<>();
-        String buildType = tilesObject.getString("type");
+
+        // build keys and their ids
         for (int i = 0; i < legend.length(); i++) {
             JSONObject entry = legend.getJSONObject(i);
             tileKeys.add(entry.getString("key"));
             tileIDs.add(entry.getString("tile"));
         }
-        switch (buildType.toLowerCase()) {
+
+        // populate tiles list based on build type
+        switch (tilesObject.getString("type").toLowerCase()) {
             case "fill" -> fill(tileIDs.get(tileKeys.indexOf(tilesObject.getString("data"))), tiles);
             case "mixed" -> {
                 fill(tileIDs.get(tileKeys.indexOf(tilesObject.getJSONObject("data").getString("common"))), tiles);
                 mixed(tilesObject.getJSONObject("data").getJSONArray("custom"), tileIDs, tileKeys, tiles);
             }
         }
+
         if (root.has("random")) {
-            JSONArray keys = root.getJSONArray("random");
-            for (int i = 0; i < keys.length(); i++) {
-                String id = tileIDs.get(tileKeys.indexOf(keys.getString(i)));
-                for (int r = 0; r < TILE_ROWS; r++) {
-                    for (int c = 0; c < TILE_COLS; c++) {
-                        LevelMapTile tile = tiles.get(r).get(c);
-                        if (tile.getID().equalsIgnoreCase(id)) {
-                            if (Util.fiftyFifty()) {
-                                switch (Util.randomInt(0, 2, true)) {
-                                    case 0 -> tile.rotate();
-                                    case 1 -> tile.rotate(180);
-                                    case 2 -> tile.rotate(270);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            randomRotations(root, tileKeys, tileIDs, tiles);
         }
+
         return tiles;
+    }
+
+    private String getJSONString(LevelMapSector sector) {
+        String jsonString = "";
+        try {
+            jsonString = Files.readString(FileSystems.getDefault().getPath("src", "main",
+                    "resources", "data", "maps", sector.parent.name, "sector-" + sector.id + ".def"));
+        } catch (IOException e) {
+            System.out.println("WARNING: Issue while building the tiles for \"" + sector + "\"");
+            e.printStackTrace();
+        }
+        return jsonString;
     }
 
     private void fill(String id, ArrayList<ArrayList<LevelMapTile>> tiles) {
@@ -100,6 +95,27 @@ public class TileBuilder {
                 image.rotate(tileObject.getInt("rotate"));
             }
             tiles.get(row).set(column, new LevelMapTile(id, image));
+        }
+    }
+
+    private void randomRotations(JSONObject root, ArrayList<String> tileKeys, ArrayList<String> tileIDs, ArrayList<ArrayList<LevelMapTile>> tiles) {
+        JSONArray keys = root.getJSONArray("random");
+        for (int i = 0; i < keys.length(); i++) {
+            String id = tileIDs.get(tileKeys.indexOf(keys.getString(i)));
+            for (int r = 0; r < TILE_ROWS; r++) {
+                for (int c = 0; c < TILE_COLS; c++) {
+                    LevelMapTile tile = tiles.get(r).get(c);
+                    if (tile.getID().equalsIgnoreCase(id)) {
+                        if (Util.fiftyFifty()) {
+                            switch (Util.randomInt(0, 2, true)) {
+                                case 0 -> tile.rotate();
+                                case 1 -> tile.rotate(180);
+                                case 2 -> tile.rotate(270);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
