@@ -22,7 +22,18 @@ class LevelMapTest {
     }
 
     @Test
-    void setSector() {
+    void addSingleSector() {
+        int id = 1;
+        LevelMap testMap = getTestMap();
+        LevelMapSector testSector = getTestSector(testMap, id);
+
+        testMap.addSector(testSector);
+
+        assertEquals();
+    }
+
+    @Test
+    void setCurrentSector() {
         int id = 1;
         LevelMap testMap = getTestMap();
         LevelMapSector testSector = getTestSector(testMap, id);
@@ -32,18 +43,20 @@ class LevelMapTest {
 
         testMap.setSector(id);
 
-        assertEquals(testSector, testMap.currentSector);
-        assertNotEquals(testSector2, testMap.currentSector);
+        assertEquals(testSector, testMap.currentSector, "currentSector set correctly");
+        assertNotEquals(testSector2, testMap.currentSector, "currentSector set to wrong sector");
     }
 
     @Test
-    void getSector() {
+    void getSectorByID() {
         int id = 1;
         LevelMap testMap = getTestMap();
         LevelMapSector testSector = getTestSector(testMap, id);
         testMap.addSector(testSector);
 
-        assertEquals(testSector, testMap.getSector(id));
+        LevelMapSector sector = testMap.getSector(id);
+
+        assertEquals(testSector, sector);
     }
 
     @Test
@@ -55,8 +68,19 @@ class LevelMapTest {
 
         testMap.addNeighborMapping(new NeighborMapping(testSector.id, Direction.DOWN, testSector2.id));
 
-        assertEquals(-1, testMap.getNeighborID(Direction.LEFT, testSector2));
         assertEquals(testSector2.id, testMap.getNeighborID(Direction.UP, testSector));
+    }
+
+    @Test
+    void getNonExistentNeighborID() {
+        int id = 1;
+        LevelMap testMap = getTestMap();
+        LevelMapSector testSector = getTestSector(testMap, id);
+        LevelMapSector testSector2 = getTestSector(testMap, id + 1);
+
+        testMap.addNeighborMapping(new NeighborMapping(testSector.id, Direction.DOWN, testSector2.id));
+
+        assertEquals(-1, testMap.getNeighborID(Direction.LEFT, testSector2));
     }
 
 }

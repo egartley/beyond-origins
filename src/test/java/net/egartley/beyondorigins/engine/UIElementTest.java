@@ -8,15 +8,21 @@ class UIElementTest {
 
     @Test
     void squareConstructor() {
-        UIElement element = new UIElement(200);
-        assertEquals(200, element.width);
-        assertEquals(200, element.height);
+        int size = 200;
+        UIElement element = new UIElement(size);
+        assertEquals(size, element.width, "Check width");
+        assertEquals(size, element.height, "Check height");
     }
 
     @Test
-    void isMouseWithinBounds() {
+    void mouseWithinBoundsTrue() {
         UIElement element = new UIElement(200, 200, 50, 50, true);
         assertTrue(element.isMouseWithinBounds(225, 225));
+    }
+
+    @Test
+    void mouseWithinBoundsFalse() {
+        UIElement element = new UIElement(200, 200, 50, 50, true);
         assertFalse(element.isMouseWithinBounds(1, 1));
     }
 

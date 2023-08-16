@@ -9,9 +9,11 @@ class LevelMapTileTest {
     @Test
     void createEmptyTile() {
         String id = "testid";
+
         LevelMapTile tile = new LevelMapTile(id, null);
-        assertEquals(id, tile.getID());
-        assertNull(tile.image);
+
+        assertEquals(id, tile.getID(), "ID set correctly");
+        assertNull(tile.image, "Image set correctly");
     }
 
 }
