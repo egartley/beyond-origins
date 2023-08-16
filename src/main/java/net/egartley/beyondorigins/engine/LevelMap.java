@@ -21,14 +21,11 @@ public abstract class LevelMap implements Tickable {
 
     public abstract void onLeave();
 
-    public abstract void onSectorChange(LevelMapSector from, LevelMapSector to);
-
     public void setSector(int id) {
         LevelMapSector newSector = getSector(id);
         if (currentSector != null) {
             currentSector.onLeave(newSector);
         }
-        onSectorChange(currentSector, newSector);
         LevelMapSector previous = currentSector;
         currentSector = newSector;
         currentSector.onEnter(previous);

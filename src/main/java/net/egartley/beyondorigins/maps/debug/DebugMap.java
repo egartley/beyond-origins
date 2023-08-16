@@ -30,9 +30,4 @@ public class DebugMap extends LevelMap {
 
     }
 
-    @Override
-    public void onSectorChange(LevelMapSector from, LevelMapSector to) {
-
-    }
-
 }
