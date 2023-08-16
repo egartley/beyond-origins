@@ -29,7 +29,7 @@ class LevelMapTest {
 
         testMap.addSector(testSector);
 
-        assertEquals();
+        assertEquals(testSector, testMap.getSector(id));
     }
 
     @Test
