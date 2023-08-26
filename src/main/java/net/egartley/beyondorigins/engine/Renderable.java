@@ -6,6 +6,10 @@ public abstract class Renderable {
 
     public int x, y, width, height;
 
+    public Renderable() {
+        this(0, 0, 0, 0);
+    }
+
     public Renderable(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
