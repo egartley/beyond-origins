@@ -10,13 +10,14 @@ class LevelMapTest {
         return new LevelMap("test") {
             public void onEnter() {}
             public void onLeave() {}
-            public void onSectorChange(LevelMapSector from, LevelMapSector to) {}
         };
     }
 
     private LevelMapSector getTestSector(LevelMap parent, int id) {
         return new LevelMapSector(parent, id) {
             public void init() {}
+            public void onEnter(LevelMapSector from) {}
+            public void onLeave(LevelMapSector to) {}
             public void tick() {}
         };
     }

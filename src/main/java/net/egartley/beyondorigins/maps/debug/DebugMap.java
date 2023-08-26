@@ -16,13 +16,11 @@ public class DebugMap extends LevelMap {
         addSector(s1);
         addSector(s2);
         addNeighborMapping(new NeighborMapping(s1.id, Direction.LEFT, s2.id));
-
-        setSector(s1.id);
     }
 
     @Override
     public void onEnter() {
-
+        setSector(1);
     }
 
     @Override

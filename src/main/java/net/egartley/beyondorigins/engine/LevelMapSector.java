@@ -7,10 +7,8 @@ import java.util.ArrayList;
 public abstract class LevelMapSector implements Tickable {
 
     public int id;
-    public static final short TILE_ROWS = 17, TILE_COLS = 30;
     private int tileRenderX, tileRenderY;
-    private final short TILE_SIZE = 32, BOUNDARY_SIZE = 18;
-    private final short PLAYER_ENTRANCE_OFFSET = BOUNDARY_SIZE + 4;
+    private final short TILE_SIZE = 32;
 
     protected LevelMap parent;
     protected ArrayList<ArrayList<LevelMapTile>> tiles = new ArrayList<>();
@@ -22,17 +20,12 @@ public abstract class LevelMapSector implements Tickable {
 
     public abstract void init();
 
+    public abstract void onEnter(LevelMapSector from);
+
+    public abstract void onLeave(LevelMapSector to);
+
     public void render(Graphics graphics) {
         drawTiles(graphics);
-    }
-
-    public void onEnter(LevelMapSector from) {
-        init();
-    }
-
-    public void onLeave(LevelMapSector to) {
-        // entities.clear();
-        // Collisions.nuke();
     }
 
     public void buildTiles() {

@@ -20,6 +20,11 @@ public class Sector2 extends LevelMapSector {
     }
 
     @Override
+    public void onLeave(LevelMapSector to) {
+
+    }
+
+    @Override
     public void tick() {
 
     }
