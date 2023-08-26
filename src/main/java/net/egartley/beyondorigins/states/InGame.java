@@ -29,7 +29,7 @@ public class InGame extends BasicGameState {
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {
         levelMaps = new LevelMap[1];
         levelMaps[0] = new DebugMap();
-        currentMap = levelMaps[0];
+        changeMap(0);
     }
 
     @Override
@@ -45,6 +45,18 @@ public class InGame extends BasicGameState {
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
 
+    }
+
+    public void changeMap(int index) {
+        if (currentMap != null) {
+            currentMap.onLeave();
+        }
+        if (index >= levelMaps.length || index < 0) {
+            System.out.println("WARNING: Could not change map to invalid index " + index);
+        } else {
+            currentMap = levelMaps[index];
+            currentMap.onEnter();
+        }
     }
 
 }
