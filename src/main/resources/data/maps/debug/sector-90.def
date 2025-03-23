@@ -1,1 +1,0 @@
-{"legend":[{"key":"g","tile":"grass-default"},{"key":"gp1","tile":"grass-path-1"},{"key":"gp2","tile":"grass-path-2"}],"tiles":{"type":"mixed","data":{"common":"g","custom":[{"c":2,"r":0,"key":"gp1"},{"c":2,"r":1,"key":"gp1"},{"c":2,"r":2,"key":"gp2","rotate":180},{"c":1,"r":2,"key":"gp1","rotate":90},{"c":0,"r":2,"key":"gp1","rotate":90}]}},"random":["g"]}
