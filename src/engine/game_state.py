@@ -1,20 +1,21 @@
 from pygame import Surface
+from pygame.rect import Rect
 
 from src.engine.event import EventStore
+from src.engine.key import KeyStore
 
 
 class GameState:
 
-    IN_GAME = 0
+    def __init__(self, size: tuple[int, int]):
+        self.surface = Surface(size)
+        self.surface.convert()
+        self.es = EventStore()
+        self.ks = KeyStore()
 
-    def __init__(self, state_id: int, es: EventStore):
-        self.state_id = state_id
-        self.es = es
-
-    def tick(self):
+    def tick(self, delta: float):
         pass
 
-    def render(self, screen_size: tuple[int, int]) -> Surface:
-        s = Surface(screen_size)
-        s.convert()
-        return s
+    def render(self) -> list[Rect | None]:
+        self.surface.fill((0, 0, 0))
+        return [None]

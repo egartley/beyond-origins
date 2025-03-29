@@ -1,7 +1,7 @@
+import copy
 import pygame
 import sys
 
-from src.engine.event import EventStore
 from src.states.in_game import InGameState
 
 
@@ -14,25 +14,25 @@ def main():
     running = True
 
     screen = pygame.display.get_surface()
-    w = screen.get_width()
-    h = screen.get_height()
-
-    es = EventStore()
-
-    in_game = InGameState(es)
+    in_game = InGameState(screen.get_size())
     current_state = in_game
+    old_rects = [None]
 
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            elif event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
+                current_state.ks.process_key(event)
             elif event.type >= pygame.USEREVENT:
-                es.process_event(event.type)
-        current_state.tick()
-        next_frame = current_state.render((w, h))
-        screen.blit(next_frame, (0, 0))
-        pygame.display.flip()  # TODO: change to more efficient .update(list_rects)
-        clock.tick(60)
+                current_state.es.process_event(event.type)
+
+        delta = clock.tick(60) / 1000  # decouple frame rate from per-frame updates
+        current_state.tick(delta)
+        new_rects = current_state.render()
+        screen.blit(current_state.surface, (0, 0))
+        pygame.display.update(old_rects + new_rects)
+        old_rects = copy.deepcopy(new_rects)  # monitor for performance with lots of rects
 
     pygame.quit()
     sys.exit()
