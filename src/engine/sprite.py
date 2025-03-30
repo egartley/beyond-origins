@@ -1,7 +1,7 @@
 from typing import List
 
 import pygame.sprite
-from pygame import Surface
+from pygame import Surface, Rect
 from src.engine.animation import Animation
 
 
@@ -19,43 +19,45 @@ class Sprite(pygame.sprite.Sprite):
         self.y = y
         self.rect.move_ip(int(self.x), int(self.y))
 
-    def move_x(self, offset: float, delta: float):
-        self.x += offset * delta
+    def move_x(self, speed: float, delta: float):
+        self.x += speed * delta
         self.rect.left = int(self.x)
 
-    def move_y(self, offset: float, delta: float):
-        self.y += offset * delta
+    def move_y(self, speed: float, delta: float):
+        self.y += speed * delta
         self.rect.top = int(self.y)
 
     def tick(self, delta: float):
         pass
 
-    def render(self, surface: Surface):
-        surface.blit(self.image, (int(self.x), int(self.y)))
+    def render(self, surface: Surface) -> Rect:
         # pygame.draw.rect(surface, (255, 255, 255), self.rect, 1)
+        return surface.blit(self.image, (int(self.x), int(self.y)))
 
 
 class AnimatedSprite(Sprite):
 
-    def __init__(self, width: int, height: int, animations: List[Animation]):
+    def __init__(self, width: int, height: int):
         super().__init__(width, height)
-        self.animations = animations
-        self.animation_index = 0
-        self.animation = self.animations[self.animation_index]
-        self.image = self.animation.get_frame()
+        self.animation = None
+        self.animations = []
+        self.current_animation_index = 0
+
+    def add_animations(self, animations: List[Animation]):
+        for a in animations:
+            self.animations.append(a)
+        self.animation = self.animations[self.current_animation_index]
+        self.image = self.animation.frames[self.animation.index]
+
+    def set_animation(self, i: int):
+        if 0 <= i < len(self.animations):
+            self.animation.stop()
+            self.current_animation_index = i
+            self.animation = self.animations[self.current_animation_index]
+            self.animation.start()
+            self.image = self.animation.frames[self.animation.index]
 
     def tick(self, delta: float):
-        self.sync_animation()
-
-    def sync_animation(self):
-        frame = self.animation.get_frame()
-        if self.image != frame:
-            self.image = frame
-
-    def set_animation(self, index: int):
-        if 0 <= index < len(self.animations):
-            self.animation.stop()
-            self.animation_index = index
-            self.animation = self.animations[self.animation_index]
-            self.animation.start()
-            self.sync_animation()
+        super().tick(delta)
+        if self.animation.frame is not None and self.animation.frame is not self.image:
+            self.image = self.animation.frame

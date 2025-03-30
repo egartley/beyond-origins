@@ -3,18 +3,19 @@ import pygame.image
 from src.engine.animation import Animation
 from src.engine.game_state import GameState
 from src.engine.sprite import AnimatedSprite
+from src.images import Image
 
 
 class Player(AnimatedSprite):
 
     def __init__(self, game_state: GameState):
-        full_sheet = pygame.image.load("res/images/entities/player-default.png")
-        full_sheet.convert_alpha()
+        super().__init__(30, 44)
+        full_sheet = game_state.images.get(Image.PLAYER_DEFAULT)
         left_sheet = full_sheet.subsurface((0, 0, 120, 44))
         right_sheet = full_sheet.subsurface((0, 44, 120, 44))
         left = Animation(game_state.es, 100, left_sheet, 4, True)
         right = Animation(game_state.es, 100, right_sheet, 4, True)
-        super().__init__(30, 44, [left, right])
+        self.add_animations([left, right])
 
         self.speed = 100
         self.set_position(100.0, 100.0)
@@ -47,11 +48,11 @@ class Player(AnimatedSprite):
 
         if self.left:
             self.move_x(-self.speed, delta)
-            if self.animation_index == 1:
+            if self.current_animation_index == 1:
                 self.set_animation(0)
         elif self.right:
             self.move_x(self.speed, delta)
-            if self.animation_index == 0:
+            if self.current_animation_index == 0:
                 self.set_animation(1)
 
         if not any([self.up, self.down, self.left, self.right]):

@@ -2,6 +2,7 @@ from pygame import Surface
 from pygame.rect import Rect
 
 from src.engine.event import EventStore
+from src.engine.image import ImageStore
 from src.engine.key import KeyStore
 
 
@@ -12,6 +13,7 @@ class GameState:
         self.surface.convert()
         self.es = EventStore()
         self.ks = KeyStore()
+        self.images = ImageStore()
 
     def tick(self, delta: float):
         pass

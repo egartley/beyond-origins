@@ -17,6 +17,7 @@ class Animation(EventHook):
         self.is_looping = loop
 
         self.index = 0
+        self.frame = None
         self.frames = []
         self.is_running = False
         self.event_id = self.es.add_event(self, self.frame_time, 0 if self.is_looping else 1)
@@ -27,11 +28,6 @@ class Animation(EventHook):
         h = self.sheet.get_height()
         for n in range(self.num_frames):
             self.frames.append(self.sheet.subsurface((n * w, 0, w, h)))
-
-    def get_frame(self) -> Surface | None:
-        if len(self.frames) == 0 or self.index < 0:
-            return None
-        return self.frames[self.index]
 
     def start(self):
         if not self.is_running:
@@ -58,3 +54,5 @@ class Animation(EventHook):
             self.index = 0 if self.is_looping else len(self.frames) - 1
             if not self.is_looping:
                 self.stop()
+        if self.is_running:
+            self.frame = self.frames[self.index]

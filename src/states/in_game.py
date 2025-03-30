@@ -1,3 +1,5 @@
+from pygame import Rect
+
 from src.engine.game_state import GameState
 from src.entities.player import Player
 
@@ -11,7 +13,7 @@ class InGameState(GameState):
     def tick(self, delta: float):
         self.player.tick(delta)
 
-    def render(self):
+    def render(self) -> list[Rect | None]:
         super().render()
-        self.player.render(self.surface)
-        return [self.player.rect]
+        r = self.player.render(self.surface)
+        return [r]
