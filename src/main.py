@@ -14,7 +14,7 @@ def main():
     running = True
 
     screen = pygame.display.get_surface()
-    in_game = InGameState(screen.get_size())
+    in_game = InGameState()
     current_state = in_game
     old_rects = [None]
 
@@ -29,9 +29,9 @@ def main():
 
         delta = clock.tick(60) / 1000  # decouple frame rate from per-frame updates
         current_state.tick(delta)
-        new_rects = current_state.render()
-        screen.blit(current_state.surface, (0, 0))
+        new_rects = [r for r in current_state.render(screen) if r is not None]
         pygame.display.update(old_rects + new_rects)
+        # print(f"{old_rects}, {new_rects}")
         old_rects = copy.deepcopy(new_rects)  # monitor for performance with lots of rects
 
     pygame.quit()

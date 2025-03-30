@@ -1,19 +1,24 @@
-from pygame import Rect
+from pygame import Rect, Surface
 
 from src.engine.game_state import GameState
-from src.entities.player import Player
+from src.engine.level import Level
+from src.levels.debug import DebugLevel
 
 
 class InGameState(GameState):
 
-    def __init__(self, size):
-        super().__init__(size)
-        self.player = Player(self)
+    def __init__(self,):
+        super().__init__()
+        self.level = None
+        self.load_level(DebugLevel(self))
+
+    def load_level(self, level: Level):
+        self.level = level
+        self.level.load()
+        self.refresh_surface = True
 
     def tick(self, delta: float):
-        self.player.tick(delta)
+        self.level.tick(delta)
 
-    def render(self) -> list[Rect | None]:
-        super().render()
-        r = self.player.render(self.surface)
-        return [r]
+    def render(self, surface: Surface) -> list[Rect | None]:
+        return super().render(surface) + self.level.render(surface)

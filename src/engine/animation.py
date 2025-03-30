@@ -31,20 +31,24 @@ class Animation(EventHook):
 
     def start(self):
         if not self.is_running:
-            self.index = 0
+            self.update_frame(0)
             self.es.start_event(self.event_id)
             self.is_running = True
 
     def stop(self):
         if self.is_running:
-            self.index = 0
+            self.update_frame(0)
             self.es.stop_event(self.event_id)
             self.is_running = False
 
     def restart(self):
-        self.index = 0
+        self.update_frame(0)
         if not self.is_running:
             self.start()
+
+    def update_frame(self, index: int):
+        self.index = index
+        self.frame = self.frames[index]
 
     def event_triggered(self):
         if not self.is_running:
@@ -55,4 +59,4 @@ class Animation(EventHook):
             if not self.is_looping:
                 self.stop()
         if self.is_running:
-            self.frame = self.frames[self.index]
+            self.update_frame(self.index)
