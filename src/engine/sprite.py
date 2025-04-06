@@ -10,6 +10,7 @@ class Sprite(pygame.sprite.Sprite):
     def __init__(self, width: int = 32, height: int = 32):
         super().__init__()
         self.x, self.y = 0.0, 0.0
+        self.x_offset, self.y_offset = 0.0, 0.0
         self.speed = 100
         self.image = pygame.Surface([width, height])
         self.rect = pygame.rect.Rect(self.x, self.y, width, height)
@@ -32,7 +33,7 @@ class Sprite(pygame.sprite.Sprite):
 
     def render(self, surface: Surface) -> Rect:
         # pygame.draw.rect(surface, (255, 255, 255), self.rect, 1)
-        return surface.blit(self.image, (int(self.x), int(self.y)))
+        return surface.blit(self.image, (int(self.x + self.x_offset), int(self.y + self.y_offset)))
 
 
 class AnimatedSprite(Sprite):

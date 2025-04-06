@@ -42,9 +42,8 @@ class Animation(EventHook):
             self.is_running = False
 
     def restart(self):
-        self.update_frame(0)
-        if not self.is_running:
-            self.start()
+        self.stop()
+        self.start()
 
     def update_frame(self, index: int):
         self.index = index

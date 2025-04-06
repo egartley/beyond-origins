@@ -2,6 +2,7 @@ import pygame.image
 
 from src.engine.animation import Animation
 from src.engine.game_state import GameState
+from src.engine.hover_control import HoverControl
 from src.engine.sprite import AnimatedSprite
 from src.images import Image
 
@@ -10,14 +11,16 @@ class Player(AnimatedSprite):
 
     def __init__(self, game_state: GameState):
         super().__init__(30, 44)
-        full_sheet = game_state.images.get(Image.PLAYER_DEFAULT)
-        left_sheet = full_sheet.subsurface((0, 0, 120, 44))
-        right_sheet = full_sheet.subsurface((0, 44, 120, 44))
-        left = Animation(game_state.es, 100, left_sheet, 4, True)
-        right = Animation(game_state.es, 100, right_sheet, 4, True)
+        full_sheet = game_state.images.get(Image.PLAYER_NEW_TEMP)
+        left_sheet = full_sheet.subsurface((0, 0, 96, 64))
+        right_sheet = full_sheet.subsurface((0, 64, 96, 64))
+        left = Animation(game_state.es, 100, left_sheet, 2, True)
+        right = Animation(game_state.es, 100, right_sheet, 2, True)
         self.add_animations([left, right])
 
-        self.speed = 100
+        self.hover = HoverControl(game_state.es, self, 4, 100)
+
+        self.speed = 150
         self.set_position(100.0, 100.0)
         self.up, self.down, self.left, self.right = False, False, False, False
         game_state.ks.register_down_hook(pygame.K_w, lambda: self.key_move(pygame.K_w, True))
@@ -55,7 +58,13 @@ class Player(AnimatedSprite):
             if self.current_animation_index == 0:
                 self.set_animation(1)
 
-        if not any([self.up, self.down, self.left, self.right]):
-            self.animation.stop()
-        elif not self.animation.is_running:
-            self.animation.start()
+        if any([self.up, self.down, self.left, self.right]):
+            if self.hover.is_running:
+                self.hover.stop()
+            if self.animation.is_running:
+                self.animation.start()
+        else:
+            if self.animation.is_running:
+                self.animation.stop()
+            if not self.hover.is_running:
+                self.hover.start()

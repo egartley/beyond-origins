@@ -6,8 +6,9 @@ from src.states.in_game import InGameState
 
 
 def main():
+    flags = pygame.SCALED
     pygame.init()
-    pygame.display.set_mode((1920, 1080))
+    pygame.display.set_mode((1920, 1080), flags)
     pygame.display.set_caption("Beyond Origins")
     pygame.display.set_icon(pygame.image.load("res/images/favicon.png"))
     clock = pygame.time.Clock()
