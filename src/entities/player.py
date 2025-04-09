@@ -1,4 +1,5 @@
 import pygame.image
+from pygame import Surface, Rect
 
 from src.engine.animation import Animation
 from src.engine.game_state import GameState
@@ -19,9 +20,12 @@ class Player(AnimatedSprite):
         self.add_animations([left, right])
 
         self.hover = HoverControl(game_state.es, self, 4, 100)
+        self.hover.start()
+        self.shadow_surface = Surface((self.rect.width, 12), pygame.SRCALPHA)
+        self.shadow_surface.set_alpha(40)
+        self.shadow_surface.convert_alpha()
 
         self.speed = 150
-        self.set_position(100.0, 100.0)
         self.up, self.down, self.left, self.right = False, False, False, False
         game_state.ks.register_down_hook(pygame.K_w, lambda: self.key_move(pygame.K_w, True))
         game_state.ks.register_down_hook(pygame.K_a, lambda: self.key_move(pygame.K_a, True))
@@ -42,6 +46,16 @@ class Player(AnimatedSprite):
         elif key == pygame.K_d:
             self.right = key_down
 
+    def draw_shadow(self, surface: Surface) -> Rect:
+        sr = Rect(int(self.x + self.x_offset), int(self.y + self.rect.height + 4), 36 + self.y_offset, 12)
+        if self.shadow_surface.get_width() != sr.width or self.shadow_surface.get_height() != sr.height:
+            self.shadow_surface.fill((0, 0, 0, 0))
+            self.shadow_surface.set_alpha(40 + (self.y_offset * 2))
+            new_x = (self.shadow_surface.get_width() / 2) - (sr.width / 2)
+            pygame.draw.ellipse(self.shadow_surface, (0, 0, 0), (new_x, 0, sr.width, sr.height))
+        surface.blit(self.shadow_surface, (sr.x, sr.y))
+        return sr
+
     def tick(self, delta: float):
         super().tick(delta)
         if self.up:
@@ -59,12 +73,12 @@ class Player(AnimatedSprite):
                 self.set_animation(1)
 
         if any([self.up, self.down, self.left, self.right]):
-            if self.hover.is_running:
-                self.hover.stop()
             if self.animation.is_running:
                 self.animation.start()
-        else:
-            if self.animation.is_running:
-                self.animation.stop()
-            if not self.hover.is_running:
-                self.hover.start()
+        elif self.animation.is_running:
+            self.animation.stop()
+
+    def render(self, surface: Surface) -> list[Rect | None]:
+        r = super().render(surface)
+        sr = self.draw_shadow(surface)
+        return r + [sr]

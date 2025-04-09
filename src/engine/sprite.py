@@ -22,18 +22,18 @@ class Sprite(pygame.sprite.Sprite):
 
     def move_x(self, speed: float, delta: float):
         self.x += speed * delta
-        self.rect.left = int(self.x)
+        self.rect.x = int(self.x)
 
     def move_y(self, speed: float, delta: float):
         self.y += speed * delta
-        self.rect.top = int(self.y)
+        self.rect.y = int(self.y)
 
     def tick(self, delta: float):
         pass
 
-    def render(self, surface: Surface) -> Rect:
+    def render(self, surface: Surface) -> list[Rect | None]:
         # pygame.draw.rect(surface, (255, 255, 255), self.rect, 1)
-        return surface.blit(self.image, (int(self.x + self.x_offset), int(self.y + self.y_offset)))
+        return [surface.blit(self.image, (int(self.x + self.x_offset), int(self.y + self.y_offset)))]
 
 
 class AnimatedSprite(Sprite):
@@ -44,11 +44,16 @@ class AnimatedSprite(Sprite):
         self.animations = []
         self.current_animation_index = 0
 
+    def _sync_image_rect(self, image: Surface):
+        self.image = image
+        self.rect.width = self.image.get_width()
+        self.rect.height = self.image.get_height()
+
     def add_animations(self, animations: List[Animation]):
         for a in animations:
             self.animations.append(a)
         self.animation = self.animations[self.current_animation_index]
-        self.image = self.animation.frames[self.animation.index]
+        self._sync_image_rect(self.animation.frames[self.animation.index])
 
     def set_animation(self, i: int):
         if 0 <= i < len(self.animations):
@@ -56,9 +61,9 @@ class AnimatedSprite(Sprite):
             self.current_animation_index = i
             self.animation = self.animations[self.current_animation_index]
             self.animation.start()
-            self.image = self.animation.frames[self.animation.index]
+            self._sync_image_rect(self.animation.frames[self.animation.index])
 
     def tick(self, delta: float):
         super().tick(delta)
         if self.animation.frame is not None and self.animation.frame is not self.image:
-            self.image = self.animation.frame
+            self._sync_image_rect(self.animation.frame)

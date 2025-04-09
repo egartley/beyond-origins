@@ -10,6 +10,7 @@ class DebugLevel(Level):
     def __init__(self, game_state: GameState):
         super().__init__("debug", game_state)
         self.player = Player(game_state)
+        self.player.set_position(100, 100)
 
     def tick(self, delta: float):
         self.player.tick(delta)
@@ -17,4 +18,4 @@ class DebugLevel(Level):
     def render(self, surface: Surface) -> list[Rect | None]:
         super().render(surface)
         r = self.player.render(surface)
-        return [r]
+        return r
