@@ -53,8 +53,7 @@ class Player(AnimatedSprite):
             self.shadow_surface.set_alpha(40 + (self.y_offset * 2))
             new_x = (self.shadow_surface.get_width() / 2) - (sr.width / 2)
             pygame.draw.ellipse(self.shadow_surface, (0, 0, 0), (new_x, 0, sr.width, sr.height))
-        surface.blit(self.shadow_surface, (sr.x, sr.y))
-        return sr
+        return surface.blit(self.shadow_surface, (sr.x, sr.y))
 
     def tick(self, delta: float):
         super().tick(delta)
@@ -78,7 +77,6 @@ class Player(AnimatedSprite):
         elif self.animation.is_running:
             self.animation.stop()
 
-    def render(self, surface: Surface) -> list[Rect | None]:
-        r = super().render(surface)
-        sr = self.draw_shadow(surface)
-        return r + [sr]
+    def render(self, surface: Surface):
+        super().render(surface)
+        self.draw_shadow(surface)

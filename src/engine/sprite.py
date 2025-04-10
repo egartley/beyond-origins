@@ -1,7 +1,7 @@
 from typing import List
 
 import pygame.sprite
-from pygame import Surface, Rect
+from pygame import Surface
 from src.engine.animation import Animation
 
 
@@ -31,9 +31,9 @@ class Sprite(pygame.sprite.Sprite):
     def tick(self, delta: float):
         pass
 
-    def render(self, surface: Surface) -> list[Rect | None]:
+    def render(self, surface: Surface):
         # pygame.draw.rect(surface, (255, 255, 255), self.rect, 1)
-        return [surface.blit(self.image, (int(self.x + self.x_offset), int(self.y + self.y_offset)))]
+        surface.blit(self.image, (int(self.x + self.x_offset), int(self.y + self.y_offset)))
 
 
 class AnimatedSprite(Sprite):

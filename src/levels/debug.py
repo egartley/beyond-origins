@@ -13,9 +13,9 @@ class DebugLevel(Level):
         self.player.set_position(100, 100)
 
     def tick(self, delta: float):
+        super().tick(delta)
         self.player.tick(delta)
 
-    def render(self, surface: Surface) -> list[Rect | None]:
+    def render(self, surface: Surface):
         super().render(surface)
-        r = self.player.render(surface)
-        return r
+        self.player.render(surface)

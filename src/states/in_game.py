@@ -15,10 +15,9 @@ class InGameState(GameState):
     def load_level(self, level: Level):
         self.level = level
         self.level.load()
-        self.refresh_surface = True
 
     def tick(self, delta: float):
         self.level.tick(delta)
 
-    def render(self, surface: Surface) -> list[Rect | None]:
-        return super().render(surface) + self.level.render(surface)
+    def render(self, surface: Surface):
+        self.level.render(surface)

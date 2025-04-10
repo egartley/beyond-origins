@@ -1,4 +1,4 @@
-from pygame import Surface, Rect
+from pygame import Surface
 
 from src.engine.game_state import GameState
 
@@ -11,6 +11,7 @@ class Level:
     def __init__(self, data_dir: str, game_state: GameState):
         self.data_dir = data_dir
         self.game_state = game_state
+        self.cam = Camera()
         self.surface = Surface((0, 0))
         self.surface.convert()
         self.rows, self.columns = 0, 0
@@ -70,6 +71,11 @@ class Level:
     def tick(self, delta: float):
         pass
 
-    def render(self, surface: Surface) -> list[Rect | None]:
-        surface.blit(self.surface, (0, 0))
-        return [None]
+    def render(self, surface: Surface):
+        surface.blit(self.surface, (self.cam.x, self.cam.y))
+
+
+class Camera:
+
+    def __init__(self):
+        self.x, self.y = 0, 0

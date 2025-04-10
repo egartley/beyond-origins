@@ -1,6 +1,7 @@
-import copy
-import pygame
 import sys
+import time
+import pygame
+from pygame import Rect
 
 from src.states.in_game import InGameState
 
@@ -13,11 +14,15 @@ def main():
     pygame.display.set_icon(pygame.image.load("res/images/favicon.png"))
     clock = pygame.time.Clock()
     running = True
+    fps = 60
 
     screen = pygame.display.get_surface()
+    display_rect = Rect(0, 0, screen.get_width(), screen.get_height())
     in_game = InGameState()
     current_state = in_game
-    old_rects = [None]
+
+    debug = True
+    debug_font = pygame.font.SysFont("Consolas", 16)
 
     while running:
         for event in pygame.event.get():
@@ -28,12 +33,20 @@ def main():
             elif event.type >= pygame.USEREVENT:
                 current_state.es.process_event(event.type)
 
-        delta = clock.tick(60) / 1000  # decouple frame rate from per-frame updates
+        delta = clock.tick(fps) / 1000
+        if debug:
+            t_1 = time.perf_counter() * 1000
         current_state.tick(delta)
-        new_rects = [r for r in current_state.render(screen) if r is not None]
-        pygame.display.update(old_rects + new_rects)
-        # print(f"{old_rects}, {new_rects}")
-        old_rects = copy.deepcopy(new_rects)  # monitor for performance with lots of rects
+        if debug:
+            t_2 = time.perf_counter() * 1000
+        current_state.render(screen)
+        if debug:
+            t_3 = time.perf_counter() * 1000
+            ft, tt, rt = t_3 - t_1, t_2 - t_1, t_3 - t_2
+            ds = debug_font.render(f"{ft:.1f}ms ({ft/(1000/fps):.1f}%) Δ:{delta:.3f} t:{tt:.1f}ms r:{rt:.1f}ms",
+                                   True, "white")
+            screen.blit(ds, (32, 32))
+        pygame.display.update(display_rect)
 
     pygame.quit()
     sys.exit()
