@@ -4,11 +4,11 @@ from pygame import Surface, Rect
 from src.engine.animation import Animation
 from src.engine.game_state import GameState
 from src.engine.hover_control import HoverControl
-from src.engine.sprite import AnimatedSprite
+from src.engine.level_entity import LevelEntity
 from src.images import Image
 
 
-class Player(AnimatedSprite):
+class Player(LevelEntity):
 
     def __init__(self, game_state: GameState):
         super().__init__(30, 44)
@@ -26,7 +26,6 @@ class Player(AnimatedSprite):
         self.shadow_surface.convert_alpha()
 
         self.speed = 150
-        self.up, self.down, self.left, self.right = False, False, False, False
         game_state.ks.register_down_hook(pygame.K_w, lambda: self.key_move(pygame.K_w, True))
         game_state.ks.register_down_hook(pygame.K_a, lambda: self.key_move(pygame.K_a, True))
         game_state.ks.register_down_hook(pygame.K_s, lambda: self.key_move(pygame.K_s, True))
@@ -46,33 +45,24 @@ class Player(AnimatedSprite):
         elif key == pygame.K_d:
             self.right = key_down
 
-    def draw_shadow(self, surface: Surface) -> Rect:
+    def draw_shadow(self, surface: Surface):
         sr = Rect(int(self.x + self.x_offset), int(self.y + self.rect.height + 4), 36 + self.y_offset, 12)
         if self.shadow_surface.get_width() != sr.width or self.shadow_surface.get_height() != sr.height:
             self.shadow_surface.fill((0, 0, 0, 0))
             self.shadow_surface.set_alpha(40 + (self.y_offset * 2))
             new_x = (self.shadow_surface.get_width() / 2) - (sr.width / 2)
             pygame.draw.ellipse(self.shadow_surface, (0, 0, 0), (new_x, 0, sr.width, sr.height))
-        return surface.blit(self.shadow_surface, (sr.x, sr.y))
+        surface.blit(self.shadow_surface, (sr.x, sr.y))
 
     def tick(self, delta: float):
         super().tick(delta)
-        if self.up:
-            self.move_y(-self.speed, delta)
-        elif self.down:
-            self.move_y(self.speed, delta)
-
-        if self.left:
-            self.move_x(-self.speed, delta)
-            if self.current_animation_index == 1:
-                self.set_animation(0)
-        elif self.right:
-            self.move_x(self.speed, delta)
-            if self.current_animation_index == 0:
-                self.set_animation(1)
+        if self.left and self.current_animation_index == 1:
+            self.set_animation(0)
+        elif self.right and self.current_animation_index == 0:
+            self.set_animation(1)
 
         if any([self.up, self.down, self.left, self.right]):
-            if self.animation.is_running:
+            if not self.animation.is_running:
                 self.animation.start()
         elif self.animation.is_running:
             self.animation.stop()

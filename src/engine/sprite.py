@@ -1,8 +1,5 @@
-from typing import List
-
 import pygame.sprite
-from pygame import Surface
-from src.engine.animation import Animation
+from pygame import Surface, Rect
 
 
 class Sprite(pygame.sprite.Sprite):
@@ -11,9 +8,8 @@ class Sprite(pygame.sprite.Sprite):
         super().__init__()
         self.x, self.y = 0.0, 0.0
         self.x_offset, self.y_offset = 0.0, 0.0
-        self.speed = 100
-        self.image = pygame.Surface([width, height])
-        self.rect = pygame.rect.Rect(self.x, self.y, width, height)
+        self.image = None
+        self.rect = Rect(0, 0, width, height)
 
     def set_position(self, x: float, y: float):
         self.x = x
@@ -34,36 +30,3 @@ class Sprite(pygame.sprite.Sprite):
     def render(self, surface: Surface):
         # pygame.draw.rect(surface, (255, 255, 255), self.rect, 1)
         surface.blit(self.image, (int(self.x + self.x_offset), int(self.y + self.y_offset)))
-
-
-class AnimatedSprite(Sprite):
-
-    def __init__(self, width: int, height: int):
-        super().__init__(width, height)
-        self.animation = None
-        self.animations = []
-        self.current_animation_index = 0
-
-    def _sync_image_rect(self, image: Surface):
-        self.image = image
-        self.rect.width = self.image.get_width()
-        self.rect.height = self.image.get_height()
-
-    def add_animations(self, animations: List[Animation]):
-        for a in animations:
-            self.animations.append(a)
-        self.animation = self.animations[self.current_animation_index]
-        self._sync_image_rect(self.animation.frames[self.animation.index])
-
-    def set_animation(self, i: int):
-        if 0 <= i < len(self.animations):
-            self.animation.stop()
-            self.current_animation_index = i
-            self.animation = self.animations[self.current_animation_index]
-            self.animation.start()
-            self._sync_image_rect(self.animation.frames[self.animation.index])
-
-    def tick(self, delta: float):
-        super().tick(delta)
-        if self.animation.frame is not None and self.animation.frame is not self.image:
-            self._sync_image_rect(self.animation.frame)

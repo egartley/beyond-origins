@@ -7,8 +7,8 @@ from src.levels.debug import DebugLevel
 
 class InGameState(GameState):
 
-    def __init__(self,):
-        super().__init__()
+    def __init__(self, screen: Surface):
+        super().__init__(screen)
         self.level = None
         self.load_level(DebugLevel(self))
 

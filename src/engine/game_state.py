@@ -7,7 +7,8 @@ from src.engine.key import KeyStore
 
 class GameState:
 
-    def __init__(self):
+    def __init__(self, screen: Surface):
+        self.screen = screen
         self.es = EventStore()
         self.ks = KeyStore()
         self.images = ImageStore()
