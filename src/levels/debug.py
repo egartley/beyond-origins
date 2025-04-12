@@ -7,5 +7,6 @@ class DebugLevel(Level):
 
     def __init__(self, game_state: GameState):
         super().__init__("debug", game_state)
-        self.control_entity = Player(game_state)
-        self.control_entity.set_position(600, 400)
+        self.set_control_entity(Player(game_state))
+        self.start_rel_x = 300
+        self.start_rel_y = 300

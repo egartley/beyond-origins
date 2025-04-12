@@ -26,6 +26,7 @@ class Player(LevelEntity):
         self.shadow_surface.convert_alpha()
 
         self.speed = 150
+        self.accel, self.decel = 700, 500
         game_state.ks.register_down_hook(pygame.K_w, lambda: self.key_move(pygame.K_w, True))
         game_state.ks.register_down_hook(pygame.K_a, lambda: self.key_move(pygame.K_a, True))
         game_state.ks.register_down_hook(pygame.K_s, lambda: self.key_move(pygame.K_s, True))
@@ -60,7 +61,6 @@ class Player(LevelEntity):
             self.set_animation(0)
         elif self.right and self.current_animation_index == 0:
             self.set_animation(1)
-
         if any([self.up, self.down, self.left, self.right]):
             if not self.animation.is_running:
                 self.animation.start()
