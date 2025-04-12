@@ -1,19 +1,18 @@
+# New!
+The existing Java code is being converted to Python with pygame.
+
+See the progress on the [pygame-rewrite](https://github.com/egartley/beyond-origins/tree/pygame-rewrite) branch.
+
 # Beyond Origins
 
-2D game written in Java. The intention is for this to be an RPG, with some puzzle elements. Right now, the focus is on creating mechanics and a framework for being able to properly implement a story and gameplay sometime in the future. See the "Status" section for an outline of what is currently in the game and working. Below is a video showcasing some of these, as well as a link to the JavaDoc.
+Website: [https://egartley.net/projects/beyond-origins](https://egartley.net/projects/beyond-origins/?via=gh)
 
 Demo video: [https://youtu.be/9yA8Gh5eoog](https://youtu.be/9yA8Gh5eoog)
 
-Documentation: [https://egartley.net/docs/beyond-origins](https://egartley.net/docs/beyond-origins)
-
 ![screenshot](https://raw.githubusercontent.com/egartley/media/master/screenshots/beyond-origins.png)
 
-More screenshots are available at [egartley.net](https://egartley.net/projects/beyond-origins/?via=gh).
-
-Earlier iterations of the game from 2013 through 2015 can be found [here](https://github.com/egartley/archive/tree/master/Java/Beyond%20Origins/Source) as well.
-
 ## Status
-These are the features or game mechanics that have been implemented so far as of commit [fd39801](https://github.com/egartley/beyond-origins/commit/fd398016d82eeaf00bb2de16c7fcfeb0ec4a6ff4). A more technical outline may be added in the future, but the one below is meant for anyone to be able to understand.
+These are the features or game mechanics that have been implemented as of commit [fd39801](https://github.com/egartley/beyond-origins/commit/fd398016d82eeaf00bb2de16c7fcfeb0ec4a6ff4)
 - Core
   - Entities, either animated or static (non-animated)
     - Includes the player, other characters and objects
@@ -51,13 +50,3 @@ These are the features or game mechanics that have been implemented so far as of
   - Given to the player by talking to NPCs or other means
   - A list of objectives, or tasks, to complete
   - User interface to view active quests and their objectives
-
-## Additional Information
-
-Tools:
-[IntelliJ IDEA](https://www.jetbrains.com/idea/)
-[Paint.NET](https://www.getpaint.net/)
-
-Libraries:
-[Slick2D](http://slick.ninjacave.com/)
-[JSON-java](https://github.com/stleary/JSON-java/)
