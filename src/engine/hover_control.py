@@ -1,10 +1,9 @@
 import math
 
 from src.engine.event import EventHook, EventStore
-from src.engine.sprite import Sprite
 
 
-def sine_oscillator(t, min_val, max_val):
+def oscillate(t, min_val, max_val):
     amplitude = (max_val - min_val) / 2
     midpoint = (max_val + min_val) / 2
     return amplitude * math.sin(t) + midpoint
@@ -12,13 +11,11 @@ def sine_oscillator(t, min_val, max_val):
 
 class HoverControl(EventHook):
 
-    def __init__(self, es: EventStore, sprite: Sprite, span: int=10, duration: int=500):
-        self.es = es
-        self.sprite = sprite
-        self.span = span
+    def __init__(self, es: EventStore, span: int=10, duration: int=500):
+        self.es, self.span = es, span
         self.duration = duration
         self.event_id = self.es.add_event(self, duration, 0)
-        self.t = 0
+        self.t, self.value = 0, 0
         self.is_running = False
 
     def start(self):
@@ -39,4 +36,4 @@ class HoverControl(EventHook):
 
     def event_triggered(self):
         self.t += math.pi * ((self.duration / 1000) / 1)
-        self.sprite.y_offset = sine_oscillator(self.t, -self.span, self.span)
+        self.value = oscillate(self.t, -self.span, self.span)

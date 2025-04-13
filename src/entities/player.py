@@ -19,14 +19,14 @@ class Player(LevelEntity):
         right = Animation(game_state.es, 100, right_sheet, 2, True)
         self.add_animations([left, right])
 
-        self.hover = HoverControl(game_state.es, self, 4, 100)
+        self.hover = HoverControl(game_state.es, 4, 100)
         self.hover.start()
         self.shadow_surface = Surface((self.rect.width, 12), pygame.SRCALPHA)
         self.shadow_surface.set_alpha(40)
         self.shadow_surface.convert_alpha()
 
-        self.speed = 150
-        self.accel, self.decel = 700, 500
+        self.speed = 200
+        self.accel, self.decel = 900, 1000
         game_state.ks.register_down_hook(pygame.K_w, lambda: self.key_move(pygame.K_w, True))
         game_state.ks.register_down_hook(pygame.K_a, lambda: self.key_move(pygame.K_a, True))
         game_state.ks.register_down_hook(pygame.K_s, lambda: self.key_move(pygame.K_s, True))
@@ -57,6 +57,7 @@ class Player(LevelEntity):
 
     def tick(self, delta: float):
         super().tick(delta)
+        self.y_offset = self.hover.value
         if self.left and self.current_animation_index == 1:
             self.set_animation(0)
         elif self.right and self.current_animation_index == 0:

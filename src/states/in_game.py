@@ -8,8 +8,9 @@ from src.levels.debug import DebugLevel
 
 class InGameState(GameState):
 
-    def __init__(self, screen: Surface):
+    def __init__(self, screen: Surface, debug: bool=False):
         super().__init__(screen)
+        self.debug = debug
         self.level = Level("", self)
         self.load_level(DebugLevel(self))
         self.debug_font = pygame.font.SysFont("Consolas", 16)
@@ -23,12 +24,13 @@ class InGameState(GameState):
 
     def render(self, surface: Surface):
         self.level.render(surface)
-        ds = self.debug_font.render(f"viewport=({int(self.level.camera.viewport_x)}, {int(self.level.camera.viewport_y)})",
-                                    True, "white")
-        surface.blit(ds, (32, 56))
-        ds = self.debug_font.render(f"rel=({int(self.level.control_entity.rel_x)}, {int(self.level.control_entity.rel_y)})",
-                                    True, "white")
-        surface.blit(ds, (32, 80))
-        ds = self.debug_font.render(f"vel_x={self.level.control_entity.vel_x:.2f}, vel_y={self.level.control_entity.vel_y:.2f}",
-                                    True, "white")
-        surface.blit(ds, (32, 104))
+        if self.debug:
+            ds = self.debug_font.render(f"viewport=({int(self.level.camera.view_x)}, {int(self.level.camera.view_y)})",
+                                        True, "white")
+            surface.blit(ds, (32, 56))
+            ds = self.debug_font.render(f"rel=({int(self.level.player.rel_x)}, {int(self.level.player.rel_y)})",
+                                        True, "white")
+            surface.blit(ds, (32, 80))
+            ds = self.debug_font.render(f"vel_x={self.level.player.vel_x:.2f}, vel_y={self.level.player.vel_y:.2f}",
+                                        True, "white")
+            surface.blit(ds, (32, 104))
