@@ -83,8 +83,6 @@ class Level:
         topleft_y = y + ceh < csy
         set_x = x if topleft_x else (csx - cew)
         set_y = y if topleft_y else (csy - ceh)
-        self.player.rel_x = x
-        self.player.rel_y = y
         if not topleft_x:
             self.camera.view_x = (x + cew) - csx
         if not topleft_y:
@@ -95,6 +93,8 @@ class Level:
         set_x += max(0, self.camera.view_x - max_vpx)
         set_y += max(0, self.camera.view_y - max_vpy)
         self.player.set_position(set_x, set_y)
+        self.player.rel_x = self.camera.view_x + set_x
+        self.player.rel_y = self.camera.view_y + set_y
 
     def tick(self, delta: float):
         self.player.tick(delta)
