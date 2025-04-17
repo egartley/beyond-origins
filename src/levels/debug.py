@@ -8,5 +8,5 @@ class DebugLevel(Level):
     def __init__(self, game_state: GameState):
         super().__init__("debug", game_state)
         self.player = Player(game_state)
-        self.start_rel_x = 1200
-        self.start_rel_y = 600
+        self.start_rel_x = 480
+        self.start_rel_y = 830

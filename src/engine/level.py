@@ -73,28 +73,28 @@ class Level:
         self.set_player_rel_position(self.start_rel_x, self.start_rel_y)
 
     def set_player_rel_position(self, x: float, y: float):
-        lw = self.surface.get_width()
-        lh = self.surface.get_height()
-        x = min(x, lw - self.player.rect.width)
-        y = min(y, lh - self.player.rect.height)
-        csx, csy = self.screen_width // 2, self.screen_height // 2
-        cew, ceh = self.player.rect.width // 2, self.player.rect.height // 2
-        topleft_x = x + cew < csx
-        topleft_y = y + ceh < csy
-        set_x = x if topleft_x else (csx - cew)
-        set_y = y if topleft_y else (csy - ceh)
-        if not topleft_x:
-            self.camera.view_x = (x + cew) - csx
-        if not topleft_y:
-            self.camera.view_y = (y + ceh) - csy
+        lw, lh = self.surface.get_size()
+        max_x = lw - self.player.rect.width
+        max_y = lh - self.player.rect.height
+        x, y = max(0.0, min(x, max_x)), max(0.0, min(y, max_y))
         max_vpx, max_vpy = lw - self.screen_width, lh - self.screen_height
-        self.camera.view_x = min(self.camera.view_x, max_vpx)
-        self.camera.view_y = min(self.camera.view_y, max_vpy)
-        set_x += max(0, self.camera.view_x - max_vpx)
-        set_y += max(0, self.camera.view_y - max_vpy)
-        self.player.set_position(set_x, set_y)
-        self.player.rel_x = self.camera.view_x + set_x
-        self.player.rel_y = self.camera.view_y + set_y
+        screen_center_x, screen_center_y = self.screen_width // 2, self.screen_height // 2
+        player_half_width, player_half_height = self.player.rect.width // 2, self.player.rect.height // 2
+
+        at_left = x + player_half_width < screen_center_x
+        at_top = y + player_half_height < screen_center_y
+        abs_x = x if at_left else screen_center_x - player_half_width
+        abs_y = y if at_top else screen_center_y - player_half_height
+
+        self.camera.view_x = min(0 if at_left else (x + player_half_width) - screen_center_x, max_vpx)
+        self.camera.view_y = min(0 if at_top else (y + player_half_height) - screen_center_y, max_vpy)
+        relative_x = self.camera.view_x + abs_x
+        relative_y = self.camera.view_y + abs_y
+        abs_x += x - relative_x if relative_x != x else 0
+        abs_y += y - relative_y if relative_y != y else 0
+
+        self.player.set_position(abs_x, abs_y)
+        self.player.rel_x, self.player.rel_y = x, y
 
     def tick(self, delta: float):
         self.player.tick(delta)
