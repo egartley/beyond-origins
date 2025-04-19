@@ -1,3 +1,4 @@
+import pygame
 from pygame import Surface
 
 from src.engine.game_state import GameState
@@ -51,16 +52,14 @@ class Level:
                 raise ValueError("Invalid tiles.dat (row count does not match meta)")
 
     def _set_tile_surface(self):
-        self.tile_surface = Surface((Level.TILE_SIZE * self.columns, Level.TILE_SIZE * self.rows))
-        self.tile_surface.convert()
+        self.tile_surface = Surface((Level.TILE_SIZE * self.columns, Level.TILE_SIZE * self.rows)).convert()
         self.tile_surface.blits([tile for tile in self.tiles])
 
     def load(self):
         self._set_meta()
         self._build_tiles()
         self._set_tile_surface()
-        self.surface = Surface((self.tile_surface.get_size()))
-        self.surface.convert()
+        self.surface = Surface(self.tile_surface.get_size()).convert()
         self.player.set_position(self.player_start_x, self.player_start_y)
 
     def tick(self, delta: float):

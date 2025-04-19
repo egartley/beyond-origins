@@ -1,6 +1,5 @@
 import time
 import pygame
-from pygame import Surface
 
 from src.states.in_game import InGameState
 

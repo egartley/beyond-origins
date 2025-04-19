@@ -28,9 +28,7 @@ class Player(LevelEntity):
 
         self.hover = Oscillator(self.es, 4, -4, 100)
         self.hover.start()
-        self.shadow_surface = Surface((self.rect.width, 16), pygame.SRCALPHA)
-        self.shadow_surface.set_alpha(40)
-        self.shadow_surface.convert_alpha()
+        self.shadow_surface = Surface((self.rect.width, 16), pygame.SRCALPHA).convert_alpha()
 
         self.jump_vel_up, self.jump_vel_down, self.max_jump_height = 125, 175, 26
         self.in_air, self.falling, self.jump_height = False, False, 0
