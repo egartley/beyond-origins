@@ -16,8 +16,7 @@ class Level:
         self.player = None
         self.cam_x, self.cam_y = 0, 0
         self.player_start_x, self.player_start_y = 100, 100
-        self.screen_width = game_state.screen.get_width()
-        self.screen_height = game_state.screen.get_height()
+        self.screen_width, self.screen_height = game_state.screen.get_size()
 
     def _set_meta(self):
         with open("res/data/level/" + self.data_dir + "/meta.dat") as file:
@@ -28,8 +27,9 @@ class Level:
                 elif i == 1:
                     self.rows = int(line)
 
-    def _get_tile(self, tile_id: int) -> Surface:
-        return self.gs.images.get(f"res/images/tiles/{tile_id}.png")
+    def _get_tile(self, tile_id: int, r: int, c: int) -> tuple[Surface, tuple[int, int]]:
+        s = self.gs.images.get(f"res/images/tiles/{tile_id}.png")
+        return s, (Level.TILE_SIZE * c, Level.TILE_SIZE * r)
 
     def _build_tiles(self):
         self.tiles = set()
@@ -39,18 +39,13 @@ class Level:
                 tile_id = int(lines[0])
                 for r in range(self.rows):
                     for c in range(self.columns):
-                        self.tiles.add((self._get_tile(tile_id), r, c))
+                        self.tiles.add(self._get_tile(tile_id, r, c))
             elif len(lines) == self.rows:
                 for r, line in enumerate(lines):
                     tile_ids = [int(x) for x in line.strip().split(",")]
-                    if len(tile_ids) == 1:
-                        tile = self._get_tile(tile_ids[0])
-                        for c in range(self.columns):
-                            self.tiles.add((tile, r, c))
-                    elif len(tile_ids) == self.columns:
-                        for c in range(self.columns):
-                            self.tiles.add((self._get_tile(tile_ids[c]), r, c))
-                    else:
+                    for c in range(self.columns):
+                        self.tiles.add(self._get_tile(tile_ids[0 if len(tile_ids) == 1 else c], r, c))
+                    if len(tile_ids) != 1 and len(tile_ids) != self.columns:
                         raise ValueError(f"Invalid tiles.dat (row {r} tile count does not match meta)")
             else:
                 raise ValueError("Invalid tiles.dat (row count does not match meta)")
@@ -58,7 +53,7 @@ class Level:
     def _set_tile_surface(self):
         self.tile_surface = Surface((Level.TILE_SIZE * self.columns, Level.TILE_SIZE * self.rows))
         self.tile_surface.convert()
-        self.tile_surface.blits([(tile[0], (tile[2] * Level.TILE_SIZE, tile[1] * Level.TILE_SIZE)) for tile in self.tiles])
+        self.tile_surface.blits([tile for tile in self.tiles])
 
     def load(self):
         self._set_meta()

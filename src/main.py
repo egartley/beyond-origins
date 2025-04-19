@@ -8,7 +8,7 @@ from src.states.in_game import InGameState
 def main():
     flags = pygame.SCALED  # turn off scaled for fullscreen
     pygame.init()
-    pygame.display.set_mode((1920, 1080), flags)
+    pygame.display.set_mode((1920, 1080), flags)  # 3840, 2160
     pygame.display.set_caption("Beyond Origins")
     pygame.display.set_icon(pygame.image.load("res/images/favicon.png"))
     clock = pygame.time.Clock()
@@ -43,8 +43,7 @@ def main():
         if debug:
             t3 = time.perf_counter() * 1000
             ft, tt, rt = t3 - t1, t2 - t1, t3 - t2
-            ds = debug_font.render(f"{ft:.1f}ms Δ{delta:.3f} t={tt:.1f}ms r={rt:.1f}ms",
-                                   True, "white")
+            ds = debug_font.render(f"{ft:.1f}ms Δ{delta:.3f} t={tt:.1f}ms r={rt:.1f}ms", True, "white")
             screen.blit(ds, (32, 32))
         pygame.display.flip()
 
