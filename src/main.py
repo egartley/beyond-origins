@@ -15,7 +15,6 @@ def main():
     fps = 60
 
     screen = pygame.display.get_surface()
-    frame = Surface(screen.get_size()).convert()
 
     debug = True
     debug_font = pygame.font.SysFont("Consolas", 16)
@@ -40,14 +39,13 @@ def main():
         current_state.tick(delta)
         if debug:
             t2 = time.perf_counter() * 1000
-        current_state.render(frame)
+        current_state.render(screen)
         if debug:
             t3 = time.perf_counter() * 1000
             ft, tt, rt = t3 - t1, t2 - t1, t3 - t2
             ds = debug_font.render(f"{ft:.1f}ms Δ{delta:.3f} t={tt:.1f}ms r={rt:.1f}ms",
                                    True, "white")
-            frame.blit(ds, (32, 32))
-        screen.blit(frame, (0, 0))
+            screen.blit(ds, (32, 32))
         pygame.display.flip()
 
     pygame.quit()

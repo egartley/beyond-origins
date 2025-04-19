@@ -10,11 +10,9 @@ class LevelEntity(Sprite):
 
     def __init__(self, width: int = 32, height: int = 32):
         super().__init__(width, height)
-        self.rel_x, self.rel_y = 0.0, 0.0
         self.vel_x, self.vel_y = 0.0, 0.0
         self.speed, self.accel, self.decel = 200, 300, 200
         self.up, self.down, self.left, self.right = False, False, False, False
-        self.frozen = False
         self.animation = None
         self.animations = []
         self.current_animation_index = 0
@@ -76,3 +74,7 @@ class LevelEntity(Sprite):
             scale = self.speed / c
             self.vel_x *= scale
             self.vel_y *= scale
+        if self.vel_x != 0:
+            self.move_x(delta)
+        if self.vel_y != 0:
+            self.move_y(delta)

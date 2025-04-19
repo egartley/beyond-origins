@@ -1,7 +1,7 @@
 import pygame.image
 from pygame import Surface, Rect
 
-from src.engine.event import EventStore, EventHook
+from src.engine.event import EventHook
 from src.engine.animation import Animation
 from src.engine.game_state import GameState
 from src.engine.oscillator import Oscillator
@@ -19,7 +19,7 @@ class Player(LevelEntity):
     def __init__(self, game_state: GameState):
         super().__init__(30, 44)
         self.es = game_state.es
-        full_sheet = game_state.images.get(Image.PLAYER_NEW_TEMP)
+        full_sheet = game_state.images.get(Image.PLAYER_NEW_TEMP, True)
         left_sheet = full_sheet.subsurface((0, 0, 96, 64))
         right_sheet = full_sheet.subsurface((0, 64, 96, 64))
         left = Animation(self.es, 100, left_sheet, 2, True)
@@ -28,7 +28,7 @@ class Player(LevelEntity):
 
         self.hover = Oscillator(self.es, 4, -4, 100)
         self.hover.start()
-        self.shadow_surface = Surface((self.rect.width, 12), pygame.SRCALPHA)
+        self.shadow_surface = Surface((self.rect.width, 16), pygame.SRCALPHA)
         self.shadow_surface.set_alpha(40)
         self.shadow_surface.convert_alpha()
 
@@ -91,12 +91,14 @@ class Player(LevelEntity):
         self.can_dash = True
 
     def draw_shadow(self, surface: Surface):
-        sr = Rect(int(self.x + self.x_offset), int(self.y + self.rect.height + 4), 36 + self.y_offset, 12)
+        sr = Rect(int(self.x + self.x_offset), int(self.y + self.rect.height + 4), 36 + self.y_offset,
+                  12 + int(self.y_offset / 6))
         if self.shadow_surface.get_width() != sr.width or self.shadow_surface.get_height() != sr.height:
             self.shadow_surface.fill((0, 0, 0, 0))
             self.shadow_surface.set_alpha(40 + int(self.y_offset * 1.3))
             new_x = (self.shadow_surface.get_width() / 2) - (sr.width / 2)
-            pygame.draw.ellipse(self.shadow_surface, (0, 0, 0), (new_x, 0, sr.width, sr.height))
+            new_y = (self.shadow_surface.get_height() / 2) - (sr.height / 2)
+            pygame.draw.ellipse(self.shadow_surface, (0, 0, 0), (new_x, new_y, sr.width, sr.height))
         surface.blit(self.shadow_surface, (sr.x, sr.y))
 
     def tick(self, delta: float):

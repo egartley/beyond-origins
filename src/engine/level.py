@@ -1,8 +1,6 @@
 from pygame import Surface
 
-from src.engine.camera import LevelCamera
 from src.engine.game_state import GameState
-from src.engine.level_entity import LevelEntity
 
 
 class Level:
@@ -14,10 +12,10 @@ class Level:
         self.gs = game_state
         self.rows, self.columns = 0, 0
         self.tiles = set()
-        self.surface = None
-        self.player = LevelEntity()
-        self.camera = LevelCamera(self.player, 0, 0, 0, 0)
-        self.start_rel_x, self.start_rel_y = 100, 100
+        self.surface, self.tile_surface = None, None
+        self.player = None
+        self.cam_x, self.cam_y = 0, 0
+        self.player_start_x, self.player_start_y = 100, 100
         self.screen_width = game_state.screen.get_width()
         self.screen_height = game_state.screen.get_height()
 
@@ -33,76 +31,52 @@ class Level:
     def _get_tile(self, tile_id: int) -> Surface:
         return self.gs.images.get(f"res/images/tiles/{tile_id}.png")
 
-    def _build_tiles(self) -> set:
-        tiles = set()
+    def _build_tiles(self):
+        self.tiles = set()
         with open("res/data/level/" + self.data_dir + "/tiles.dat") as file:
             lines = file.readlines()
             if len(lines) == 1:
                 tile_id = int(lines[0])
                 for r in range(self.rows):
                     for c in range(self.columns):
-                        tiles.add((self._get_tile(tile_id), r, c))
+                        self.tiles.add((self._get_tile(tile_id), r, c))
             elif len(lines) == self.rows:
                 for r, line in enumerate(lines):
                     tile_ids = [int(x) for x in line.strip().split(",")]
                     if len(tile_ids) == 1:
                         tile = self._get_tile(tile_ids[0])
                         for c in range(self.columns):
-                            tiles.add((tile, r, c))
+                            self.tiles.add((tile, r, c))
                     elif len(tile_ids) == self.columns:
                         for c in range(self.columns):
-                            tiles.add((self._get_tile(tile_ids[c]), r, c))
+                            self.tiles.add((self._get_tile(tile_ids[c]), r, c))
                     else:
                         raise ValueError(f"Invalid tiles.dat (row {r} tile count does not match meta)")
             else:
                 raise ValueError("Invalid tiles.dat (row count does not match meta)")
-        return tiles
 
-    def _get_tile_surface(self) -> Surface:
-        surface = Surface((Level.TILE_SIZE * self.columns, Level.TILE_SIZE * self.rows))
-        surface.convert()
-        surface.blits([(tile[0], (tile[2] * Level.TILE_SIZE, tile[1] * Level.TILE_SIZE)) for tile in self.tiles])
-        return surface
+    def _set_tile_surface(self):
+        self.tile_surface = Surface((Level.TILE_SIZE * self.columns, Level.TILE_SIZE * self.rows))
+        self.tile_surface.convert()
+        self.tile_surface.blits([(tile[0], (tile[2] * Level.TILE_SIZE, tile[1] * Level.TILE_SIZE)) for tile in self.tiles])
 
     def load(self):
         self._set_meta()
-        self.tiles = self._build_tiles()
-        self.surface = self._get_tile_surface()
-        self.camera = LevelCamera(self.player, self.surface.get_width(), self.surface.get_height(),
-                                  self.screen_width, self.screen_height)
-        self.set_player_rel_position(self.start_rel_x, self.start_rel_y)
-
-    def set_player_rel_position(self, x: float, y: float):
-        lw, lh = self.surface.get_size()
-        max_x = lw - self.player.rect.width
-        max_y = lh - self.player.rect.height
-        x, y = max(0.0, min(x, max_x)), max(0.0, min(y, max_y))
-        max_vpx, max_vpy = lw - self.screen_width, lh - self.screen_height
-        screen_center_x, screen_center_y = self.screen_width // 2, self.screen_height // 2
-        player_half_width, player_half_height = self.player.rect.width // 2, self.player.rect.height // 2
-
-        at_left = x + player_half_width < screen_center_x
-        at_top = y + player_half_height < screen_center_y
-        abs_x = x if at_left else screen_center_x - player_half_width
-        abs_y = y if at_top else screen_center_y - player_half_height
-
-        self.camera.view_x = min(0 if at_left else (x + player_half_width) - screen_center_x, max_vpx)
-        self.camera.view_y = min(0 if at_top else (y + player_half_height) - screen_center_y, max_vpy)
-        relative_x = self.camera.view_x + abs_x
-        relative_y = self.camera.view_y + abs_y
-        abs_x += x - relative_x if relative_x != x else 0
-        abs_y += y - relative_y if relative_y != y else 0
-
-        self.player.set_position(abs_x, abs_y)
-        self.player.rel_x, self.player.rel_y = x, y
+        self._build_tiles()
+        self._set_tile_surface()
+        self.surface = Surface((self.tile_surface.get_size()))
+        self.surface.convert()
+        self.player.set_position(self.player_start_x, self.player_start_y)
 
     def tick(self, delta: float):
         self.player.tick(delta)
-        self.camera.tick(delta)
-        self.player.rel_x = self.camera.view_x + self.player.x
-        self.player.rel_y = self.camera.view_y + self.player.y
+        cx = self.player.x - (self.screen_width // 2) + (self.player.rect.width // 2)
+        cy = self.player.y - (self.screen_height // 2) + (self.player.rect.height // 2)
+        self.cam_x = max(0, min(cx, self.surface.get_width() - self.screen_width))
+        self.cam_y = max(0, min(cy, self.surface.get_height() - self.screen_height))
 
     def render(self, surface: Surface):
-        surface.blit(self.surface, (0, 0),
-                     (self.camera.view_x, self.camera.view_y, self.screen_width, self.screen_height))
-        self.player.render(surface)
+        viewport = (self.cam_x, self.cam_y, self.screen_width, self.screen_height)
+        self.surface.blit(self.tile_surface, (viewport[0], viewport[1]), viewport)
+        self.player.render(self.surface)
+        surface.blit(self.surface, (0, 0), viewport)

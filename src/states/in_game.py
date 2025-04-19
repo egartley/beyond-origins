@@ -25,10 +25,10 @@ class InGameState(GameState):
     def render(self, surface: Surface):
         self.level.render(surface)
         if self.debug:
-            ds = self.debug_font.render(f"viewport=({int(self.level.camera.view_x)}, {int(self.level.camera.view_y)})",
+            ds = self.debug_font.render(f"camera=({int(self.level.cam_x)}, {int(self.level.cam_y)})",
                                         True, "white")
             surface.blit(ds, (32, 56))
-            ds = self.debug_font.render(f"rel=({int(self.level.player.rel_x)}, {int(self.level.player.rel_y)})",
+            ds = self.debug_font.render(f"pos=({int(self.level.player.x)}, {int(self.level.player.y)})",
                                         True, "white")
             surface.blit(ds, (32, 80))
             ds = self.debug_font.render(f"vel_x={self.level.player.vel_x:.2f}, vel_y={self.level.player.vel_y:.2f}",

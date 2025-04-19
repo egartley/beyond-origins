@@ -51,11 +51,11 @@ class TestLevel(unittest.TestCase):
         self.level._get_tile = MagicMock(side_effect=lambda x: f"tile_{x}")
         mock_file_data = "1\n"
         with patch("builtins.open", mock_open(read_data=mock_file_data)):
-            tiles = self.level._build_tiles()
+            self.level._build_tiles()
         expected_tiles = {
             ("tile_1", r, c) for r in range(self.level.rows) for c in range(self.level.columns)
         }
-        self.assertEqual(tiles, expected_tiles)
+        self.assertEqual(self.level.tiles, expected_tiles)
 
     def test__build_tiles_full(self):
         self.level.rows = 2
@@ -63,51 +63,12 @@ class TestLevel(unittest.TestCase):
         self.level._get_tile = MagicMock(side_effect=lambda x: f"tile_{x}")
         mock_file_data = "1,2,3\n4,5,6\n"
         with patch("builtins.open", mock_open(read_data=mock_file_data)):
-            tiles = self.level._build_tiles()
+            self.level._build_tiles()
         expected_tiles = {
             ("tile_1", 0, 0), ("tile_2", 0, 1), ("tile_3", 0, 2),
             ("tile_4", 1, 0), ("tile_5", 1, 1), ("tile_6", 1, 2)
         }
-        self.assertEqual(tiles, expected_tiles)
-
-    def test_set_player_rel_position_top_left(self):
-        x, y = 300, 100
-        self.level.set_player_rel_position(x, y)
-        self.assertEqual(self.level.camera.view_x, 0)
-        self.assertEqual(self.level.camera.view_y, 0)
-        self.assertEqual(self.level.player.rel_x, x)
-        self.assertEqual(self.level.player.rel_y, y)
-        self.assertEqual(self.level.player.x, x)
-        self.assertEqual(self.level.player.y, y)
-
-    def test_set_player_rel_position_middle(self):
-        x, y = 1000, 900
-        self.level.set_player_rel_position(x, y)
-        self.assertEqual(self.level.camera.view_x, x + (self.level.player.rect.width // 2) - (self.level.screen_width // 2))
-        self.assertEqual(self.level.camera.view_y, y + (self.level.player.rect.height // 2) - (self.level.screen_height // 2))
-        self.assertEqual(self.level.player.rel_x, x)
-        self.assertEqual(self.level.player.rel_y, y)
-        self.assertEqual(self.level.player.x, (self.level.screen_width // 2) - (self.level.player.rect.width // 2))
-        self.assertEqual(self.level.player.y, (self.level.screen_height // 2) - (self.level.player.rect.height // 2))
-
-    def test_set_player_rel_position_out_of_bounds_min(self):
-        self.level.set_player_rel_position(-1234, -1234)
-        self.assertEqual(self.level.camera.view_x, 0)
-        self.assertEqual(self.level.camera.view_y, 0)
-        self.assertEqual(self.level.player.rel_x, 0)
-        self.assertEqual(self.level.player.rel_y, 0)
-        self.assertEqual(self.level.player.x, 0)
-        self.assertEqual(self.level.player.y, 0)
-
-    def test_set_player_rel_position_out_of_bounds_max(self):
-        self.level.set_player_rel_position(9999, 9999)
-        self.assertEqual(self.level.camera.view_x, self.level.surface.get_size()[0] - self.level.screen_width)
-        self.assertEqual(self.level.camera.view_y, self.level.surface.get_size()[1] - self.level.screen_height)
-        self.assertEqual(self.level.player.rel_x, self.level.surface.get_size()[0] - self.level.player.rect.width)
-        self.assertEqual(self.level.player.rel_y, self.level.surface.get_size()[1] - self.level.player.rect.height)
-        self.assertEqual(self.level.player.x, self.level.screen_width - self.level.player.rect.width)
-        self.assertEqual(self.level.player.y, self.level.screen_height - self.level.player.rect.height)
-
+        self.assertEqual(self.level.tiles, expected_tiles)
 
 if __name__ == '__main__':
     unittest.main()
