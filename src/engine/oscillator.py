@@ -9,10 +9,10 @@ def oscillate(t, min_val, max_val):
     return amplitude * math.sin(t) + midpoint
 
 
-class HoverControl(EventHook):
+class Oscillator(EventHook):
 
-    def __init__(self, es: EventStore, span: int=10, duration: int=500):
-        self.es, self.span = es, span
+    def __init__(self, es: EventStore, min_val: int=-10, max_val: int=10, duration: int=500):
+        self.es, self.min_val, self.max_val = es, min_val, max_val
         self.duration = duration
         self.event_id = self.es.add_event(self, duration, 0)
         self.t, self.value = 0, 0
@@ -20,13 +20,13 @@ class HoverControl(EventHook):
 
     def start(self):
         if not self.is_running:
-            self.t = 0
+            self.t, self.value = 0, 0
             self.es.start_event(self.event_id)
             self.is_running = True
 
     def stop(self):
         if self.is_running:
-            self.t = 0
+            self.t, self.value = 0, 0
             self.es.stop_event(self.event_id)
             self.is_running = False
 
@@ -36,4 +36,4 @@ class HoverControl(EventHook):
 
     def event_triggered(self):
         self.t += math.pi * ((self.duration / 1000) / 1)
-        self.value = oscillate(self.t, -self.span, self.span)
+        self.value = oscillate(self.t, self.min_val, self.max_val)
