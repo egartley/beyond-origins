@@ -32,8 +32,8 @@ class Player(LevelEntity):
         self.shadow_surface.set_alpha(40)
         self.shadow_surface.convert_alpha()
 
-        self.jump_up, self.jump_down, self.jump_height = 125, 175, 26
-        self.in_air, self.falling = False, False
+        self.jump_vel_up, self.jump_vel_down, self.max_jump_height = 125, 175, 26
+        self.in_air, self.falling, self.jump_height = False, False, 0
         self.dash_duration, self.dash_modifier = 250, 3
         self.dash_cooldown, self.can_dash = 175, True
         self.speed = 200
@@ -66,11 +66,13 @@ class Player(LevelEntity):
     def start_jump(self):
         if not self.in_air:
             self.in_air = True
+            self.jump_height = 0
             self.hover.stop()
 
     def stop_jump(self):
         self.in_air = False
         self.falling = False
+        self.jump_height = 0
         self.hover.start()
 
     def start_dash(self):
@@ -91,11 +93,11 @@ class Player(LevelEntity):
         self.can_dash = True
 
     def draw_shadow(self, surface: Surface):
-        sr = Rect(int(self.x + self.x_offset), int(self.y + self.rect.height + 4), 36 + self.y_offset,
-                  12 + int(self.y_offset / 6))
-        if self.shadow_surface.get_width() != sr.width or self.shadow_surface.get_height() != sr.height:
+        sr = Rect(int(self.x + self.x_offset), int(self.rect.bottom + 4 + self.jump_height),
+                  36 + self.y_offset - self.jump_height, 12 + int((self.y_offset - self.jump_height) / 6))
+        if self.shadow_surface.get_size() != sr.size:
             self.shadow_surface.fill((0, 0, 0, 0))
-            self.shadow_surface.set_alpha(40 + int(self.y_offset * 1.3))
+            self.shadow_surface.set_alpha(40 + int((self.y_offset - self.jump_height) * 1.3))
             new_x = (self.shadow_surface.get_width() / 2) - (sr.width / 2)
             new_y = (self.shadow_surface.get_height() / 2) - (sr.height / 2)
             pygame.draw.ellipse(self.shadow_surface, (0, 0, 0), (new_x, new_y, sr.width, sr.height))
@@ -106,14 +108,16 @@ class Player(LevelEntity):
         if not self.in_air:
             self.y_offset = self.hover.value
         else:
-            self.y_offset += (1 if self.falling else -1) * (self.jump_down if self.falling else self.jump_up) * delta
-            if self.y_offset <= -self.jump_height and not self.falling:
+            cy = self.y
+            self.move_y(delta, (1 if self.falling else -1) * (self.jump_vel_down if self.falling else self.jump_vel_up))
+            self.jump_height += cy - self.y
+            if self.jump_height >= self.max_jump_height and not self.falling:
                 self.falling = True
-            if self.falling and self.y_offset >= 0:
+            if self.falling and self.jump_height <= 0:
                 self.stop_jump()
-        if self.left and self.current_animation_index == 1:
+        if self.left and self.animation_index == 1:
             self.set_animation(0)
-        elif self.right and self.current_animation_index == 0:
+        elif self.right and self.animation_index == 0:
             self.set_animation(1)
         if any([self.up, self.down, self.left, self.right]):
             if not self.animation.is_running:

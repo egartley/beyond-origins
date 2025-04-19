@@ -15,32 +15,31 @@ class LevelEntity(Sprite):
         self.up, self.down, self.left, self.right = False, False, False, False
         self.animation = None
         self.animations = []
-        self.current_animation_index = 0
+        self.animation_index = 0
 
     def _sync_image_rect(self, image: Surface):
         self.image = image
-        self.rect.width = self.image.get_width()
-        self.rect.height = self.image.get_height()
+        self.rect.size = self.image.get_size()
 
-    def move_x(self, delta: float):
-        self.x += self.vel_x * delta
+    def move_x(self, delta: float, vel: float=0):
+        self.x += (self.vel_x if vel == 0 else vel) * delta
         self.rect.x = int(self.x)
 
-    def move_y(self, delta: float):
-        self.y += self.vel_y * delta
+    def move_y(self, delta: float, vel: float=0):
+        self.y += (self.vel_y if vel == 0 else vel) * delta
         self.rect.y = int(self.y)
 
     def add_animations(self, animations: List[Animation]):
         for a in animations:
             self.animations.append(a)
-        self.animation = self.animations[self.current_animation_index]
+        self.animation = self.animations[self.animation_index]
         self._sync_image_rect(self.animation.frames[self.animation.index])
 
     def set_animation(self, i: int):
         if 0 <= i < len(self.animations):
             self.animation.stop()
-            self.current_animation_index = i
-            self.animation = self.animations[self.current_animation_index]
+            self.animation_index = i
+            self.animation = self.animations[self.animation_index]
             self.animation.start()
             self._sync_image_rect(self.animation.frames[self.animation.index])
 
