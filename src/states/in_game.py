@@ -42,16 +42,15 @@ class InGameState(GameState):
             self.level.tick(delta)
 
     def render(self, surface: Surface):
-        self.level.render(surface)
+        s = [self.level.render()]
         if self.menu_visible:
-            surface.blit(self.menu_surface, (0, 0))
+            s.append((self.menu_surface, (0, 0)))
         if self.debug:
-            ds = self.debug_font.render(f"camera=({int(self.level.cam_x)}, {int(self.level.cam_y)})",
+            ds = self.debug_font.render(f"cam=({int(self.level.cam_x)}, {int(self.level.cam_y)}), "
+                                        f"pos=({int(self.level.player.x)}, {int(self.level.player.y)})",
                                         True, "white")
-            surface.blit(ds, (32, 56))
-            ds = self.debug_font.render(f"pos=({int(self.level.player.x)}, {int(self.level.player.y)})",
+            s.append((ds, (32, 56)))
+            ds = self.debug_font.render(f"vx={self.level.player.vel_x:.2f}, vy={self.level.player.vel_y:.2f}",
                                         True, "white")
-            surface.blit(ds, (32, 80))
-            ds = self.debug_font.render(f"vel_x={self.level.player.vel_x:.2f}, vel_y={self.level.player.vel_y:.2f}",
-                                        True, "white")
-            surface.blit(ds, (32, 104))
+            s.append((ds, (32, 80)))
+        surface.blits(s, doreturn=False)

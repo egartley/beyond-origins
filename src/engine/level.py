@@ -1,4 +1,3 @@
-import pygame
 from pygame import Surface
 
 from src.engine.game_state import GameState
@@ -53,7 +52,7 @@ class Level:
 
     def _set_tile_surface(self):
         self.tile_surface = Surface((Level.TILE_SIZE * self.columns, Level.TILE_SIZE * self.rows)).convert()
-        self.tile_surface.blits([tile for tile in self.tiles])
+        self.tile_surface.blits([tile for tile in self.tiles], doreturn=False)
 
     def load(self):
         self._set_meta()
@@ -69,8 +68,8 @@ class Level:
         self.cam_x = max(0, min(cx, self.surface.get_width() - self.screen_width))
         self.cam_y = max(0, min(cy, self.surface.get_height() - self.screen_height))
 
-    def render(self, surface: Surface):
+    def render(self) -> tuple[Surface, tuple[int, int], tuple[int, int, int, int]]:
         viewport = (self.cam_x, self.cam_y, self.screen_width, self.screen_height)
-        self.surface.blit(self.tile_surface, (viewport[0], viewport[1]), viewport)
+        self.surface.blit(self.tile_surface, (self.cam_x, self.cam_y), viewport)
         self.player.render(self.surface)
-        surface.blit(self.surface, (0, 0), viewport)
+        return self.surface, (0, 0), viewport

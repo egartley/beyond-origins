@@ -10,6 +10,7 @@ def main():
     pygame.display.set_mode((1920, 1080), flags)  # 3840, 2160
     pygame.display.set_caption("Beyond Origins")
     pygame.display.set_icon(pygame.image.load("res/images/favicon.png"))
+    pygame.event.set_allowed([pygame.QUIT, pygame.KEYUP, pygame.KEYDOWN])
     clock = pygame.time.Clock()
     fps = 60
 
