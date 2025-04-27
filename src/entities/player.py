@@ -22,30 +22,27 @@ class Player(LevelEntity):
         full_sheet = game_state.images.get(Image.PLAYER_NEW_TEMP, True)
         left_sheet = full_sheet.subsurface((0, 0, 96, 64))
         right_sheet = full_sheet.subsurface((0, 64, 96, 64))
-        left = Animation(self.es, 100, left_sheet, 2, True)
-        right = Animation(self.es, 100, right_sheet, 2, True)
-        self.add_animations([left, right])
+        self.add_animations([
+            Animation(self.es, 100, left_sheet, 2, True),
+            Animation(self.es, 100, right_sheet, 2, True)
+        ])
 
         self.hover = Oscillator(self.es, 4, -4, 100)
         self.hover.start()
-        self.shadow_surface = Surface((self.rect.width, 16), pygame.SRCALPHA).convert_alpha()
+        self.shadow_surface = Surface((self.rect.width, 16), pygame.SRCALPHA)
 
         self.jump_vel_up, self.jump_vel_down, self.max_jump_height = 125, 175, 26
         self.in_air, self.falling, self.jump_height = False, False, 0
         self.dash_duration, self.dash_modifier = 250, 3
         self.dash_cooldown, self.can_dash = 175, True
-        self.speed = 200
-        self.accel, self.decel = 900, 1000
-        game_state.ks.register_down_hook(pygame.K_w, lambda: self.key_move(pygame.K_w, True))
-        game_state.ks.register_down_hook(pygame.K_a, lambda: self.key_move(pygame.K_a, True))
-        game_state.ks.register_down_hook(pygame.K_s, lambda: self.key_move(pygame.K_s, True))
-        game_state.ks.register_down_hook(pygame.K_d, lambda: self.key_move(pygame.K_d, True))
-        game_state.ks.register_down_hook(pygame.K_SPACE, lambda: self.key_move(pygame.K_SPACE, True))
-        game_state.ks.register_down_hook(pygame.K_LSHIFT, lambda: self.key_move(pygame.K_LSHIFT, True))
-        game_state.ks.register_up_hook(pygame.K_w, lambda: self.key_move(pygame.K_w, False))
-        game_state.ks.register_up_hook(pygame.K_a, lambda: self.key_move(pygame.K_a, False))
-        game_state.ks.register_up_hook(pygame.K_s, lambda: self.key_move(pygame.K_s, False))
-        game_state.ks.register_up_hook(pygame.K_d, lambda: self.key_move(pygame.K_d, False))
+        self.speed, self.accel, self.decel = 200, 900, 1000
+
+        keys = [pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d,
+                pygame.K_SPACE, pygame.K_LSHIFT]
+        for key in keys:
+            game_state.ks.register_down_hook(key, lambda k=key: self.key_move(k, True))
+            if key != pygame.K_SPACE and key != pygame.K_LSHIFT:
+                game_state.ks.register_up_hook(key, lambda k=key: self.key_move(k, False))
 
     def key_move(self, key: int, key_down: bool):
         if key == pygame.K_w:
@@ -91,15 +88,20 @@ class Player(LevelEntity):
         self.can_dash = True
 
     def draw_shadow(self, surface: Surface):
-        sr = Rect(int(self.x + self.x_offset), int(self.rect.bottom + 4 + self.jump_height),
-                  36 + self.y_offset - self.jump_height, 12 + int((self.y_offset - self.jump_height) / 6))
-        if self.shadow_surface.get_size() != sr.size:
+        shadow_rect = Rect(
+            int(self.x + self.x_offset),
+            int(self.rect.bottom + 4 + self.jump_height),
+            36 + self.y_offset - self.jump_height,
+            12 + (self.y_offset - self.jump_height) // 6
+        )
+        if self.shadow_surface.get_size() != shadow_rect.size:
             self.shadow_surface.fill((0, 0, 0, 0))
             self.shadow_surface.set_alpha(40 + int((self.y_offset - self.jump_height) * 1.3))
-            new_x = (self.shadow_surface.get_width() / 2) - (sr.width / 2)
-            new_y = (self.shadow_surface.get_height() / 2) - (sr.height / 2)
-            pygame.draw.ellipse(self.shadow_surface, (0, 0, 0), (new_x, new_y, sr.width, sr.height))
-        surface.blit(self.shadow_surface, (sr.x, sr.y))
+            offset_x = (self.shadow_surface.get_width() - shadow_rect.width) // 2
+            offset_y = (self.shadow_surface.get_height() - shadow_rect.height) // 2
+            pygame.draw.ellipse(self.shadow_surface, (0, 0, 0),
+                                (offset_x, offset_y, shadow_rect.width, shadow_rect.height))
+        surface.blit(self.shadow_surface, shadow_rect.topleft)
 
     def tick(self, delta: float):
         super().tick(delta)

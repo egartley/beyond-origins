@@ -24,11 +24,11 @@ class InGameState(GameState):
         self.set_ui_surfaces()
 
     def set_ui_surfaces(self):
-        background = Surface(self.screen.get_size(), pygame.SRCALPHA).convert_alpha()
+        background = Surface(self.screen.get_size(), pygame.SRCALPHA)
         background.fill((0, 0, 0, 128))
         placeholder = Surface((1280, 720)).convert()
         placeholder.fill((128, 128, 128))
-        self.menu_surface = Surface(self.screen.get_size(), pygame.SRCALPHA).convert_alpha()
+        self.menu_surface = Surface(self.screen.get_size(), pygame.SRCALPHA)
         self.menu_surface.blit(background, (0, 0))
         cx = (self.menu_surface.get_width() // 2) - (placeholder.get_width() // 2)
         cy = (self.menu_surface.get_height() // 2) - (placeholder.get_height() // 2)
@@ -46,11 +46,10 @@ class InGameState(GameState):
         if self.menu_visible:
             s.append((self.menu_surface, (0, 0)))
         if self.debug:
-            ds = self.debug_font.render(f"cam=({int(self.level.cam_x)}, {int(self.level.cam_y)}), "
-                                        f"pos=({int(self.level.player.x)}, {int(self.level.player.y)})",
-                                        True, "white")
-            s.append((ds, (32, 56)))
-            ds = self.debug_font.render(f"vx={self.level.player.vel_x:.2f}, vy={self.level.player.vel_y:.2f}",
-                                        True, "white")
-            s.append((ds, (32, 80)))
+            pos = self.debug_font.render(f"cam=({int(self.level.cam_x)}, {int(self.level.cam_y)}), "
+                                         f"pos=({int(self.level.player.x)}, {int(self.level.player.y)})",
+                                         True, "white")
+            vel = self.debug_font.render(f"vx={self.level.player.vel_x:.2f}, vy={self.level.player.vel_y:.2f}",
+                                         True, "white")
+            s.extend([(pos, (32, 56)), (vel, (32, 80))])
         surface.blits(s, doreturn=False)
